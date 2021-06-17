@@ -1,0 +1,59 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { Lab900DataListModule } from '../../../../lib/src/lib/data-list/data-list.module';
+import { Lab900SharingModule } from '../../../../lib/src/lib/sharing/sharing.module';
+import { Lab900TableModule } from '../../../../lib/src/lib/table/table.module';
+import { Lab900PageHeaderModule } from '../../../../lib/src/lib/page-header/page-header.module';
+import { AlertModule } from '../../../../lib/src/lib/alert/alert.module';
+import { Lab900MergerModule } from '../../../../lib/src/lib/merger/merger.module';
+
+import { ShowcaseUiRoutingModule } from './showcase-ui-routing.module';
+import { SharedModule } from '../shared/shared.module';
+import { DataListExampleComponent } from './examples/data-list-example/data-list-example.component';
+import { SharingExampleComponent } from './examples/sharing-example/sharing-example.component';
+import { AlertsExampleComponent } from './examples/alerts-example/alerts-example.component';
+import { NavListExampleComponent } from './examples/nav-list-example/nav-list-example.component';
+import { PageHeaderExampleComponent } from './examples/page-header-example/page-header-example.component';
+import { TableExampleComponent } from './examples/table-example/table-example.component';
+import { PageHeaderParamsExampleComponent } from './examples/page-header-params-example/page-header-params-example.component';
+import { MergerExampleComponent } from './examples/merger-example/merger-example.component';
+import { CustomExampleComponent } from './examples/merger-example/custom-example.component';
+import { ButtonExampleComponent } from './examples/button-example/button-example.component';
+import { Lab900ButtonModule } from '../../../../lib/src/lib/button/button.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
+const examples = [
+  SharingExampleComponent,
+  DataListExampleComponent,
+  AlertsExampleComponent,
+  NavListExampleComponent,
+  PageHeaderExampleComponent,
+  PageHeaderParamsExampleComponent,
+  TableExampleComponent,
+  MergerExampleComponent,
+  CustomExampleComponent,
+  ButtonExampleComponent,
+];
+
+@NgModule({
+  declarations: examples,
+  entryComponents: [CustomExampleComponent],
+  imports: [
+    CommonModule,
+    ShowcaseUiRoutingModule,
+    SharedModule,
+    Lab900DataListModule,
+    Lab900SharingModule,
+    AlertModule,
+    Lab900TableModule,
+    Lab900PageHeaderModule,
+    Lab900MergerModule,
+    Lab900ButtonModule,
+    TranslateModule,
+    Lab900ButtonModule,
+    MatCheckboxModule,
+  ],
+})
+export class ShowcaseUiModule {}
