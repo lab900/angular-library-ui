@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { mergerDataExample } from './config/merger-data-example';
-import { MergeObject } from '../../../../../../lib/src/lib/merger/models/merge-object.model';
-import { MergeConfig } from '../../../../../../lib/src/lib/merger/models/merge-config.model';
+import { MergeObject } from '@lab900/ui';
+import { MergeConfig } from '@lab900/ui';
 import { mergerSchemaExample } from './config/merger-schema-example';
-import { Lab900MergerComponent } from '../../../../../../lib/src/lib/merger/components/merger/merger.component';
+import { Lab900MergerComponent } from '@lab900/ui';
 import { MergerDataExample } from './models/merger-data-example.model';
 
 @Component({

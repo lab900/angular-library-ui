@@ -1,4 +1,4 @@
-import { MergeObject } from '../../../../../../../lib/src/lib/merger/models/merge-object.model';
+import { MergeObject } from '@lab900/ui';
 import { MergerDataExample } from '../models/merger-data-example.model';
 
 export const mergerDataExample: MergeObject<MergerDataExample>[] = [

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CustomComponentAbstract } from '../../../../../../lib/src/lib/merger/abstracts/custom-component.abstract';
+import { CustomComponentAbstract } from '@lab900/ui';
 import { MergerDataExample } from './models/merger-data-example.model';
 
 @Component({

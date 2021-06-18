@@ -10,8 +10,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 
-import { Lab900NavListModule } from '../../../../lib/src/lib/nav-list/nav-list.module';
-import { Lab900PageHeaderModule } from '../../../../lib/src/lib/page-header/page-header.module';
+import { Lab900NavListModule } from '@lab900/ui';
+import { Lab900PageHeaderModule } from '@lab900/ui';
 
 import { ExampleViewerComponent } from './components/example-viewer/example-viewer.component';
 import { ShowcasePageComponent } from './components/showcase-page/showcase-page.component';

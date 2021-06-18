@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NavItemGroup } from '../../lib/src/lib/nav-list/models/nav-item.model';
+import { NavItemGroup } from '@lab900/ui';
 import { showcaseUiNavItems } from './modules/showcase-ui/showcase-ui.nav-items';
 import { TranslateService } from '@ngx-translate/core';
 import { MatIconRegistry } from '@angular/material/icon';

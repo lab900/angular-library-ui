@@ -1,4 +1,4 @@
-import { MergeConfig } from '../../../../../../../lib/src/lib/merger/models/merge-config.model';
+import { MergeConfig } from '@lab900/ui';
 import * as moment from 'moment';
 import { of } from 'rxjs';
 import { CustomExampleComponent } from '../custom-example.component';

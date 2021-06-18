@@ -19,7 +19,7 @@ View the [showcase](https://lab900.github.io/angular-libraries/) for guides & ex
 
 1. Go to project root in terminal
 2. $ npm i --legacy-peer-deps
-3. $ npm run build:ui
+3. $ npm run watch:ui
 4. $ npm run start
 
 ## Deploy to NPM
