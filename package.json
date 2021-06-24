@@ -9,7 +9,6 @@
     "ng": "ng",
     "start": "ng serve --port 4900",
     "build": "ng build",
-    "build:forms": "ng build forms",
     "build:ui": "ng build ui",
     "build:ui:prod": "npm run build:ui -- --prod",
     "watch:ui": "npm run build:ui -- --watch",

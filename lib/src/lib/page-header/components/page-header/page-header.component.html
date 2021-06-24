@@ -1,5 +1,11 @@
 <header class="lab900-page-header">
-  <div class="lab900-page-header__main" fxLayout.gt-sm="row" fxLayoutGap="16px" fxLayoutAlign.gt-sm="space-between center">
+  <div
+    *ngIf="pageTitle || breadCrumbs?.length || actions?.length"
+    class="lab900-page-header__main"
+    fxLayout.gt-sm="row"
+    fxLayoutGap="16px"
+    fxLayoutAlign.gt-sm="space-between center"
+  >
     <div>
       <h1 *ngIf="pageTitle">{{ pageTitle | translate: pageTitleArgs }}</h1>
       <lab900-bread-crumbs *ngIf="breadCrumbs?.length" [breadCrumbs]="breadCrumbs" [data]="data"></lab900-bread-crumbs>
