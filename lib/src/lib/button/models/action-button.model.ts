@@ -15,6 +15,7 @@ export interface ActionButton<T = any> {
   tooltip?: { value: string; position?: TooltipPosition };
   suffixIcon?: propValue<T>;
   prefixIcon?: propValue<T>;
+  svgIcon?: boolean;
 }
 
 export interface ToggleActionButton<T = any> extends ActionButton<T> {

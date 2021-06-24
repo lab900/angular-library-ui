@@ -11,6 +11,7 @@
       [prefixIcon]="getPrefixIcon()"
       [suffixIcon]="getSuffixIcon()"
       [matTooltipPosition]="tooltipPosition"
+      [svgIcon]="action?.svgIcon"
     ></lab900-button>
     <ng-template #subActions>
       <lab900-button
@@ -24,6 +25,7 @@
         [prefixIcon]="getPrefixIcon()"
         [suffixIcon]="getSuffixIcon()"
         [matTooltipPosition]="tooltipPosition"
+        [svgIcon]="action?.svgIcon"
       ></lab900-button>
       <lab900-action-button-menu #sub [actions]="action.subActions" [data]="data"></lab900-action-button-menu>
     </ng-template>
