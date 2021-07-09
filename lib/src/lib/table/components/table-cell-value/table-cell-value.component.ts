@@ -4,15 +4,21 @@ import { TableCell } from '../../models/table-cell.model';
 @Component({
   selector: 'lab900-table-cell-value',
   template: ` <ng-container *ngIf="cell && cellValue">
-    <span *ngIf="!cell.click" [matTooltipClass]="'lab900-table__mat-tooltip'" [matTooltip]="getMatTooltip()">
+    <span
+      *ngIf="!cell.click"
+      matTooltipClass="lab900-table__mat-tooltip"
+      [matTooltip]="getMatTooltip()"
+      [matTooltipPosition]="this.cell?.cellTooltipOptions ?? 'below'"
+    >
       {{ cellValue | translate }}
     </span>
     <a
       style="cursor: pointer"
       *ngIf="cell.click"
       (click)="cell.click(data, cell)"
-      [matTooltipClass]="'lab900-table__mat-tooltip'"
+      matTooltipClass="lab900-table__mat-tooltip"
       [matTooltip]="getMatTooltip()"
+      [matTooltipPosition]="this.cell?.cellTooltipOptions ?? 'below'"
     >
       {{ cellValue | translate }}
     </a>

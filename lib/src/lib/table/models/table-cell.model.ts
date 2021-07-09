@@ -66,4 +66,8 @@ export interface TableCell<T = any> {
    * Enable a tooltip, displays the cell content in a tooltip
    */
   cellTooltip?: (data: T, cell: TableCell) => string;
+  /**
+   * Options for the cellTooltip if available
+   */
+  cellTooltipOptions?: { tooltipPosition: string };
 }
