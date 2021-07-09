@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { TableCell } from '../../models/table-cell.model';
+import { MatTooltipOptions, TableCell } from '../../models/table-cell.model';
 
 @Component({
   selector: 'lab900-table-cell-value',
@@ -8,7 +8,7 @@ import { TableCell } from '../../models/table-cell.model';
       *ngIf="!cell.click"
       matTooltipClass="lab900-table__mat-tooltip"
       [matTooltip]="getMatTooltip()"
-      [matTooltipPosition]="this.cell?.cellTooltipOptions ?? 'below'"
+      [matTooltipPosition]="getMatTooltipOption().tooltipPosition"
     >
       {{ cellValue | translate }}
     </span>
@@ -18,7 +18,7 @@ import { TableCell } from '../../models/table-cell.model';
       (click)="cell.click(data, cell)"
       matTooltipClass="lab900-table__mat-tooltip"
       [matTooltip]="getMatTooltip()"
-      [matTooltipPosition]="this.cell?.cellTooltipOptions ?? 'below'"
+      [matTooltipPosition]="getMatTooltipOption().tooltipPosition"
     >
       {{ cellValue | translate }}
     </a>
@@ -55,5 +55,14 @@ export class Lab900TableCellValueComponent<T = any> implements OnChanges {
 
   public getMatTooltip(): string {
     return this.cell.cellTooltip ? this.cell.cellTooltip(this.data, this.cell) : '';
+  }
+
+  public getMatTooltipOption(): MatTooltipOptions {
+    const matTooltipOption = this.cell.cellTooltipOptions ? this.cell.cellTooltipOptions : {};
+
+    return {
+      ...matTooltipOption,
+      tooltipPosition: matTooltipOption.tooltipPosition ?? 'below',
+    };
   }
 }
