@@ -1,4 +1,9 @@
+import { TooltipPosition } from '@angular/material/tooltip';
 import { propValue } from '../../utils/utils';
+
+export interface MatTooltipOptions {
+  tooltipPosition?: TooltipPosition;
+}
 
 export interface TableCell<T = any> {
   /**
@@ -66,4 +71,8 @@ export interface TableCell<T = any> {
    * Enable a tooltip, displays the cell content in a tooltip
    */
   cellTooltip?: (data: T, cell: TableCell) => string;
+  /**
+   * Options for the cellTooltip if available
+   */
+  cellTooltipOptions?: MatTooltipOptions;
 }
