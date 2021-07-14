@@ -9,6 +9,7 @@ export interface NavItem {
   children?: NavItem[];
   childrenInOverlay?: boolean;
   hide?: (() => boolean) | boolean;
+  navigationFinished?: (navigationResult: boolean | null) => void;
 }
 
 export interface NavItemGroup {
