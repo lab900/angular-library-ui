@@ -64,7 +64,11 @@ export class NavItemComponent extends SubscriptionBasedDirective implements OnIn
     if (this.item?.children?.length) {
       this.expanded = !this.expanded;
     } else if (this.item?.route) {
-      this.router.navigate([this.item.route], { queryParams: this.item?.routeQueryParams });
+      this.router.navigate([this.item.route], { queryParams: this.item?.routeQueryParams }).then((navigationResult: boolean) => {
+        if (this.item?.navigationFinished) {
+          this.item.navigationFinished(navigationResult);
+        }
+      });
     } else if (this.item?.href?.url) {
       window.open(this.item.href.url, this.item.href?.target ?? '_blank');
     }
