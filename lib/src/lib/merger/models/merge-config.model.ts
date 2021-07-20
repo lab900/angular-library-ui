@@ -14,4 +14,5 @@ export interface MergeConfig<T> extends MergeConfigBase {
   active?: boolean;
   component?: Type<CustomComponent<T>>;
   nestedObject?: MergeConfigBase[];
+  combine?: boolean;
 }

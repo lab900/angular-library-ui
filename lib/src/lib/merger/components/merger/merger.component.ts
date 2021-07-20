@@ -2,6 +2,9 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { MergeObject } from '../../models/merge-object.model';
 import { MergeConfig, MergeConfigBase } from '../../models/merge-config.model';
 import * as _ from 'lodash';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import MergeIcon from '../../../../assets/icons/merge';
 
 @Component({
   selector: 'lab900-merger',
@@ -28,12 +31,21 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
 
   public result: T;
 
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIconLiteral('merge', sanitizer.bypassSecurityTrustHtml(MergeIcon));
+  }
+
   public ngOnInit(): void {
     this.loading = !this.leftObject || !this.rightObject || !this.schema;
     this.result = { ...this.rightObject.data };
     this.schema.forEach((s) => {
       if (s.active) {
-        this.result[s.attribute] = this.getBase(s.active)[s.attribute];
+        const baseValue = this.getBase(s.active)[s.attribute];
+        if (s.combine) {
+          this.result[s.attribute] = [...this.result[s.attribute], baseValue];
+        } else {
+          this.result[s.attribute] = baseValue;
+        }
       }
     });
   }
@@ -48,7 +60,9 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   }
 
   public compare(config: MergeConfig<T>): boolean {
-    if (config?.nestedObject) {
+    if (config?.combine) {
+      return false;
+    } else if (config?.nestedObject) {
       let different = false;
       for (let i = 0; i < config?.nestedObject.length && !different; i++) {
         different = this.compareValues(config.nestedObject[i].attribute, config.attribute);
@@ -86,12 +100,23 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
     } else {
       this.result[config.attribute] = base[config.attribute];
     }
+    if (!config.active && config.combine) {
+      this.result[config.attribute] = [
+        ...(this.leftObject.data[config.attribute] as T[]),
+        ...(this.rightObject.data[config.attribute] as T[]),
+      ];
+    }
 
     this.schema[index] = { ...this.schema[index], active: !config.active };
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if ((changes.leftObject || changes.rightObject) && this.leftObject && this.rightObject) {
+    if (
+      (changes.leftObject || changes.rightObject) &&
+      this.leftObject &&
+      this.rightObject &&
+      !(changes.leftObject.firstChange || changes.rightObject.firstChange)
+    ) {
       this.reset();
     }
   }
