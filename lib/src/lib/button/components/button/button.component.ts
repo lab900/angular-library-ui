@@ -27,7 +27,10 @@ export class Lab900ButtonComponent {
   public disabled?: boolean;
 
   @Input()
-  public svgIcon: boolean = false;
+  public svgIcon = false;
+
+  @Input()
+  public containerClass?: string;
 
   public get classList(): { suffixIcon: boolean; prefixIcon: boolean } {
     return { suffixIcon: !!this.suffixIcon, prefixIcon: !!this.prefixIcon };

@@ -16,6 +16,7 @@ export interface ActionButton<T = any> {
   suffixIcon?: propValue<T>;
   prefixIcon?: propValue<T>;
   svgIcon?: boolean;
+  containerClass?: string;
 }
 
 export interface ToggleActionButton<T = any> extends ActionButton<T> {
