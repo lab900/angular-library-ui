@@ -32,10 +32,17 @@
         <mat-icon
           (click)="toggleActive(config, i)"
           *ngIf="compare(config)"
-          [ngClass]="{ 'not-active': !config.active, rotate: selected !== 'right' }"
+          [ngClass]="{ 'not-active': !config.active, flip: selected !== 'right' }"
           color="primary"
           >trending_flat
         </mat-icon>
+        <mat-icon
+          (click)="toggleActive(config, i)"
+          *ngIf="config?.combine"
+          [ngClass]="{ 'not-active': !config.active, flip: selected !== 'right' }"
+          color="primary"
+          svgIcon="merge"
+        ></mat-icon>
       </div>
       <lab900-merger-item
         [active]="selected === 'right'"

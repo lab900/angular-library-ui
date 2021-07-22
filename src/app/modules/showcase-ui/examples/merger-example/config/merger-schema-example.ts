@@ -36,6 +36,8 @@ export const mergerSchemaExample: MergeConfig<MergerDataExample>[] = [
     label: 'language',
     formatter: (data) => of(data.sort().join(', ')),
     nextLine: true,
+    combine: true,
+    active: true,
   },
   {
     attribute: 'text',
