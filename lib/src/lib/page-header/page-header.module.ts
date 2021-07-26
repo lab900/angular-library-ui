@@ -8,6 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { Lab900ButtonModule } from '../button/button.module';
 import { BreadCrumbsModule } from '../bread-crumbs/bread-crumbs.module';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [Lab900PageHeaderComponent],
@@ -21,6 +22,7 @@ import { BreadCrumbsModule } from '../bread-crumbs/bread-crumbs.module';
     MatMenuModule,
     Lab900ButtonModule,
     BreadCrumbsModule,
+    MatDividerModule,
   ],
 })
 export class Lab900PageHeaderModule {}
