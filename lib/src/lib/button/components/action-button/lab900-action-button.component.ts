@@ -65,4 +65,8 @@ export class Lab900ActionButtonComponent {
   public getSuffixIcon(): string {
     return readPropValue(this.action.suffixIcon, this.data);
   }
+
+  public getContainerClass(): string {
+    return readPropValue(this.action.containerClass, this.data);
+  }
 }
