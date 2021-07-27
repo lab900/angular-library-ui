@@ -123,3 +123,9 @@ pre[class*='language-'] {
     padding: 15px;
   }
 }
+
+.action-button {
+  &--red {
+    color: #e57373 !important;
+  }
+}

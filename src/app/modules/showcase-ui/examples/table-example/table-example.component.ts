@@ -95,7 +95,8 @@ export class TableExampleComponent {
       disabled: (d) => d?.id === 1,
     },
     {
-      label: 'delete',
+      label: (data) => (data.id === 1 ? 'delete_forever' : 'delete'),
+      containerClass: (data) => (data.id === 1 ? 'action-button--red' : ''),
       type: 'icon',
     },
   ];

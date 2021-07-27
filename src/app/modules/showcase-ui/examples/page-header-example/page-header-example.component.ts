@@ -48,7 +48,6 @@ export class PageHeaderExampleComponent {
     {
       label: 'Save',
       suffixIcon: 'keyboard_arrow_down',
-
       action: () => console.log('save'),
       type: 'flat',
     },
