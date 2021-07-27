@@ -5,6 +5,13 @@
     }
   }
 
+  &__title {
+    min-width: fit-content;
+  }
+  &__actions {
+    min-width: unset !important;
+  }
+
   @media screen and (min-width: 960px) {
     &__nav {
       padding: 0 50px;

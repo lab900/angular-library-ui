@@ -30,6 +30,12 @@ export class PageHeaderParamsExampleComponent {
       type: 'flat',
     },
     {
+      label: 'Left btn',
+      action: () => console.log('Left btn'),
+      type: 'flat',
+      align: 'left',
+    },
+    {
       label: 'Save',
       action: () => console.log('save'),
       type: 'flat',
