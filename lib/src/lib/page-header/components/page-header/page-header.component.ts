@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { PageHeaderNavItem } from '../../models/page-header-nav.model';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { BreadCrumb } from '../../../bread-crumbs/models/bread-crumb.model';
@@ -30,9 +30,11 @@ export class Lab900PageHeaderComponent implements OnChanges {
   @Input()
   public breadCrumbs: BreadCrumb[];
 
-  public ngOnChanges(): void {
-    this.leftActions = this.actions?.filter((action) => action.align === 'left');
-    this.rightActions = this.actions?.filter((action) => action.align === 'right' || action.align == null);
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.actions) {
+      this.leftActions = this.actions?.filter((action) => action.align === 'left');
+      this.rightActions = this.actions?.filter((action) => action.align === 'right' || action.align == null);
+    }
   }
 
   public getLabel(item: PageHeaderNavItem): string {
