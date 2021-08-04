@@ -43,6 +43,12 @@ export class Lab900TableCellComponent<T = any> {
   @Input()
   public customCellContent?: Lab900TableCustomCellDirective;
 
+  /**
+   * max column width, set by table input
+   */
+  @Input()
+  public maxColumnWidthFromTable?: string;
+
   @Output()
   public headerClick = new EventEmitter<TableCell<T>>();
 

@@ -43,6 +43,7 @@
         *ngFor="let cell of tableCells; trackBy: trackCellFn"
         [cell]="cell"
         [sort]="sort"
+        [maxColumnWidthFromTable]="maxColumnWidth"
         [customCellContent]="customCellContent"
         (headerClick)="handleHeaderClick($event)"
       ></lab900-table-cell>
