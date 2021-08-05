@@ -15,11 +15,11 @@ export interface TableCellTooltip<T = any> {
   /**
    * Currently ony supports positioning option of matTooltip
    */
-  matTooltipOptions?: {
-    matTooltipPosition: TooltipPosition;
+  tooltipOptions?: {
+    tooltipPosition: TooltipPosition;
   };
 }
 
-export interface MatTooltipOptions {
+export interface TooltipOptions {
   tooltipPosition?: TooltipPosition;
 }

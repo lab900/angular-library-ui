@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { MatTooltipOptions } from '../../models/table-cell-tooltip.model';
+import { TooltipOptions } from '../../models/table-cell-tooltip.model';
 import { TableCell } from '../../models/table-cell.model';
 import { readPropValue } from '../../../utils/utils';
 
@@ -96,10 +96,10 @@ export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterV
     return '';
   }
 
-  public getMatTooltipOption(): MatTooltipOptions {
+  public getMatTooltipOption(): TooltipOptions {
     return {
-      ...this.cell.cellTooltip?.matTooltipOptions,
-      tooltipPosition: this.cell.cellTooltip?.matTooltipOptions?.matTooltipPosition ?? 'below',
+      ...this.cell.cellTooltip?.tooltipOptions,
+      tooltipPosition: this.cell.cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below',
     };
   }
 

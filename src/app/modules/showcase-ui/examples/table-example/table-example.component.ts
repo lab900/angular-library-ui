@@ -146,7 +146,7 @@ export class TableExampleComponent {
       cellClass: 'clickable-cell',
       cellTooltip: {
         text: (data) => data.email,
-        matTooltipOptions: { matTooltipPosition: 'left' },
+        tooltipOptions: { tooltipPosition: 'left' },
       },
       columnOrder: 0,
     },
