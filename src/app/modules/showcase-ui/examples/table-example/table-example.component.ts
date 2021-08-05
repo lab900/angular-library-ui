@@ -154,7 +154,7 @@ export class TableExampleComponent {
       key: 'nameLong',
       label: 'Long name',
       sortable: true,
-      cellClass: 'clickable-cell table-cell--max-width',
+      cellClass: 'clickable-cell',
       cellTooltip: { text: (data) => data.nameLong, onlyOnOverflow: true },
       cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
