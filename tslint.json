@@ -16,7 +16,7 @@
     "directive-class-suffix": true,
     "directive-selector": [true, "attribute", "lab900", "camelCase"],
     "component-selector": [true, "element", "lab900", "kebab-case"],
-    "eofline": false,
+    "eofline": true,
     "import-blacklist": [true, "rxjs/Rx"],
     "import-spacing": true,
     "indent": {
