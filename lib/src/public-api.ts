@@ -48,6 +48,7 @@ export * from './lib/table/directives/table-disabled.directive';
 export * from './lib/table/directives/table-header-content.directive';
 export * from './lib/table/directives/table-top-content.directive';
 export * from './lib/table/models/table-cell.model';
+export * from './lib/table/models/table-cell-tooltip.model';
 
 // page header
 export * from './lib/page-header/page-header.module';

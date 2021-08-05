@@ -14,7 +14,7 @@
       <ng-container *ngTemplateOutlet="customCellContent; context: { $implicit: { cell: cell, element: element } }"></ng-container>
     </ng-container>
     <ng-container *ngIf="!cell?.customCellContent">
-      <lab900-table-cell-value [data]="element" [cell]="cell"></lab900-table-cell-value>
+      <lab900-table-cell-value [data]="element" [cell]="cell" [maxColumnWidthFromTable]="maxColumnWidthFromTable"></lab900-table-cell-value>
     </ng-container>
   </td>
 </ng-container>

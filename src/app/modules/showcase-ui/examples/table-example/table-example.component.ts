@@ -21,6 +21,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
     [multiSort]="true"
     [rowClass]="getRowClass"
     (tableCellsFiltered)="filtered($event)"
+    [maxColumnWidth]="'200px'"
   >
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
@@ -103,13 +104,13 @@ export class TableExampleComponent {
 
   public mockData: any[] = [
     {
-      name: 'A name',
-      nameLong: 'A name sdfdsfdsfdsfdsfdsf',
+      name: 'John Cena',
+      nameLong: 'John Cena, the guy from wrestling and movies and stuff, and also just from the memes',
       id: 1,
       nested: {
         test: 'xxx',
       },
-      email: 'mail@test.com',
+      email: 'john@cena.com',
       city: 'New York City',
     },
     {
@@ -118,6 +119,7 @@ export class TableExampleComponent {
       id: 2,
       active: true,
       nested: {},
+      email: 'b@name.com',
     },
     {
       name: '',
@@ -142,7 +144,10 @@ export class TableExampleComponent {
       cellHeaderClass: 'center-cell',
       sortable: true,
       cellClass: 'clickable-cell',
-      cellTooltip: (data) => data.name,
+      cellTooltip: {
+        text: (data) => data.email,
+        tooltipOptions: { tooltipPosition: 'left' },
+      },
       columnOrder: 0,
     },
     {
@@ -150,7 +155,8 @@ export class TableExampleComponent {
       label: 'Long name',
       sortable: true,
       cellClass: 'clickable-cell',
-      cellTooltip: (data) => data.nameLong,
+      cellTooltip: { text: (data) => data.nameLong, onlyOnOverflow: true },
+      cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
     },
     {

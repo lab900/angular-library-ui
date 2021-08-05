@@ -159,6 +159,14 @@ export class Lab900TableComponent implements OnChanges {
   @Input()
   public paging?: Paging;
 
+  /**
+   * set max width of all columns, can be individually overwritten per tableCell
+   * this will create a tooltip with the content of the cell, when the text overflows
+   * @example: '300px'
+   */
+  @Input()
+  public maxColumnWidth?: string;
+
   @Input()
   public onRowClick: (value: any, index: number, event: Event) => void;
 
