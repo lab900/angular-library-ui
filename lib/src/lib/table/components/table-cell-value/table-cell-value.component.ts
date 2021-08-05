@@ -10,8 +10,8 @@ import { readPropValue } from '../../../utils/utils';
       #cellRef
       *ngIf="!cell.click"
       matTooltipClass="lab900-table__mat-tooltip"
-      [matTooltip]="getMatTooltip()"
-      [matTooltipPosition]="getMatTooltipOption().tooltipPosition"
+      [matTooltip]="getTooltipContent()"
+      [matTooltipPosition]="getTooltipOptions().tooltipPosition"
     >
       {{ cellValue | translate }}
     </span>
@@ -21,8 +21,8 @@ import { readPropValue } from '../../../utils/utils';
       *ngIf="cell.click"
       (click)="cell.click(data, cell)"
       matTooltipClass="lab900-table__mat-tooltip"
-      [matTooltip]="getMatTooltip()"
-      [matTooltipPosition]="getMatTooltipOption().tooltipPosition"
+      [matTooltip]="getTooltipContent()"
+      [matTooltipPosition]="getTooltipOptions().tooltipPosition"
     >
       {{ cellValue | translate }}
     </a>
@@ -72,7 +72,7 @@ export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterV
     }
   }
 
-  public getMatTooltip(): string {
+  public getTooltipContent(): string {
     // case: only table max width > show content only on overflow
     if (
       this.maxColumnWidthFromTable &&
@@ -96,7 +96,7 @@ export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterV
     return '';
   }
 
-  public getMatTooltipOption(): TooltipOptions {
+  public getTooltipOptions(): TooltipOptions {
     return {
       ...this.cell.cellTooltip?.tooltipOptions,
       tooltipPosition: this.cell.cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below',
