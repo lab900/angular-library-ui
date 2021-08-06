@@ -63,4 +63,30 @@
   &__mat-tooltip {
     min-width: fit-content;
   }
+
+  &__footer {
+    @media screen and (min-width: 600px) {
+      display: flex;
+      align-items: center;
+    }
+
+    > div {
+      flex: 1;
+    }
+
+    &__actions {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      margin: 0 -4px;
+
+      @media screen and (max-width: 600px) {
+        margin: 10px -4px 0;
+      }
+
+      lab900-action-button {
+        padding: 0 4px;
+      }
+    }
+  }
 }

@@ -22,6 +22,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
     [rowClass]="getRowClass"
     (tableCellsFiltered)="filtered($event)"
     [maxColumnWidth]="'200px'"
+    [tableFooterActions]="tableFooterActions"
   >
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
@@ -39,6 +40,19 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
 })
 export class TableExampleComponent {
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
+
+  public tableFooterActions: ActionButton[] = [
+    {
+      label: 'Kies een locatie',
+      type: 'flat',
+      align: 'left',
+    },
+    {
+      label: 'Button',
+      type: 'stroked',
+      align: 'right',
+    },
+  ];
 
   public tableHeaderActions: ActionButton[] = [
     {

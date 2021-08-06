@@ -96,6 +96,12 @@ export class Lab900TableComponent implements OnChanges {
   public tableHeaderActions: ActionButton[];
 
   /**
+   * Show a set of action at the bottom of the table
+   */
+  @Input()
+  public tableFooterActions: ActionButton[];
+
+  /**
    * Show a set of action at the start of each row
    */
   @Input()
