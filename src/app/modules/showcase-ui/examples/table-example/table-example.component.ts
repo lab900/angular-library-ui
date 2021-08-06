@@ -45,12 +45,10 @@ export class TableExampleComponent {
     {
       label: 'Kies een locatie',
       type: 'flat',
-      align: 'left',
     },
     {
       label: 'Button',
       type: 'stroked',
-      align: 'right',
     },
   ];
 
