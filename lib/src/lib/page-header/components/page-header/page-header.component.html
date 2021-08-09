@@ -4,34 +4,21 @@
     class="lab900-page-header__main"
     fxLayout.gt-sm="row"
     fxLayoutGap="16px"
-    fxLayoutAlign.gt-sm="space-between center"
+    fxLayoutAlign.gt-sm="start center"
   >
     <div class="lab900-page-header__title">
       <h1 *ngIf="pageTitle">{{ pageTitle | translate: pageTitleArgs }}</h1>
       <lab900-bread-crumbs *ngIf="breadCrumbs?.length" [breadCrumbs]="breadCrumbs" [data]="data"></lab900-bread-crumbs>
     </div>
 
-    <div
-      class="lab900-page-header__actions"
-      *ngIf="leftActions?.length"
-      fxLayout="row"
-      fxLayoutGap="16px"
-      fxLayoutAlign.lt-md="center"
-      fxFill
-    >
-      <mat-divider vertical="true"></mat-divider>
-      <lab900-action-button *ngFor="let action of leftActions" [action]="action" [data]="data"></lab900-action-button>
-    </div>
-    <div
-      class="lab900-page-header__actions"
-      *ngIf="rightActions?.length"
-      fxLayout="row"
-      fxLayoutGap="16px"
-      fxLayoutAlign="end"
-      fxLayoutAlign.lt-md="center"
-      fxFill
-    >
-      <lab900-action-button *ngFor="let action of rightActions" [action]="action" [data]="data"></lab900-action-button>
+    <div class="lab900-page-header__actions" *ngIf="actions?.length">
+      <div class="lab900-page-header__actions--left" fxLayoutGap="16px">
+        <mat-divider vertical="true" class="lab900-page-header__divider" *ngIf="leftActions?.length > 0"></mat-divider>
+        <lab900-action-button *ngFor="let action of leftActions" [action]="action" [data]="data"></lab900-action-button>
+      </div>
+      <div class="lab900-page-header__actions--right" fxLayoutGap="16px">
+        <lab900-action-button *ngFor="let action of rightActions" [action]="action" [data]="data"></lab900-action-button>
+      </div>
     </div>
   </div>
   <nav *ngIf="navItems?.length" class="lab900-page-header__nav" mat-tab-nav-bar>
