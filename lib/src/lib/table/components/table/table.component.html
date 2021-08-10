@@ -78,6 +78,16 @@
     </table>
   </div>
 
+  <div class="lab900-table__empty" *ngIf="data && !data.length && !disabled">
+    <ng-container *ngIf="emptyTableTemplate">
+      <ng-container *ngTemplateOutlet="emptyTableTemplate"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="!emptyTableTemplate">
+      <h3>{{ 'GENERAL.NO_RESULTS.TITLE' | translate }}</h3>
+      <p>{{ 'GENERAL.NO_RESULTS.DESC' | translate }}</p>
+    </ng-container>
+  </div>
+
   <div class="lab900-table__footer" *ngIf="tableFooterActions?.length || (data?.length && paging)">
     <div>
       <div class="lab900-table__footer__actions" *ngIf="tableFooterActions?.length">
@@ -93,16 +103,6 @@
       [pageIndex]="paging.pageIndex"
       (page)="pageChange.emit($event)"
     ></mat-paginator>
-  </div>
-
-  <div class="lab900-table__empty" *ngIf="data && !data.length && !disabled">
-    <ng-container *ngIf="emptyTableTemplate">
-      <ng-container *ngTemplateOutlet="emptyTableTemplate"></ng-container>
-    </ng-container>
-    <ng-container *ngIf="!emptyTableTemplate">
-      <h3>{{ 'GENERAL.NO_RESULTS.TITLE' | translate }}</h3>
-      <p>{{ 'GENERAL.NO_RESULTS.DESC' | translate }}</p>
-    </ng-container>
   </div>
 
   <div *ngIf="disabled">
