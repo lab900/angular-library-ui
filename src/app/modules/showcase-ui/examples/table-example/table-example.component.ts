@@ -181,8 +181,8 @@ export class TableExampleComponent {
       key: 'quantity',
       label: 'Quantity',
       cellClass: 'clickable-cell',
-      footer: (data) => {
-        return data.map((data) => data.quantity).reduce((valA, valB) => valA + valB, 0);
+      footer: (tableData) => {
+        return tableData.map((data) => data.quantity).reduce((valA, valB) => valA + valB, 0);
       },
       footerCellClass: 'table-footer-highlight',
     },
