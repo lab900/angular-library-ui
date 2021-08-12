@@ -23,6 +23,7 @@ import { CustomExampleComponent } from './examples/merger-example/custom-example
 import { ButtonExampleComponent } from './examples/button-example/button-example.component';
 import { Lab900ButtonModule } from '@lab900/ui';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
 
 const examples = [
   SharingExampleComponent,
@@ -32,6 +33,7 @@ const examples = [
   PageHeaderExampleComponent,
   PageHeaderParamsExampleComponent,
   TableExampleComponent,
+  TableDragAndDropExampleComponent,
   MergerExampleComponent,
   CustomExampleComponent,
   ButtonExampleComponent,

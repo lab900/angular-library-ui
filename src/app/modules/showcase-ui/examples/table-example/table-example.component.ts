@@ -113,6 +113,7 @@ export class TableExampleComponent {
       label: (data) => (data.id === 1 ? 'delete_forever' : 'delete'),
       containerClass: (data) => (data.id === 1 ? 'action-button--red' : ''),
       type: 'icon',
+      action: () => confirm('Are you sure?'),
     },
   ];
 
