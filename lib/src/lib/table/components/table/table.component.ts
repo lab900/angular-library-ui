@@ -1,4 +1,5 @@
 import {
+  AfterContentInit,
   Component,
   ContentChild,
   EventEmitter,
@@ -41,7 +42,7 @@ export interface Lab900Sort {
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class Lab900TableComponent implements OnChanges {
+export class Lab900TableComponent implements OnChanges, AfterContentInit {
   @Input()
   public set tableCells(cells: TableCell[]) {
     this._tableCells = cells.sort(Lab900TableComponent.reorderColumnsFn);
@@ -176,6 +177,9 @@ export class Lab900TableComponent implements OnChanges {
   @Input()
   public onRowClick: (value: any, index: number, event: Event) => void;
 
+  @Input()
+  public preFooterTitle: string;
+
   @Output()
   public readonly pageChange = new EventEmitter<PageEvent>();
 
@@ -205,9 +209,15 @@ export class Lab900TableComponent implements OnChanges {
 
   public displayedColumns: string[] = [];
 
+  public showCellFooters = false;
+
   // when columnOrder is not specified, put them in the back (position 10000)
   public static reorderColumnsFn(a: TableCell, b: TableCell): number {
     return (a.columnOrder ?? 10000) - (b.columnOrder ?? 10000);
+  }
+
+  public ngAfterContentInit(): void {
+    this.showCellFooters = !!this.tableCells.find((cell) => cell.footer);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

@@ -43,6 +43,9 @@ export class Lab900TableCellComponent<T = any> {
   @Input()
   public customCellContent?: Lab900TableCustomCellDirective;
 
+  @Input()
+  public data: T[];
+
   /**
    * max column width, set by table input
    */
@@ -88,5 +91,18 @@ export class Lab900TableCellComponent<T = any> {
 
   public getCellHeaderSvgIcon(): string {
     return readPropValue<TableCell<T>>(this.cell.cellHeaderSvgIcon, this.cell);
+  }
+
+  public getCellFooter(): string {
+    if (this.cell.footer) {
+      if (typeof this.cell.footer === 'function') {
+        return this.cell.footer(this.data, this.cell);
+      }
+      return this.cell.footer;
+    }
+  }
+
+  public getCellFooterClass(): string {
+    return this.cell.footerCellClass;
   }
 }

@@ -3,7 +3,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-table-example',
-  template: `<lab900-table
+  template: ` <lab900-table
     [pageSizeConfig]="{ hidePageSize: true, pageSizeOptions: [5, 10] }"
     [tableCells]="tableCells"
     [sort]="sort"
@@ -23,6 +23,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
     (tableCellsFiltered)="filtered($event)"
     [maxColumnWidth]="'200px'"
     [tableFooterActions]="tableFooterActions"
+    [preFooterTitle]="'Quantity Total'"
   >
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
@@ -37,6 +38,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
       </div>
     </div>
   </lab900-table>`,
+  styleUrls: ['table-example.component.scss'],
 })
 export class TableExampleComponent {
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
@@ -124,19 +126,22 @@ export class TableExampleComponent {
       },
       email: 'john@cena.com',
       city: 'New York City',
+      quantity: 123,
     },
     {
-      name: 'B name',
-      nameLong: 'A name sdfdsfdsfdsfdsfdsf',
+      name: 'A name',
+      nameLong: 'A very very veeeeeeeeryyy loooooooooong name',
       id: 2,
       active: true,
       nested: {},
       email: 'b@name.com',
+      quantity: 456,
     },
     {
       name: '',
-      nameLong: 'A name sdfdsfdsfdsfdsfdsf sdfdsfdsfdsfdsfdsf',
+      nameLong: 'A name very long :)',
       id: 3,
+      quantity: 789,
     },
   ];
 
@@ -161,6 +166,7 @@ export class TableExampleComponent {
         tooltipOptions: { tooltipPosition: 'left' },
       },
       columnOrder: 0,
+      footer: '<a href="javascript:void(0)">Click here!</a>',
     },
     {
       key: 'nameLong',
@@ -170,6 +176,15 @@ export class TableExampleComponent {
       cellTooltip: { text: (data) => data.nameLong, onlyOnOverflow: true },
       cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
+    },
+    {
+      key: 'quantity',
+      label: 'Quantity',
+      cellClass: 'clickable-cell',
+      footer: (data) => {
+        return data.map((data) => data.quantity).reduce((valA, valB) => valA + valB, 0);
+      },
+      footerCellClass: 'table-footer-highlight',
     },
     {
       key: 'id',
