@@ -37,7 +37,10 @@
             [disabled]="selection.isSelected(row) ? false : !selectEnabled"
           ></mat-checkbox>
         </td>
-        <td mat-footer-cell *matFooterCellDef></td>
+
+        <ng-container *ngIf="showCellFooters">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
       </ng-container>
 
       <lab900-table-cell
@@ -67,7 +70,9 @@
             <lab900-action-button *ngFor="let action of tableActionsFront" [data]="element" [action]="action"></lab900-action-button>
           </div>
         </td>
-        <td mat-footer-cell *matFooterCellDef></td>
+        <ng-container *ngIf="showCellFooters">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
       </ng-container>
 
       <ng-container matColumnDef="actions-back" stickyEnd>
@@ -77,7 +82,9 @@
             <lab900-action-button *ngFor="let action of tableActionsBack" [data]="element" [action]="action"></lab900-action-button>
           </div>
         </td>
-        <td mat-footer-cell *matFooterCellDef></td>
+        <ng-container *ngIf="showCellFooters">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

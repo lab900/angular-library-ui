@@ -101,8 +101,4 @@ export class Lab900TableCellComponent<T = any> {
       return this.cell.footer;
     }
   }
-
-  public getCellFooterClass(): string {
-    return this.cell.footerCellClass;
-  }
 }
