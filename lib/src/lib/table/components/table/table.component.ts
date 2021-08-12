@@ -217,7 +217,7 @@ export class Lab900TableComponent implements OnChanges, AfterContentInit {
   }
 
   public ngAfterContentInit(): void {
-    this.showCellFooters = !!this.tableCells.find((cell) => cell.footer);
+    this.showCellFooters = this.tableCells.some((cell) => cell.footer);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
