@@ -72,4 +72,9 @@ export interface TableCell<T = any> {
    * @example: '300px'
    */
   cellMaxWidth?: propValue<T>;
+  /**
+   * Cell footer to be displayed
+   */
+  footer?: ((data: T[], cell: TableCell) => string) | string;
+  footerCellClass?: string;
 }

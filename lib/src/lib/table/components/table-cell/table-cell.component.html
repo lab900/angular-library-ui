@@ -17,4 +17,5 @@
       <lab900-table-cell-value [data]="element" [cell]="cell" [maxColumnWidthFromTable]="maxColumnWidthFromTable"></lab900-table-cell-value>
     </ng-container>
   </td>
+  <td mat-footer-cell *matFooterCellDef [innerHtml]="getCellFooter()" [ngClass]="cell.footerCellClass"></td>
 </ng-container>

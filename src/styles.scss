@@ -106,6 +106,12 @@ pre[class*='language-'] {
   border-radius: 0 !important;
 }
 
+.table-footer-highlight {
+  background-color: #03ada5;
+  padding: 0px !important;
+  text-align: center !important;
+}
+
 .clickable-cell > a {
   border-bottom: 1px solid $palette-lab900green-500;
 }

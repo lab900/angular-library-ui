@@ -41,6 +41,10 @@
             [disabled]="selection.isSelected(row) ? false : !selectEnabled"
           ></mat-checkbox>
         </td>
+
+        <ng-container *ngIf="showCellFooters">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
       </ng-container>
 
       <lab900-table-cell
@@ -50,9 +54,18 @@
         [maxColumnWidthFromTable]="maxColumnWidth"
         [customCellContent]="customCellContent"
         (headerClick)="handleHeaderClick($event)"
+        [data]="data"
       ></lab900-table-cell>
 
       <ng-content select=".lab900-table-cell"></ng-content>
+
+      <ng-container *ngIf="preFooterTitle">
+        <ng-container matColumnDef="preFooterTitle">
+          <td mat-footer-cell *matFooterCellDef [attr.colspan]="tableCells.length" class="lab900-table__pre-footer-title-cell">
+            {{ preFooterTitle }}
+          </td>
+        </ng-container>
+      </ng-container>
 
       <ng-container matColumnDef="actions-front">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -67,6 +80,9 @@
             ></lab900-action-button>
           </div>
         </td>
+        <ng-container *ngIf="showCellFooters">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
       </ng-container>
 
       <ng-container matColumnDef="actions-back" stickyEnd>
@@ -82,6 +98,9 @@
             ></lab900-action-button>
           </div>
         </td>
+        <ng-container *ngIf="showCellFooters">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -93,7 +112,12 @@
         cdkDrag
         [cdkDragDisabled]="!draggableRows"
       ></tr>
-
+      <ng-container *ngIf="preFooterTitle">
+        <tr mat-footer-row *matFooterRowDef="['preFooterTitle']" class="lab900-table__pre-footer-title-row"></tr>
+      </ng-container>
+      <ng-container *ngIf="showCellFooters">
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </ng-container>
       <ng-container *ngIf="draggableRows">
         <div *cdkDragPlaceholder></div>
       </ng-container>
