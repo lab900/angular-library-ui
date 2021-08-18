@@ -54,10 +54,7 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   @Input()
   public set tableCells(cells: TableCell<T>[]) {
     this._tableCells = cells.sort(Lab900TableComponent.reorderColumnsFn);
-    setTimeout(() => {
-      this.removeOldColumnsFromTable();
-      this.addColumnsToTable();
-    });
+    this.reloadColumns();
   }
 
   public get tableCells(): TableCell<T>[] {
@@ -95,7 +92,10 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   public rowClass: propFunction<T> | string;
 
   @Input()
-  public pageSizeConfig: { hidePageSize?: boolean; pageSizeOptions?: number[] } = { hidePageSize: true, pageSizeOptions: [5, 10, 50] };
+  public pageSizeConfig: { hidePageSize?: boolean; pageSizeOptions?: number[] } = {
+    hidePageSize: true,
+    pageSizeOptions: [5, 10, 50],
+  };
 
   @Input()
   public loading = false;
@@ -244,6 +244,9 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
       this.selection.clear();
       this.selection.select(...this.selectedItems);
     }
+    if (changes.data) {
+      this.reloadColumns();
+    }
   }
 
   public selectRow(row: T): void {
@@ -329,14 +332,21 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   }
 
   private removeOldColumnsFromTable(): void {
-    const oldColumns: Set<MatColumnDef> = (this.table as any)._customColumnDefs;
-    oldColumns.forEach((oldColumn: MatColumnDef) => {
+    const oldColumns: Set<MatColumnDef> = (this.table as any)?._customColumnDefs;
+    oldColumns?.forEach((oldColumn: MatColumnDef) => {
       this.table.removeColumnDef(oldColumn);
       // removing column also from the displayed columns (such array should match the dataSource!)
       this.displayedColumns.splice(
         this.displayedColumns.findIndex((column: string) => column === oldColumn.name),
         1,
       );
+    });
+  }
+
+  private reloadColumns(): void {
+    setTimeout(() => {
+      this.removeOldColumnsFromTable();
+      this.addColumnsToTable();
     });
   }
 }
