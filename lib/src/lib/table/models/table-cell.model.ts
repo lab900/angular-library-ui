@@ -13,7 +13,7 @@ export interface TableCell<T = any> {
   /**
    * Custom cell class
    */
-  cellClass?: propValue<[T, TableCell<T>]>;
+  cellClass?: ((data: T, cell: TableCell) => string) | string;
   /**
    * Custom cell header class
    */

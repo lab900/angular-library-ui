@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, Output, ViewChild, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { SortDirection } from '@angular/material/sort';
@@ -74,7 +74,9 @@ export class Lab900TableCellComponent<T = any> {
   }
 
   public getCellClass(data: T): string {
-    return readPropValue<[T, TableCell<T>]>(this.cell.cellClass, [data, this.cell]);
+    return typeof this.cell.cellClass === 'function'
+      ? (this.cell.cellClass as (data: T, cell: TableCell) => string)(data, this.cell)
+      : this.cell.cellClass;
   }
 
   public getCellLabel(): string {
