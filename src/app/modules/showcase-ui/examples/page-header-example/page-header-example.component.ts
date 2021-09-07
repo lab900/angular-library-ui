@@ -8,6 +8,7 @@ import { PageHeaderNavItem, ActionButton, BreadCrumb } from '@lab900/ui';
     [navItems]="navItems"
     [actions]="actions"
     [breadCrumbs]="breadCrumbs"
+    [data]="{ tab: 'Examples' }"
   ></lab900-page-header>`,
 })
 export class PageHeaderExampleComponent {
@@ -34,7 +35,14 @@ export class PageHeaderExampleComponent {
     },
     {
       title: 'Page header',
-      route: '/ui/page-header',
+      route: '/page-header',
+    },
+    {
+      title: (data: { tab: string }) => data.tab,
+      route: `/page-header`,
+      queryParams: (data: { tab: string }) => ({
+        tab: data.tab.toLowerCase(),
+      }),
     },
   ];
 
