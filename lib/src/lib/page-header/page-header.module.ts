@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Lab900ButtonModule } from '../button/button.module';
 import { BreadCrumbsModule } from '../bread-crumbs/bread-crumbs.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [Lab900PageHeaderComponent],
@@ -23,6 +24,7 @@ import { MatDividerModule } from '@angular/material/divider';
     Lab900ButtonModule,
     BreadCrumbsModule,
     MatDividerModule,
+    MatIconModule,
   ],
 })
 export class Lab900PageHeaderModule {}

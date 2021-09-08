@@ -15,11 +15,13 @@ export class PageHeaderExampleComponent {
   public navItems: PageHeaderNavItem[] = [
     {
       label: 'Tab 1',
-      route: '',
+      route: '#',
+      suffixIcon: 'warning',
     },
     {
       label: 'Tab 2',
-      route: '',
+      route: '#',
+      prefixIcon: 'warning',
     },
   ];
 
