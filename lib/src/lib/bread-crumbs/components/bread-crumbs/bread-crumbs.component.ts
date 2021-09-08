@@ -14,7 +14,15 @@ export class BreadCrumbsComponent {
   @Input()
   public data?: any;
 
+  public getTitle(title: ((data: any) => string) | string): string | null {
+    return readPropValue(title, this.data);
+  }
+
   public getRoute(route: ((data: any) => string) | string): string | null {
     return readPropValue(route, this.data);
+  }
+
+  public getQueryParams(queryParams: ((data: any) => object) | object | undefined): object | null {
+    return readPropValue(queryParams, this.data);
   }
 }
