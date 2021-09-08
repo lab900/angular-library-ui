@@ -30,8 +30,18 @@
         [queryParams]="link?.queryParams"
         #rla="routerLinkActive"
         [active]="rla.isActive"
-        >{{ getLabel(link) | translate }}</a
+        class="lab900-page-header__nav__item"
       >
+        <ng-container *ngIf="link.prefixIcon">
+          <mat-icon class="lab900-page-header__nav__item__prefix-icon" *ngIf="link.svgIcon" [svgIcon]="link.prefixIcon"></mat-icon>
+          <mat-icon class="lab900-page-header__nav__item__prefix-icon" *ngIf="!link.svgIcon">{{ link.prefixIcon }}</mat-icon>
+        </ng-container>
+        {{ getLabel(link) | translate }}
+        <ng-container *ngIf="link.suffixIcon">
+          <mat-icon class="lab900-page-header__nav__item__suffix-icon" *ngIf="link.svgIcon" [svgIcon]="link.suffixIcon"></mat-icon>
+          <mat-icon class="lab900-page-header__nav__item__suffix-icon" *ngIf="!link.svgIcon">{{ link.suffixIcon }}</mat-icon>
+        </ng-container>
+      </a>
     </ng-container>
   </nav>
 </header>
