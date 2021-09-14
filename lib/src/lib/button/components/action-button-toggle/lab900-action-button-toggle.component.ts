@@ -36,11 +36,11 @@ export class Lab900ActionButtonToggleComponent {
   }
 
   public getDisabled(): boolean {
-    return readPropValue(this.action.disabled, this.data);
+    return readPropValue(typeof this.action.disabled === 'function' ? this.action.disabled(this.data) : this.action.disabled, this.data);
   }
 
   public getSubActionDisabled(action: ActionButton): boolean {
-    return readPropValue(action.disabled, this.data);
+    return readPropValue(typeof action.disabled === 'function' ? action.disabled(this.data) : action.disabled, this.data);
   }
 
   public doAction(e: Event): void {

@@ -48,7 +48,7 @@ export class Lab900ActionButtonComponent {
   }
 
   public getDisabled(): boolean {
-    return readPropValue(this.action.disabled, this.data);
+    return readPropValue(typeof this.action.disabled === 'function' ? this.action.disabled(this.data) : this.action.disabled, this.data);
   }
 
   public doAction(e: Event): void {

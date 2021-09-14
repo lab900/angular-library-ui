@@ -8,7 +8,7 @@ export interface ActionButton<T = any> {
   action?: (data?: T, e?: Event) => any;
   type?: propValue<T, 'toggle' | Lab900ButtonType>;
   color?: propValue<T, ThemePalette>;
-  disabled?: propValue<T, boolean>;
+  disabled?: propValue<T, boolean> | ((data?: T) => propValue<T, boolean>);
   selected?: propValue<T, boolean>;
   hide?: propValue<T, boolean>;
   subActions?: ActionButton<T>[];
