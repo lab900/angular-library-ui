@@ -1,6 +1,6 @@
 <p align="center">
 <a href="https://lab900.com" target="_blank">
-    <img src="https://lab900.github.io/angular-libraries/assets/images/logo-duo-dark.svg" width="100">
+    <img src="https://lab900.github.io/angular-library-ui/assets/images/logo-duo-dark.svg" width="100">
 </a>
 <h1>Lab900 - Angular UI library</h1>
 
@@ -9,11 +9,11 @@
 </p>
 
 A set of Angular 11+ form components built on top of [Angular Material](https://material.angular.io/). \
-View the [showcase](https://lab900.github.io/angular-libraries/) for guides & examples
+View the [showcase](https://lab900.github.io/angular-library-ui/) for guides & examples
 
 ## Getting started
 
-- [UI library](https://lab900.github.io/angular-libraries/ui/getting-started)
+- [UI library](https://lab900.github.io/angular-library-ui/getting-started)
 
 ## Dev setup
 
@@ -31,5 +31,5 @@ View the [showcase](https://lab900.github.io/angular-libraries/) for guides & ex
 ## Manual Deploy to NPM (deprecated)
 
 1. $ npm login
-2. $ ./deploy.sh
+2. $ ./deploy-manual.sh
 3. Commit and push version increment to repository
