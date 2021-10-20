@@ -1,4 +1,4 @@
-<ng-container matColumnDef>
+<ng-container matColumnDef [sticky]="cell.sticky">
   <th mat-header-cell *matHeaderCellDef (click)="headerClick.emit(cell)" [class.sortable]="cell.sortable" [ngClass]="cellHeaderClass">
     <div>
       <mat-icon *ngIf="cellHeaderIcon as icon">{{ icon }}</mat-icon>

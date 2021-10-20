@@ -168,6 +168,7 @@ export class TableExampleComponent {
       },
       columnOrder: 0,
       footer: '<a href="javascript:void(0)">Click here!</a>',
+      sticky: true,
     },
     {
       key: 'nameLong',
