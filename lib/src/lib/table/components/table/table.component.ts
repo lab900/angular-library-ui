@@ -27,6 +27,8 @@ import { Lab900TableTopContentDirective } from '../../directives/table-top-conte
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { ThemePalette } from '@angular/material/core';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -78,6 +80,12 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
 
   @ViewChildren(Lab900TableCellComponent)
   public cellComponents!: QueryList<Lab900TableCellComponent<T>>;
+
+  @ViewChildren('rowCheckbox')
+  public rowCheckboxes!: QueryList<MatCheckbox>;
+
+  @ViewChild('selectAllCheckbox')
+  public selectAllCheckbox!: MatCheckbox;
 
   @Input()
   public selection = new SelectionModel<T>(false, []);
@@ -132,6 +140,14 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
    */
   @Input()
   public selectableRows: boolean;
+
+  @Input()
+  public selectableRowsOptions: {
+    checkBoxColor?: ThemePalette;
+    position?: 'right' | 'left';
+    sticky?: boolean;
+    showSelectAllCheckbox?: boolean;
+  };
 
   @Input()
   public selectableRowsEnabled: boolean;
@@ -251,6 +267,15 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
 
   public selectRow(row: T): void {
     this.selection.toggle(row);
+
+    if (this.selectAllCheckbox) {
+      if (this.selection.selected.length === this.data.length) {
+        this.selectAllCheckbox.checked = true;
+      } else {
+        this.selectAllCheckbox.checked = false;
+      }
+    }
+
     this.selectionChanged.emit(this.selection);
     this.rowSelectToggle.emit(row);
   }
@@ -305,6 +330,20 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
     }
   }
 
+  public handleSelectAllCheckbox({ checked }): void {
+    const rowCheckboxes = this.rowCheckboxes.toArray();
+    if (checked) {
+      this.selection.clear();
+      this.selection.select(...this.data);
+      rowCheckboxes.forEach((checkBox) => (checkBox.checked = true));
+    } else {
+      this.selection.clear();
+      rowCheckboxes.forEach((checkBox) => (checkBox.checked = false));
+    }
+
+    this.selectionChanged.emit(this.selection);
+  }
+
   public onTableCellsFiltered(tableCells: TableCell[]): void {
     this.tableCells = tableCells.sort(Lab900TableComponent.reorderColumnsFn);
     this.addColumnsToTable();
@@ -325,9 +364,15 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
     if (this.tableActionsBack?.length) {
       columns.push('actions-back');
     }
+
     if (this.selectableRows) {
-      columns.unshift('select');
+      if (this.selectableRowsOptions?.position === 'right') {
+        columns.push('select');
+      } else {
+        columns.unshift('select');
+      }
     }
+
     this.displayedColumns = columns;
   }
 
