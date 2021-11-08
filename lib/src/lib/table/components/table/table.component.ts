@@ -46,6 +46,17 @@ export interface TableRowAction<T = any> extends ActionButton<T> {
   draggable?: boolean;
 }
 
+export interface SelectableRowsOptions<T = any> {
+  checkBoxColor?: ThemePalette;
+  position?: 'right' | 'left';
+  sticky?: boolean;
+  showSelectAllCheckbox?: boolean;
+  disabled?: boolean;
+  maxSelectableRows?: number;
+  selectedItems?: T[];
+  singleSelect?: boolean;
+}
+
 @Component({
   selector: 'lab900-table',
   templateUrl: './table.component.html',
@@ -148,16 +159,7 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   public selectableRows: boolean;
 
   @Input()
-  public selectableRowsOptions: {
-    checkBoxColor?: ThemePalette;
-    position?: 'right' | 'left';
-    sticky?: boolean;
-    showSelectAllCheckbox?: boolean;
-    disabled?: boolean;
-    maxSelectableRows?: number;
-    selectedItems?: T[];
-    singleSelect?: boolean;
-  };
+  public selectableRowsOptions: SelectableRowsOptions<T>;
 
   /**
    * Show columns filter to hide/show columns
