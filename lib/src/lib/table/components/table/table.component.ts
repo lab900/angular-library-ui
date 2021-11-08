@@ -251,12 +251,12 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    const selectableRowsOptions = changes.selectableRowsOptions.currentValue;
+    const selectableRowsOptions = changes.selectableRowsOptions?.currentValue;
 
-    if (selectableRowsOptions.singleSelect) {
+    if (selectableRowsOptions?.singleSelect) {
       this.selection = new SelectionModel<any>(false, []);
     }
-    if (selectableRowsOptions.selectedItems) {
+    if (selectableRowsOptions?.selectedItems) {
       this.selection.clear();
       this.selection.select(...this.selectableRowsOptions.selectedItems);
     }
