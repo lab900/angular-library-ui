@@ -12,8 +12,6 @@ import { SelectionModel } from '@angular/cdk/collections';
     (tableRowOrderChange)="dropTable($event)"
     [selectableRows]="true"
     [selectableRowsOptions]="{ checkBoxColor: 'accent', position: 'right', sticky: true, showSelectAllCheckbox: true }"
-    [selectableRowsEnabled]="true"
-    [multiSelect]="true"
     (selectionChanged)="selectionChanged($event)"
   >
   </lab900-table>`,

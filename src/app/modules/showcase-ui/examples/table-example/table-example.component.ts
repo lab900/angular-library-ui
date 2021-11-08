@@ -16,7 +16,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
     [toggleAndMoveColumns]="true"
     filterIcon="settings"
     [selectableRows]="true"
-    [selectedItems]="selectedItems"
+    [selectableRowsOptions]="{ selectedItems: selectedItems, disabled: true }"
     [onRowClick]="rowClick"
     [multiSort]="true"
     [rowClass]="getRowClass"

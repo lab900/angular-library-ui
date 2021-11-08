@@ -68,7 +68,13 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   }
 
   public get selectEnabled(): boolean {
-    return this.selectableRowsEnabled && (this.maxSelectableRows ? this.selection.selected.length < this.maxSelectableRows : true);
+    if (this.selectableRowsOptions?.disabled) {
+      return false;
+    } else if (this.selectableRowsOptions?.maxSelectableRows) {
+      return this.selection.selected.length < this.selectableRowsOptions.maxSelectableRows;
+    } else {
+      return true;
+    }
   }
 
   public get draggableRows(): boolean {
@@ -88,7 +94,7 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   public selectAllCheckbox!: MatCheckbox;
 
   @Input()
-  public selection = new SelectionModel<T>(false, []);
+  public selection = new SelectionModel<T>(true, []);
 
   @Input()
   public data: any[];
@@ -147,19 +153,11 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
     position?: 'right' | 'left';
     sticky?: boolean;
     showSelectAllCheckbox?: boolean;
+    disabled?: boolean;
+    maxSelectableRows?: number;
+    selectedItems?: T[];
+    singleSelect?: boolean;
   };
-
-  @Input()
-  public selectableRowsEnabled: boolean;
-
-  @Input()
-  public selectedItems: T[];
-
-  @Input()
-  public multiSelect: boolean;
-
-  @Input()
-  public maxSelectableRows: number;
 
   /**
    * Show columns filter to hide/show columns
@@ -253,12 +251,14 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.multiSelect) {
-      this.selection = new SelectionModel<any>(this.multiSelect, []);
+    const selectableRowsOptions = changes.selectableRowsOptions.currentValue;
+
+    if (selectableRowsOptions.singleSelect) {
+      this.selection = new SelectionModel<any>(false, []);
     }
-    if (changes.selectedItems) {
+    if (selectableRowsOptions.selectedItems) {
       this.selection.clear();
-      this.selection.select(...this.selectedItems);
+      this.selection.select(...this.selectableRowsOptions.selectedItems);
     }
     if (changes.data) {
       this.reloadColumns();
