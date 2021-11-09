@@ -30,11 +30,24 @@
       (cdkDropListDropped)="tableRowOrderChange.emit($event)"
     >
       >
-      <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef></th>
+      <ng-container
+        matColumnDef="select"
+        [sticky]="selectableRowsOptions?.position === 'left' && selectableRowsOptions.sticky"
+        [stickyEnd]="selectableRowsOptions?.position === 'right' && selectableRowsOptions.sticky"
+      >
+        <th mat-header-cell *matHeaderCellDef class="checkbox-cell">
+          <mat-checkbox
+            #selectAllCheckbox
+            *ngIf="selectableRowsOptions?.showSelectAllCheckbox"
+            [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
+            (click)="$event.stopPropagation()"
+            (change)="handleSelectAllCheckbox($event)"
+          ></mat-checkbox>
+        </th>
         <td mat-cell *matCellDef="let row" class="checkbox-cell">
           <mat-checkbox
-            color="primary"
+            #rowCheckbox
+            [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
             (click)="$event.stopPropagation()"
             (change)="$event ? selectRow(row) : null"
             [checked]="selection.isSelected(row)"
@@ -87,7 +100,7 @@
 
       <ng-container matColumnDef="actions-back" stickyEnd>
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
+        <td style="width: 0px" mat-cell *matCellDef="let element">
           <div style="width: 100%" fxLayout="row" fxLayoutGap="8" fxLayoutAlign="end center" *ngIf="tableActionsBack?.length">
             <lab900-action-button
               *ngFor="let action of tableActionsBack"
