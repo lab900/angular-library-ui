@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, Output, ViewChild, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { SortDirection } from '@angular/material/sort';
@@ -43,6 +43,15 @@ export class Lab900TableCellComponent<T = any> {
   @Input()
   public customCellContent?: Lab900TableCustomCellDirective;
 
+  @Input()
+  public data: T[];
+
+  /**
+   * max column width, set by table input
+   */
+  @Input()
+  public maxColumnWidthFromTable?: string;
+
   @Output()
   public headerClick = new EventEmitter<TableCell<T>>();
 
@@ -65,7 +74,9 @@ export class Lab900TableCellComponent<T = any> {
   }
 
   public getCellClass(data: T): string {
-    return readPropValue<[T, TableCell<T>]>(this.cell.cellClass, [data, this.cell]);
+    return typeof this.cell.cellClass === 'function'
+      ? (this.cell.cellClass as (data: T, cell: TableCell) => string)(data, this.cell)
+      : this.cell.cellClass;
   }
 
   public getCellLabel(): string {
@@ -82,5 +93,14 @@ export class Lab900TableCellComponent<T = any> {
 
   public getCellHeaderSvgIcon(): string {
     return readPropValue<TableCell<T>>(this.cell.cellHeaderSvgIcon, this.cell);
+  }
+
+  public getCellFooter(): string {
+    if (this.cell.footer) {
+      if (typeof this.cell.footer === 'function') {
+        return this.cell.footer(this.data, this.cell);
+      }
+      return this.cell.footer;
+    }
   }
 }

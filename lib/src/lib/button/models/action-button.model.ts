@@ -17,6 +17,7 @@ export interface ActionButton<T = any> {
   prefixIcon?: propValue<T>;
   svgIcon?: boolean;
   containerClass?: propValue<T>;
+  align?: 'left' | 'right';
 }
 
 export interface ToggleActionButton<T = any> extends ActionButton<T> {

@@ -3,7 +3,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-table-example',
-  template: `<lab900-table
+  template: ` <lab900-table
     [pageSizeConfig]="{ hidePageSize: true, pageSizeOptions: [5, 10] }"
     [tableCells]="tableCells"
     [sort]="sort"
@@ -16,11 +16,14 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
     [toggleAndMoveColumns]="true"
     filterIcon="settings"
     [selectableRows]="true"
-    [selectedItems]="selectedItems"
+    [selectableRowsOptions]="{ selectedItems: selectedItems, disabled: true }"
     [onRowClick]="rowClick"
     [multiSort]="true"
     [rowClass]="getRowClass"
     (tableCellsFiltered)="filtered($event)"
+    [maxColumnWidth]="'200px'"
+    [tableFooterActions]="tableFooterActions"
+    [preFooterTitle]="'Quantity Total'"
   >
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
@@ -35,9 +38,21 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
       </div>
     </div>
   </lab900-table>`,
+  styleUrls: ['table-example.component.scss'],
 })
 export class TableExampleComponent {
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
+
+  public tableFooterActions: ActionButton[] = [
+    {
+      label: 'Kies een locatie',
+      type: 'flat',
+    },
+    {
+      label: 'Button',
+      type: 'stroked',
+    },
+  ];
 
   public tableHeaderActions: ActionButton[] = [
     {
@@ -98,31 +113,36 @@ export class TableExampleComponent {
       label: (data) => (data.id === 1 ? 'delete_forever' : 'delete'),
       containerClass: (data) => (data.id === 1 ? 'action-button--red' : ''),
       type: 'icon',
+      action: () => confirm('Are you sure?'),
     },
   ];
 
   public mockData: any[] = [
     {
-      name: 'A name',
-      nameLong: 'A name sdfdsfdsfdsfdsfdsf',
+      name: 'John Cena',
+      nameLong: 'John Cena, the guy from wrestling and movies and stuff, and also just from the memes',
       id: 1,
       nested: {
         test: 'xxx',
       },
-      email: 'mail@test.com',
+      email: 'john@cena.com',
       city: 'New York City',
+      quantity: 123,
     },
     {
-      name: 'B name',
-      nameLong: 'A name sdfdsfdsfdsfdsfdsf',
+      name: 'A name',
+      nameLong: 'A very very veeeeeeeeryyy loooooooooong name',
       id: 2,
       active: true,
       nested: {},
+      email: 'b@name.com',
+      quantity: 456,
     },
     {
       name: '',
-      nameLong: 'A name sdfdsfdsfdsfdsfdsf sdfdsfdsfdsfdsfdsf',
+      nameLong: 'A name very long :)',
       id: 3,
+      quantity: 789,
     },
   ];
 
@@ -142,16 +162,31 @@ export class TableExampleComponent {
       cellHeaderClass: 'center-cell',
       sortable: true,
       cellClass: 'clickable-cell',
-      cellTooltip: (data) => data.name,
+      cellTooltip: {
+        text: (data) => data.email,
+        tooltipOptions: { tooltipPosition: 'left' },
+      },
       columnOrder: 0,
+      footer: '<a href="javascript:void(0)">Click here!</a>',
+      sticky: true,
     },
     {
       key: 'nameLong',
       label: 'Long name',
       sortable: true,
       cellClass: 'clickable-cell',
-      cellTooltip: (data) => data.nameLong,
+      cellTooltip: { text: (data) => data.nameLong, onlyOnOverflow: true },
+      cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
+    },
+    {
+      key: 'quantity',
+      label: 'Quantity',
+      cellClass: 'clickable-cell',
+      footer: (tableData) => {
+        return tableData.map((data) => data.quantity).reduce((valA, valB) => valA + valB, 0);
+      },
+      footerCellClass: 'table-footer-highlight',
     },
     {
       key: 'id',

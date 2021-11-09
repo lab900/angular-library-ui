@@ -1,5 +1,6 @@
 export interface BreadCrumb {
-  title: string;
+  title: ((data: any) => string) | string;
   route: ((data: any) => string) | string;
+  queryParams?: ((data: any) => object) | object;
   divider?: string;
 }

@@ -1,4 +1,4 @@
-<ng-container matColumnDef>
+<ng-container matColumnDef [sticky]="cell.sticky">
   <th mat-header-cell *matHeaderCellDef (click)="headerClick.emit(cell)" [class.sortable]="cell.sortable" [ngClass]="cellHeaderClass">
     <div>
       <mat-icon *ngIf="cellHeaderIcon as icon">{{ icon }}</mat-icon>
@@ -14,7 +14,8 @@
       <ng-container *ngTemplateOutlet="customCellContent; context: { $implicit: { cell: cell, element: element } }"></ng-container>
     </ng-container>
     <ng-container *ngIf="!cell?.customCellContent">
-      <lab900-table-cell-value [data]="element" [cell]="cell"></lab900-table-cell-value>
+      <lab900-table-cell-value [data]="element" [cell]="cell" [maxColumnWidthFromTable]="maxColumnWidthFromTable"></lab900-table-cell-value>
     </ng-container>
   </td>
+  <td mat-footer-cell *matFooterCellDef [innerHtml]="getCellFooter()" [ngClass]="cell.footerCellClass"></td>
 </ng-container>
