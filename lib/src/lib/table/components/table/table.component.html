@@ -100,7 +100,7 @@
 
       <ng-container matColumnDef="actions-back" stickyEnd>
         <th mat-header-cell *matHeaderCellDef></th>
-        <td style="width: 0px" mat-cell *matCellDef="let element">
+        <td style="width: 0" mat-cell *matCellDef="let element">
           <div style="width: 100%" fxLayout="row" fxLayoutGap="8" fxLayoutAlign="end center" *ngIf="tableActionsBack?.length">
             <lab900-action-button
               *ngFor="let action of tableActionsBack"
