@@ -19,7 +19,7 @@ import { readPropValue } from '../../../utils/utils';
       #cellRef
       style="cursor: pointer"
       *ngIf="cell.click"
-      (click)="cell.click(data, cell)"
+      (click)="cell.click(data, cell, $event)"
       matTooltipClass="lab900-table__mat-tooltip"
       [matTooltip]="getTooltipContent()"
       [matTooltipPosition]="getTooltipOptions().tooltipPosition"

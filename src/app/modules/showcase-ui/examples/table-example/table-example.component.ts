@@ -178,6 +178,10 @@ export class TableExampleComponent {
       cellTooltip: { text: (data) => data.nameLong, onlyOnOverflow: true },
       cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
+      click: (data, cell, mouseEvent) => {
+        mouseEvent.stopPropagation();
+        console.log('click cell content > function params:', { data }, { cell }, { mouseEvent });
+      },
     },
     {
       key: 'quantity',
@@ -224,12 +228,12 @@ export class TableExampleComponent {
     });
   }
 
-  public rowClick(event, row, i): void {
-    console.log(event, row, i);
+  public rowClick(row, i, event): void {
+    console.log('click row > function params:', { row }, { i }, { event });
   }
 
-  public filtered(e): void {
-    console.log(e);
+  public filtered(tableCells: TableCell[]): void {
+    console.log({ tableCells });
   }
 
   public getRowClass(row: any): string {
