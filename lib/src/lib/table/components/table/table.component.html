@@ -74,7 +74,7 @@
 
       <ng-container *ngIf="preFooterTitle">
         <ng-container matColumnDef="preFooterTitle">
-          <td mat-footer-cell *matFooterCellDef [attr.colspan]="tableCells.length" class="lab900-table__pre-footer-title-cell">
+          <td mat-footer-cell *matFooterCellDef [attr.colspan]="tableCells.length + 1" class="lab900-table__pre-footer-title-cell">
             {{ preFooterTitle | translate }}
           </td>
         </ng-container>
