@@ -58,7 +58,7 @@ export interface TableCell<T = any> {
   /**
    * on click
    */
-  click?: (data: T, cell: TableCell) => any;
+  click?: (data: T, cell: TableCell, mouseEvent?: MouseEvent) => any;
   /**
    * render a different cell template
    */
