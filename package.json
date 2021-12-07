@@ -10,7 +10,7 @@
     "start": "ng serve --port 4900",
     "build": "ng build",
     "build:ui": "ng build ui",
-    "build:ui:prod": "npm run build:ui -- --prod",
+    "build:ui:prod": "npm run build:ui -- --configuration production",
     "watch:ui": "npm run build:ui -- --watch",
     "deploy:showcase": "ng deploy",
     "test": "ng test",
