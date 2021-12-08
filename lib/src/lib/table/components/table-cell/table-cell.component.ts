@@ -2,9 +2,9 @@ import { Component, EventEmitter, HostBinding, Input, Output, ViewChild, ViewEnc
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { SortDirection } from '@angular/material/sort';
-import { Lab900Sort } from '../table/table.component';
 import { MatColumnDef } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
+import { Lab900Sort } from '../../models/table-sort.model';
 
 @Component({
   selector: 'lab900-table-cell',

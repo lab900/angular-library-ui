@@ -22,22 +22,15 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
-import { SortDirection } from '@angular/material/sort';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { Lab900Sort } from '../../models/table-sort.model';
 
 type propFunction<T, R = string> = (data: T) => R;
-
-export interface Lab900Sort {
-  /** The id of the column being sorted. */
-  id: string;
-  /** The sort direction. */
-  direction: SortDirection;
-}
 
 export interface TableRowAction<T = any> extends ActionButton<T> {
   /**
