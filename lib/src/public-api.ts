@@ -49,6 +49,7 @@ export * from './lib/table/directives/table-header-content.directive';
 export * from './lib/table/directives/table-top-content.directive';
 export * from './lib/table/models/table-cell.model';
 export * from './lib/table/models/table-cell-tooltip.model';
+export * from './lib/table/models/table-sort.model';
 
 // page header
 export * from './lib/page-header/page-header.module';
