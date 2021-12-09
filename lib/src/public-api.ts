@@ -44,6 +44,7 @@ export * from './lib/table/components/table-cell/table-cell.component';
 export * from './lib/table/components/table-cell-value/table-cell-value.component';
 export * from './lib/table/directives/table-empty.directive';
 export * from './lib/table/directives/table-custom-cell.directive';
+export * from './lib/table/directives/table-custom-header-cell.directive';
 export * from './lib/table/directives/table-disabled.directive';
 export * from './lib/table/directives/table-header-content.directive';
 export * from './lib/table/directives/table-top-content.directive';

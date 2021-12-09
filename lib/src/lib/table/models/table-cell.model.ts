@@ -64,6 +64,10 @@ export interface TableCell<T = any> {
    */
   customCellContent?: boolean;
   /**
+   * render a different column header template
+   */
+  customHeaderCell?: boolean;
+  /**
    * Enable a tooltip, displays the cell content in a tooltip
    */
   cellTooltip?: TableCellTooltip<T>;

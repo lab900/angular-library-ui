@@ -32,6 +32,9 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
         <mat-checkbox color="primary" [checked]="data.element?.active"></mat-checkbox>
       </div>
     </div>
+    <div *lab900TableCustomHeaderCell="let data">
+      <div *ngIf="data.cell.key === 'active'" class="rainbow">Active</div>
+    </div>
     <div *lab900TableEmpty>
       <div class="no-results">
         <p>No results template (can be anything)</p>
@@ -204,6 +207,7 @@ export class TableExampleComponent {
       key: 'active',
       label: 'Active',
       customCellContent: true,
+      customHeaderCell: true,
       cellClass: 'center-cell',
       columnOrder: 2,
     },

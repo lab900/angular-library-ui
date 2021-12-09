@@ -23,6 +23,7 @@ import { Lab900TableHeaderContentDirective } from './directives/table-header-con
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Lab900ButtonModule } from '../button/button.module';
 import { Lab900TableCustomCellDirective } from './directives/table-custom-cell.directive';
+import { Lab900TableCustomHeaderCellDirective } from './directives/table-custom-header-cell.directive';
 import { Lab900TableTopContentDirective } from './directives/table-top-content.directive';
 import { Lab900TableCellComponent } from './components/table-cell/table-cell.component';
 import { Lab900TableCellValueComponent } from './components/table-cell-value/table-cell-value.component';
@@ -36,6 +37,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     Lab900TableHeaderContentDirective,
     Lab900TableTopContentDirective,
     Lab900TableCustomCellDirective,
+    Lab900TableCustomHeaderCellDirective,
     Lab900TableFilterMenuComponent,
     Lab900TableHeaderComponent,
     Lab900TableCellComponent,
@@ -48,6 +50,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     Lab900TableHeaderContentDirective,
     Lab900TableTopContentDirective,
     Lab900TableCustomCellDirective,
+    Lab900TableCustomHeaderCellDirective,
     Lab900TableFilterMenuComponent,
     Lab900TableHeaderComponent,
     Lab900TableCellComponent,
