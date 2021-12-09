@@ -29,6 +29,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { Lab900Sort } from '../../models/table-sort.model';
+import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -231,6 +232,9 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
 
   @ContentChild(Lab900TableCustomCellDirective, { read: TemplateRef })
   public customCellContent?: Lab900TableCustomCellDirective;
+
+  @ContentChild(Lab900TableCustomHeaderCellDirective, { read: TemplateRef })
+  public customHeaderCell?: Lab900TableCustomHeaderCellDirective;
 
   public displayedColumns: string[] = [];
 

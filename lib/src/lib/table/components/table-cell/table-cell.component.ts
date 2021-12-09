@@ -5,6 +5,7 @@ import { SortDirection } from '@angular/material/sort';
 import { MatColumnDef } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
 import { Lab900Sort } from '../../models/table-sort.model';
+import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 
 @Component({
   selector: 'lab900-table-cell',
@@ -42,6 +43,9 @@ export class Lab900TableCellComponent<T = any> {
 
   @Input()
   public customCellContent?: Lab900TableCustomCellDirective;
+
+  @Input()
+  public customHeaderCell?: Lab900TableCustomHeaderCellDirective;
 
   @Input()
   public data: T[];
