@@ -378,6 +378,7 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   private removeOldColumnsFromTable(): void {
     const oldColumns: Set<MatColumnDef> = (this.table as any)?._customColumnDefs;
     oldColumns?.forEach((oldColumn: MatColumnDef) => {
+      this.table.removeFooterRowDef(null);
       this.table.removeColumnDef(oldColumn);
       // removing column also from the displayed columns (such array should match the dataSource!)
       this.displayedColumns.splice(

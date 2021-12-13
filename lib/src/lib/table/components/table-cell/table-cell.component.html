@@ -16,7 +16,13 @@
       </div>
     </ng-template>
   </th>
-  <td mat-cell *matCellDef="let element" [style.width]="cell?.width === '*' ? '100%' : cell?.width" [ngClass]="getCellClass(element)">
+  <td
+    mat-cell
+    *matCellDef="let element"
+    [style.width]="cell?.width === '*' ? '100%' : cell?.width"
+    [ngClass]="getCellClass(element)"
+    (click)="cell.click ? $event.stopPropagation() : undefined"
+  >
     <ng-container *ngIf="cell?.customCellContent && customCellContent">
       <ng-container *ngTemplateOutlet="customCellContent; context: { $implicit: { cell: cell, element: element } }"></ng-container>
     </ng-container>
