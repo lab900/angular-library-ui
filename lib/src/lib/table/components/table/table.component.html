@@ -126,10 +126,10 @@
         cdkDrag
         [cdkDragDisabled]="!draggableRows"
       ></tr>
-      <ng-container *ngIf="preFooterTitle">
+      <ng-container *ngIf="preFooterTitle && data?.length">
         <tr mat-footer-row *matFooterRowDef="['preFooterTitle']" class="lab900-table__pre-footer-title-row"></tr>
       </ng-container>
-      <ng-container *ngIf="showCellFooters">
+      <ng-container *ngIf="showCellFooters && data?.length">
         <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
       </ng-container>
       <ng-container *ngIf="draggableRows">
