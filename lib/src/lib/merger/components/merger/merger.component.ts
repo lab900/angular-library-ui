@@ -38,23 +38,27 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   public ngOnInit(): void {
     this.loading = !this.leftObject || !this.rightObject || !this.schema;
     this.result = { ...this.rightObject.data };
-    this.schema.forEach((s) => {
-      if (s.active) {
-        const baseValue = this.getBase(s.active)[s.attribute];
-        if (s.combine) {
-          this.result[s.attribute] = [...this.result[s.attribute], ...baseValue];
-        } else {
-          this.result[s.attribute] = baseValue;
-        }
-      }
-    });
+    this.setInitialValues(false);
   }
 
   public reset(): void {
     this.result = { ...this.getBase() };
+    this.setInitialValues(true);
+  }
+
+  public setInitialValues(reset: boolean): void {
     this.schema.forEach((s, index) => {
       if (s.active) {
-        this.schema[index].active = false;
+        if (reset && !s.disabled) {
+          this.schema[index].active = false;
+        } else {
+          const baseValue = this.getBase(s.active)[s.attribute];
+          if (s.combine) {
+            this.result[s.attribute] = [...this.result[s.attribute], ...baseValue];
+          } else {
+            this.result[s.attribute] = baseValue;
+          }
+        }
       }
     });
   }
