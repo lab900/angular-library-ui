@@ -38,6 +38,7 @@ export const mergerSchemaExample: MergeConfig<MergerDataExample>[] = [
     nextLine: true,
     combine: true,
     active: true,
+    disabled: true,
   },
   {
     attribute: 'text',
