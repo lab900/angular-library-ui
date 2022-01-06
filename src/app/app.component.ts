@@ -58,11 +58,6 @@ export class AppComponent extends SubscriptionBasedDirective implements OnInit, 
     this.unsub.next();
     this.unsub.unsubscribe();
   }
-
-  public languageChanged(language: string): void {
-    this.translateService.use(language);
-  }
-
   private watchMedia(): void {
     this.addSubscription(
       this.media.asObservable().pipe(
