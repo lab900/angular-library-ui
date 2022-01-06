@@ -29,20 +29,17 @@
         fxFlex="45 1 45%"
       ></lab900-merger-item>
       <div class="lab900-merger__row__icon">
-        <mat-icon
-          (click)="toggleActive(config, i)"
-          *ngIf="compare(config)"
-          [ngClass]="{ 'not-active': !config.active, flip: selected !== 'right' }"
-          color="primary"
-          >trending_flat
-        </mat-icon>
-        <mat-icon
-          (click)="toggleActive(config, i)"
-          *ngIf="config?.combine"
-          [ngClass]="{ 'not-active': !config.active, flip: selected !== 'right' }"
-          color="primary"
-          svgIcon="merge"
-        ></mat-icon>
+        <button mat-icon-button [disableRipple]="true" (click)="toggleActive(config, i)" [disabled]="config?.disabled">
+          <mat-icon *ngIf="compare(config)" [ngClass]="{ 'not-active': !config.active, flip: selected !== 'right' }" color="primary"
+            >trending_flat
+          </mat-icon>
+          <mat-icon
+            *ngIf="config?.combine"
+            [ngClass]="{ 'not-active': !config.active, flip: selected !== 'right' }"
+            color="primary"
+            svgIcon="merge"
+          ></mat-icon>
+        </button>
       </div>
       <lab900-merger-item
         [active]="selected === 'right'"

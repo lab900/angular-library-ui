@@ -42,7 +42,7 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
       if (s.active) {
         const baseValue = this.getBase(s.active)[s.attribute];
         if (s.combine) {
-          this.result[s.attribute] = [...this.result[s.attribute], baseValue];
+          this.result[s.attribute] = [...this.result[s.attribute], ...baseValue];
         } else {
           this.result[s.attribute] = baseValue;
         }

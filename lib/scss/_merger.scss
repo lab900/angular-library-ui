@@ -21,4 +21,15 @@
       border-bottom-width: 2px !important;
     }
   }
+  .lab900-merger__row {
+    .mat-button-disabled {
+      .mat-icon {
+        cursor: not-allowed;
+        color: mat-color(map-get($config-or-theme, primary), 100);
+        &.not-active {
+          color: rgb(237, 237, 237);
+        }
+      }
+    }
+  }
 }

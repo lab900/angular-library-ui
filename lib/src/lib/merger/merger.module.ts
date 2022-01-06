@@ -7,10 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { Lab900MergerItemComponent } from './components/merger-item/merger-item.component';
 import { FlexModule } from '@angular/flex-layout';
+import { Lab900ButtonModule } from '../button/button.module';
 
 @NgModule({
   declarations: [Lab900MergerComponent, Lab900MergerItemComponent],
   exports: [Lab900MergerComponent],
-  imports: [CommonModule, MatProgressBarModule, TranslateModule, MatIconModule, MatRadioModule, FlexModule],
+  imports: [CommonModule, MatProgressBarModule, TranslateModule, MatIconModule, MatRadioModule, FlexModule, Lab900ButtonModule],
 })
 export class Lab900MergerModule {}
