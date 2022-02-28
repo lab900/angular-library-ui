@@ -30,6 +30,7 @@ import { ThemePalette } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
+import { Lab900TableTab } from '../../models/table-tabs.model';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -57,7 +58,7 @@ export interface SelectableRowsOptions<T = any> {
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class Lab900TableComponent<T extends object = object> implements OnChanges, AfterContentInit {
+export class Lab900TableComponent<T extends object = object, TabId = string> implements OnChanges, AfterContentInit {
   @Input()
   public set tableCells(cells: TableCell<T>[]) {
     this._tableCells = cells.sort(Lab900TableComponent.reorderColumnsFn);
@@ -203,6 +204,15 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   @Input()
   public preFooterTitle: string;
 
+  @Input()
+  public tableTabs: Lab900TableTab<TabId>[];
+
+  @Input()
+  public activeTabId: TabId;
+
+  @Output()
+  public activeTabIdChange = new EventEmitter<TabId>();
+
   @Output()
   public readonly pageChange = new EventEmitter<PageEvent>();
 
@@ -268,11 +278,7 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
     this.selection.toggle(row);
 
     if (this.selectAllCheckbox) {
-      if (this.selection.selected.length === this.data.length) {
-        this.selectAllCheckbox.checked = true;
-      } else {
-        this.selectAllCheckbox.checked = false;
-      }
+      this.selectAllCheckbox.checked = this.selection?.selected?.length === this.data?.length;
     }
 
     this.selectionChanged.emit(this.selection);
@@ -347,6 +353,11 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
     this.tableCells = tableCells.sort(Lab900TableComponent.reorderColumnsFn);
     this.addColumnsToTable();
     this.tableCellsFiltered.emit(tableCells);
+  }
+
+  public onActiveTabChange(id: TabId): void {
+    this.activeTabId = id;
+    this.activeTabIdChange.emit(id);
   }
 
   private addColumnsToTable(): void {

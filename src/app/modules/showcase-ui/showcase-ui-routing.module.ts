@@ -16,6 +16,7 @@ import { showcaseUiConfig } from './showcase-ui.constants';
 import { showcaseUiNavItems } from './showcase-ui.nav-items';
 import { MarkdownPageComponent } from '../shared/components/markdown-page/markdown-page.component';
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
+import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,7 @@ const routes: Routes = [
   new ShowcaseRoute('table', 'Table', [
     new ShowcaseExample(TableExampleComponent, 'Table'),
     new ShowcaseExample(TableDragAndDropExampleComponent, 'Table with re-arrangeable rows'),
+    new ShowcaseExample(TableTabsExampleComponent, 'Table with different tabs'),
   ]),
   new ShowcaseRoute('page-header', 'Page header', [
     new ShowcaseExample(PageHeaderParamsExampleComponent, 'Page header from request params'),

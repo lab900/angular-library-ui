@@ -24,6 +24,7 @@ import { ButtonExampleComponent } from './examples/button-example/button-example
 import { Lab900ButtonModule } from '@lab900/ui';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
+import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
 
 const examples = [
   SharingExampleComponent,
@@ -34,6 +35,7 @@ const examples = [
   PageHeaderParamsExampleComponent,
   TableExampleComponent,
   TableDragAndDropExampleComponent,
+  TableTabsExampleComponent,
   MergerExampleComponent,
   CustomExampleComponent,
   ButtonExampleComponent,
