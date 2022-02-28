@@ -40,6 +40,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
         <p>No results template (can be anything)</p>
       </div>
     </div>
+    <div *lab900TableLeftFooter>Test content left side of footer</div>
   </lab900-table>`,
   styleUrls: ['table-example.component.scss'],
 })

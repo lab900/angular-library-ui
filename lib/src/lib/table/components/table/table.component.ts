@@ -31,6 +31,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { Lab900TableTab } from '../../models/table-tabs.model';
+import { Lab900TableLeftFooterDirective } from '../../directives/table-left-footer.directive';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -252,6 +253,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
 
   @ContentChild(Lab900TableCustomHeaderCellDirective, { read: TemplateRef })
   public customHeaderCell?: Lab900TableCustomHeaderCellDirective;
+
+  @ContentChild(Lab900TableLeftFooterDirective, { read: TemplateRef })
+  public footerLeftContent?: Lab900TableLeftFooterDirective;
 
   public displayedColumns: string[] = [];
 
