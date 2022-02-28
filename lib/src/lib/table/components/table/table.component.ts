@@ -63,7 +63,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   private originalCells?: TableCell<T>[];
 
   @Input('tableCells')
-  private set tableCellsInput(cells: TableCell<T>[]) {
+  public set tableCellsInput(cells: TableCell<T>[]) {
     this.originalCells = [...cells];
     this.tableCells = cells;
   }
