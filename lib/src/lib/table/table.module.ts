@@ -29,6 +29,7 @@ import { Lab900TableCellComponent } from './components/table-cell/table-cell.com
 import { Lab900TableCellValueComponent } from './components/table-cell-value/table-cell-value.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Lab900TableTabsComponent } from './components/table-tabs/table-tabs.component';
+import { Lab900TableLeftFooterDirective } from './directives/table-left-footer.directive';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { Lab900TableTabsComponent } from './components/table-tabs/table-tabs.com
     Lab900TableCellComponent,
     Lab900TableCellValueComponent,
     Lab900TableTabsComponent,
+    Lab900TableLeftFooterDirective,
   ],
   exports: [
     Lab900TableComponent,
@@ -58,6 +60,7 @@ import { Lab900TableTabsComponent } from './components/table-tabs/table-tabs.com
     Lab900TableCellComponent,
     Lab900TableCellValueComponent,
     Lab900TableTabsComponent,
+    Lab900TableLeftFooterDirective,
   ],
   imports: [
     CommonModule,

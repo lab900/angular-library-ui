@@ -68,11 +68,24 @@
   &__footer {
     @media screen and (min-width: 600px) {
       display: flex;
-      align-items: center;
-    }
 
-    > div {
-      flex: 1;
+      &.left-content {
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      &:not(.left-content) {
+        justify-content: flex-end;
+      }
+
+      &__right {
+        display: flex;
+        align-items: center;
+
+        > div {
+          flex: 1;
+        }
+      }
     }
 
     &__actions {

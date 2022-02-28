@@ -152,21 +152,30 @@
     </ng-container>
   </div>
 
-  <div class="lab900-table__footer" *ngIf="tableFooterActions?.length || (data?.length && paging)">
-    <div>
-      <div class="lab900-table__footer__actions" *ngIf="tableFooterActions?.length">
-        <lab900-action-button *ngFor="let action of tableFooterActions" [action]="action"></lab900-action-button>
-      </div>
+  <div
+    class="lab900-table__footer"
+    [class.left-content]="footerLeftContent"
+    *ngIf="footerLeftContent || tableFooterActions?.length || (data?.length && paging)"
+  >
+    <div class="lab900-table__footer__left" *ngIf="footerLeftContent">
+      <ng-container *ngTemplateOutlet="footerLeftContent"></ng-container>
     </div>
-    <mat-paginator
-      *ngIf="data?.length && paging"
-      [hidePageSize]="pageSizeConfig.hidePageSize"
-      [pageSizeOptions]="pageSizeConfig.pageSizeOptions"
-      [length]="paging.totalItems"
-      [pageSize]="paging.pageSize"
-      [pageIndex]="paging.pageIndex"
-      (page)="pageChange.emit($event)"
-    ></mat-paginator>
+    <div class="lab900-table__footer__right">
+      <div>
+        <div class="lab900-table__footer__actions" *ngIf="tableFooterActions?.length">
+          <lab900-action-button *ngFor="let action of tableFooterActions" [action]="action"></lab900-action-button>
+        </div>
+      </div>
+      <mat-paginator
+        *ngIf="data?.length && paging"
+        [hidePageSize]="pageSizeConfig.hidePageSize"
+        [pageSizeOptions]="pageSizeConfig.pageSizeOptions"
+        [length]="paging.totalItems"
+        [pageSize]="paging.pageSize"
+        [pageIndex]="paging.pageIndex"
+        (page)="pageChange.emit($event)"
+      ></mat-paginator>
+    </div>
   </div>
 
   <div *ngIf="disabled">
