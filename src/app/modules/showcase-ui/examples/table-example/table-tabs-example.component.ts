@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Lab900TableComponent, TableCell } from '@lab900/ui';
-import { Lab900TableTab } from '../../../../../../dist/@lab900/ui/lib/table/models/table-tabs.model';
+import { Lab900TableComponent, TableCell, Lab900TableTab } from '@lab900/ui';
 
 const mockDataA: any[] = [
   {
