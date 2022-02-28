@@ -16,15 +16,16 @@
     <ng-container *ngTemplateOutlet="tableTopContent"></ng-container>
   </ng-container>
 
+  <lab900-table-tabs
+    *ngIf="tableTabs?.length"
+    [tableTabs]="tableTabs"
+    [activeTabId]="activeTabId || tableTabs[0].id"
+    (activeTabIdChange)="onActiveTabChange($event)"
+  ></lab900-table-tabs>
+
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
   <div class="lab900-table-wrapper">
-    <lab900-table-tabs
-      *ngIf="tableTabs?.length"
-      [tableTabs]="tableTabs"
-      [activeTabId]="activeTabId || tableTabs[0].id"
-      (activeTabIdChange)="onActiveTabChange($event)"
-    ></lab900-table-tabs>
     <table
       mat-table
       cdkDropList

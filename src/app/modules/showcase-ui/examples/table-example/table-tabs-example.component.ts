@@ -38,17 +38,6 @@ const mockDataC: any[] = [
   },
 ];
 
-const tableCells: TableCell[] = [
-  {
-    key: 'id',
-    label: 'ID',
-  },
-  {
-    key: 'name',
-    label: 'Name',
-  },
-];
-
 const tableCellsAlt: TableCell[] = [
   {
     key: 'id',
@@ -73,7 +62,13 @@ const tableCellsAlt2: TableCell[] = [
 
 @Component({
   selector: 'lab900-table-tabs-example',
-  template: `<lab900-table [tableCells]="tableCells" [data]="activeData" [tableTabs]="tabs" (activeTabIdChange)="switchData($event)">
+  template: `<lab900-table
+    [loading]="true"
+    [tableCells]="tableCells"
+    [data]="activeData"
+    [tableTabs]="tabs"
+    (activeTabIdChange)="switchData($event)"
+  >
   </lab900-table>`,
 })
 export class TableTabsExampleComponent {

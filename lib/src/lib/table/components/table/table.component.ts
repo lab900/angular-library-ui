@@ -213,10 +213,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   public preFooterTitle: string;
 
   @Input()
-  public tableTabs: Lab900TableTab<TabId, T>[];
+  public tableTabs?: Lab900TableTab<TabId, T>[];
 
   @Input()
-  public activeTabId: TabId;
+  public activeTabId?: TabId;
 
   @Output()
   public activeTabIdChange = new EventEmitter<TabId>();
