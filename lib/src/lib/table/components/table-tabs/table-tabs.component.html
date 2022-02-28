@@ -1,0 +1,5 @@
+<nav *ngIf="tableTabs?.length" class="lab900-table-tabs">
+  <button class="tab {{ tab.id }}" *ngFor="let tab of tableTabs" [class.active]="activeTabId === tab?.id" (click)="changeTable(tab)">
+    <span class="label">{{ tab.label | translate }}</span>
+  </button>
+</nav>

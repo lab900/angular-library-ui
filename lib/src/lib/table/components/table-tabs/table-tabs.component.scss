@@ -1,0 +1,38 @@
+.lab900-table-tabs {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  display: flex;
+
+  button {
+    position: relative;
+    padding: 0 calc(2em + 4px) 0 1em;
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid #dde6e9;
+    border-bottom: 0;
+    outline: 0;
+    border-top-right-radius: 26px;
+    border-top-left-radius: 4px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    height: 26px;
+
+    .label {
+      line-height: 36px;
+      display: block;
+      margin-right: 10px;
+      font-size: 12px;
+    }
+
+    &:not(:first-child) {
+      margin-left: -0.5em;
+    }
+
+    &.active {
+      background: #fff;
+      z-index: 2;
+    }
+  }
+}
