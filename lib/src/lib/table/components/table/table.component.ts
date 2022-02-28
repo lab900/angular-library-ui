@@ -59,7 +59,14 @@ export interface SelectableRowsOptions<T = any> {
   encapsulation: ViewEncapsulation.None,
 })
 export class Lab900TableComponent<T extends object = object, TabId = string> implements OnChanges, AfterContentInit {
-  @Input()
+  private originalCells?: TableCell<T>[];
+
+  @Input('tableCells')
+  private set tableCellsInput(cells: TableCell<T>[]) {
+    this.originalCells = cells;
+    this.tableCells = cells;
+  }
+
   public set tableCells(cells: TableCell<T>[]) {
     this._tableCells = cells.sort(Lab900TableComponent.reorderColumnsFn);
     this.reloadColumns();
@@ -205,7 +212,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   public preFooterTitle: string;
 
   @Input()
-  public tableTabs: Lab900TableTab<TabId>[];
+  public tableTabs: Lab900TableTab<TabId, T>[];
 
   @Input()
   public activeTabId: TabId;
@@ -356,6 +363,17 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   }
 
   public onActiveTabChange(id: TabId): void {
+    this.selection.clear();
+    const previousTableTab = this.tableTabs.find((t) => t.id === this.activeTabId);
+    const activeTableTab = this.tableTabs.find((t) => t.id === id);
+
+    if (activeTableTab?.tableCells?.length) {
+      this.tableCells = activeTableTab.tableCells;
+      // load the original tableCells if the new active tab hasn't got any specific table cells but the previous tab had
+    } else if (previousTableTab?.tableCells?.length && !activeTableTab?.tableCells?.length && this.originalCells?.length) {
+      this.tableCells = this.originalCells;
+    }
+
     this.activeTabId = id;
     this.activeTabIdChange.emit(id);
   }

@@ -1,5 +1,10 @@
-export interface Lab900TableTab<T = string> {
-  id: T;
+import { TableCell } from './table-cell.model';
+
+export interface Lab900TableTab<TabId = string, T extends object = object> {
+  id: TabId;
   label: string;
-  loading?: boolean;
+  /**
+   * Load a different config for a tab
+   */
+  tableCells?: TableCell<T>[];
 }

@@ -39,6 +39,39 @@ const mockDataC: any[] = [
   },
 ];
 
+const tableCells: TableCell[] = [
+  {
+    key: 'id',
+    label: 'ID',
+  },
+  {
+    key: 'name',
+    label: 'Name',
+  },
+];
+
+const tableCellsAlt: TableCell[] = [
+  {
+    key: 'id',
+    label: 'ID',
+  },
+  {
+    key: 'name',
+    label: 'Name',
+  },
+  {
+    key: 'alt',
+    label: 'Tab specific column',
+  },
+];
+
+const tableCellsAlt2: TableCell[] = [
+  {
+    key: 'name',
+    label: 'Name',
+  },
+];
+
 @Component({
   selector: 'lab900-table-tabs-example',
   template: `<lab900-table [tableCells]="tableCells" [data]="activeData" [tableTabs]="tabs" (activeTabIdChange)="switchData($event)">
@@ -49,10 +82,11 @@ export class TableTabsExampleComponent {
   private table: Lab900TableComponent;
 
   public activeData: any[] = mockDataA;
+
   public tabs: Lab900TableTab<'a' | 'b' | 'c'>[] = [
     { id: 'a', label: 'tab A' },
-    { id: 'b', label: 'tab B' },
-    { id: 'c', label: 'tab C' },
+    { id: 'b', label: 'tab B', tableCells: tableCellsAlt },
+    { id: 'c', label: 'tab C', tableCells: tableCellsAlt2 },
   ];
 
   public tableCells: TableCell[] = [
