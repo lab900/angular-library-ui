@@ -394,7 +394,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   private setHiddenSelectableRow(): void {
     if (this.selectableRowsOptions?.hideSelectableRow) {
       this.data.forEach((value) => {
-        value.hideSelectableRow = this.selectableRowsOptions.hideSelectableRow(value);
+        value._hideSelectableRow = this.selectableRowsOptions.hideSelectableRow(value);
       });
     }
   }
