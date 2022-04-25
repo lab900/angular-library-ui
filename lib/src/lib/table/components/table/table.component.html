@@ -51,13 +51,15 @@
           ></mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row" class="checkbox-cell" (click)="$event.stopPropagation()">
-          <mat-checkbox
-            #rowCheckbox
-            [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
-            (change)="selectRow(row)"
-            [checked]="selection.isSelected(row)"
-            [disabled]="selection.isSelected(row) ? false : !selectEnabled"
-          ></mat-checkbox>
+          <ng-container *ngIf="!hideSelectableCheckbox(row)">
+            <mat-checkbox
+              #rowCheckbox
+              [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
+              (change)="selectRow(row)"
+              [checked]="selection.isSelected(row)"
+              [disabled]="selection.isSelected(row) ? false : !selectEnabled"
+            ></mat-checkbox>
+          </ng-container>
         </td>
 
         <ng-container *ngIf="showCellFooters">

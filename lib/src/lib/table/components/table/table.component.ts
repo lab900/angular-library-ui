@@ -51,6 +51,7 @@ export interface SelectableRowsOptions<T = any> {
   maxSelectableRows?: number;
   selectedItems?: T[];
   singleSelect?: boolean;
+  hideSelectableRow?: (row: T) => boolean;
 }
 
 @Component({
@@ -284,6 +285,8 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
       this.reloadColumns();
     }
   }
+
+  public hideSelectableCheckbox = (row: T): boolean => !!this.selectableRowsOptions?.hideSelectableRow?.(row);
 
   public selectRow(row: T): void {
     this.selection.toggle(row);
