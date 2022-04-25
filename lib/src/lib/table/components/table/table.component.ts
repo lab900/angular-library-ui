@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   QueryList,
   SimpleChanges,
@@ -51,6 +52,7 @@ export interface SelectableRowsOptions<T = any> {
   maxSelectableRows?: number;
   selectedItems?: T[];
   singleSelect?: boolean;
+  hideSelectableRow?: (row: T) => boolean;
 }
 
 @Component({
@@ -59,7 +61,7 @@ export interface SelectableRowsOptions<T = any> {
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class Lab900TableComponent<T extends object = object, TabId = string> implements OnChanges, AfterContentInit {
+export class Lab900TableComponent<T extends object = object, TabId = string> implements OnInit, OnChanges, AfterContentInit {
   private originalCells?: TableCell<T>[];
 
   @Input('tableCells')
@@ -266,6 +268,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     return (a.columnOrder ?? 10000) - (b.columnOrder ?? 10000);
   }
 
+  public ngOnInit(): void {
+    this.setHiddenSelectableRow();
+  }
+
   public ngAfterContentInit(): void {
     this.showCellFooters = this.tableCells.some((cell) => cell.footer);
   }
@@ -282,8 +288,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     }
     if (changes.data) {
       this.reloadColumns();
+      this.setHiddenSelectableRow();
     }
   }
+
+  public hideSelectableCheckbox = (row: T): boolean => !!this.selectableRowsOptions?.hideSelectableRow?.(row);
 
   public selectRow(row: T): void {
     this.selection.toggle(row);
@@ -380,6 +389,14 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
 
     this.activeTabId = id;
     this.activeTabIdChange.emit(id);
+  }
+
+  private setHiddenSelectableRow(): void {
+    if (this.selectableRowsOptions?.hideSelectableRow) {
+      this.data.forEach((value) => {
+        value._hideSelectableRow = this.selectableRowsOptions.hideSelectableRow(value);
+      });
+    }
   }
 
   private addColumnsToTable(): void {

@@ -11,7 +11,13 @@ import { SelectionModel } from '@angular/cdk/collections';
     [tableActionsBack]="tableActions"
     (tableRowOrderChange)="dropTable($event)"
     [selectableRows]="true"
-    [selectableRowsOptions]="{ checkBoxColor: 'accent', position: 'right', sticky: true, showSelectAllCheckbox: true }"
+    [selectableRowsOptions]="{
+      checkBoxColor: 'accent',
+      position: 'right',
+      sticky: true,
+      showSelectAllCheckbox: true,
+      hideSelectableRow: hideSelectableCheckboxForSarah
+    }"
     (selectionChanged)="selectionChanged($event)"
   >
   </lab900-table>`,
@@ -83,5 +89,12 @@ export class TableDragAndDropExampleComponent {
 
   public selectionChanged(selection: SelectionModel<any>): void {
     console.log('selection', selection.selected);
+  }
+
+  public hideSelectableCheckboxForSarah(row: any): boolean {
+    if (row?.name === 'Sarah') {
+      return true;
+    }
+    return false;
   }
 }

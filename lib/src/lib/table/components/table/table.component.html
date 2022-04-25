@@ -36,7 +36,6 @@
       [dataSource]="data"
       (cdkDropListDropped)="tableRowOrderChange.emit($event)"
     >
-      >
       <ng-container
         matColumnDef="select"
         [sticky]="selectableRowsOptions?.position === 'left' && selectableRowsOptions.sticky"
@@ -51,13 +50,15 @@
           ></mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row" class="checkbox-cell" (click)="$event.stopPropagation()">
-          <mat-checkbox
-            #rowCheckbox
-            [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
-            (change)="selectRow(row)"
-            [checked]="selection.isSelected(row)"
-            [disabled]="selection.isSelected(row) ? false : !selectEnabled"
-          ></mat-checkbox>
+          <ng-container *ngIf="!row?._hideSelectableRow">
+            <mat-checkbox
+              #rowCheckbox
+              [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
+              (change)="selectRow(row)"
+              [checked]="selection.isSelected(row)"
+              [disabled]="selection.isSelected(row) ? false : !selectEnabled"
+            ></mat-checkbox>
+          </ng-container>
         </td>
 
         <ng-container *ngIf="showCellFooters">
