@@ -359,7 +359,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     const rowCheckboxes = this.rowCheckboxes.toArray();
     if (checked) {
       this.selection.clear();
-      this.selection.select(...this.data);
+      this.selection.select(...this.data.filter((row) => !row._hideSelectableRow));
       rowCheckboxes.forEach((checkBox) => (checkBox.checked = true));
     } else {
       this.selection.clear();
