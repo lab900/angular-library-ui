@@ -16,6 +16,29 @@ import { Component } from '@angular/core';
     <lab900-button type="fab" label="delete"></lab900-button>
     <p>Fab-mini icon button</p>
     <lab900-button type="mini-fab" label="delete"></lab900-button>
+    <p>Toggle action button</p>
+    <lab900-action-button [data]="[]" [action]="toggleActionButton"></lab900-action-button>
   `,
 })
-export class ButtonExampleComponent {}
+export class ButtonExampleComponent {
+  public toggleActionButton = {
+    label: 'EntityDetailSectionToggleToggleButton',
+    type: 'toggle',
+    subActions: [
+      {
+        label: 'Button 1',
+        selected: true,
+        action: () => {
+          console.log('Button 1 is selected');
+        },
+      },
+      {
+        label: 'Button 2',
+        selected: false,
+        action: () => {
+          console.log('Button 2 is selected');
+        },
+      },
+    ],
+  };
+}
