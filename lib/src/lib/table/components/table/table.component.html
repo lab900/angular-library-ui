@@ -128,6 +128,7 @@
         mat-row
         *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
         [ngClass]="getRowClasses(row, i)"
+        [style.background-color]="getRowColor(row)"
         (click)="handleRowClick($event, row, i)"
         cdkDrag
         [cdkDragDisabled]="!draggableRows"
