@@ -122,6 +122,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   public rowClass: propFunction<T> | string;
 
   @Input()
+  public rowColor: propFunction<T> | string;
+
+  @Input()
   public pageSizeConfig: { hidePageSize?: boolean; pageSizeOptions?: number[] } = {
     hidePageSize: true,
     pageSizeOptions: [5, 10, 50],
@@ -319,8 +322,12 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
       classes.push('lab900-row-odd');
     }
 
-    classes.push(typeof this.rowClass === 'function' ? this.rowClass(row) : this.rowClass ?? '');
+    classes.push((typeof this.rowClass === 'function' ? this.rowClass(row) : this.rowClass) ?? '');
     return classes.join(' ') || '';
+  }
+
+  public getRowColor(row: T): string {
+    return (typeof this.rowColor === 'function' ? this.rowColor(row) : this.rowColor) ?? '';
   }
 
   public handleRowClick(event: Event, row: T, index: number): void {
