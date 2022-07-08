@@ -272,6 +272,13 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   }
 
   public ngOnInit(): void {
+    if (this.tableTabs?.length && this.activeTabId) {
+      const activeTab = this.tableTabs.find((tab) => tab.id === this.activeTabId);
+      if (activeTab?.tableCells) {
+        this.tableCells = activeTab?.tableCells;
+      }
+    }
+
     this.setHiddenSelectableRow();
   }
 
