@@ -1,5 +1,11 @@
 <ng-container matColumnDef [sticky]="cell.sticky">
-  <th mat-header-cell *matHeaderCellDef (click)="headerClick.emit(cell)" [class.sortable]="cell.sortable" [ngClass]="cellHeaderClass">
+  <th
+    mat-header-cell
+    *matHeaderCellDef
+    (click)="!disableSort ? headerClick.emit(cell) : undefined"
+    [class.sortable]="!disableSort && cell.sortable"
+    [ngClass]="cellHeaderClass"
+  >
     <ng-container *ngIf="cell?.customHeaderCell && customHeaderCell; else defaultHeader">
       <ng-container
         *ngTemplateOutlet="customHeaderCell; context: { $implicit: { cell: cell, sortDirection: sortDirection } }"
@@ -10,7 +16,7 @@
         <mat-icon *ngIf="cellHeaderIcon as icon">{{ icon }}</mat-icon>
         <mat-icon *ngIf="cellHeaderSvgIcon as icon" [svgIcon]="icon"></mat-icon>
         {{ cellLabel | translate }}
-        <span class="material-icons lab900-sort-arrow" *ngIf="cell.sortable && sortDirection">
+        <span class="material-icons lab900-sort-arrow" *ngIf="!disableSort && cell.sortable && sortDirection">
           {{ sortIcon }}
         </span>
       </div>

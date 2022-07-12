@@ -197,6 +197,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   @Input()
   public multiSort = false;
 
+  @Input()
+  public disableSort = false;
+
   @Output()
   public readonly sortChange = new EventEmitter<Lab900Sort[]>();
 
@@ -348,7 +351,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   }
 
   public handleHeaderClick(cell: TableCell<T>): void {
-    if (cell.sortable) {
+    if (!this.disableSort && cell.sortable) {
       if (this.multiSort) {
         const currentIndex = (this.sort || []).findIndex((s) => s.id === cell.key);
         if (currentIndex >= 0) {
