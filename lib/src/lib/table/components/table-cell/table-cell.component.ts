@@ -42,6 +42,9 @@ export class Lab900TableCellComponent<T = any> {
   public sort: Lab900Sort[] = [];
 
   @Input()
+  public disableSort = false;
+
+  @Input()
   public customCellContent?: Lab900TableCustomCellDirective;
 
   @Input()

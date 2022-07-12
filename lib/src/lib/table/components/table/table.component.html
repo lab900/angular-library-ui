@@ -70,6 +70,7 @@
         *ngFor="let cell of tableCells; trackBy: trackCellFn"
         [cell]="cell"
         [sort]="sort"
+        [disableSort]="disableSort"
         [maxColumnWidthFromTable]="maxColumnWidth"
         [customCellContent]="customCellContent"
         [customHeaderCell]="customHeaderCell"
