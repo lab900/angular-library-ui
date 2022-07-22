@@ -3,7 +3,7 @@ import { propValue } from '../../utils/utils';
 
 export interface TableCellTooltip<T = any> {
   /**
-   * Text that is displayed in the tooltip, can be dependant on data
+   * Text that is displayed in the tooltip, can be dependent on data
    */
   text?: propValue<T>;
   /**

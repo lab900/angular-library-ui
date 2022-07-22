@@ -5,28 +5,31 @@ import { readPropValue } from '../../../utils/utils';
 
 @Component({
   selector: 'lab900-table-cell-value',
-  template: ` <ng-container *ngIf="cell && cellValue">
-    <span
-      #cellRef
-      *ngIf="!cell.click"
-      matTooltipClass="lab900-table__mat-tooltip"
-      [matTooltip]="getTooltipContent()"
-      [matTooltipPosition]="getTooltipOptions().tooltipPosition"
-    >
-      {{ cellValue | translate }}
-    </span>
-    <a
-      #cellRef
-      style="cursor: pointer"
-      *ngIf="cell.click"
-      (click)="cell.click(data, cell, $event)"
-      matTooltipClass="lab900-table__mat-tooltip"
-      [matTooltip]="getTooltipContent()"
-      [matTooltipPosition]="getTooltipOptions().tooltipPosition"
-    >
-      {{ cellValue | translate }}
-    </a>
-  </ng-container>`,
+  template: ` <div
+    *ngIf="cell"
+    matTooltipClass="lab900-table__mat-tooltip"
+    [matTooltip]="getTooltipContent()"
+    [matTooltipPosition]="getTooltipOptions().tooltipPosition"
+  >
+    <mat-icon *ngIf="icon">{{ icon }}</mat-icon>
+    <mat-icon *ngIf="svgIcon" [svgIcon]="svgIcon"></mat-icon>
+    <ng-container *ngIf="cellValue">
+      <span #cellRef *ngIf="!cell.click">
+        {{ cellValue | translate }}
+      </span>
+      <a
+        #cellRef
+        style="cursor: pointer"
+        *ngIf="cell.click"
+        (click)="cell.click(data, cell, $event)"
+        matTooltipClass="lab900-table__mat-tooltip"
+        [matTooltip]="getTooltipContent()"
+        [matTooltipPosition]="getTooltipOptions().tooltipPosition"
+      >
+        {{ cellValue | translate }}
+      </a>
+    </ng-container>
+  </div>`,
 })
 export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterViewInit {
   @Input()
@@ -39,6 +42,9 @@ export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterV
   public cellRef: ElementRef;
   public cellValue: string;
   private isEllipsisActive = false;
+
+  public icon: string;
+  public svgIcon: string;
 
   public static getCellValue<T = any>(cell: TableCell<T>, data: T): string {
     if (cell.cellFormatter) {
@@ -69,6 +75,8 @@ export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterV
   public ngOnChanges(changes: SimpleChanges): void {
     if ((changes.data || changes.cell) && this.cell) {
       this.cellValue = Lab900TableCellValueComponent.getCellValue<T>(this.cell, this.data);
+      this.icon = this.cell.icon(this.data, this.cell);
+      this.svgIcon = this.cell.svgIcon(this.data, this.cell);
     }
   }
 
