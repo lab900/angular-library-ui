@@ -5,7 +5,7 @@ import { readPropValue } from '../../../utils/utils';
 
 @Component({
   selector: 'lab900-table-cell-value',
-  template: ` <div
+  template: ` <span
     *ngIf="cell"
     matTooltipClass="lab900-table__mat-tooltip"
     [matTooltip]="getTooltipContent()"
@@ -29,7 +29,7 @@ import { readPropValue } from '../../../utils/utils';
         {{ cellValue | translate }}
       </a>
     </ng-container>
-  </div>`,
+  </span>`,
 })
 export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterViewInit {
   @Input()
