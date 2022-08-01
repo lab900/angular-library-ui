@@ -1,5 +1,6 @@
 import { propValue } from '../../utils/utils';
 import { TableCellTooltip } from './table-cell-tooltip.model';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 export interface TableCell<T = any> {
   /**
@@ -67,6 +68,14 @@ export interface TableCell<T = any> {
    * render a different column header template
    */
   customHeaderCell?: boolean;
+  /**
+   * Enable a tooltip for cell header, takes text to be displayed
+   */
+  cellHeaderTooltip?: string;
+  /**
+   * Define the position for the cell header tooltip
+   */
+  cellHeaderTooltipPosition?: TooltipPosition;
   /**
    * Enable a tooltip, displays the cell content in a tooltip
    */

@@ -221,6 +221,8 @@ export class TableExampleComponent {
     {
       key: 'city',
       label: 'City',
+      cellHeaderTooltip: 'This column shows the city',
+      cellHeaderTooltipPosition: 'above',
       columnOrder: 5,
       hide: true,
     },
