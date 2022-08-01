@@ -132,6 +132,7 @@ export class TableExampleComponent {
       email: 'john@cena.com',
       city: 'New York City',
       quantity: 123,
+      warning: true,
     },
     {
       name: 'A name',
@@ -141,6 +142,7 @@ export class TableExampleComponent {
       nested: {},
       email: 'b@name.com',
       quantity: 456,
+      warning: false,
     },
     {
       name: '',
@@ -225,6 +227,15 @@ export class TableExampleComponent {
       cellHeaderTooltipPosition: 'above',
       columnOrder: 5,
       hide: true,
+    },
+    {
+      key: 'warning',
+      label: 'Warning',
+      cellFormatter: () => '',
+      icon: (data) => (data.warning ? 'warning' : 'check'),
+      cellTooltip: {
+        text: (data) => (data.warning ? 'This is a dangerous entry' : 'This is not a dangerous entry'),
+      },
     },
   ];
 

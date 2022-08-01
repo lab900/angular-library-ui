@@ -90,4 +90,13 @@ export interface TableCell<T = any> {
    */
   footer?: ((data: T[], cell: TableCell) => string) | string;
   footerCellClass?: string;
+
+  /**
+   * Cell prefixed icon, use cellFormatter to remove text if you want to only use the icon
+   */
+  icon?: (data: T, cell: TableCell) => string;
+  /**
+   * Cell prefixed SVG icon
+   */
+  svgIcon?: (data: T, cell: TableCell) => string;
 }
