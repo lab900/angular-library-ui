@@ -75,8 +75,8 @@ export class Lab900TableCellValueComponent<T = any> implements OnChanges, AfterV
   public ngOnChanges(changes: SimpleChanges): void {
     if ((changes.data || changes.cell) && this.cell) {
       this.cellValue = Lab900TableCellValueComponent.getCellValue<T>(this.cell, this.data);
-      this.icon = this.cell.icon(this.data, this.cell);
-      this.svgIcon = this.cell.svgIcon(this.data, this.cell);
+      this.icon = this.cell?.icon ? this.cell.icon(this.data, this.cell) : null;
+      this.svgIcon = this.cell?.svgIcon ? this.cell.svgIcon(this.data, this.cell) : null;
     }
   }
 
