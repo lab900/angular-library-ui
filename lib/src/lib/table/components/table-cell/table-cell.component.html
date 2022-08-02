@@ -6,8 +6,8 @@
     [class.sortable]="!disableSort && cell.sortable"
     [ngClass]="cellHeaderClass"
     matTooltipClass="lab900-table__mat-tooltip"
-    [matTooltip]="cell?.cellHeaderTooltip"
-    [matTooltipPosition]="cell?.cellHeaderTooltipPosition"
+    [matTooltip]="cell?.cellHeaderTooltip | translate"
+    [matTooltipPosition]="cell?.cellHeaderTooltipPosition || 'above'"
   >
     <ng-container *ngIf="cell?.customHeaderCell && customHeaderCell; else defaultHeader">
       <ng-container
