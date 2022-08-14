@@ -25,7 +25,7 @@
 
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
-  <div class="lab900-table-wrapper">
+  <div class="lab900-table-wrapper" [ngClass]="{ 'sticky-header': stickyHeader }">
     <table
       mat-table
       cdkDropList
@@ -124,7 +124,7 @@
         </ng-container>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: stickyHeader"></tr>
       <tr
         mat-row
         *matRowDef="let row; columns: displayedColumns; let i = dataIndex"

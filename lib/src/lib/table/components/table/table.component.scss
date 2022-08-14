@@ -121,6 +121,10 @@
   }
 }
 
+.sticky-header {
+  overflow: visible !important;
+}
+
 .cdk-drag-placeholder {
   background-color: #ebebeb;
 }

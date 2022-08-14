@@ -11,6 +11,7 @@ import { SelectionModel } from '@angular/cdk/collections';
     [tableActionsBack]="tableActions"
     (tableRowOrderChange)="dropTable($event)"
     [selectableRows]="true"
+    [stickyHeader]="true"
     [selectableRowsOptions]="{
       checkBoxColor: 'accent',
       position: 'right',

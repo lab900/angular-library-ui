@@ -226,6 +226,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   @Input()
   public activeTabId?: TabId;
 
+  @Input()
+  public stickyHeader?: boolean;
+
   @Output()
   public activeTabIdChange = new EventEmitter<TabId>();
 
