@@ -49,6 +49,11 @@ export interface TableCell<T = any> {
    */
   sortable?: boolean;
   /**
+   * sort key to be used
+   * defaults to `key` if not defined
+   */
+  sortKey?: string;
+  /**
    * Column is sticky
    */
   sticky?: boolean;

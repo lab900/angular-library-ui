@@ -355,8 +355,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
 
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort && cell.sortable) {
+      const sortKey = cell.sortKey ?? cell.key;
+
       if (this.multiSort) {
-        const currentIndex = (this.sort || []).findIndex((s) => s.id === cell.key);
+        const currentIndex = (this.sort || []).findIndex((s) => s.id === sortKey);
         if (currentIndex >= 0) {
           const { direction } = this.sort[currentIndex];
           if (direction === 'desc') {
@@ -365,11 +367,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
             this.sort[currentIndex] = { ...this.sort[currentIndex], direction: 'desc' };
           }
         } else {
-          this.sort.push({ id: cell.key, direction: 'asc' });
+          this.sort.push({ id: sortKey, direction: 'asc' });
         }
       } else {
-        const inCurrent = (this.sort || []).find((s) => s.id === cell.key);
-        this.sort = [{ id: cell.key, direction: inCurrent?.direction === 'asc' ? 'desc' : 'asc' }];
+        const inCurrent = (this.sort || []).find((s) => s.id === sortKey);
+        this.sort = [{ id: sortKey, direction: inCurrent?.direction === 'asc' ? 'desc' : 'asc' }];
       }
       this.sortChange.emit(this.sort);
     }
