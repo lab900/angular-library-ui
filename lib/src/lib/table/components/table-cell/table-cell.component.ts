@@ -69,7 +69,8 @@ export class Lab900TableCellComponent<T = any> {
   public cellLabel: string;
 
   public get sortDirection(): SortDirection {
-    return (this.sort || []).find((s) => s.id === this.cell.key)?.direction ?? '';
+    const sortKey = this.cell.sortKey ?? this.cell.key;
+    return (this.sort || []).find((s) => s.id === sortKey)?.direction ?? '';
   }
 
   public get sortIcon(): string {
