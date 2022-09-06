@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Lab900Sort, Lab900TableComponent, TableCell, TableRowAction } from '@lab900/ui';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'lab900-table-example',
@@ -9,6 +10,16 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
     [data]="mockData"
     [tableActionsBack]="tableActions"
     (tableRowOrderChange)="dropTable($event)"
+    [selectableRows]="true"
+    [stickyHeader]="true"
+    [selectableRowsOptions]="{
+      checkBoxColor: 'accent',
+      position: 'right',
+      sticky: true,
+      showSelectAllCheckbox: true,
+      hideSelectableRow: hideSelectableCheckboxForSarah
+    }"
+    (selectionChanged)="selectionChanged($event)"
   >
   </lab900-table>`,
 })
@@ -75,5 +86,16 @@ export class TableDragAndDropExampleComponent {
      */
     moveItemInArray(this.mockData, event.previousIndex, event.currentIndex);
     this.table.table.renderRows();
+  }
+
+  public selectionChanged(selection: SelectionModel<any>): void {
+    console.log('selection', selection.selected);
+  }
+
+  public hideSelectableCheckboxForSarah(row: any): boolean {
+    if (row?.name === 'Sarah') {
+      return true;
+    }
+    return false;
   }
 }

@@ -16,7 +16,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
     [toggleAndMoveColumns]="true"
     filterIcon="settings"
     [selectableRows]="true"
-    [selectedItems]="selectedItems"
+    [selectableRowsOptions]="{ selectedItems: selectedItems, disabled: true }"
     [onRowClick]="rowClick"
     [multiSort]="true"
     [rowClass]="getRowClass"
@@ -32,11 +32,15 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
         <mat-checkbox color="primary" [checked]="data.element?.active"></mat-checkbox>
       </div>
     </div>
+    <div *lab900TableCustomHeaderCell="let data">
+      <div *ngIf="data.cell.key === 'active'" class="rainbow">Active</div>
+    </div>
     <div *lab900TableEmpty>
       <div class="no-results">
         <p>No results template (can be anything)</p>
       </div>
     </div>
+    <div *lab900TableLeftFooter>Test content left side of footer</div>
   </lab900-table>`,
   styleUrls: ['table-example.component.scss'],
 })
@@ -128,6 +132,7 @@ export class TableExampleComponent {
       email: 'john@cena.com',
       city: 'New York City',
       quantity: 123,
+      warning: true,
     },
     {
       name: 'A name',
@@ -137,6 +142,7 @@ export class TableExampleComponent {
       nested: {},
       email: 'b@name.com',
       quantity: 456,
+      warning: false,
     },
     {
       name: '',
@@ -168,6 +174,7 @@ export class TableExampleComponent {
       },
       columnOrder: 0,
       footer: '<a href="javascript:void(0)">Click here!</a>',
+      sticky: true,
     },
     {
       key: 'nameLong',
@@ -177,6 +184,10 @@ export class TableExampleComponent {
       cellTooltip: { text: (data) => data.nameLong, onlyOnOverflow: true },
       cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
+      click: (data, cell, mouseEvent) => {
+        mouseEvent.stopPropagation();
+        console.log('click cell content > function params:', { data }, { cell }, { mouseEvent });
+      },
     },
     {
       key: 'quantity',
@@ -199,6 +210,7 @@ export class TableExampleComponent {
       key: 'active',
       label: 'Active',
       customCellContent: true,
+      customHeaderCell: true,
       cellClass: 'center-cell',
       columnOrder: 2,
     },
@@ -211,8 +223,19 @@ export class TableExampleComponent {
     {
       key: 'city',
       label: 'City',
+      cellHeaderTooltip: 'This column shows the city',
+      cellHeaderTooltipPosition: 'above',
       columnOrder: 5,
       hide: true,
+    },
+    {
+      key: 'warning',
+      label: 'Warning',
+      cellFormatter: () => '',
+      icon: (data) => (data.warning ? 'warning' : 'check'),
+      cellTooltip: {
+        text: (data) => (data.warning ? 'This is a dangerous entry' : 'This is not a dangerous entry'),
+      },
     },
   ];
 
@@ -223,12 +246,12 @@ export class TableExampleComponent {
     });
   }
 
-  public rowClick(event, row, i): void {
-    console.log(event, row, i);
+  public rowClick(row, i, event): void {
+    console.log('click row > function params:', { row }, { i }, { event });
   }
 
-  public filtered(e): void {
-    console.log(e);
+  public filtered(tableCells: TableCell[]): void {
+    console.log({ tableCells });
   }
 
   public getRowClass(row: any): string {
