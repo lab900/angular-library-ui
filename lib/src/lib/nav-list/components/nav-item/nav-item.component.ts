@@ -1,9 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Event, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
 import { Subscription } from 'rxjs';
 import { SubscriptionBasedDirective } from '../../../common/directives/subscription-based.directive';
 import { MediaObserver } from '@angular/flex-layout';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'lab900-nav-item',
@@ -42,12 +43,11 @@ export class NavItemComponent extends SubscriptionBasedDirective implements OnIn
     if (!(this.item.route || this.item.href || this.item.children)) {
       this.disabled = true;
     } else {
-      this.addSubscription(this.router.events, (event: Event) => {
-        if (event instanceof NavigationEnd) {
-          const url = event.urlAfterRedirects;
-          if (url && this.item?.children?.length) {
-            this.expanded = this.item.children.some((item: NavItem) => url.indexOf(`/${item.route}`) === 0);
-          }
+      this.addSubscription(this.router.events.pipe(filter((e) => e instanceof NavigationEnd)), (event: NavigationEnd) => {
+        this.item.navigationFinished?.(true);
+        const url = event.urlAfterRedirects;
+        if (url && this.item?.children?.length) {
+          this.expanded = this.item.children.some((item: NavItem) => url.indexOf(`/${item.route}`) === 0);
         }
       });
     }
@@ -60,17 +60,9 @@ export class NavItemComponent extends SubscriptionBasedDirective implements OnIn
   }
 
   public onClick(event: MouseEvent): void {
-    event.preventDefault();
     if (this.item?.children?.length) {
+      event.preventDefault();
       this.expanded = !this.expanded;
-    } else if (this.item?.route) {
-      this.router.navigate([this.item.route], { queryParams: this.item?.routeQueryParams }).then((navigationResult: boolean) => {
-        if (this.item?.navigationFinished) {
-          this.item.navigationFinished(navigationResult);
-        }
-      });
-    } else if (this.item?.href?.url) {
-      window.open(this.item.href.url, this.item.href?.target ?? '_blank');
     }
   }
 }

@@ -35,7 +35,7 @@ export class NavListExampleComponent {
                 position: 'right',
               },
               label: 'Actual link',
-              route: '/ui/nav-list',
+              route: '/nav-list',
             },
             {
               label: 'Actual link',
@@ -66,7 +66,7 @@ export class NavListExampleComponent {
           children: [
             {
               label: 'Actual link',
-              route: '/ui/nav-list',
+              route: '/nav-list',
             },
             {
               label: 'Actual link',
@@ -79,7 +79,7 @@ export class NavListExampleComponent {
           children: [
             {
               label: 'Actual link',
-              route: '/ui/nav-list',
+              route: '/nav-list',
             },
             {
               label: 'Actual link',
