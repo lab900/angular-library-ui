@@ -1,11 +1,19 @@
 import { Component } from '@angular/core';
+import { IsActiveMatchOptions } from '@angular/router';
 import { NavItemGroup } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-nav-list-example',
-  template: '<lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true"></lab900-nav-list>',
+  template:
+    '<lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true" [routeMatchOptions]="matchOptions"></lab900-nav-list>',
 })
 export class NavListExampleComponent {
+  public matchOptions: IsActiveMatchOptions = {
+    paths: 'exact',
+    queryParams: 'subset',
+    matrixParams: 'subset',
+    fragment: 'ignored',
+  };
   public navItemGroups: NavItemGroup[] = [
     {
       icon: {
@@ -41,18 +49,18 @@ export class NavListExampleComponent {
               label: 'Actual link',
               route: '/',
             },
-          ],
-        },
-        {
-          label: 'Sub level 2',
-          children: [
             {
-              label: 'Actual link',
-              href: { url: 'https://www.google.be', target: '_blank' },
-            },
-            {
-              label: 'Actual link',
-              route: '/',
+              label: 'Sub level 2',
+              children: [
+                {
+                  label: 'Actual link',
+                  href: { url: 'https://www.google.be', target: '_blank' },
+                },
+                {
+                  label: 'Actual link',
+                  route: '/',
+                },
+              ],
             },
           ],
         },
@@ -72,20 +80,64 @@ export class NavListExampleComponent {
               label: 'Actual link',
               route: '/',
             },
+            {
+              label: 'Sub level 2',
+              children: [
+                {
+                  label: 'Actual link',
+                  route: '/nav-list',
+                },
+                {
+                  label: 'Actual link',
+                  route: '/',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: 'Match Paths',
+      items: [
+        {
+          label: 'Item with children',
+          children: [
+            {
+              label: 'child 1',
+              href: {
+                url: '/nav-list',
+                target: '_blank',
+              },
+            },
           ],
         },
         {
-          label: 'Sub level 2',
-          children: [
-            {
-              label: 'Actual link',
-              route: '/nav-list',
-            },
-            {
-              label: 'Actual link',
-              route: '/',
-            },
-          ],
+          label: 'Exact path / exact query params',
+          route: '/nav-list',
+          routeQueryParams: {
+            tab: 'examples',
+            extraParam: 'random',
+          },
+          routeMatchOptions: {
+            paths: 'exact',
+            queryParams: 'exact',
+            matrixParams: 'ignored',
+            fragment: 'ignored',
+          },
+        },
+        {
+          label: 'Exact path / query param subset',
+          route: '/nav-list',
+          routeQueryParams: {
+            tab: 'examples',
+          },
+          routeMatchOptions: {
+            paths: 'subset',
+            queryParams: 'subset',
+            matrixParams: 'ignored',
+            fragment: 'ignored',
+          },
         },
       ],
     },

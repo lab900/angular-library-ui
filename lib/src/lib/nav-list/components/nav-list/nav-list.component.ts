@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NavItem, NavItemGroup } from '../../models/nav-item.model';
+import { IsActiveMatchOptions } from '@angular/router';
 
 const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   return typeof i?.hide === 'function' ? i.hide() : i?.hide ?? false;
@@ -22,6 +23,15 @@ export class NavListComponent implements OnChanges {
 
   @Input()
   public allowOverlayMenuUntil: string | string[] = 'xs';
+
+  @Input()
+  public routeMatchOptions: IsActiveMatchOptions = {
+    // Default match options
+    paths: 'exact',
+    queryParams: 'subset',
+    matrixParams: 'subset',
+    fragment: 'ignored',
+  };
 
   public filtersGroups: NavItemGroup[];
 

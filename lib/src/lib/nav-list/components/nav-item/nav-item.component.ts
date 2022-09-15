@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
 import { Subscription } from 'rxjs';
 import { SubscriptionBasedDirective } from '../../../common/directives/subscription-based.directive';
@@ -35,6 +35,9 @@ export class NavItemComponent extends SubscriptionBasedDirective implements OnIn
   @Input()
   public expanded = false;
 
+  @Input()
+  public navListMatchOptions: IsActiveMatchOptions;
+
   public constructor(public readonly router: Router, public readonly mediaObserver: MediaObserver) {
     super();
   }
@@ -64,5 +67,14 @@ export class NavItemComponent extends SubscriptionBasedDirective implements OnIn
       event.preventDefault();
       this.expanded = !this.expanded;
     }
+  }
+
+  public routeIsActive(item: NavItem): boolean {
+    return this.router.isActive(
+      this.router.createUrlTree([item.route ?? item.href?.url], {
+        queryParams: item.routeQueryParams,
+      }),
+      item.routeMatchOptions ?? this.navListMatchOptions,
+    );
   }
 }
