@@ -1,45 +1,52 @@
-import { Component, EventEmitter, HostBinding, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnDestroy, Optional, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { SortDirection } from '@angular/material/sort';
-import { MatColumnDef } from '@angular/material/table';
+import { MatColumnDef, MatTable } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
 import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
+import { BehaviorSubject, combineLatest, Observable, ReplaySubject } from 'rxjs';
+import { filter, map, shareReplay } from 'rxjs/operators';
+import memo from 'memo-decorator';
 
 @Component({
-  selector: 'lab900-table-cell',
+  selector: 'lab900-table-cell[cell]',
   templateUrl: './table-cell.component.html',
   encapsulation: ViewEncapsulation.None,
 })
-export class Lab900TableCellComponent<T = any> {
+export class Lab900TableCellComponent<T = any> implements OnDestroy {
   @HostBinding()
   public className = 'lab900-table-cell';
 
   @ViewChild(MatColumnDef, { static: true })
-  public columnDef!: MatColumnDef;
+  private columnDef!: MatColumnDef;
 
-  // tslint:disable-next-line:variable-name
-  private _cell: TableCell<T>;
-
-  get cell(): TableCell<T> {
-    return this._cell;
-  }
-
-  @Input()
-  set cell(value: TableCell<T>) {
-    this._cell = value;
-    if (value?.key) {
-      this.columnDef.name = this._cell.key;
-      this.cellHeaderClass = this.getCellHeaderClass();
-      this.cellHeaderIcon = this.getCellHeaderIcon();
-      this.cellHeaderSvgIcon = this.getCellHeaderSvgIcon();
-      this.cellLabel = this.getCellLabel();
-    }
-  }
+  private readonly _cell$ = new ReplaySubject<TableCell<T>>();
+  public readonly cell$: Observable<TableCell<T>> = this._cell$.asObservable().pipe(
+    filter((c) => !!c?.key),
+    shareReplay(1),
+  );
 
   @Input()
-  public sort: Lab900Sort[] = [];
+  public set cell(value: TableCell<T>) {
+    this._cell$.next(value);
+  }
+
+  private readonly _data$ = new ReplaySubject<T[]>();
+
+  @Input()
+  public set data(value: T[]) {
+    this._data$.next(value);
+  }
+
+  private readonly _sort$ = new BehaviorSubject<Lab900Sort[]>([]);
+  public readonly sort$ = this._sort$.asObservable();
+
+  @Input()
+  public set sort(value: Lab900Sort[]) {
+    this._sort$.next(value);
+  }
 
   @Input()
   public disableSort = false;
@@ -50,9 +57,6 @@ export class Lab900TableCellComponent<T = any> {
   @Input()
   public customHeaderCell?: Lab900TableCustomHeaderCellDirective;
 
-  @Input()
-  public data: T[];
-
   /**
    * max column width, set by table input
    */
@@ -62,53 +66,58 @@ export class Lab900TableCellComponent<T = any> {
   @Output()
   public headerClick = new EventEmitter<TableCell<T>>();
 
-  public cellClass: string;
-  public cellHeaderClass: string;
-  public cellHeaderIcon: string;
-  public cellHeaderSvgIcon: string;
-  public cellLabel: string;
+  public readonly cellHeaderClass$: Observable<string>;
+  public readonly cellHeaderIcon$: Observable<string>;
+  public readonly cellHeaderSvgIcon$: Observable<string>;
+  public readonly cellLabel$: Observable<string>;
+  public readonly sticky$: Observable<boolean>;
+  public readonly sortDirection$: Observable<SortDirection>;
+  public readonly sortIcon$: Observable<'north' | 'south'>;
+  public readonly cellFooter$: Observable<string>;
 
-  public get sortDirection(): SortDirection {
-    const sortKey = this.cell.sortKey ?? this.cell.key;
-    return (this.sort || []).find((s) => s.id === sortKey)?.direction ?? '';
-  }
-
-  public get sortIcon(): string {
-    if (this.sortDirection === 'asc') {
-      return 'north';
-    } else if (this.sortDirection === 'desc') {
-      return 'south';
-    }
-  }
-
-  public getCellClass(data: T): string {
-    return typeof this.cell.cellClass === 'function'
-      ? (this.cell.cellClass as (data: T, cell: TableCell) => string)(data, this.cell)
-      : this.cell.cellClass;
-  }
-
-  public getCellLabel(): string {
-    return readPropValue<TableCell<T>>(this.cell.label, this.cell);
-  }
-
-  public getCellHeaderClass(): string {
-    return readPropValue<TableCell<T>>(this.cell.cellHeaderClass, this.cell);
-  }
-
-  public getCellHeaderIcon(): string {
-    return readPropValue<TableCell<T>>(this.cell.cellHeaderIcon, this.cell);
-  }
-
-  public getCellHeaderSvgIcon(): string {
-    return readPropValue<TableCell<T>>(this.cell.cellHeaderSvgIcon, this.cell);
-  }
-
-  public getCellFooter(): string {
-    if (this.cell.footer) {
-      if (typeof this.cell.footer === 'function') {
-        return this.cell.footer(this.data, this.cell);
+  public constructor(@Optional() public table: MatTable<any>) {
+    this.cell$.subscribe((cell) => {
+      if (this.columnDef.name) {
+        this.table?.removeColumnDef(this.columnDef);
       }
-      return this.cell.footer;
-    }
+      this.columnDef.name = cell.key;
+      this.table?.addColumnDef(this.columnDef);
+    });
+
+    this.sticky$ = this.cell$.pipe(map((c) => !!c?.sticky));
+    this.cellLabel$ = this.cell$.pipe(map((c) => readPropValue<TableCell<T>>(c.label, c)));
+    this.cellHeaderClass$ = this.cell$.pipe(map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c)));
+    this.cellHeaderIcon$ = this.cell$.pipe(
+      filter((c) => !!c?.cellHeaderIcon),
+      map((c) => readPropValue<TableCell<T>>(c.cellHeaderIcon, c)),
+    );
+    this.cellHeaderSvgIcon$ = this.cell$.pipe(
+      filter((c) => !!c?.cellHeaderSvgIcon),
+      map((c) => readPropValue<TableCell<T>>(c.cellHeaderSvgIcon, c)),
+    );
+    this.sortDirection$ = combineLatest([this.cell$.pipe(filter((c) => !!c.sortable)), this.sort$]).pipe(
+      map(([cell, sort]) => sort.find((s) => s.id === (cell.sortKey ?? cell.key))?.direction ?? ''),
+    );
+    this.sortIcon$ = this.sortDirection$.pipe(
+      map((dir) => {
+        if (dir === 'asc') {
+          return 'north';
+        } else if (dir === 'desc') {
+          return 'south';
+        }
+      }),
+    );
+    this.cellFooter$ = combineLatest([this.cell$.pipe(filter((c) => !!c.footer)), this._data$.asObservable()]).pipe(
+      map(([cell, data]) => (typeof cell.footer === 'function' ? cell.footer(data, cell) : cell.footer)),
+    );
+  }
+
+  public ngOnDestroy() {
+    this.table?.removeColumnDef(this.columnDef);
+  }
+
+  @memo()
+  public getCellClass(data: T, cell: TableCell<T>): string {
+    return typeof cell.cellClass === 'function' ? (cell.cellClass as (data: T, cell: TableCell) => string)(data, cell) : cell.cellClass;
   }
 }

@@ -1,19 +1,4 @@
-import {
-  AfterContentInit,
-  Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  QueryList,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild,
-  ViewChildren,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Lab900TableEmptyDirective } from '../../directives/table-empty.directive';
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
@@ -24,15 +9,17 @@ import { Lab900TableHeaderContentDirective } from '../../directives/table-header
 import { ActionButton } from '../../../button/models/action-button.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
-import { MatColumnDef, MatTable } from '@angular/material/table';
-import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
+import { MatTable } from '@angular/material/table';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableLeftFooterDirective } from '../../directives/table-left-footer.directive';
+import { BehaviorSubject, combineLatest, Observable, ReplaySubject } from 'rxjs';
+import { filter, map, shareReplay, take } from 'rxjs/operators';
+import { Lab900TableService } from '../../services/table.service';
+import memo from 'memo-decorator';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -60,69 +47,47 @@ export interface SelectableRowsOptions<T = any> {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [Lab900TableService],
 })
-export class Lab900TableComponent<T extends object = object, TabId = string> implements OnInit, OnChanges, AfterContentInit {
-  private originalCells?: TableCell<T>[];
+export class Lab900TableComponent<T extends object = object, TabId = string> {
+  @ViewChild(MatTable)
+  public table?: MatTable<T>;
 
-  @Input('tableCells')
-  public set tableCellsInput(cells: TableCell<T>[]) {
-    this.originalCells = [...cells];
-    this.tableCells = cells;
+  @Input()
+  public set tableCells(columns: TableCell<T>[]) {
+    this.tableService.updateColumns(columns);
   }
 
-  public set tableCells(cells: TableCell<T>[]) {
-    this._tableCells = cells.sort(Lab900TableComponent.reorderColumnsFn);
-    this.reloadColumns();
+  @Input()
+  public set tableTabs(tabs: Lab900TableTab<TabId, T>[]) {
+    this.tableService.updateTabs(tabs);
   }
 
-  public get tableCells(): TableCell<T>[] {
-    return this._tableCells;
-  }
-
-  public get selectCount(): number {
-    return this.selection.selected.length;
-  }
-
-  public get selectEnabled(): boolean {
-    if (this.selectableRowsOptions?.disabled) {
-      return false;
-    } else if (this.selectableRowsOptions?.maxSelectableRows) {
-      return this.selection.selected.length < this.selectableRowsOptions.maxSelectableRows;
-    } else {
-      return true;
-    }
+  @Input()
+  public set activeTabId(tabId: TabId) {
+    this.tableService.updateTabId(tabId);
   }
 
   public get draggableRows(): boolean {
     return this.tableActionsBack?.some((a) => !!a?.draggable) || this.tableActionsFront?.some((a) => !!a?.draggable);
   }
 
-  @ViewChild(MatTable)
-  public table!: MatTable<T>;
-
-  @ViewChildren(Lab900TableCellComponent)
-  public cellComponents!: QueryList<Lab900TableCellComponent<T>>;
-
-  @ViewChildren('rowCheckbox')
-  public rowCheckboxes!: QueryList<MatCheckbox>;
-
-  @ViewChild('selectAllCheckbox')
-  public selectAllCheckbox!: MatCheckbox;
+  private readonly _data$ = new ReplaySubject<any[]>();
+  public readonly data$: Observable<any[]>;
 
   @Input()
-  public selection = new SelectionModel<T>(true, []);
-
-  @Input()
-  public data: any[];
+  public set data(value: any[]) {
+    this._data$.next(value);
+  }
 
   @Input()
   public tableClass: string;
 
   @Input()
-  public rowClass: propFunction<T> | string;
+  public rowClass?: propFunction<T> | string;
 
   @Input()
-  public rowColor: propFunction<T> | string;
+  public rowColor?: propFunction<T> | string;
 
   @Input()
   public pageSizeConfig: { hidePageSize?: boolean; pageSizeOptions?: number[] } = {
@@ -132,9 +97,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
 
   @Input()
   public loading = false;
-
-  // tslint:disable-next-line:variable-name
-  private _tableCells: TableCell<T>[];
 
   /**
    * Show a set of actions at the top of the table
@@ -161,13 +123,25 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   public tableActionsBack: TableRowAction<T>[];
 
   /**
-   * Enable checkboxes in front of the table rows
+   * @Deprecated
+   * Define [selectableRowsOptions] to enable selectable rows
    */
   @Input()
-  public selectableRows: boolean;
+  private selectableRows: boolean;
 
   @Input()
-  public selectableRowsOptions: SelectableRowsOptions<T>;
+  public selection?: SelectionModel<T>;
+
+  private readonly _selectableRowsOptions$ = new BehaviorSubject<SelectableRowsOptions<T> | null>(null);
+  public readonly selectableRowsOptions$: Observable<SelectableRowsOptions<T>> = this._selectableRowsOptions$
+    .asObservable()
+    .pipe(filter((options) => !!options));
+
+  @Input()
+  public set selectableRowsOptions(value: SelectableRowsOptions<T>) {
+    this._selectableRowsOptions$.next(value);
+    this.selection = new SelectionModel<any>(!value?.singleSelect, value?.selectedItems ?? []);
+  }
 
   /**
    * Show columns filter to hide/show columns
@@ -218,13 +192,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   public onRowClick: (value: T, index: number, event: Event) => void;
 
   @Input()
-  public preFooterTitle: string;
-
-  @Input()
-  public tableTabs?: Lab900TableTab<TabId, T>[];
-
-  @Input()
-  public activeTabId?: TabId;
+  public preFooterTitle?: string;
 
   @Input()
   public stickyHeader?: boolean;
@@ -268,77 +236,70 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   @ContentChild(Lab900TableLeftFooterDirective, { read: TemplateRef })
   public footerLeftContent?: Lab900TableLeftFooterDirective;
 
-  public displayedColumns: string[] = [];
+  public readonly showCellFooters$: Observable<boolean>;
+  public readonly columns$: Observable<TableCell<T>[]>;
+  public readonly tabId$: Observable<TabId>;
+  public readonly tabs$: Observable<Lab900TableTab<TabId, T>[]>;
+  public readonly displayedColumns$: Observable<string[]>;
 
-  public showCellFooters = false;
-
-  // when columnOrder is not specified, put them in the back (position 10000)
-  public static reorderColumnsFn(a: TableCell, b: TableCell): number {
-    return (a.columnOrder ?? 10000) - (b.columnOrder ?? 10000);
+  public constructor(private tableService: Lab900TableService<T, TabId>) {
+    this.columns$ = this.tableService.columns$;
+    this.tabId$ = this.tableService.tabId$;
+    this.tabs$ = this.tableService.tabs$;
+    this.showCellFooters$ = this.columns$.pipe(
+      map((columns) => !!columns?.some((c) => c.footer)),
+      shareReplay(1),
+    );
+    this.displayedColumns$ = combineLatest([this.columns$, this._selectableRowsOptions$.asObservable()]).pipe(
+      map(([columns, options]) => this.getDisplayedColumns(columns, options)),
+      shareReplay(1),
+    );
+    this.data$ = combineLatest([this._selectableRowsOptions$.asObservable(), this._data$.asObservable()]).pipe(
+      map(([options, data]) =>
+        options?.hideSelectableRow ? data.map((v) => ({ ...v, _hideSelectableRow: options.hideSelectableRow(v) })) : data,
+      ),
+      shareReplay(1),
+    );
   }
 
-  public ngOnInit(): void {
-    if (this.tableTabs?.length && this.activeTabId) {
-      const activeTab = this.tableTabs.find((tab) => tab.id === this.activeTabId);
-      if (activeTab?.tableCells) {
-        this.tableCells = activeTab?.tableCells;
-      }
-    }
-
-    this.setHiddenSelectableRow();
-  }
-
-  public ngAfterContentInit(): void {
-    this.showCellFooters = this.tableCells.some((cell) => cell.footer);
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    const selectableRowsOptions = changes.selectableRowsOptions?.currentValue;
-
-    if (selectableRowsOptions?.singleSelect) {
-      this.selection = new SelectionModel<any>(false, []);
-    }
-    if (selectableRowsOptions?.selectedItems) {
-      this.selection.clear();
-      this.selection.select(...this.selectableRowsOptions.selectedItems);
-    }
-    if (changes.data) {
-      this.reloadColumns();
-      this.setHiddenSelectableRow();
+  public handleSelectAll(checked: boolean): void {
+    this.selection.clear();
+    if (checked) {
+      this.data$.pipe(take(1)).subscribe((data) => {
+        this.selection.select(...data.filter((row) => !row._hideSelectableRow));
+        this.selectionChanged.emit(this.selection);
+      });
+    } else {
+      this.selectionChanged.emit(this.selection);
     }
   }
 
-  public hideSelectableCheckbox = (row: T): boolean => !!this.selectableRowsOptions?.hideSelectableRow?.(row);
-
-  public selectRow(row: T): void {
+  public handleSelectRow(row: T): void {
     this.selection.toggle(row);
-
-    if (this.selectAllCheckbox) {
-      this.selectAllCheckbox.checked = this.selection?.selected?.length === this.data?.length;
-    }
-
     this.selectionChanged.emit(this.selection);
     this.rowSelectToggle.emit(row);
   }
 
+  public isRowSelected(row: T): boolean {
+    return this.selection?.isSelected(row);
+  }
+
+  @memo()
   public getRowClasses(row: T, index: number): string {
     const classes: string[] = [];
     if (typeof this.onRowClick === 'function') {
       classes.push('lab900-row-clickable');
-    }
-    if (this.selection && this.selection.isSelected(row)) {
-      classes.push('lab900-row-selected');
     }
     if (index % 2 === 0) {
       classes.push('lab900-row-even');
     } else {
       classes.push('lab900-row-odd');
     }
-
     classes.push((typeof this.rowClass === 'function' ? this.rowClass(row) : this.rowClass) ?? '');
     return classes.join(' ') || '';
   }
 
+  @memo()
   public getRowColor(row: T): string {
     return (typeof this.rowColor === 'function' ? this.rowColor(row) : this.rowColor) ?? '';
   }
@@ -356,7 +317,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort && cell.sortable) {
       const sortKey = cell.sortKey ?? cell.key;
-
       if (this.multiSort) {
         const currentIndex = (this.sort || []).findIndex((s) => s.id === sortKey);
         if (currentIndex >= 0) {
@@ -377,93 +337,31 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     }
   }
 
-  public handleSelectAllCheckbox({ checked }): void {
-    const rowCheckboxes = this.rowCheckboxes.toArray();
-    if (checked) {
-      this.selection.clear();
-      this.selection.select(...this.data.filter((row) => !row._hideSelectableRow));
-      rowCheckboxes.forEach((checkBox) => (checkBox.checked = true));
-    } else {
-      this.selection.clear();
-      rowCheckboxes.forEach((checkBox) => (checkBox.checked = false));
-    }
-
-    this.selectionChanged.emit(this.selection);
-  }
-
   public onTableCellsFiltered(tableCells: TableCell[]): void {
-    this.tableCells = tableCells.sort(Lab900TableComponent.reorderColumnsFn);
-    this.addColumnsToTable();
+    this.tableCells = tableCells;
     this.tableCellsFiltered.emit(tableCells);
   }
 
   public onActiveTabChange(id: TabId): void {
-    this.selection.clear();
-    const previousTableTab = this.tableTabs.find((t) => t.id === this.activeTabId);
-    const activeTableTab = this.tableTabs.find((t) => t.id === id);
-
-    if (activeTableTab?.tableCells?.length) {
-      this.tableCells = activeTableTab.tableCells;
-      // load the original tableCells if the new active tab hasn't got any specific table cells but the previous tab had
-    } else if (previousTableTab?.tableCells?.length && !activeTableTab?.tableCells?.length && this.originalCells?.length) {
-      this.tableCells = this.originalCells;
-    }
-
     this.activeTabId = id;
     this.activeTabIdChange.emit(id);
   }
 
-  private setHiddenSelectableRow(): void {
-    if (this.selectableRowsOptions?.hideSelectableRow) {
-      this.data.forEach((value) => {
-        value._hideSelectableRow = this.selectableRowsOptions.hideSelectableRow(value);
-      });
-    }
-  }
-
-  private addColumnsToTable(): void {
-    let columns = [];
-    for (const column of this.cellComponents.toArray()) {
-      this.table.addColumnDef(column.columnDef);
-      if (!column.cell.hide) {
-        columns = [...columns, column.cell.key];
-      }
-    }
+  private getDisplayedColumns(columns: TableCell<T>[], options: SelectableRowsOptions<T>): string[] {
+    const displayColumns = columns.map((c) => c.key);
     if (this.tableActionsFront?.length) {
-      columns.unshift('actions-front');
+      displayColumns.unshift('actions-front');
     }
     if (this.tableActionsBack?.length) {
-      columns.push('actions-back');
+      displayColumns.push('actions-back');
     }
-
-    if (this.selectableRows) {
-      if (this.selectableRowsOptions?.position === 'right') {
-        columns.push('select');
+    if (options) {
+      if (options?.position === 'right') {
+        displayColumns.push('select');
       } else {
-        columns.unshift('select');
+        displayColumns.unshift('select');
       }
     }
-
-    this.displayedColumns = columns;
-  }
-
-  private removeOldColumnsFromTable(): void {
-    const oldColumns: Set<MatColumnDef> = (this.table as any)?._customColumnDefs;
-    oldColumns?.forEach((oldColumn: MatColumnDef) => {
-      this.table.removeFooterRowDef(null);
-      this.table.removeColumnDef(oldColumn);
-      // removing column also from the displayed columns (such array should match the dataSource!)
-      this.displayedColumns.splice(
-        this.displayedColumns.findIndex((column: string) => column === oldColumn.name),
-        1,
-      );
-    });
-  }
-
-  private reloadColumns(): void {
-    setTimeout(() => {
-      this.removeOldColumnsFromTable();
-      this.addColumnsToTable();
-    });
+    return displayColumns;
   }
 }

@@ -1,12 +1,10 @@
-::ng-deep lab900-table {
-  tr.lab900-table__pre-footer-title-row {
-    background-color: #b3e6e4;
-    text-align: center;
+::ng-deep lab900-table tr.lab900-table__pre-footer-title-row {
+  background-color: #b3e6e4;
+  text-align: center;
+}
 
-    td.lab900-table__pre-footer-title-cell {
-      text-align: center;
-    }
-  }
+::ng-deep lab900-table td.lab900-table__pre-footer-title-cell {
+  text-align: center;
 }
 
 .rainbow {
