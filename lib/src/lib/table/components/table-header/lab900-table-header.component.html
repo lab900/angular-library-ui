@@ -5,7 +5,6 @@
   </div>
   <lab900-table-filter-menu
     *ngIf="toggleColumns || toggleAndMoveColumns"
-    [tableCells]="tableCells"
     (filterChanged)="tableCellsFiltered.emit($event)"
     [filterIcon]="filterIcon"
     [toggleAndMoveColumns]="toggleAndMoveColumns"

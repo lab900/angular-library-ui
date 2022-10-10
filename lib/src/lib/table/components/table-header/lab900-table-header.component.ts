@@ -23,9 +23,6 @@ export class Lab900TableHeaderComponent {
   public toggleAndMoveColumns = false;
 
   @Input()
-  public tableCells: TableCell[];
-
-  @Input()
   public filterIcon = 'filter_alt';
 
   @Output()

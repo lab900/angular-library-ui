@@ -8,6 +8,7 @@ import { Lab900TableTab } from '../models/table-tabs.model';
 export class Lab900TableService<T extends object = object, TabId = string> {
   private readonly _columns$ = new ReplaySubject<TableCell<T>[]>();
   public readonly columns$: Observable<TableCell<T>[]>;
+  public readonly visibleColumns$: Observable<TableCell<T>[]>;
 
   private readonly _tabs$ = new BehaviorSubject<Lab900TableTab<TabId, T>[] | null>(null);
   public readonly tabs$ = this._tabs$.asObservable().pipe(filter((tabs) => tabs != null));
@@ -32,7 +33,11 @@ export class Lab900TableService<T extends object = object, TabId = string> {
       }),
       filter((columns) => columns != null),
       map((columns) => columns.sort(Lab900TableService.reorderColumnsFn)),
-      map((columns) => columns.filter((c) => !!c.key && !c.hide)),
+      map((columns) => columns.filter((c) => !!c.key)),
+      shareReplay(1),
+    );
+    this.visibleColumns$ = this.columns$.pipe(
+      map((columns) => columns.filter((c) => !c.hide)),
       shareReplay(1),
     );
   }

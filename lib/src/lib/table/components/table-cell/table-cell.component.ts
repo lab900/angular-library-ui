@@ -72,7 +72,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly cellLabel$: Observable<string>;
   public readonly sticky$: Observable<boolean>;
   public readonly sortDirection$: Observable<SortDirection>;
-  public readonly sortIcon$: Observable<'north' | 'south'>;
+  public readonly sortIcon$: Observable<'north' | 'south' | ''>;
   public readonly cellFooter$: Observable<string>;
 
   public constructor(@Optional() public table: MatTable<any>) {
@@ -84,7 +84,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       this.table?.addColumnDef(this.columnDef);
     });
 
-    this.sticky$ = this.cell$.pipe(map((c) => !!c?.sticky));
+    this.sticky$ = this.cell$.pipe(map((c) => !c?.hide && !!c?.sticky));
     this.cellLabel$ = this.cell$.pipe(map((c) => readPropValue<TableCell<T>>(c.label, c)));
     this.cellHeaderClass$ = this.cell$.pipe(map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c)));
     this.cellHeaderIcon$ = this.cell$.pipe(
@@ -105,6 +105,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
         } else if (dir === 'desc') {
           return 'south';
         }
+        return '';
       }),
     );
     this.cellFooter$ = combineLatest([this.cell$.pipe(filter((c) => !!c.footer)), this._data$.asObservable()]).pipe(

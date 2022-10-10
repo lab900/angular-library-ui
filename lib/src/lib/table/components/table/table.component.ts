@@ -237,20 +237,21 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public footerLeftContent?: Lab900TableLeftFooterDirective;
 
   public readonly showCellFooters$: Observable<boolean>;
-  public readonly columns$: Observable<TableCell<T>[]>;
+
+  public readonly visibleColumns$: Observable<TableCell<T>[]>;
   public readonly tabId$: Observable<TabId>;
   public readonly tabs$: Observable<Lab900TableTab<TabId, T>[]>;
   public readonly displayedColumns$: Observable<string[]>;
 
   public constructor(private tableService: Lab900TableService<T, TabId>) {
-    this.columns$ = this.tableService.columns$;
+    this.visibleColumns$ = this.tableService.visibleColumns$;
     this.tabId$ = this.tableService.tabId$;
     this.tabs$ = this.tableService.tabs$;
-    this.showCellFooters$ = this.columns$.pipe(
+    this.showCellFooters$ = this.visibleColumns$.pipe(
       map((columns) => !!columns?.some((c) => c.footer)),
       shareReplay(1),
     );
-    this.displayedColumns$ = combineLatest([this.columns$, this._selectableRowsOptions$.asObservable()]).pipe(
+    this.displayedColumns$ = combineLatest([this.visibleColumns$, this._selectableRowsOptions$.asObservable()]).pipe(
       map(([columns, options]) => this.getDisplayedColumns(columns, options)),
       shareReplay(1),
     );

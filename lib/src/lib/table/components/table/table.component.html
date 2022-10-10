@@ -1,7 +1,6 @@
-<div class="lab900-table {{ tableClass }}" *ngIf="columns$ | async as columns">
+<div class="lab900-table {{ tableClass }}" *ngIf="visibleColumns$ | async as columns">
   <lab900-table-header
     [tableHeaderActions]="tableHeaderActions"
-    [tableCells]="columns"
     [toggleColumns]="toggleColumns"
     [toggleAndMoveColumns]="toggleAndMoveColumns"
     (tableCellsFiltered)="onTableCellsFiltered($event)"
