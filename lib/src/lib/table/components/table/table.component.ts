@@ -166,7 +166,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public disabled = false;
 
   @Input()
-  public sort: Lab900Sort[] = [];
+  public set sort(value: Lab900Sort[] | null) {
+    this.tableService.updateSorting(value);
+  }
 
   @Input()
   public multiSort = false;
@@ -317,24 +319,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort && cell.sortable) {
-      const sortKey = cell.sortKey ?? cell.key;
-      if (this.multiSort) {
-        const currentIndex = (this.sort || []).findIndex((s) => s.id === sortKey);
-        if (currentIndex >= 0) {
-          const { direction } = this.sort[currentIndex];
-          if (direction === 'desc') {
-            this.sort.splice(currentIndex, 1);
-          } else {
-            this.sort[currentIndex] = { ...this.sort[currentIndex], direction: 'desc' };
-          }
-        } else {
-          this.sort.push({ id: sortKey, direction: 'asc' });
-        }
-      } else {
-        const inCurrent = (this.sort || []).find((s) => s.id === sortKey);
-        this.sort = [{ id: sortKey, direction: inCurrent?.direction === 'asc' ? 'desc' : 'asc' }];
-      }
-      this.sortChange.emit(this.sort);
+      this.tableService.updateColumnSorting(cell, this.multiSort, (sort) => this.sortChange.emit(sort));
     }
   }
 

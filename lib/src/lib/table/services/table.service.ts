@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { TableCell } from '../models/table-cell.model';
-import { filter, map, shareReplay, withLatestFrom } from 'rxjs/operators';
+import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableTab } from '../models/table-tabs.model';
+import { Lab900Sort } from '../models/table-sort.model';
 
 @Injectable()
 export class Lab900TableService<T extends object = object, TabId = string> {
@@ -19,6 +20,9 @@ export class Lab900TableService<T extends object = object, TabId = string> {
     map(([tabId, tabs]) => tabId ?? tabs?.[0]?.id),
     filter((tabId) => tabId != null),
   );
+
+  private readonly _sort$ = new ReplaySubject<Lab900Sort[] | null>();
+  public readonly sort$: Observable<Lab900Sort[] | null> = this._sort$.asObservable();
 
   public constructor() {
     this.columns$ = combineLatest([this._tabId$.asObservable(), this._tabs$.asObservable(), this._columns$.asObservable()]).pipe(
@@ -56,5 +60,38 @@ export class Lab900TableService<T extends object = object, TabId = string> {
 
   public updateTabs(tabs: Lab900TableTab<TabId, T>[] | null): void {
     this._tabs$.next(tabs);
+  }
+
+  public updateSorting(sort: Lab900Sort[] | null): void {
+    this._sort$.next(sort);
+  }
+
+  public updateColumnSorting(column: TableCell<T>, multiSort: boolean, callback?: (sort: Lab900Sort[] | null) => void): void {
+    const sortKey = column.sortKey ?? column.key;
+    this.sort$
+      .pipe(
+        take(1),
+        map((sort) => sort ?? []),
+      )
+      .subscribe((sort) => {
+        if (multiSort) {
+          const currentIndex = sort.findIndex((s) => s.id === sortKey);
+          if (currentIndex >= 0) {
+            const { direction } = sort[currentIndex];
+            if (direction === 'desc') {
+              sort.splice(currentIndex, 1);
+            } else {
+              sort[currentIndex] = { ...sort[currentIndex], direction: 'desc' };
+            }
+          } else {
+            sort.push({ id: sortKey, direction: 'asc' });
+          }
+        } else {
+          const inCurrent = sort.find((s) => s.id === sortKey);
+          sort = [{ id: sortKey, direction: inCurrent?.direction === 'asc' ? 'desc' : 'asc' }];
+        }
+        this.updateSorting(sort);
+        callback?.(sort);
+      });
   }
 }

@@ -47,7 +47,6 @@
       <lab900-table-cell
         *ngFor="let column of columns; trackBy: trackCellFn"
         [cell]="column"
-        [sort]="sort"
         [disableSort]="disableSort"
         [maxColumnWidthFromTable]="maxColumnWidth"
         [customCellContent]="customCellContent"

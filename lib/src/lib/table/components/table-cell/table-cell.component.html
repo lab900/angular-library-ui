@@ -20,9 +20,11 @@
           <mat-icon *ngIf="cellHeaderIcon$ | async as icon">{{ icon }}</mat-icon>
           <mat-icon *ngIf="cellHeaderSvgIcon$ | async as icon" [svgIcon]="icon"></mat-icon>
           {{ cellLabel$ | async | translate }}
-          <span class="material-icons lab900-sort-arrow" *ngIf="!disableSort && (sortDirection$ | async)">
-            {{ sortIcon$ | async }}
-          </span>
+          <ng-container *ngIf="!disableSort && cell.sortable">
+            <span class="material-icons lab900-sort-arrow" *ngIf="sortIcon$ | async as icon">
+              {{ icon }}
+            </span>
+          </ng-container>
         </div>
       </ng-template>
     </th>

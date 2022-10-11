@@ -4,11 +4,12 @@ import { Lab900TableCustomCellDirective } from '../../directives/table-custom-ce
 import { SortDirection } from '@angular/material/sort';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
-import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
-import { BehaviorSubject, combineLatest, Observable, ReplaySubject } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
+import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { distinctUntilChanged, filter, map, shareReplay, withLatestFrom } from 'rxjs/operators';
 import memo from 'memo-decorator';
+import { Lab900TableService } from '../../services/table.service';
+import { Lab900Sort } from '../../models/table-sort.model';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
@@ -16,6 +17,8 @@ import memo from 'memo-decorator';
   encapsulation: ViewEncapsulation.None,
 })
 export class Lab900TableCellComponent<T = any> implements OnDestroy {
+  private cellSub: Subscription;
+
   @HostBinding()
   public className = 'lab900-table-cell';
 
@@ -38,14 +41,6 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   @Input()
   public set data(value: T[]) {
     this._data$.next(value);
-  }
-
-  private readonly _sort$ = new BehaviorSubject<Lab900Sort[]>([]);
-  public readonly sort$ = this._sort$.asObservable();
-
-  @Input()
-  public set sort(value: Lab900Sort[]) {
-    this._sort$.next(value);
   }
 
   @Input()
@@ -74,9 +69,11 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly sortDirection$: Observable<SortDirection>;
   public readonly sortIcon$: Observable<'north' | 'south' | ''>;
   public readonly cellFooter$: Observable<string>;
+  public readonly sort$: Observable<Lab900Sort[] | null>;
 
-  public constructor(@Optional() public table: MatTable<any>) {
-    this.cell$.subscribe((cell) => {
+  public constructor(@Optional() public table: MatTable<any>, private tableService: Lab900TableService) {
+    this.sort$ = this.tableService.sort$;
+    this.cellSub = this.cell$.subscribe((cell) => {
       if (this.columnDef.name) {
         this.table?.removeColumnDef(this.columnDef);
       }
@@ -95,10 +92,12 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       filter((c) => !!c?.cellHeaderSvgIcon),
       map((c) => readPropValue<TableCell<T>>(c.cellHeaderSvgIcon, c)),
     );
-    this.sortDirection$ = combineLatest([this.cell$.pipe(filter((c) => !!c.sortable)), this.sort$]).pipe(
-      map(([cell, sort]) => sort.find((s) => s.id === (cell.sortKey ?? cell.key))?.direction ?? ''),
+    this.sortDirection$ = this.sort$.pipe(
+      withLatestFrom(this.cell$),
+      map(([sort, cell]) => sort?.find((s) => s.id === (cell.sortKey ?? cell.key))?.direction ?? ''),
     );
     this.sortIcon$ = this.sortDirection$.pipe(
+      distinctUntilChanged(),
       map((dir) => {
         if (dir === 'asc') {
           return 'north';
@@ -114,6 +113,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.cellSub?.unsubscribe();
     this.table?.removeColumnDef(this.columnDef);
   }
 
