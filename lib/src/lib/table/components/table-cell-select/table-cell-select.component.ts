@@ -7,6 +7,7 @@ import {
   Optional,
   Output,
   QueryList,
+  SkipSelf,
   ViewChild,
   ViewChildren,
   ViewEncapsulation,
@@ -69,7 +70,7 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
   @Output()
   private readonly selectAll = new EventEmitter<boolean>();
 
-  public constructor(@Optional() public table: MatTable<any>) {}
+  public constructor(@Optional() @SkipSelf() public table: MatTable<any>) {}
 
   public ngOnInit(): void {
     this.columnDef.name = 'select';

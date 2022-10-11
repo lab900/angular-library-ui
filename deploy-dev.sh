@@ -8,4 +8,4 @@ npm i
 npm run build:ui:prod
 cd dist/@lab900/ui || exit
 npm config set -- '//registry.npmjs.org/:_authToken' "$1"
-npm publish
+npm publish --ignore-scripts

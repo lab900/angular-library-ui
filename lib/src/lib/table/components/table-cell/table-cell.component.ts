@@ -1,4 +1,15 @@
-import { Component, EventEmitter, HostBinding, Input, OnDestroy, Optional, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnDestroy,
+  Optional,
+  Output,
+  SkipSelf,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { SortDirection } from '@angular/material/sort';
@@ -71,7 +82,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly cellFooter$: Observable<string>;
   public readonly sort$: Observable<Lab900Sort[] | null>;
 
-  public constructor(@Optional() public table: MatTable<any>, private tableService: Lab900TableService) {
+  public constructor(@Optional() @SkipSelf() public table: MatTable<any>, private tableService: Lab900TableService) {
     this.sort$ = this.tableService.sort$;
     this.cellSub = this.cell$.subscribe((cell) => {
       if (this.columnDef.name) {
