@@ -129,7 +129,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   }
 
   @memo()
-  public getCellClass(data: T, cell: TableCell<T>): string {
-    return typeof cell.cellClass === 'function' ? (cell.cellClass as (data: T, cell: TableCell) => string)(data, cell) : cell.cellClass;
+  public getCellClass(cell: TableCell<T>, data: T): string {
+    return typeof cell.cellClass === 'function' ? cell.cellClass(data, cell) : cell.cellClass;
   }
 }
