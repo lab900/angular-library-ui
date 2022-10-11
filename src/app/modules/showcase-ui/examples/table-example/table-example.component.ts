@@ -173,7 +173,7 @@ export class TableExampleComponent {
         tooltipOptions: { tooltipPosition: 'left' },
       },
       columnOrder: 0,
-      footer: '<a href="javascript:void(0)">Click here!</a>',
+      footer: '<a href="#">Click here!</a>',
       sticky: true,
     },
     {
