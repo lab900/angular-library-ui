@@ -72,11 +72,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     return this.tableActionsBack?.some((a) => !!a?.draggable) || this.tableActionsFront?.some((a) => !!a?.draggable);
   }
 
-  private readonly _data$ = new ReplaySubject<any[]>();
-  public readonly data$: Observable<any[]>;
+  private readonly _data$ = new ReplaySubject<T[] | null>();
+  public readonly data$: Observable<T[] | null>;
 
   @Input()
-  public set data(value: any[]) {
+  public set data(value: T[] | null) {
     this._data$.next(value);
   }
 
@@ -127,7 +127,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
    * Define [selectableRowsOptions] to enable selectable rows
    */
   @Input()
-  private selectableRows: boolean;
+  public selectableRows?: boolean;
 
   @Input()
   public selection?: SelectionModel<T>;
@@ -138,9 +138,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     .pipe(filter((options) => !!options));
 
   @Input()
-  public set selectableRowsOptions(value: SelectableRowsOptions<T>) {
-    this._selectableRowsOptions$.next(value);
-    this.selection = new SelectionModel<any>(!value?.singleSelect, value?.selectedItems ?? []);
+  public set selectableRowsOptions(value: SelectableRowsOptions<T> | undefined) {
+    this._selectableRowsOptions$.next(value ?? null);
+    if (value) {
+      this.selection = new SelectionModel<any>(!value?.singleSelect, value?.selectedItems ?? []);
+    }
   }
 
   /**
@@ -269,7 +271,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     this.selection.clear();
     if (checked) {
       this.data$.pipe(take(1)).subscribe((data) => {
-        this.selection.select(...data.filter((row) => !row._hideSelectableRow));
+        this.selection.select(...data.filter((row) => !(row as any)._hideSelectableRow));
         this.selectionChanged.emit(this.selection);
       });
     } else {
