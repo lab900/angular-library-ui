@@ -32,7 +32,7 @@
       mat-cell
       *matCellDef="let element"
       [style.width]="cell?.width === '*' ? '100%' : cell?.width"
-      [ngClass]="getCellClass(element, cell)"
+      [ngClass]="getCellClass(cell, element)"
       (click)="cell.click ? $event.stopPropagation() : undefined"
     >
       <ng-container *ngIf="cell?.customCellContent && customCellContent">
