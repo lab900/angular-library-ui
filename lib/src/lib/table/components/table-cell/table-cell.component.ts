@@ -123,7 +123,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     );
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.cellSub?.unsubscribe();
     this.table?.removeColumnDef(this.columnDef);
   }
