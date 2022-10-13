@@ -18,7 +18,6 @@ import { readPropValue } from '../../../utils/utils';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, withLatestFrom } from 'rxjs/operators';
-import memo from 'memo-decorator';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900Sort } from '../../models/table-sort.model';
 
@@ -128,7 +127,6 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     this.table?.removeColumnDef(this.columnDef);
   }
 
-  @memo()
   public getCellClass(cell: TableCell<T>, data: T): string {
     return typeof cell.cellClass === 'function' ? cell.cellClass(data, cell) : cell.cellClass;
   }
