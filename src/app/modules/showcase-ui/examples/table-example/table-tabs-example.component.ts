@@ -1,14 +1,17 @@
 import { Component, ViewChild } from '@angular/core';
-import { Lab900TableComponent, TableCell, Lab900TableTab } from '@lab900/ui';
+import { Lab900TableComponent, Lab900TableTab, TableCell } from '@lab900/ui';
 
 const mockDataA: any[] = [
   {
     id: 1,
-    name: 'John',
+    name: 'john',
   },
   {
     id: 2,
-    name: 'Lucie',
+    name: 'lucie',
+  },
+  {
+    id: 3,
   },
 ];
 
@@ -25,15 +28,15 @@ const mockDataB: any[] = [
 
 const mockDataC: any[] = [
   {
-    id: 5,
+    testKey: 5,
     name: 'Max',
   },
   {
-    id: 6,
+    testKey: 6,
     name: 'Jane',
   },
   {
-    id: 7,
+    testKey: 7,
     name: 'Oliver',
   },
 ];
@@ -55,14 +58,14 @@ const tableCellsAlt: TableCell[] = [
 
 const tableCellsAlt2: TableCell[] = [
   {
-    key: 'name',
-    label: 'Name',
+    key: 'testKey',
+    label: 'TestKey',
   },
 ];
 
 @Component({
   selector: 'lab900-table-tabs-example',
-  template: `<lab900-table
+  template: ` <lab900-table
     [loading]="true"
     [tableCells]="tableCells"
     [data]="activeData"
@@ -87,10 +90,12 @@ export class TableTabsExampleComponent {
     {
       key: 'id',
       label: 'ID',
+      cellClass: 'test',
     },
     {
       key: 'name',
       label: 'Name',
+      cellClass: (data) => 'lcs-approval-status-cell ' + data.name,
     },
   ];
 
