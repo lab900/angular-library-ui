@@ -341,7 +341,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   private getDisplayedColumns(columns: TableCell<T>[], options: SelectableRowsOptions<T>): string[] {
-    const displayColumns = columns.map((c) => c.key);
+    const displayColumns = columns?.map((c) => c.key);
     if (this.tableActionsFront?.length) {
       displayColumns.unshift('actions-front');
     }
