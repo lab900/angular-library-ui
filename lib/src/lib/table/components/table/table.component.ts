@@ -261,7 +261,12 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     );
     this.data$ = combineLatest([this._selectableRowsOptions$.asObservable(), this._data$.asObservable()]).pipe(
       map(([options, data]) =>
-        options?.hideSelectableRow ? data.map((v) => ({ ...v, _hideSelectableRow: options.hideSelectableRow(v) })) : data,
+        options?.hideSelectableRow
+          ? data?.map((v) => ({
+              ...v,
+              _hideSelectableRow: options.hideSelectableRow(v),
+            }))
+          : data,
       ),
       shareReplay(1),
     );
@@ -336,7 +341,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   private getDisplayedColumns(columns: TableCell<T>[], options: SelectableRowsOptions<T>): string[] {
-    const displayColumns = columns.map((c) => c.key);
+    const displayColumns = columns?.map((c) => c.key);
     if (this.tableActionsFront?.length) {
       displayColumns.unshift('actions-front');
     }
