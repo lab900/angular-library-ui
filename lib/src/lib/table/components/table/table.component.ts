@@ -261,7 +261,12 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     );
     this.data$ = combineLatest([this._selectableRowsOptions$.asObservable(), this._data$.asObservable()]).pipe(
       map(([options, data]) =>
-        options?.hideSelectableRow ? data.map((v) => ({ ...v, _hideSelectableRow: options.hideSelectableRow(v) })) : data,
+        options?.hideSelectableRow
+          ? data?.map((v) => ({
+              ...v,
+              _hideSelectableRow: options.hideSelectableRow(v),
+            }))
+          : data,
       ),
       shareReplay(1),
     );
