@@ -1,4 +1,4 @@
-import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Lab900TableEmptyDirective } from '../../directives/table-empty.directive';
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
@@ -16,8 +16,8 @@ import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableLeftFooterDirective } from '../../directives/table-left-footer.directive';
-import { BehaviorSubject, combineLatest, Observable, ReplaySubject } from 'rxjs';
-import { filter, map, shareReplay, take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
 import memo from 'memo-decorator';
 
@@ -49,7 +49,9 @@ export interface SelectableRowsOptions<T = any> {
   encapsulation: ViewEncapsulation.None,
   providers: [Lab900TableService],
 })
-export class Lab900TableComponent<T extends object = object, TabId = string> {
+export class Lab900TableComponent<T extends object = object, TabId = string> implements OnDestroy {
+  private readonly footerSub: Subscription;
+
   @ViewChild(MatTable)
   public table?: MatTable<T>;
 
@@ -270,6 +272,22 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
       ),
       shareReplay(1),
     );
+
+    /**
+     * Fix for rendering async footers
+     */
+    this.footerSub = this.data$.pipe(withLatestFrom(this.showCellFooters$)).subscribe(([data, showFooter]) => {
+      if (this.table) {
+        this.table.removeFooterRowDef(null);
+        if (data?.length && showFooter) {
+          this.table.renderRows();
+        }
+      }
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.footerSub.unsubscribe();
   }
 
   public handleSelectAll(checked: boolean): void {

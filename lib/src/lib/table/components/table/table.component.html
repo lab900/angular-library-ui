@@ -92,7 +92,9 @@
       </ng-container>
 
       <ng-container *ngIf="displayedColumns$ | async as displayedColumns">
+        <!-- header row -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: stickyHeader"></tr>
+        <!-- content rows -->
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
@@ -103,8 +105,9 @@
           cdkDrag
           [cdkDragDisabled]="!draggableRows"
         ></tr>
-        <ng-container *ngIf="data$ | async as data">
-          <ng-container *ngIf="data?.length">
+        <ng-container *ngIf="showCellFooters$ | async">
+          <div *ngIf="(data$ | async)?.length">
+            <!-- pre footer row -->
             <ng-container *ngIf="preFooterTitle">
               <ng-container matColumnDef="preFooterTitle">
                 <td mat-footer-cell *matFooterCellDef [attr.colspan]="columns.length + 1" class="lab900-table__pre-footer-title-cell">
@@ -113,11 +116,11 @@
               </ng-container>
               <tr mat-footer-row *matFooterRowDef="['preFooterTitle']" class="lab900-table__pre-footer-title-row"></tr>
             </ng-container>
-          </ng-container>
-          <ng-container *ngIf="showCellFooters$ | async">
+            <!-- footer row -->
             <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-          </ng-container>
+          </div>
         </ng-container>
+        <!-- drag placeholder -->
         <ng-container *ngIf="draggableRows">
           <div *cdkDragPlaceholder></div>
         </ng-container>
