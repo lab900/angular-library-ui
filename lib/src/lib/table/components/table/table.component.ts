@@ -81,7 +81,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   @Input()
-  public tableClass: string;
+  public tableClass?: string;
 
   @Input()
   public rowClass?: propFunction<T> | string;
@@ -102,25 +102,25 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
    * Show a set of actions at the top of the table
    */
   @Input()
-  public tableHeaderActions: ActionButton<T>[];
+  public tableHeaderActions?: ActionButton<T>[];
 
   /**
    * Show a set of actions at the bottom of the table
    */
   @Input()
-  public tableFooterActions: ActionButton<T>[];
+  public tableFooterActions?: ActionButton<T>[];
 
   /**
    * Show a set of actions at the start of each row
    */
   @Input()
-  public tableActionsFront: TableRowAction<T>[];
+  public tableActionsFront?: TableRowAction<T>[];
 
   /**
    * Show a set of actions at the end of each row
    */
   @Input()
-  public tableActionsBack: TableRowAction<T>[];
+  public tableActionsBack?: TableRowAction<T>[];
 
   /**
    * @Deprecated
@@ -252,7 +252,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     this.tabId$ = this.tableService.tabId$;
     this.tabs$ = this.tableService.tabs$;
     this.showCellFooters$ = this.visibleColumns$.pipe(
-      map((columns) => !!columns?.some((c) => c.footer)),
+      map((columns) => !!columns?.some((c) => !!c?.footer)),
       shareReplay(1),
     );
     this.displayedColumns$ = combineLatest([this.visibleColumns$, this._selectableRowsOptions$.asObservable()]).pipe(
@@ -276,8 +276,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     this.selection.clear();
     if (checked) {
       this.data$.pipe(take(1)).subscribe((data) => {
-        this.selection.select(...data.filter((row) => !(row as any)._hideSelectableRow));
-        this.selectionChanged.emit(this.selection);
+        if (data?.length) {
+          this.selection.select(...data.filter((row) => !(row as any)._hideSelectableRow));
+          this.selectionChanged.emit(this.selection);
+        }
       });
     } else {
       this.selectionChanged.emit(this.selection);

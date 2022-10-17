@@ -55,12 +55,6 @@
         [data]="data$ | async"
       ></lab900-table-cell>
 
-      <ng-container *ngIf="preFooterTitle" matColumnDef="preFooterTitle">
-        <td mat-footer-cell *matFooterCellDef [attr.colspan]="columns.length + 1" class="lab900-table__pre-footer-title-cell">
-          {{ preFooterTitle | translate }}
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="actions-front">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
@@ -109,17 +103,24 @@
           cdkDrag
           [cdkDragDisabled]="!draggableRows"
         ></tr>
-        <ng-container *ngIf="(data$ | async)?.length">
-          <ng-container *ngIf="preFooterTitle">
-            <tr mat-footer-row *matFooterRowDef="['preFooterTitle']" class="lab900-table__pre-footer-title-row"></tr>
+        <ng-container *ngIf="data$ | async as data">
+          <ng-container *ngIf="data?.length">
+            <ng-container *ngIf="preFooterTitle">
+              <ng-container matColumnDef="preFooterTitle">
+                <td mat-footer-cell *matFooterCellDef [attr.colspan]="columns.length + 1" class="lab900-table__pre-footer-title-cell">
+                  {{ preFooterTitle | translate }}
+                </td>
+              </ng-container>
+              <tr mat-footer-row *matFooterRowDef="['preFooterTitle']" class="lab900-table__pre-footer-title-row"></tr>
+            </ng-container>
           </ng-container>
           <ng-container *ngIf="showCellFooters$ | async">
             <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
           </ng-container>
         </ng-container>
-      </ng-container>
-      <ng-container *ngIf="draggableRows">
-        <div *cdkDragPlaceholder></div>
+        <ng-container *ngIf="draggableRows">
+          <div *cdkDragPlaceholder></div>
+        </ng-container>
       </ng-container>
     </table>
   </div>
