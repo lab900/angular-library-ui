@@ -81,7 +81,7 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy, AfterV
     }
   }
 
-  public maxWidth({ cellMaxWidth }: TableCell<T>, data: T) {
+  public maxWidth({ cellMaxWidth }: TableCell<T>, data: T): string {
     return readPropValue<T>(cellMaxWidth, data) ?? this.maxColumnWidthFromTable;
   }
 
