@@ -1,0 +1,27 @@
+<div
+  *ngIf="cell$ | async as cell"
+  matTooltipClass="lab900-table__mat-tooltip"
+  [matTooltip]="tooltip$ | async | translate"
+  [matTooltipDisabled]="!viewTooltip"
+  [matTooltipPosition]="tooltipPosition$ | async"
+  (mouseover)="checkWidth($event)"
+>
+  <mat-icon *ngIf="icon$ | async as icon">{{ icon }}</mat-icon>
+  <mat-icon *ngIf="svgIcon$ | async as icon" [svgIcon]="icon"></mat-icon>
+  <ng-container *ngIf="cellValue$ | async as cellValue">
+    <span [style]="'display: block; overflow: hidden; text-overflow: ellipsis; max-width: ' + (maxWidth$ | async)" *ngIf="!cell.click">
+      {{ cellValue | translate }}
+    </span>
+    <ng-container *ngIf="cell.click">
+      <a
+        #cellRef
+        style="cursor: pointer"
+        *ngIf="data$ | async as data"
+        (click)="cell.click(data, cell, $event)"
+        matTooltipClass="lab900-table__mat-tooltip"
+      >
+        {{ cellValue | translate }}
+      </a>
+    </ng-container>
+  </ng-container>
+</div>

@@ -1,9 +1,11 @@
 import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
 import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
-import { delay, filter, map, shareReplay } from 'rxjs/operators';
+import { delay, filter, map, tap, shareReplay } from 'rxjs/operators';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { readPropValue } from '../../../utils/utils';
+import { AfterViewInit } from '@angular/core/core';
+import { BehaviorSubject } from 'rxjs';
 
 function cellFormatter(cell: TableCell, data: any): string {
   if (cell?.cellFormatter) {
@@ -21,35 +23,9 @@ function cellFormatter(cell: TableCell, data: any): string {
 
 @Component({
   selector: 'lab900-table-cell-value[cell][data]',
-  template: ` <div
-    *ngIf="cell$ | async as cell"
-    matTooltipClass="lab900-table__mat-tooltip"
-    [matTooltip]="tooltip$ | async"
-    [matTooltipPosition]="tooltipPosition$ | async"
-  >
-    <mat-icon *ngIf="icon$ | async as icon">{{ icon }}</mat-icon>
-    <mat-icon *ngIf="svgIcon$ | async as icon" [svgIcon]="icon"></mat-icon>
-    <ng-container *ngIf="cellValue$ | async as cellValue">
-      <span #cellRef *ngIf="!cell.click">
-        {{ cellValue | translate }}
-      </span>
-      <ng-container *ngIf="cell.click">
-        <a
-          #cellRef
-          style="cursor: pointer"
-          *ngIf="data$ | async as data"
-          (click)="cell.click(data, cell, $event)"
-          matTooltipClass="lab900-table__mat-tooltip"
-          [matTooltip]="tooltip$ | async"
-          [matTooltipPosition]="tooltipPosition$ | async"
-        >
-          {{ cellValue | translate }}
-        </a>
-      </ng-container>
-    </ng-container>
-  </div>`,
+  templateUrl: './table-cell-value.component.html',
 })
-export class Lab900TableCellValueComponent<T = any> implements OnDestroy {
+export class Lab900TableCellValueComponent<T = any> implements OnDestroy, AfterViewInit {
   @Input()
   public set cell(value: TableCell<T>) {
     this._cell$.next(value);
@@ -58,13 +34,6 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy {
   @Input()
   public set data(value: T) {
     this._data$.next(value);
-  }
-
-  @ViewChild('cellRef')
-  public set cellRef(value: ElementRef) {
-    if (value?.nativeElement) {
-      this.cellElement$.next(value.nativeElement);
-    }
   }
   private readonly _cell$ = new ReplaySubject<TableCell<T>>();
   private readonly _data$ = new ReplaySubject<T>();
@@ -75,12 +44,10 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy {
   public readonly cellValue$: Observable<string>;
   public readonly icon$: Observable<string | null>;
   public readonly svgIcon$: Observable<string | null>;
-  public readonly tooltip$: Observable<string>;
-  public readonly tooltipPosition$: Observable<TooltipPosition>;
-
-  private readonly cellElement$ = new ReplaySubject<any>();
-  private readonly isEllipsisActive$: Observable<boolean>;
-  private cellElementSub: Subscription;
+  public tooltip$: Observable<string>;
+  public tooltipPosition$: Observable<TooltipPosition>;
+  public viewTooltip: boolean | null = null;
+  public maxWidth$: Observable<string>;
 
   @Input()
   public maxColumnWidthFromTable?: string;
@@ -96,31 +63,31 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy {
       map(([cell, data]) => cell.svgIcon(data, cell)),
     );
     this.cellValue$ = streams.pipe(map(([cell, data]) => cellFormatter(cell, data)));
-    this.isEllipsisActive$ = this.cellElement$.pipe(map((e) => e.offsetWidth < e.scrollWidth));
-    this.cellElementSub = combineLatest([this.cell$, this.cellElement$]).subscribe(([cell, cellElement]) => {
-      if (cellElement && this.maxColumnWidthFromTable) {
-        cellElement.style.maxWidth = readPropValue<T>(cell.cellMaxWidth, this.data) ?? this.maxColumnWidthFromTable;
-        cellElement.style.overflow = 'hidden';
-        cellElement.style.textOverflow = 'ellipsis';
-        cellElement.style.display = 'block';
-      }
-    });
-
-    this.tooltip$ = combineLatest([this.cell$, this.data$, this.cellValue$, this.isEllipsisActive$]).pipe(
-      delay(1),
-      map(([cell, data, value, isEllipsisActive]) => this.getTooltipContent(cell, data, value, isEllipsisActive)),
-      filter((content) => !!content?.length),
-      shareReplay(1),
-    );
-    this.tooltipPosition$ = this.cell$.pipe(
-      map((cell) => cell.cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below'),
-      shareReplay(1),
-    );
+    this.maxWidth$ = streams.pipe(map(([cell, data]) => this.maxWidth(cell, data)));
   }
 
-  public getTooltipContent({ cellTooltip }: TableCell<T>, data: T, value: string, isEllipsisActive: boolean): string {
+  public ngAfterViewInit(): void {
+    this.tooltip$ = combineLatest([this.cell$, this.data$, this.cellValue$]).pipe(
+      map(([cell, data, value]) => this.getTooltipContent(cell, data, value)),
+      filter((content) => !!content?.length),
+    );
+    this.tooltipPosition$ = this.cell$.pipe(map((cell) => cell.cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below'));
+  }
+
+  public checkWidth(event): void {
+    const el = event.target;
+    if (this.viewTooltip == null) {
+      this.viewTooltip = el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight;
+    }
+  }
+
+  public maxWidth({ cellMaxWidth }: TableCell<T>, data: T) {
+    return readPropValue<T>(cellMaxWidth, data) ?? this.maxColumnWidthFromTable;
+  }
+
+  public getTooltipContent({ cellTooltip }: TableCell<T>, data: T, value: string): string {
     // case: only table max width > show content only on overflow
-    if (this.maxColumnWidthFromTable && !cellTooltip?.text && (isEllipsisActive || cellTooltip?.onlyOnOverflow === false)) {
+    if (this.maxColumnWidthFromTable && !cellTooltip?.text) {
       return value;
     }
     // case: TableCell tooltip text defined, but not onlyOnOverflow
@@ -129,13 +96,11 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy {
     }
     // case: TableCell tooltip on overflow
     // take cellValue if cellTooltip.text is not defined
-    if (cellTooltip?.onlyOnOverflow && isEllipsisActive) {
+    if (cellTooltip?.onlyOnOverflow) {
       return readPropValue<T>(cellTooltip?.text, data) ?? value;
     }
     return '';
   }
 
-  public ngOnDestroy(): void {
-    this.cellElementSub.unsubscribe();
-  }
+  public ngOnDestroy(): void {}
 }
