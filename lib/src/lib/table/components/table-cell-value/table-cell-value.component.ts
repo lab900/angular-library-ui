@@ -47,6 +47,7 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy, AfterV
   public tooltip$: Observable<string>;
   public tooltipPosition$: Observable<TooltipPosition>;
   public viewTooltip: boolean | null = null;
+  public onlyOnOverflow: boolean | null = null;
   public maxWidth$: Observable<string>;
 
   @Input()
@@ -76,6 +77,9 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy, AfterV
 
   public checkWidth(event): void {
     const el = event.target;
+    if (!this.onlyOnOverflow) {
+      this.viewTooltip = true;
+    }
     if (this.viewTooltip == null) {
       this.viewTooltip = el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight;
     }
@@ -86,20 +90,8 @@ export class Lab900TableCellValueComponent<T = any> implements OnDestroy, AfterV
   }
 
   public getTooltipContent({ cellTooltip }: TableCell<T>, data: T, value: string): string {
-    // case: only table max width > show content only on overflow
-    if (this.maxColumnWidthFromTable && !cellTooltip?.text) {
-      return value;
-    }
-    // case: TableCell tooltip text defined, but not onlyOnOverflow
-    if (cellTooltip?.text && !cellTooltip?.onlyOnOverflow) {
-      return readPropValue<T>(cellTooltip?.text, data);
-    }
-    // case: TableCell tooltip on overflow
-    // take cellValue if cellTooltip.text is not defined
-    if (cellTooltip?.onlyOnOverflow) {
-      return readPropValue<T>(cellTooltip?.text, data) ?? value;
-    }
-    return '';
+    this.onlyOnOverflow = !!cellTooltip?.onlyOnOverflow;
+    return readPropValue<T>(cellTooltip?.text, data) ?? value;
   }
 
   public ngOnDestroy(): void {}
