@@ -37,7 +37,7 @@
       (cdkDropListDropped)="tableRowOrderChange.emit($event)"
     >
       <lab900-table-cell-select
-        *ngIf="selectableRowsOptions$ | async as options"
+        *ngIf="selectableRows$ | async as options"
         [showFooter]="showCellFooters$ | async"
         [options]="options"
         [selection]="selection"

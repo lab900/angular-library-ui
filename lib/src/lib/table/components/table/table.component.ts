@@ -30,7 +30,8 @@ export interface TableRowAction<T = any> extends ActionButton<T> {
   draggable?: boolean;
 }
 
-export interface SelectableRowsOptions<T = any> {
+export interface SelectableRows<T = any> {
+  enabled: boolean;
   checkBoxColor?: ThemePalette;
   position?: 'right' | 'left';
   sticky?: boolean;
@@ -124,26 +125,22 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   @Input()
   public tableActionsBack?: TableRowAction<T>[];
 
-  /**
-   * @Deprecated
-   * Define [selectableRowsOptions] to enable selectable rows
-   */
-  @Input()
-  public selectableRows?: boolean;
-
   @Input()
   public selection?: SelectionModel<T>;
 
-  private readonly _selectableRowsOptions$ = new BehaviorSubject<SelectableRowsOptions<T> | null>(null);
-  public readonly selectableRowsOptions$: Observable<SelectableRowsOptions<T>> = this._selectableRowsOptions$
+  private readonly _selectableRows$ = new BehaviorSubject<SelectableRows<T> | null>(null);
+
+  public readonly selectableRows$: Observable<SelectableRows<T>> = this._selectableRows$
     .asObservable()
-    .pipe(filter((options) => !!options));
+    .pipe(filter((selectableRows) => !!selectableRows));
 
   @Input()
-  public set selectableRowsOptions(value: SelectableRowsOptions<T> | undefined) {
-    this._selectableRowsOptions$.next(value ?? null);
-    if (value) {
+  public set selectableRows(value: SelectableRows<T> | undefined) {
+    if (value && value.enabled) {
+      this._selectableRows$.next(value);
       this.selection = new SelectionModel<any>(!value?.singleSelect, value?.selectedItems ?? []);
+    } else {
+      this._selectableRows$.next(null);
     }
   }
 
@@ -257,11 +254,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
       map((columns) => !!columns?.some((c) => !!c?.footer)),
       shareReplay(1),
     );
-    this.displayedColumns$ = combineLatest([this.visibleColumns$, this._selectableRowsOptions$.asObservable()]).pipe(
-      map(([columns, options]) => this.getDisplayedColumns(columns, options)),
+    this.displayedColumns$ = combineLatest([this.visibleColumns$, this._selectableRows$.asObservable()]).pipe(
+      map(([columns, selectableRows]) => this.getDisplayedColumns(columns, selectableRows)),
       shareReplay(1),
     );
-    this.data$ = combineLatest([this._selectableRowsOptions$.asObservable(), this._data$.asObservable()]).pipe(
+    this.data$ = combineLatest([this._selectableRows$.asObservable(), this._data$.asObservable()]).pipe(
       map(([options, data]) =>
         options?.hideSelectableRow
           ? data?.map((v) => ({
@@ -360,7 +357,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     this.activeTabIdChange.emit(id);
   }
 
-  private getDisplayedColumns(columns: TableCell<T>[], options: SelectableRowsOptions<T>): string[] {
+  private getDisplayedColumns(columns: TableCell<T>[], selectableRows: SelectableRows<T>): string[] {
     const displayColumns = columns?.map((c) => c.key);
     if (this.tableActionsFront?.length) {
       displayColumns.unshift('actions-front');
@@ -368,8 +365,8 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     if (this.tableActionsBack?.length) {
       displayColumns.push('actions-back');
     }
-    if (options) {
-      if (options?.position === 'right') {
+    if (selectableRows) {
+      if (selectableRows?.position === 'right') {
         displayColumns.push('select');
       } else {
         displayColumns.unshift('select');

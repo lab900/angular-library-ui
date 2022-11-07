@@ -13,7 +13,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { SelectableRowsOptions } from '../table/table.component';
+import { SelectableRows } from '../table/table.component';
 import { ThemePalette } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatColumnDef, MatTable } from '@angular/material/table';
@@ -36,10 +36,11 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
   @ViewChild(MatColumnDef, { static: true })
   private columnDef!: MatColumnDef;
 
-  private readonly _options$ = new ReplaySubject<SelectableRowsOptions<T>>();
+  private readonly _options$ = new ReplaySubject<SelectableRows<T>>();
   public color?: ThemePalette;
   public sticky?: 'left' | 'right';
   public showSelectAll?: boolean;
+  public disabled?: boolean;
 
   private _selection: SelectionModel<T>;
   public allSelected$: Observable<boolean>;
@@ -51,18 +52,16 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
   }
 
   @Input()
-  public set options(value: SelectableRowsOptions<T>) {
+  public set options(value: SelectableRows<T>) {
     this._options$.next(value);
     this.color = value?.checkBoxColor ?? 'primary';
-    this.sticky = value?.sticky ? undefined : value.position;
+    this.sticky = value?.sticky ? value.position : undefined;
     this.showSelectAll = value?.showSelectAllCheckbox ?? false;
+    this.disabled = value?.disabled ?? false;
   }
 
   @Input()
   public showFooter?: boolean;
-
-  @Input()
-  public disabled?: boolean;
 
   @Output()
   public readonly selectRow = new EventEmitter<T>();

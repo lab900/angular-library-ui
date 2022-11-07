@@ -10,9 +10,9 @@ import { SelectionModel } from '@angular/cdk/collections';
     [data]="mockData"
     [tableActionsBack]="tableActions"
     (tableRowOrderChange)="dropTable($event)"
-    [selectableRows]="true"
     [stickyHeader]="true"
-    [selectableRowsOptions]="{
+    [selectableRows]="{
+      enabled: false,
       checkBoxColor: 'accent',
       position: 'right',
       sticky: true,
