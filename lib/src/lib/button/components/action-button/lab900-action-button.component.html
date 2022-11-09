@@ -5,7 +5,7 @@
       [type]="getButtonType()"
       [color]="getColor()"
       [disabled]="getDisabled()"
-      (click)="!getDisabled() && doAction($event)"
+      (btnClick)="doAction($event)"
       [label]="getLabel()"
       [matTooltip]="action?.tooltip?.value | translate"
       [prefixIcon]="getPrefixIcon()"
@@ -16,7 +16,7 @@
     ></lab900-button>
     <ng-template #subActions>
       <lab900-button
-        (click)="$event.stopPropagation()"
+        (btnClick)="$event.stopPropagation()"
         [type]="getButtonType()"
         [color]="getColor()"
         [disabled]="getDisabled()"

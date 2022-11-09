@@ -1,8 +1,17 @@
 <ng-container [ngSwitch]="type">
-  <button *ngSwitchDefault [class]="containerClass" mat-button [color]="color || 'primary'" [disabled]="disabled" [ngClass]="classList">
+  <button
+    (click)="btnClick.emit($event)"
+    *ngSwitchDefault
+    [class]="containerClass"
+    mat-button
+    [color]="color || 'primary'"
+    [disabled]="disabled"
+    [ngClass]="classList"
+  >
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
   <button
+    (click)="btnClick.emit($event)"
     *ngSwitchCase="'raised'"
     [class]="containerClass"
     mat-raised-button
@@ -13,6 +22,7 @@
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
   <button
+    (click)="btnClick.emit($event)"
     *ngSwitchCase="'stroked'"
     [class]="containerClass"
     mat-stroked-button
@@ -23,6 +33,7 @@
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
   <button
+    (click)="btnClick.emit($event)"
     *ngSwitchCase="'flat'"
     [class]="containerClass"
     mat-flat-button
@@ -32,15 +43,36 @@
   >
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
-  <button *ngSwitchCase="'icon'" [class]="containerClass" mat-icon-button [color]="color || 'primary'" [disabled]="disabled">
+  <button
+    (click)="btnClick.emit($event)"
+    *ngSwitchCase="'icon'"
+    [class]="containerClass"
+    mat-icon-button
+    [color]="color || 'primary'"
+    [disabled]="disabled"
+  >
     <mat-icon *ngIf="svgIcon" [svgIcon]="label"></mat-icon>
     <mat-icon *ngIf="!svgIcon">{{ label }}</mat-icon>
   </button>
-  <button *ngSwitchCase="'fab'" [class]="containerClass" mat-fab [color]="color || 'primary'" [disabled]="disabled">
+  <button
+    (click)="btnClick.emit($event)"
+    *ngSwitchCase="'fab'"
+    [class]="containerClass"
+    mat-fab
+    [color]="color || 'primary'"
+    [disabled]="disabled"
+  >
     <mat-icon *ngIf="svgIcon" [svgIcon]="label"></mat-icon>
     <mat-icon *ngIf="!svgIcon">{{ label }}</mat-icon>
   </button>
-  <button *ngSwitchCase="'mini-fab'" [class]="containerClass" mat-mini-fab [color]="color || 'primary'" [disabled]="disabled">
+  <button
+    (click)="btnClick.emit($event)"
+    *ngSwitchCase="'mini-fab'"
+    [class]="containerClass"
+    mat-mini-fab
+    [color]="color || 'primary'"
+    [disabled]="disabled"
+  >
     <mat-icon *ngIf="svgIcon" [svgIcon]="label"></mat-icon>
     <mat-icon *ngIf="!svgIcon">{{ label }}</mat-icon>
   </button>

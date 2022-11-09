@@ -5,7 +5,14 @@ import { Component } from '@angular/core';
   styles: ['p {margin: 10px 0}'],
   template: `
     <p>Flat button</p>
-    <lab900-button color="primary" type="flat" label="hello world" suffixIcon="remove_red_eye"></lab900-button>
+    <lab900-button
+      disabled="true"
+      (btnClick)="log('wuut')"
+      color="primary"
+      type="flat"
+      label="hello world"
+      suffixIcon="remove_red_eye"
+    ></lab900-button>
     <p>Flat button</p>
     <lab900-button color="primary" type="stroked" label="hello world" prefixIcon="edit"></lab900-button>
     <p>Raised button</p>
@@ -41,4 +48,8 @@ export class ButtonExampleComponent {
       },
     ],
   };
+
+  public log(message: string): void {
+    console.log(message);
+  }
 }

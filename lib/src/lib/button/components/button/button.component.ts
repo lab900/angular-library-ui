@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 
@@ -31,6 +31,9 @@ export class Lab900ButtonComponent {
 
   @Input()
   public containerClass?: string;
+
+  @Output()
+  public btnClick = new EventEmitter<any>();
 
   public get classList(): { suffixIcon: boolean; prefixIcon: boolean } {
     return { suffixIcon: !!this.suffixIcon, prefixIcon: !!this.prefixIcon };
