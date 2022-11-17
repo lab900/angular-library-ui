@@ -16,7 +16,7 @@
     ></lab900-button>
     <ng-template #subActions>
       <lab900-button
-        (btnClick)="$event.stopPropagation()"
+        (click)="$event.stopPropagation()"
         [type]="getButtonType()"
         [color]="getColor()"
         [disabled]="getDisabled()"
