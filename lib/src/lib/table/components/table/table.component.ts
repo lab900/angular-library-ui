@@ -311,7 +311,8 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     return this.selection?.isSelected(row);
   }
 
-  @memo()
+  // FIXME: Refactor to be observable based, like this is not flexible enough
+  // @memo()
   public getRowClasses(row: T, index: number): string {
     const classes: string[] = [];
     if (typeof this.onRowClick === 'function') {
