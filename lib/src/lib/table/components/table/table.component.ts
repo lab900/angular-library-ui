@@ -1,4 +1,15 @@
-import { Component, ContentChild, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  TemplateRef,
+  TrackByFunction,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Lab900TableEmptyDirective } from '../../directives/table-empty.directive';
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
@@ -199,6 +210,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
 
   @Input()
   public stickyHeader?: boolean;
+
+  @Input()
+  public trackByTableFn?: TrackByFunction<T>;
 
   @Output()
   public activeTabIdChange = new EventEmitter<TabId>();
