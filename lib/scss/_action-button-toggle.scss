@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 
 @mixin lab900-action-button-toggle($config-or-theme) {
   mat-button-toggle-group {

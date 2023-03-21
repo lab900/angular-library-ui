@@ -42,22 +42,21 @@ const examples = [
 ];
 
 @NgModule({
-  declarations: examples,
-  entryComponents: [CustomExampleComponent],
-  imports: [
-    CommonModule,
-    ShowcaseUiRoutingModule,
-    SharedModule,
-    Lab900DataListModule,
-    Lab900SharingModule,
-    AlertModule,
-    Lab900TableModule,
-    Lab900PageHeaderModule,
-    Lab900MergerModule,
-    Lab900ButtonModule,
-    TranslateModule,
-    Lab900ButtonModule,
-    MatCheckboxModule,
-  ],
+    declarations: examples,
+    imports: [
+        CommonModule,
+        ShowcaseUiRoutingModule,
+        SharedModule,
+        Lab900DataListModule,
+        Lab900SharingModule,
+        AlertModule,
+        Lab900TableModule,
+        Lab900PageHeaderModule,
+        Lab900MergerModule,
+        Lab900ButtonModule,
+        TranslateModule,
+        Lab900ButtonModule,
+        MatCheckboxModule,
+    ]
 })
 export class ShowcaseUiModule {}
