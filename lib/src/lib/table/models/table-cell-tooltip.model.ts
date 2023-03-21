@@ -1,4 +1,4 @@
-import { TooltipPosition } from '@angular/material/tooltip';
+import { LegacyTooltipPosition as TooltipPosition } from '@angular/material/legacy-tooltip';
 import { propValue } from '../../utils/utils';
 
 export interface TableCellTooltip<T = any> {

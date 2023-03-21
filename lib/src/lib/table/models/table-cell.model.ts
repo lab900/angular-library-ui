@@ -1,6 +1,6 @@
 import { propValue } from '../../utils/utils';
 import { TableCellTooltip } from './table-cell-tooltip.model';
-import { TooltipPosition } from '@angular/material/tooltip';
+import { LegacyTooltipPosition as TooltipPosition } from '@angular/material/legacy-tooltip';
 
 export interface TableCell<T = any> {
   /**

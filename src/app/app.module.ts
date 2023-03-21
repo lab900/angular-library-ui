@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -11,7 +11,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MergingTranslateLoader } from './utils/merging-translate-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgxMaskModule } from 'ngx-mask';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 export function TranslationLoaderFactory(
   http: HttpClient
@@ -29,7 +29,6 @@ export function TranslationLoaderFactory(
     AppRoutingModule,
     SharedModule,
     MarkdownModule.forRoot(),
-    NgxMaskModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -41,5 +40,6 @@ export function TranslationLoaderFactory(
     }),
   ],
   bootstrap: [AppComponent],
+  providers: [provideEnvironmentNgxMask()],
 })
 export class AppModule {}

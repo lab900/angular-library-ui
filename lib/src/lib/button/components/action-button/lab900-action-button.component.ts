@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActionButton } from '../../models/action-button.model';
-import { TooltipPosition } from '@angular/material/tooltip';
+import { LegacyTooltipPosition as TooltipPosition } from '@angular/material/legacy-tooltip';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 import { readPropValue } from '../../../utils/utils';

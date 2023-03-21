@@ -5,14 +5,14 @@ import { Lab900DataListItemComponent } from './components/data-list-item/data-li
 import { Lab900DataListEmptyDirective } from './directives/data-list-empty.directive';
 import { Lab900DataListItemInfoDirective } from './directives/data-list-item-info.directive';
 
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { Lab900SharingModule } from '../sharing/sharing.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 import { Lab900ButtonModule } from '../button/button.module';
 
 @NgModule({

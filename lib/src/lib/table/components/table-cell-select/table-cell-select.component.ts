@@ -15,8 +15,11 @@ import {
 import { Observable, ReplaySubject } from 'rxjs';
 import { SelectableRows } from '../table/table.component';
 import { ThemePalette } from '@angular/material/core';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatColumnDef, MatTable } from '@angular/material/table';
+import { MatLegacyCheckbox as MatCheckbox } from '@angular/material/legacy-checkbox';
+import {
+  MatLegacyColumnDef as MatColumnDef,
+  MatLegacyTable as MatTable,
+} from '@angular/material/legacy-table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { map } from 'rxjs/operators';
 

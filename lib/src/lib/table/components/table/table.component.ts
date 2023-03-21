@@ -14,13 +14,13 @@ import { Lab900TableEmptyDirective } from '../../directives/table-empty.directiv
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
 import { Paging } from '../../../common/models/paging.model';
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
-import { MatTable } from '@angular/material/table';
+import { MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900Sort } from '../../models/table-sort.model';
