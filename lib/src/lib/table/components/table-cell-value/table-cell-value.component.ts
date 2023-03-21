@@ -1,10 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { readPropValue } from '../../../utils/utils';
-import { AfterViewInit } from '@angular/core/core';
 
 function cellFormatter(cell: TableCell, data: any): string {
   if (cell?.cellFormatter) {

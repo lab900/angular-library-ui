@@ -3,7 +3,6 @@ import { TableCell } from '../../models/table-cell.model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { map, take, withLatestFrom } from 'rxjs/operators';
-import memo from 'memo-decorator';
 import { Lab900TableService } from '../../services/table.service';
 import { readPropValue } from '../../../utils/utils';
 
@@ -40,7 +39,6 @@ export class Lab900TableFilterMenuComponent {
     );
   }
 
-  @memo()
   public getCellLabel(cell: TableCell): string {
     return readPropValue(cell.label, cell);
   }

@@ -27,7 +27,7 @@ const routes: Routes = [
   {
     path: 'getting-started',
     component: MarkdownPageComponent,
-    data: { filePath: 'guides/ui/getting-started.md' },
+    data: { filePath: 'guides/getting-started.md' },
   },
   new ShowcaseRoute('sharing', 'Sharing', [
     new ShowcaseExample(SharingExampleComponent, 'Sharing list'),

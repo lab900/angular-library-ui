@@ -22,7 +22,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "allowedCommonJsDependencies": ["nouislider", "lodash"],
+            "allowedCommonJsDependencies": ["nouislider", "lodash", "moment"],
             "aot": true,
             "assets": [
               "src/favicon.ico",
@@ -192,9 +192,8 @@
       }
     }
   },
-  "defaultProject": "angular-libraries",
   "cli": {
     "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }

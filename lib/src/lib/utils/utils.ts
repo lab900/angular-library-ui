@@ -1,8 +1,6 @@
-export type propValue<T = any, R = string> = ((data?: T) => R) | R;
+import { coerceArray } from '@angular/cdk/coercion';
 
-export function coerceArray<T = any>(data: T | T[]): T[] {
-  return Array.isArray(data) ? data : [data];
-}
+export type propValue<T = any, R = string> = ((data?: T) => R) | R;
 
 export function readPropValue<T extends any, R = string>(
   value: propValue<T, R>,

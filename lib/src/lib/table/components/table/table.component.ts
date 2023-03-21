@@ -36,7 +36,6 @@ import {
 } from 'rxjs';
 import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
-import memo from 'memo-decorator';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -356,8 +355,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
     return this.selection?.isSelected(row);
   }
 
-  // FIXME: Refactor to be observable based, like this is not flexible enough
-  // @memo()
   public getRowClasses(row: T, index: number): string {
     const classes: string[] = [];
     if (typeof this.onRowClick === 'function') {
@@ -376,7 +373,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
     return classes.join(' ') || '';
   }
 
-  @memo()
   public getRowColor(row: T): string {
     return (
       (typeof this.rowColor === 'function'

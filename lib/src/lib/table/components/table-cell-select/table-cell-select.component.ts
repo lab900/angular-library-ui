@@ -18,7 +18,6 @@ import { ThemePalette } from '@angular/material/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import memo from 'memo-decorator';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -94,12 +93,10 @@ export class TableCellSelectComponent<T extends object = object>
     this.selectAll.emit(checked);
   }
 
-  @memo()
   public isChecked(value: T): boolean {
     return this._selection?.isSelected(value);
   }
 
-  @memo()
   public isDisabled(value: T): boolean {
     return this.isChecked(value) ? false : this.disabled;
   }
