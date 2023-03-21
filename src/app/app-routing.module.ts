@@ -4,7 +4,10 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./modules/showcase-ui/showcase-ui.module').then((m) => m.ShowcaseUiModule),
+    loadChildren: () =>
+      import('./modules/showcase-ui/showcase-ui.module').then(
+        (m) => m.ShowcaseUiModule
+      ),
   },
 ];
 

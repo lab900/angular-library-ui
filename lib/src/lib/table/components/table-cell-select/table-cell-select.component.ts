@@ -26,7 +26,9 @@ import { map } from 'rxjs/operators';
   templateUrl: './table-cell-select.component.html',
   encapsulation: ViewEncapsulation.None,
 })
-export class TableCellSelectComponent<T extends object = object> implements OnInit, OnDestroy {
+export class TableCellSelectComponent<T extends object = object>
+  implements OnInit, OnDestroy
+{
   @ViewChildren('rowCheckbox')
   public rowCheckboxes!: QueryList<MatCheckbox>;
 
@@ -46,9 +48,14 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
   public allSelected$: Observable<boolean>;
 
   @Input()
-  set selection(value: SelectionModel<T>) {
+  public set selection(value: SelectionModel<T>) {
     this._selection = value;
-    this.allSelected$ = this._selection.changed.pipe(map((change) => change?.source?.selected?.length === this.rowCheckboxes?.length));
+    this.allSelected$ = this._selection.changed.pipe(
+      map(
+        (change) =>
+          change?.source?.selected?.length === this.rowCheckboxes?.length
+      )
+    );
   }
 
   @Input()
@@ -81,7 +88,9 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
   }
 
   public handleSelectAllCheckbox({ checked }): void {
-    this.rowCheckboxes.toArray().forEach((checkBox) => (checkBox.checked = checked));
+    this.rowCheckboxes
+      .toArray()
+      .forEach((checkBox) => (checkBox.checked = checked));
     this.selectAll.emit(checked);
   }
 

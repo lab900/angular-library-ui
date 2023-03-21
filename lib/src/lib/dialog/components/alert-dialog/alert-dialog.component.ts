@@ -11,7 +11,11 @@ export class AlertDialogComponent {
   public message = '';
   public messageHTML = '';
   public buttonText = 'Ok';
-  constructor(@Inject(MAT_DIALOG_DATA) private data: AlertDialog, private dialogRef: MatDialogRef<AlertDialogComponent>) {
+
+  public constructor(
+    @Inject(MAT_DIALOG_DATA) private data: AlertDialog,
+    private dialogRef: MatDialogRef<AlertDialogComponent>
+  ) {
     if (data) {
       this.message = data.message || this.message;
       this.buttonText = data.okButtonText || this.buttonText;

@@ -9,6 +9,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [Lab900SharingComponent],
   exports: [Lab900SharingComponent],
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatDialogModule,
+  ],
 })
 export class Lab900SharingModule {}

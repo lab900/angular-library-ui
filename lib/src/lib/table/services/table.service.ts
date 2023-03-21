@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, ReplaySubject } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  Observable,
+  ReplaySubject,
+} from 'rxjs';
 import { TableCell } from '../models/table-cell.model';
 import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableTab } from '../models/table-tabs.model';
@@ -11,24 +16,35 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   public readonly columns$: Observable<TableCell<T>[]>;
   public readonly visibleColumns$: Observable<TableCell<T>[]>;
 
-  private readonly _tabs$ = new BehaviorSubject<Lab900TableTab<TabId, T>[] | null>(null);
-  public readonly tabs$ = this._tabs$.asObservable().pipe(filter((tabs) => tabs != null));
+  private readonly _tabs$ = new BehaviorSubject<
+    Lab900TableTab<TabId, T>[] | null
+  >(null);
+  public readonly tabs$ = this._tabs$
+    .asObservable()
+    .pipe(filter((tabs) => tabs != null));
 
   private readonly _tabId$ = new BehaviorSubject<TabId | null>(null);
   public readonly tabId$ = this._tabId$.asObservable().pipe(
     withLatestFrom(this.tabs$),
     map(([tabId, tabs]) => tabId ?? tabs?.[0]?.id),
-    filter((tabId) => tabId != null),
+    filter((tabId) => tabId != null)
   );
 
   private readonly _sort$ = new ReplaySubject<Lab900Sort[] | null>();
-  public readonly sort$: Observable<Lab900Sort[] | null> = this._sort$.asObservable();
+  public readonly sort$: Observable<Lab900Sort[] | null> =
+    this._sort$.asObservable();
 
   public constructor() {
-    this.columns$ = combineLatest([this._tabId$.asObservable(), this._tabs$.asObservable(), this._columns$.asObservable()]).pipe(
+    this.columns$ = combineLatest([
+      this._tabId$.asObservable(),
+      this._tabs$.asObservable(),
+      this._columns$.asObservable(),
+    ]).pipe(
       map(([tabId, tabs, columns]) => {
         if (tabs?.length) {
-          const activeTab = tabId ? tabs.find((tab) => tab.id === tabId) : tabs?.[0];
+          const activeTab = tabId
+            ? tabs.find((tab) => tab.id === tabId)
+            : tabs?.[0];
           if (activeTab?.tableCells) {
             return activeTab?.tableCells;
           }
@@ -38,11 +54,11 @@ export class Lab900TableService<T extends object = object, TabId = string> {
       filter((columns) => columns != null),
       map((columns) => columns.sort(Lab900TableService.reorderColumnsFn)),
       map((columns) => columns.filter((c) => !!c.key)),
-      shareReplay(1),
+      shareReplay(1)
     );
     this.visibleColumns$ = this.columns$.pipe(
       map((columns) => columns.filter((c) => !c.hide)),
-      shareReplay(1),
+      shareReplay(1)
     );
   }
 
@@ -66,12 +82,16 @@ export class Lab900TableService<T extends object = object, TabId = string> {
     this._sort$.next(sort);
   }
 
-  public updateColumnSorting(column: TableCell<T>, multiSort: boolean, callback?: (sort: Lab900Sort[] | null) => void): void {
+  public updateColumnSorting(
+    column: TableCell<T>,
+    multiSort: boolean,
+    callback?: (sort: Lab900Sort[] | null) => void
+  ): void {
     const sortKey = column.sortKey ?? column.key;
     this.sort$
       .pipe(
         take(1),
-        map((sort) => sort ?? []),
+        map((sort) => sort ?? [])
       )
       .subscribe((sort) => {
         if (multiSort) {
@@ -88,7 +108,12 @@ export class Lab900TableService<T extends object = object, TabId = string> {
           }
         } else {
           const inCurrent = sort.find((s) => s.id === sortKey);
-          sort = [{ id: sortKey, direction: inCurrent?.direction === 'asc' ? 'desc' : 'asc' }];
+          sort = [
+            {
+              id: sortKey,
+              direction: inCurrent?.direction === 'asc' ? 'desc' : 'asc',
+            },
+          ];
         }
         this.updateSorting(sort);
         callback?.(sort);

@@ -7,8 +7,16 @@ import { ConfirmationDialogDirective } from './directives/confirmation-dialog.di
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
-  declarations: [AlertDialogComponent, ConfirmationDialogComponent, ConfirmationDialogDirective],
+  declarations: [
+    AlertDialogComponent,
+    ConfirmationDialogComponent,
+    ConfirmationDialogDirective,
+  ],
   imports: [MatDialogModule, MatButtonModule, TranslateModule],
-  exports: [AlertDialogComponent, ConfirmationDialogComponent, ConfirmationDialogDirective],
+  exports: [
+    AlertDialogComponent,
+    ConfirmationDialogComponent,
+    ConfirmationDialogDirective,
+  ],
 })
 export class DialogModule {}

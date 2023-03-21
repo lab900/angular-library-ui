@@ -12,8 +12,25 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Lab900ActionButtonToggleComponent } from './components/action-button-toggle/lab900-action-button-toggle.component';
 
 @NgModule({
-  declarations: [Lab900ButtonComponent, Lab900ActionButtonToggleComponent, Lab900ActionButtonComponent, Lab900ActionButtonMenuComponent],
-  exports: [Lab900ButtonComponent, Lab900ActionButtonComponent, MatButtonModule],
-  imports: [CommonModule, MatButtonModule, MatMenuModule, MatIconModule, TranslateModule, MatTooltipModule, MatButtonToggleModule],
+  declarations: [
+    Lab900ButtonComponent,
+    Lab900ActionButtonToggleComponent,
+    Lab900ActionButtonComponent,
+    Lab900ActionButtonMenuComponent,
+  ],
+  exports: [
+    Lab900ButtonComponent,
+    Lab900ActionButtonComponent,
+    MatButtonModule,
+  ],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
+    TranslateModule,
+    MatTooltipModule,
+    MatButtonToggleModule,
+  ],
 })
 export class Lab900ButtonModule {}

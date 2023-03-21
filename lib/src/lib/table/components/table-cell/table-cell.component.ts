@@ -17,7 +17,13 @@ import { MatColumnDef, MatTable } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay, withLatestFrom } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  filter,
+  map,
+  shareReplay,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900Sort } from '../../models/table-sort.model';
 
@@ -36,10 +42,12 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   private columnDef!: MatColumnDef;
 
   private readonly _cell$ = new ReplaySubject<TableCell<T>>();
-  public readonly cell$: Observable<TableCell<T>> = this._cell$.asObservable().pipe(
-    filter((c) => !!c?.key),
-    shareReplay(1),
-  );
+  public readonly cell$: Observable<TableCell<T>> = this._cell$
+    .asObservable()
+    .pipe(
+      filter((c) => !!c?.key),
+      shareReplay(1)
+    );
 
   @Input()
   public set cell(value: TableCell<T>) {
@@ -81,7 +89,10 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly cellFooter$: Observable<string>;
   public readonly sort$: Observable<Lab900Sort[] | null>;
 
-  public constructor(@Optional() @SkipSelf() public table: MatTable<any>, private tableService: Lab900TableService) {
+  public constructor(
+    @Optional() @SkipSelf() public table: MatTable<any>,
+    private tableService: Lab900TableService
+  ) {
     this.sort$ = this.tableService.sort$;
     this.cellSub = this.cell$.subscribe((cell) => {
       if (this.columnDef.name) {
@@ -92,19 +103,27 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     });
 
     this.sticky$ = this.cell$.pipe(map((c) => !c?.hide && !!c?.sticky));
-    this.cellLabel$ = this.cell$.pipe(map((c) => readPropValue<TableCell<T>>(c.label, c)));
-    this.cellHeaderClass$ = this.cell$.pipe(map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c)));
+    this.cellLabel$ = this.cell$.pipe(
+      map((c) => readPropValue<TableCell<T>>(c.label, c))
+    );
+    this.cellHeaderClass$ = this.cell$.pipe(
+      map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c))
+    );
     this.cellHeaderIcon$ = this.cell$.pipe(
       filter((c) => !!c?.cellHeaderIcon),
-      map((c) => readPropValue<TableCell<T>>(c.cellHeaderIcon, c)),
+      map((c) => readPropValue<TableCell<T>>(c.cellHeaderIcon, c))
     );
     this.cellHeaderSvgIcon$ = this.cell$.pipe(
       filter((c) => !!c?.cellHeaderSvgIcon),
-      map((c) => readPropValue<TableCell<T>>(c.cellHeaderSvgIcon, c)),
+      map((c) => readPropValue<TableCell<T>>(c.cellHeaderSvgIcon, c))
     );
     this.sortDirection$ = this.sort$.pipe(
       withLatestFrom(this.cell$),
-      map(([sort, cell]) => sort?.find((s) => s.id === (cell.sortKey ?? cell.key))?.direction ?? ''),
+      map(
+        ([sort, cell]) =>
+          sort?.find((s) => s.id === (cell.sortKey ?? cell.key))?.direction ??
+          ''
+      )
     );
     this.sortIcon$ = this.sortDirection$.pipe(
       distinctUntilChanged(),
@@ -115,10 +134,17 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
           return 'south';
         }
         return '';
-      }),
+      })
     );
-    this.cellFooter$ = combineLatest([this.cell$.pipe(filter((c) => !!c.footer)), this._data$.asObservable()]).pipe(
-      map(([cell, data]) => (typeof cell.footer === 'function' ? cell.footer(data, cell) : cell.footer)),
+    this.cellFooter$ = combineLatest([
+      this.cell$.pipe(filter((c) => !!c.footer)),
+      this._data$.asObservable(),
+    ]).pipe(
+      map(([cell, data]) =>
+        typeof cell.footer === 'function'
+          ? cell.footer(data, cell)
+          : cell.footer
+      )
     );
   }
 
@@ -128,6 +154,8 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   }
 
   public getCellClass(cell: TableCell<T>, data: T): string {
-    return typeof cell.cellClass === 'function' ? cell.cellClass(data, cell) : cell.cellClass;
+    return typeof cell.cellClass === 'function'
+      ? cell.cellClass(data, cell)
+      : cell.cellClass;
   }
 }

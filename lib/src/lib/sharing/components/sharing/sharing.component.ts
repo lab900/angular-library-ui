@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ShareDialogComponent, SharingDialogData } from '../../models/share-dialog-component.abstract';
+import {
+  ShareDialogComponent,
+  SharingDialogData,
+} from '../../models/share-dialog-component.abstract';
 import { ComponentType } from '@angular/cdk/portal';
 
 const materialIconBase64 =

@@ -17,8 +17,17 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { Lab900ButtonModule } from '../button/button.module';
 
 @NgModule({
-  declarations: [Lab900DataListComponent, Lab900DataListItemComponent, Lab900DataListEmptyDirective, Lab900DataListItemInfoDirective],
-  exports: [Lab900DataListComponent, Lab900DataListEmptyDirective, Lab900DataListItemInfoDirective],
+  declarations: [
+    Lab900DataListComponent,
+    Lab900DataListItemComponent,
+    Lab900DataListEmptyDirective,
+    Lab900DataListItemInfoDirective,
+  ],
+  exports: [
+    Lab900DataListComponent,
+    Lab900DataListEmptyDirective,
+    Lab900DataListItemInfoDirective,
+  ],
   imports: [
     CommonModule,
     MatCardModule,

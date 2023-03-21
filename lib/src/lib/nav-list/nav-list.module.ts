@@ -13,8 +13,22 @@ import { NavItemButtonComponent } from './components/nav-item-button/nav-item-bu
 import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
-  declarations: [NavListComponent, NavItemComponent, IconComponent, NavItemButtonComponent],
-  imports: [CommonModule, MatListModule, TranslateModule, FlexModule, MatIconModule, RouterModule, OverlayModule, MatMenuModule],
+  declarations: [
+    NavListComponent,
+    NavItemComponent,
+    IconComponent,
+    NavItemButtonComponent,
+  ],
+  imports: [
+    CommonModule,
+    MatListModule,
+    TranslateModule,
+    FlexModule,
+    MatIconModule,
+    RouterModule,
+    OverlayModule,
+    MatMenuModule,
+  ],
   exports: [NavListComponent, IconComponent],
 })
 export class Lab900NavListModule {}

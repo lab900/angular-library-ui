@@ -12,6 +12,14 @@ import { Lab900ButtonModule } from '../button/button.module';
 @NgModule({
   declarations: [Lab900MergerComponent, Lab900MergerItemComponent],
   exports: [Lab900MergerComponent],
-  imports: [CommonModule, MatProgressBarModule, TranslateModule, MatIconModule, MatRadioModule, FlexModule, Lab900ButtonModule],
+  imports: [
+    CommonModule,
+    MatProgressBarModule,
+    TranslateModule,
+    MatIconModule,
+    MatRadioModule,
+    FlexModule,
+    Lab900ButtonModule,
+  ],
 })
 export class Lab900MergerModule {}

@@ -1,5 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { Lab900Sort, Lab900TableComponent, TableCell, TableRowAction } from '@lab900/ui';
+import {
+  Lab900Sort,
+  Lab900TableComponent,
+  TableCell,
+  TableRowAction,
+} from '@lab900/ui';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 
