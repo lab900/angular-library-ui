@@ -1,6 +1,9 @@
 .data-list-item {
   @media screen and (min-width: 960px) {
     padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   @media screen and (max-width: 959px) {
@@ -11,6 +14,16 @@
         padding: 16px 30px;
         background: rgba(#000, 0.05);
       }
+    }
+  }
+
+  &__side {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > div + div {
+      margin-left: 10px;
     }
   }
 }

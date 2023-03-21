@@ -3,6 +3,7 @@ import {
   Component,
   ComponentFactoryResolver,
   ComponentRef,
+  HostBinding,
   Input,
   OnChanges,
   SimpleChanges,
@@ -31,6 +32,7 @@ export class Lab900MergerItemComponent<T>
   public data: T;
 
   @Input()
+  @HostBinding('class.selected')
   public active: boolean;
 
   @ViewChild('customComponentContainer', { read: ViewContainerRef })

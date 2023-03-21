@@ -8,7 +8,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { Lab900TableComponent } from './components/table/table.component';
 import { Lab900TableEmptyDirective } from './directives/table-empty.directive';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { Lab900TableDisabledDirective } from './directives/table-disabled.directive';
 import { MatSortModule } from '@angular/material/sort';
@@ -75,7 +74,6 @@ import { TableCellSelectComponent } from './components/table-cell-select/table-c
     MatProgressBarModule,
     TranslateModule,
     RouterModule,
-    FlexLayoutModule,
     MatMenuModule,
     MatTooltipModule,
     MatPaginatorModule,

@@ -3,8 +3,8 @@ import { IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
 import { Subscription } from 'rxjs';
 import { SubscriptionBasedDirective } from '../../../common/directives/subscription-based.directive';
-import { MediaObserver } from '@angular/flex-layout';
 import { filter } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'lab900-nav-item',
@@ -30,7 +30,7 @@ export class NavItemComponent
   public readonly depth = 0;
 
   @Input()
-  public readonly allowOverlayMenuUntil: string | string[] = 'xs';
+  public readonly allowOverlayMenuUntil: string | string[] = Breakpoints.XSmall;
 
   @Input()
   public disabled = false;
@@ -43,7 +43,7 @@ export class NavItemComponent
 
   public constructor(
     public readonly router: Router,
-    public readonly mediaObserver: MediaObserver
+    public readonly breakpointObserver: BreakpointObserver
   ) {
     super();
   }

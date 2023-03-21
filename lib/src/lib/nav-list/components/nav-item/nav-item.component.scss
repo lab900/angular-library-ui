@@ -1,3 +1,13 @@
+.nav-item {
+  display: flex;
+  flex-direction: column;
+
+  &--without-overlay__children {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .nav-item--with-overlay {
   position: relative;
 

@@ -1,15 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { mergerDataExample } from './config/merger-data-example';
-import { MergeObject } from '@lab900/ui';
-import { MergeConfig } from '@lab900/ui';
+import { Lab900MergerComponent, MergeConfig, MergeObject } from '@lab900/ui';
 import { mergerSchemaExample } from './config/merger-schema-example';
-import { Lab900MergerComponent } from '@lab900/ui';
 import { MergerDataExample } from './models/merger-data-example.model';
 
 @Component({
   selector: 'lab900-merger-example',
   template: `
-    <div fxLayoutAlign="flex-end center" style="margin-bottom: 1rem">
+    <div class="merger-example-header">
       <button mat-flat-button color="primary" (click)="mergerComponent.reset()">
         {{ 'reset' | translate }}
       </button>
@@ -28,6 +26,15 @@ import { MergerDataExample } from './models/merger-data-example.model';
       {{ 'log_result' | translate }}
     </button>
   `,
+  styles: [
+    `
+      .merger-example-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+      }
+    `,
+  ],
 })
 export class MergerExampleComponent {
   public exampleData: MergeObject<MergerDataExample>[] = mergerDataExample;

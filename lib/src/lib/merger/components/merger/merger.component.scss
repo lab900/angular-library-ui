@@ -1,12 +1,20 @@
-@import '@angular/material/theming';
-
 .lab900-merger__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+
   &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 1rem;
     border-top: 1px solid lightgray;
     border-left: 1px solid lightgray;
     border-right: 1px solid lightgray;
     border-radius: 5px 5px 0 0;
+    flex: 45 1 100%;
+    max-width: 45%;
+    box-sizing: border-box;
 
     p,
     h2 {
@@ -25,6 +33,7 @@
       cursor: pointer;
     }
   }
+
   .mat-button-disabled {
     .mat-icon {
       cursor: not-allowed;

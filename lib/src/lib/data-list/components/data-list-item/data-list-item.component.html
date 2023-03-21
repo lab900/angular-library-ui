@@ -1,8 +1,10 @@
-<div class="data-list-item" *ngIf="data" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+<div class="data-list-item" *ngIf="data">
   <div class="data-list-item__info" *ngIf="dataListItemInfoTemplate">
-    <ng-container *ngTemplateOutlet="dataListItemInfoTemplate; context: { $implicit: data }"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="dataListItemInfoTemplate; context: { $implicit: data }"
+    ></ng-container>
   </div>
-  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
+  <div class="data-list-item__side">
     <div class="data-list-item__share" *ngIf="dataListSharing">
       <lab900-sharing
         [users]="dataListSharing.sharedUsersFn(data)"
@@ -14,7 +16,11 @@
       ></lab900-sharing>
     </div>
     <div class="data-list-item__actions" *ngIf="actions?.length">
-      <lab900-action-button *ngFor="let action of actions" [action]="action" [data]="data"></lab900-action-button>
+      <lab900-action-button
+        *ngFor="let action of actions"
+        [action]="action"
+        [data]="data"
+      ></lab900-action-button>
     </div>
   </div>
 </div>

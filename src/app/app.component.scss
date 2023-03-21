@@ -9,6 +9,16 @@
     position: relative;
     padding-left: 0;
 
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      > div:first-child {
+        display: flex;
+      }
+    }
+
     .menu-button {
       background: $palette-lab900green-50;
       height: 64px;
