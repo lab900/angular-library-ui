@@ -1,5 +1,4 @@
 import {
-  ComponentFactoryResolver,
   Directive,
   Input,
   OnChanges,
@@ -13,12 +12,9 @@ import {
 })
 export class ComponentLoaderDirective implements OnChanges {
   @Input()
-  private lab900ComponentLoader: Type<any>;
+  private lab900ComponentLoader!: Type<any>;
 
-  public constructor(
-    public container: ViewContainerRef,
-    private resolver: ComponentFactoryResolver
-  ) {}
+  public constructor(public container: ViewContainerRef) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.lab900ComponentLoader) {
@@ -29,10 +25,7 @@ export class ComponentLoaderDirective implements OnChanges {
   private loadComponent(): void {
     this.container.clear();
     if (this.lab900ComponentLoader) {
-      const component = this.resolver.resolveComponentFactory(
-        this.lab900ComponentLoader
-      );
-      this.container.createComponent(component);
+      this.container.createComponent(this.lab900ComponentLoader);
     }
   }
 }

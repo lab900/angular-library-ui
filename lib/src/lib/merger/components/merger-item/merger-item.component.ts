@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ComponentFactoryResolver,
   ComponentRef,
   HostBinding,
   Input,
@@ -40,8 +39,6 @@ export class Lab900MergerItemComponent<T>
 
   private customComponentRef: ComponentRef<CustomComponent<T>>;
 
-  public constructor(private resolver: ComponentFactoryResolver) {}
-
   public get flexDirection(): 'row' | 'column' {
     if (this.config?.nextLine || this.config?.nestedObject) {
       return 'column';
@@ -74,11 +71,9 @@ export class Lab900MergerItemComponent<T>
   }
 
   private createComponent(): void {
-    const factory = this.resolver.resolveComponentFactory<CustomComponent<T>>(
+    this.customComponentRef = this.customComponentContainer.createComponent(
       this.config.component
     );
-    this.customComponentRef =
-      this.customComponentContainer.createComponent(factory);
     setTimeout(() => {
       this.customComponentRef.instance.data = this.data;
       this.customComponentRef.location.nativeElement.style.width = '100%';

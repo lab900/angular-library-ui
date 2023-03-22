@@ -20,9 +20,8 @@ export class ShowcasePageComponent extends SubscriptionBasedDirective {
     queryParams: { tab: 'examples' },
   };
 
-  public currentTab: 'guide' | 'examples' = 'guide';
-  public examples: any[];
-  public data: ShowcaseRouteData;
+  public currentTab?: 'guide' | 'examples';
+  public data?: ShowcaseRouteData;
   public navItems: PageHeaderNavItem[] = [];
 
   public constructor(
@@ -32,9 +31,6 @@ export class ShowcasePageComponent extends SubscriptionBasedDirective {
     super();
     this.addSubscription(this.activatedRoute.queryParams, (queryParams) => {
       this.data = this.activatedRoute.snapshot.data as ShowcaseRouteData;
-      this.navItems = !this.data?.docFile
-        ? [this.exampleNav]
-        : [this.guideNav, this.exampleNav];
       if (queryParams?.tab) {
         this.currentTab = queryParams?.tab;
       } else {
@@ -43,6 +39,9 @@ export class ShowcasePageComponent extends SubscriptionBasedDirective {
           queryParams: { tab: this.data?.docFile ? 'guide' : 'examples' },
         });
       }
+      this.navItems = !this.data?.docFile
+        ? [this.exampleNav]
+        : [this.guideNav, this.exampleNav];
     });
   }
 }

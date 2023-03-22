@@ -2,12 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { Lab900DataListModule } from '@lab900/ui';
-import { Lab900SharingModule } from '@lab900/ui';
-import { Lab900TableModule } from '@lab900/ui';
-import { Lab900PageHeaderModule } from '@lab900/ui';
-import { AlertModule } from '@lab900/ui';
-import { Lab900MergerModule } from '@lab900/ui';
+import {
+  AlertModule,
+  Lab900ButtonModule,
+  Lab900DataListModule,
+  Lab900MergerModule,
+  Lab900PageHeaderModule,
+  Lab900SharingModule,
+  Lab900TableModule,
+} from '@lab900/ui';
 
 import { ShowcaseUiRoutingModule } from './showcase-ui-routing.module';
 import { SharedModule } from '../shared/shared.module';
@@ -21,7 +24,6 @@ import { PageHeaderParamsExampleComponent } from './examples/page-header-params-
 import { MergerExampleComponent } from './examples/merger-example/merger-example.component';
 import { CustomExampleComponent } from './examples/merger-example/custom-example.component';
 import { ButtonExampleComponent } from './examples/button-example/button-example.component';
-import { Lab900ButtonModule } from '@lab900/ui';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
 import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
@@ -59,4 +61,4 @@ const examples = [
     MatCheckboxModule,
   ],
 })
-export class ShowcaseUiModule {}
+export default class ShowcaseUiModule {}
