@@ -1,13 +1,13 @@
 {
   "name": "@lab900/ui",
-  "version": "14.0.0",
+  "version": "15.0.0",
   "author": "Lab900 <info@lab900.com> (https://lab900.com)",
   "licens": "MIT",
   "sideEffects": true,
   "peerDependencies": {
-    "@angular/common": "~14.3.0",
-    "@angular/core": "~14.3.0",
-    "@angular/material": "~14.2.7",
+    "@angular/common": "~15.2.3",
+    "@angular/core": "~15.2.3",
+    "@angular/material": "~15.2.3",
     "@ngx-translate/core": "^14.0.0",
     "lodash": "^4.17.20"
   },
