@@ -1,6 +1,11 @@
 button {
   &.suffixIcon,
   &.prefixIcon {
+    .mdc-button__label {
+      display: inline-flex;
+      align-items: center;
+    }
+
     .mat-icon {
       font-size: 18px;
       height: 18px;
@@ -12,7 +17,7 @@ button {
     padding-right: 10px;
 
     .mat-icon {
-      padding-left: 3px;
+      padding-left: 4px;
     }
   }
 
@@ -20,7 +25,7 @@ button {
     padding-left: 10px;
 
     .mat-icon {
-      padding-right: 3px;
+      padding-right: 4px;
     }
   }
 }

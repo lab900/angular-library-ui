@@ -34,40 +34,47 @@
       </div>
     </div>
   </div>
-  <nav *ngIf="navItems?.length" class="lab900-page-header__nav" mat-tab-nav-bar>
+  <nav
+    *ngIf="navItems?.length && tabPanel"
+    class="lab900-page-header__nav"
+    mat-tab-nav-bar
+    [tabPanel]="tabPanel"
+    [fitInkBarToContent]="navFitInkBarToContent"
+    [mat-stretch-tabs]="navStretch"
+  >
     <ng-container *ngFor="let link of navItems">
       <a
         mat-tab-link
-        routerLinkActive
-        [routerLink]="getRoute(link.route)"
+        routerLinkActive="active"
+        [routerLink]="getRoute(link.route) ?? []"
         [queryParams]="link?.queryParams"
         #rla="routerLinkActive"
         [active]="rla.isActive"
         class="lab900-page-header__nav__item"
       >
-        <ng-container *ngIf="link.prefixIcon">
+        <ng-container *ngIf="getIcon(link?.prefixIcon) as prefixIcon">
           <mat-icon
             class="lab900-page-header__nav__item__prefix-icon"
             *ngIf="link.svgIcon"
-            [svgIcon]="link.prefixIcon"
+            [svgIcon]="prefixIcon"
           ></mat-icon>
           <mat-icon
             class="lab900-page-header__nav__item__prefix-icon"
             *ngIf="!link.svgIcon"
-            >{{ link.prefixIcon }}</mat-icon
+            >{{ prefixIcon }}</mat-icon
           >
         </ng-container>
         {{ getLabel(link) | translate }}
-        <ng-container *ngIf="link.suffixIcon">
+        <ng-container *ngIf="getIcon(link?.suffixIcon) as suffixIcon">
           <mat-icon
             class="lab900-page-header__nav__item__suffix-icon"
             *ngIf="link.svgIcon"
-            [svgIcon]="link.suffixIcon"
+            [svgIcon]="suffixIcon"
           ></mat-icon>
           <mat-icon
             class="lab900-page-header__nav__item__suffix-icon"
             *ngIf="!link.svgIcon"
-            >{{ link.suffixIcon }}</mat-icon
+            >{{ suffixIcon }}</mat-icon
           >
         </ng-container>
       </a>

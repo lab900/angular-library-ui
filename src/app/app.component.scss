@@ -50,6 +50,10 @@
         display: block;
       }
 
+      h1 {
+        margin-bottom: 0;
+      }
+
       @media screen and (max-width: 599px) {
         h1 {
           display: none;

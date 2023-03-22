@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 
@@ -6,6 +12,7 @@ import { Lab900ButtonType } from '../../models/button.model';
   selector: 'lab900-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class Lab900ButtonComponent {
   @Input()

@@ -49,21 +49,13 @@
     width: 100%;
 
     ::ng-deep {
-      /*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-      .mat-checkbox-label {
-        margin-right: 10px;
-        white-space: normal;
-      }
-
-      /*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-      .mat-checkbox-layout {
+      .mdc-form-field--align-end {
         width: 100%;
-      }
+        justify-content: space-between;
 
-      /*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-      .mat-checkbox-inner-container {
-        margin-left: auto;
-        margin-right: 8px;
+        > label {
+          margin: 0;
+        }
       }
     }
   }

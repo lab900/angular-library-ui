@@ -1,6 +1,5 @@
 @import 'responsiveness';
 
-/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
 mat-dialog-content {
   min-width: 300px;
   margin: -1 * map-get($gutter, 'material') -1 * map-get($gutter, 'material') 0;
