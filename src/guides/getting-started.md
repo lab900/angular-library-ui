@@ -16,17 +16,18 @@ The library isn't a single module but multiple component modules.
 If you want to use for example the Lab900TableModule you just import it in the module you need.
 
 ```ts
-import { Lab900TableModule } from '@lab900/ui';
+import {Lab900TableModule} from '@lab900/ui';
 
 @NgModule({
   imports: [
     ...
-    Lab900TableModule,
+      Lab900TableModule,
     ...
   ],
   bootstrap: [],
 })
-export class MyModule {}
+export class MyModule {
+}
 ```
 
 ## Styling
@@ -34,9 +35,9 @@ export class MyModule {}
 Include the library stylesheet in your scss file.
 
 ```scss
-@import '~@lab900/ui/theming';
+@use '~@lab900/ui/theming' as theme;
 
-@include lab900-ui(YOUR_MATERIAL_THEME);
+@include theme.lab900-ui(YOUR_MATERIAL_THEME);
 ```
 
 The lab900-ui mixin expects a [Material theme of config](https://material.angular.io/guide/theming).

@@ -1,10 +1,15 @@
-@import '~@angular/material/theming';
+@use 'sass:map';
+@use '@angular/material' as mat;
 
 @mixin lab900-action-button-toggle($config-or-theme) {
+  $color-config: mat.get-color-config($config-or-theme);
+  $primary-palette: map.get($color-config, 'primary');
+
   mat-button-toggle-group {
     .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
       line-height: 36px;
     }
+
     .mat-button-toggle-appearance-standard {
       button {
         margin: 0;
@@ -13,10 +18,11 @@
         border-radius: 4px;
       }
     }
+
     .mat-button-toggle-checked,
     .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
-      background-color: mat-color(map-get($config-or-theme, primary));
-      color: mat-contrast(map-get($config-or-theme, primary), 500);
+      background-color: mat.get-color-from-palette($primary-palette, 500);
+      color: mat.get-contrast-color-from-palette($primary-palette, 100);
       font-weight: bold;
     }
   }

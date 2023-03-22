@@ -1,22 +1,29 @@
 <ng-template #navItemContent>
-  <div fxFlex="1 1 auto" [ngStyle]="{ 'padding-left': depth * 12 + 'px' }">
+  <div class="nav-item-btn__inner" [style.padding-left.px]="depth * 12">
     <lab900-icon
       class="nav-item-btn__icon-left"
       [icon]="item.icon"
-      *ngIf="item.icon && (item.icon?.position === 'left' || !item.icon?.position)"
+      *ngIf="
+        item.icon && (item.icon?.position === 'left' || !item.icon?.position)
+      "
     ></lab900-icon>
-    <span fxFlex="1 1 auto">{{ item.label | translate }}</span>
+    <div class="nav-item-btn__label">
+      {{ item.label | translate }}
+    </div>
     <lab900-icon
       class="nav-item-btn__icon-right"
       [icon]="item.icon"
       *ngIf="!showLevelArrow && item?.icon?.position === 'right'"
     ></lab900-icon>
-    <lab900-icon class="nav-item-btn__icon-right" [icon]="{ name: levelArrow }" *ngIf="showLevelArrow"></lab900-icon>
+    <lab900-icon
+      class="nav-item-btn__icon-right"
+      [icon]="{ name: levelArrow }"
+      *ngIf="showLevelArrow"
+    ></lab900-icon>
   </div>
 </ng-template>
 <a
   *ngIf="item.route"
-  fxFlex="1 1 auto"
   role="menuitem"
   class="nav-item-btn"
   mat-list-item
@@ -30,7 +37,6 @@
 </a>
 <a
   *ngIf="item.href"
-  fxFlex="1 1 auto"
   role="menuitem"
   class="nav-item-btn"
   mat-list-item
@@ -44,13 +50,16 @@
 </a>
 <a
   *ngIf="item.children"
-  fxFlex="1 1 auto"
   role="menuitem"
   class="nav-item-btn"
   mat-list-item
   tabindex="-1"
   [disabled]="disabled"
-  [ngClass]="{ active: active, expanded: expanded, expandable: item?.children?.length }"
+  [ngClass]="{
+    active: active,
+    expanded: expanded,
+    expandable: item?.children?.length
+  }"
 >
   <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
 </a>

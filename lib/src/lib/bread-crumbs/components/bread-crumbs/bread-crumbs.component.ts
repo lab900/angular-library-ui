@@ -22,7 +22,9 @@ export class BreadCrumbsComponent {
     return readPropValue(route, this.data);
   }
 
-  public getQueryParams(queryParams: ((data: any) => object) | object | undefined): object | null {
+  public getQueryParams(
+    queryParams: ((data: any) => object) | object | undefined
+  ): object | null {
     return readPropValue(queryParams, this.data);
   }
 }

@@ -25,7 +25,7 @@ export class NavItemButtonComponent {
   @Input()
   public readonly showLevelArrow: boolean = false;
 
-  get levelArrow(): string {
+  public get levelArrow(): string {
     if (this.item?.childrenInOverlay) {
       return 'navigate_next';
     }

@@ -11,9 +11,11 @@ import { MarkdownModule } from 'ngx-markdown';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MergingTranslateLoader } from './utils/merging-translate-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgxMaskModule } from 'ngx-mask';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 
-export function TranslationLoaderFactory(http: HttpClient): MergingTranslateLoader {
+export function TranslationLoaderFactory(
+  http: HttpClient
+): MergingTranslateLoader {
   return new MergingTranslateLoader(http, './assets/i18n/', '.json');
 }
 
@@ -27,7 +29,6 @@ export function TranslationLoaderFactory(http: HttpClient): MergingTranslateLoad
     AppRoutingModule,
     SharedModule,
     MarkdownModule.forRoot(),
-    NgxMaskModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -39,5 +40,6 @@ export function TranslationLoaderFactory(http: HttpClient): MergingTranslateLoad
     }),
   ],
   bootstrap: [AppComponent],
+  providers: [provideEnvironmentNgxMask()],
 })
 export class AppModule {}

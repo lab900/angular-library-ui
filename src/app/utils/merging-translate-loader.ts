@@ -8,7 +8,11 @@ import { TranslateLoader } from '@ngx-translate/core';
  * (root) project. The root project can override and extend translations as needed.
  */
 export class MergingTranslateLoader implements TranslateLoader {
-  constructor(private http: HttpClient, public prefix: string = '/assets/i18n/', public suffix: string = '.json') {}
+  public constructor(
+    private http: HttpClient,
+    public prefix: string = '/assets/i18n/',
+    public suffix: string = '.json'
+  ) {}
 
   /**
    * Combines translations from subprojects with dynamically loaded translations/overrides for this project.
@@ -17,7 +21,7 @@ export class MergingTranslateLoader implements TranslateLoader {
     return this.http.get(`${this.prefix}${lang}${this.suffix}`).pipe(
       map((translations) => ({
         ...translations,
-      })),
+      }))
     );
   }
 }

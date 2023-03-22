@@ -5,6 +5,7 @@ import { ActionButton } from '../../../button/models/action-button.model';
 @Component({
   selector: 'lab900-table-header',
   templateUrl: './lab900-table-header.component.html',
+  styleUrls: ['./lab900-table-header.component.scss'],
 })
 export class Lab900TableHeaderComponent {
   /**
@@ -26,5 +27,7 @@ export class Lab900TableHeaderComponent {
   public filterIcon = 'filter_alt';
 
   @Output()
-  public tableCellsFiltered: EventEmitter<TableCell[]> = new EventEmitter<TableCell[]>();
+  public tableCellsFiltered: EventEmitter<TableCell[]> = new EventEmitter<
+    TableCell[]
+  >();
 }

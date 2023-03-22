@@ -43,7 +43,6 @@ const examples = [
 
 @NgModule({
   declarations: examples,
-  entryComponents: [CustomExampleComponent],
   imports: [
     CommonModule,
     ShowcaseUiRoutingModule,

@@ -1,4 +1,11 @@
-import { Component, Input, TemplateRef, ContentChild, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  TemplateRef,
+  ContentChild,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Lab900DataListEmptyDirective } from '../../directives/data-list-empty.directive';
 import { DataListSharing } from '../../models/data-list.model';
 import { Lab900DataListItemInfoDirective } from '../../directives/data-list-item-info.directive';

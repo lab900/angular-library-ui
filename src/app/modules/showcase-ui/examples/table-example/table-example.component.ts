@@ -34,7 +34,10 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
     <div *lab900TableHeaderContent>Custom header</div>
     <div *lab900TableCustomCell="let data">
       <div *ngIf="data.cell.key === 'active'">
-        <mat-checkbox color="primary" [checked]="data.element?.active"></mat-checkbox>
+        <mat-checkbox
+          color="primary"
+          [checked]="data.element?.active"
+        ></mat-checkbox>
       </div>
     </div>
     <div *lab900TableCustomHeaderCell="let data">
@@ -129,7 +132,8 @@ export class TableExampleComponent {
   public mockData: any[] = [
     {
       name: 'John Cena',
-      nameLong: 'John Cena, the guy from wrestling and movies and stuff, and also just from the memes',
+      nameLong:
+        'John Cena, the guy from wrestling and movies and stuff, and also just from the memes',
       id: 1,
       nested: {
         test: 'xxx',
@@ -191,7 +195,12 @@ export class TableExampleComponent {
       columnOrder: 1,
       click: (data, cell, mouseEvent) => {
         mouseEvent.stopPropagation();
-        console.log('click cell content > function params:', { data }, { cell }, { mouseEvent });
+        console.log(
+          'click cell content > function params:',
+          { data },
+          { cell },
+          { mouseEvent }
+        );
       },
     },
     {
@@ -199,7 +208,9 @@ export class TableExampleComponent {
       label: 'Quantity',
       cellClass: 'clickable-cell',
       footer: (tableData) => {
-        return tableData.map((data) => data.quantity).reduce((valA, valB) => valA + valB, 0);
+        return tableData
+          .map((data) => data.quantity)
+          .reduce((valA, valB) => valA + valB, 0);
       },
       footerCellClass: 'table-footer-highlight',
     },
@@ -239,14 +250,20 @@ export class TableExampleComponent {
       cellFormatter: () => '',
       icon: (data) => (data.warning ? 'warning' : 'check'),
       cellTooltip: {
-        text: (data) => (data.warning ? 'This is a dangerous entry' : 'This is not a dangerous entry'),
+        text: (data) =>
+          data.warning
+            ? 'This is a dangerous entry'
+            : 'This is not a dangerous entry',
       },
     },
   ];
 
   public sortChange(sort: Lab900Sort[]): void {
     sort.forEach((s) => {
-      this.mockData.sort((a: any, b: any) => (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1));
+      this.mockData.sort(
+        (a: any, b: any) =>
+          (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1)
+      );
       this.mockData = [...this.mockData];
     });
   }

@@ -1,22 +1,33 @@
 <div
   class="lab900-merger-item"
   [ngClass]="{ selected: active }"
-  [fxLayout]="flexDirection"
-  fxLayoutAlign="{{ config.nextLine ? '' : 'space-between center' }}"
+  [style.flex-direction]="flexDirection"
+  [style.align-items]="config.nextLine ? '' : 'center'"
+  [style.justify-content]="config.nextLine ? '' : 'space-between'"
 >
   <ng-container *ngIf="!config?.component">
     <ng-container *ngIf="config?.nestedObject">
-      <div *ngFor="let subConfig of config.nestedObject" fxLayoutAlign="space-between center" style="width: 100%">
+      <div
+        *ngFor="let subConfig of config.nestedObject"
+        class="lab900-merger-item__sub"
+      >
         <p>{{ subConfig.label | translate }}</p>
-        <span>{{ display(subConfig, config.attribute) | async | translate }}</span>
+        <span>{{
+          display(subConfig, config.attribute) | async | translate
+        }}</span>
       </div>
     </ng-container>
 
     <ng-container *ngIf="!config?.nestedObject">
       <p>{{ config.label | translate }}</p>
-      <span style="text-align: right">{{ display(config) | async | translate }}</span>
+      <span style="text-align: right">{{
+        display(config) | async | translate
+      }}</span>
     </ng-container>
   </ng-container>
 
-  <ng-container *ngIf="config?.component" #customComponentContainer></ng-container>
+  <ng-container
+    *ngIf="config?.component"
+    #customComponentContainer
+  ></ng-container>
 </div>

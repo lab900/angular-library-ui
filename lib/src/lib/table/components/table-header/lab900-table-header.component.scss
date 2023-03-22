@@ -1,0 +1,12 @@
+.lab900-table-header,
+.lab900-table-header__action {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+
+  > :not(:last-child),
+  > ::ng-deep:not(:last-child) {
+    margin-right: 8px !important;
+  }
+}

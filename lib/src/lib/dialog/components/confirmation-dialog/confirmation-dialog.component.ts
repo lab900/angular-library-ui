@@ -11,7 +11,11 @@ export class ConfirmationDialogComponent {
   public message = 'Are you sure?';
   public confirmButtonText = 'Yes';
   public cancelButtonText = 'Cancel';
-  constructor(@Inject(MAT_DIALOG_DATA) private data: ConfirmationDialog, private dialogRef: MatDialogRef<ConfirmationDialogComponent>) {
+
+  public constructor(
+    @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialog,
+    private dialogRef: MatDialogRef<ConfirmationDialogComponent>
+  ) {
     if (data) {
       this.message = data.message || this.message;
       this.confirmButtonText = data.okButtonText || this.confirmButtonText;

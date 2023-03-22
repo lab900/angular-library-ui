@@ -1,10 +1,12 @@
 .lab900-table-filter-menu {
   &__mat-menu {
     overflow: hidden;
-    ::ng-deep &.mat-menu-panel {
+
+    ::ng-deep &.mat-mdc-menu-panel {
       height: fit-content !important;
       min-height: fit-content !important;
-      .mat-menu-content {
+
+      .mat-mdc-menu-content {
         padding: 0;
       }
     }
@@ -18,9 +20,17 @@
   &__option {
     border-bottom: 1px solid #dde6e9;
     cursor: pointer;
+
     &--padding {
       padding: 8px 16px;
+
+      &.center-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
+
     &--bold {
       font-weight: bold;
     }
@@ -29,6 +39,7 @@
   &__title {
     cursor: unset !important;
     padding: 8px 16px;
+
     &--middle {
       border-top: 1px solid #dde6e9;
     }
@@ -36,17 +47,15 @@
 
   &__checkbox {
     width: 100%;
+
     ::ng-deep {
-      .mat-checkbox-label {
-        margin-right: 10px;
-        white-space: normal;
-      }
-      .mat-checkbox-layout {
+      .mdc-form-field--align-end {
         width: 100%;
-      }
-      .mat-checkbox-inner-container {
-        margin-left: auto;
-        margin-right: 8px;
+        justify-content: space-between;
+
+        > label {
+          margin: 0;
+        }
       }
     }
   }

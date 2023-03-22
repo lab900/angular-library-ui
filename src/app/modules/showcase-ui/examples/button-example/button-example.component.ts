@@ -14,9 +14,18 @@ import { Component } from '@angular/core';
       suffixIcon="remove_red_eye"
     ></lab900-button>
     <p>Flat button</p>
-    <lab900-button color="primary" type="stroked" label="hello world" prefixIcon="edit"></lab900-button>
+    <lab900-button
+      color="primary"
+      type="stroked"
+      label="hello world"
+      prefixIcon="edit"
+    ></lab900-button>
     <p>Raised button</p>
-    <lab900-button color="accent" type="raised" label="hello world"></lab900-button>
+    <lab900-button
+      color="accent"
+      type="raised"
+      label="hello world"
+    ></lab900-button>
     <p>Icon button</p>
     <lab900-button type="icon" label="delete"></lab900-button>
     <p>Fab icon button</p>
@@ -24,7 +33,10 @@ import { Component } from '@angular/core';
     <p>Fab-mini icon button</p>
     <lab900-button type="mini-fab" label="delete"></lab900-button>
     <p>Toggle action button</p>
-    <lab900-action-button [data]="[]" [action]="toggleActionButton"></lab900-action-button>
+    <lab900-action-button
+      [data]="[]"
+      [action]="toggleActionButton"
+    ></lab900-action-button>
   `,
 })
 export class ButtonExampleComponent {

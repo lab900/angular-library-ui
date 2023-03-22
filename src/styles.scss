@@ -1,7 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '~@angular/material' as mat;
-@import '../dist/@lab900/ui/theming';
+@use '@angular/material' as mat;
+@use '../dist/@lab900/ui/theming' as theme;
 @import 'src/styles/green.palette';
 @import 'src/styles/grey.palette';
 
@@ -11,6 +11,7 @@
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 @include mat.core();
+@include mat.typography-hierarchy(mat.define-typography-config());
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
@@ -33,7 +34,7 @@ $angular-libraries-theme: mat.define-light-theme(
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($angular-libraries-theme);
-@include lab900-ui($angular-libraries-theme);
+@include theme.lab900-ui($angular-libraries-theme);
 
 /* You can add global styles to this file, and also import other style files */
 html,
@@ -72,21 +73,21 @@ p {
   color: $palette-lab900-text;
 }
 
-.mat-list-base .mat-list-item {
+.mat-mdc-list-base .mat-mdc-list-item {
   color: $palette-lab900-text;
 }
 
-.mat-card.lab900-card {
+.mat-mdc-card.lab900-card {
   display: flex;
   flex-direction: column;
   margin-bottom: 32px;
   padding: 0;
 
-  .mat-card-header {
+  .mat-mdc-card-header {
     padding: 8px;
     background: $palette-lab900green-100;
 
-    .mat-card-title {
+    .mat-mdc-card-title {
       margin: 0;
       padding: 0;
 

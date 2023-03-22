@@ -27,10 +27,15 @@ import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableLeftFooterDirective } from '../../directives/table-left-footer.directive';
-import { BehaviorSubject, combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  Observable,
+  ReplaySubject,
+  Subscription,
+} from 'rxjs';
 import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
-import memo from 'memo-decorator';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -61,7 +66,9 @@ export interface SelectableRows<T = any> {
   encapsulation: ViewEncapsulation.None,
   providers: [Lab900TableService],
 })
-export class Lab900TableComponent<T extends object = object, TabId = string> implements OnDestroy {
+export class Lab900TableComponent<T extends object = object, TabId = string>
+  implements OnDestroy
+{
   private readonly footerSub: Subscription;
 
   @ViewChild(MatTable)
@@ -83,7 +90,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   }
 
   public get draggableRows(): boolean {
-    return this.tableActionsBack?.some((a) => !!a?.draggable) || this.tableActionsFront?.some((a) => !!a?.draggable);
+    return (
+      this.tableActionsBack?.some((a) => !!a?.draggable) ||
+      this.tableActionsFront?.some((a) => !!a?.draggable)
+    );
   }
 
   private readonly _data$ = new ReplaySubject<T[] | null>();
@@ -104,7 +114,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   public rowColor?: propFunction<T> | string;
 
   @Input()
-  public pageSizeConfig: { hidePageSize?: boolean; pageSizeOptions?: number[] } = {
+  public pageSizeConfig: {
+    hidePageSize?: boolean;
+    pageSizeOptions?: number[];
+  } = {
     hidePageSize: true,
     pageSizeOptions: [5, 10, 50],
   };
@@ -139,17 +152,22 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
   @Input()
   public selection?: SelectionModel<T>;
 
-  private readonly _selectableRows$ = new BehaviorSubject<SelectableRows<T> | null>(null);
+  private readonly _selectableRows$ =
+    new BehaviorSubject<SelectableRows<T> | null>(null);
 
-  public readonly selectableRows$: Observable<SelectableRows<T>> = this._selectableRows$
-    .asObservable()
-    .pipe(filter((selectableRows) => !!selectableRows));
+  public readonly selectableRows$: Observable<SelectableRows<T>> =
+    this._selectableRows$
+      .asObservable()
+      .pipe(filter((selectableRows) => !!selectableRows));
 
   @Input()
   public set selectableRows(value: SelectableRows<T> | undefined) {
     if (value && value.enabled) {
       this._selectableRows$.next(value);
-      this.selection = new SelectionModel<any>(!value?.singleSelect, value?.selectedItems ?? []);
+      this.selection = new SelectionModel<any>(
+        !value?.singleSelect,
+        value?.selectedItems ?? []
+      );
     } else {
       this._selectableRows$.next(null);
     }
@@ -266,35 +284,45 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     this.tabs$ = this.tableService.tabs$;
     this.showCellFooters$ = this.visibleColumns$.pipe(
       map((columns) => !!columns?.some((c) => !!c?.footer)),
-      shareReplay(1),
+      shareReplay(1)
     );
-    this.displayedColumns$ = combineLatest([this.visibleColumns$, this._selectableRows$.asObservable()]).pipe(
-      map(([columns, selectableRows]) => this.getDisplayedColumns(columns, selectableRows)),
-      shareReplay(1),
+    this.displayedColumns$ = combineLatest([
+      this.visibleColumns$,
+      this._selectableRows$.asObservable(),
+    ]).pipe(
+      map(([columns, selectableRows]) =>
+        this.getDisplayedColumns(columns, selectableRows)
+      ),
+      shareReplay(1)
     );
-    this.data$ = combineLatest([this._selectableRows$.asObservable(), this._data$.asObservable()]).pipe(
+    this.data$ = combineLatest([
+      this._selectableRows$.asObservable(),
+      this._data$.asObservable(),
+    ]).pipe(
       map(([options, data]) =>
         options?.hideSelectableRow
           ? data?.map((v) => ({
               ...v,
               _hideSelectableRow: options.hideSelectableRow(v),
             }))
-          : data,
+          : data
       ),
-      shareReplay(1),
+      shareReplay(1)
     );
 
     /**
      * Fix for rendering async footers
      */
-    this.footerSub = this.data$.pipe(withLatestFrom(this.showCellFooters$)).subscribe(([data, showFooter]) => {
-      if (this.table) {
-        this.table.removeFooterRowDef(null);
-        if (data?.length && showFooter) {
-          this.table.renderRows();
+    this.footerSub = this.data$
+      .pipe(withLatestFrom(this.showCellFooters$))
+      .subscribe(([data, showFooter]) => {
+        if (this.table) {
+          this.table.removeFooterRowDef(null);
+          if (data?.length && showFooter) {
+            this.table.renderRows();
+          }
         }
-      }
-    });
+      });
   }
 
   public ngOnDestroy(): void {
@@ -306,7 +334,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     if (checked) {
       this.data$.pipe(take(1)).subscribe((data) => {
         if (data?.length) {
-          this.selection.select(...data.filter((row) => !(row as any)._hideSelectableRow));
+          this.selection.select(
+            ...data.filter((row) => !(row as any)._hideSelectableRow)
+          );
           this.selectionChanged.emit(this.selection);
         }
       });
@@ -325,8 +355,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     return this.selection?.isSelected(row);
   }
 
-  // FIXME: Refactor to be observable based, like this is not flexible enough
-  // @memo()
   public getRowClasses(row: T, index: number): string {
     const classes: string[] = [];
     if (typeof this.onRowClick === 'function') {
@@ -337,13 +365,20 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     } else {
       classes.push('lab900-row-odd');
     }
-    classes.push((typeof this.rowClass === 'function' ? this.rowClass(row) : this.rowClass) ?? '');
+    classes.push(
+      (typeof this.rowClass === 'function'
+        ? this.rowClass(row)
+        : this.rowClass) ?? ''
+    );
     return classes.join(' ') || '';
   }
 
-  @memo()
   public getRowColor(row: T): string {
-    return (typeof this.rowColor === 'function' ? this.rowColor(row) : this.rowColor) ?? '';
+    return (
+      (typeof this.rowColor === 'function'
+        ? this.rowColor(row)
+        : this.rowColor) ?? ''
+    );
   }
 
   public handleRowClick(event: Event, row: T, index: number): void {
@@ -358,7 +393,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
 
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort && cell.sortable) {
-      this.tableService.updateColumnSorting(cell, this.multiSort, (sort) => this.sortChange.emit(sort));
+      this.tableService.updateColumnSorting(cell, this.multiSort, (sort) =>
+        this.sortChange.emit(sort)
+      );
     }
   }
 
@@ -372,7 +409,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> imp
     this.activeTabIdChange.emit(id);
   }
 
-  private getDisplayedColumns(columns: TableCell<T>[], selectableRows: SelectableRows<T>): string[] {
+  private getDisplayedColumns(
+    columns: TableCell<T>[],
+    selectableRows: SelectableRows<T>
+  ): string[] {
     const displayColumns = columns?.map((c) => c.key);
     if (this.tableActionsFront?.length) {
       displayColumns.unshift('actions-front');

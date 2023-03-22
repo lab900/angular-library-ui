@@ -3,7 +3,6 @@ import { TableCell } from '../../models/table-cell.model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { map, take, withLatestFrom } from 'rxjs/operators';
-import memo from 'memo-decorator';
 import { Lab900TableService } from '../../services/table.service';
 import { readPropValue } from '../../../utils/utils';
 
@@ -24,15 +23,22 @@ export class Lab900TableFilterMenuComponent {
   public toggleAndMoveColumns = false;
 
   @Output()
-  public filterChanged: EventEmitter<TableCell[]> = new EventEmitter<TableCell[]>();
+  public filterChanged: EventEmitter<TableCell[]> = new EventEmitter<
+    TableCell[]
+  >();
 
   public constructor(private tableService: Lab900TableService) {
-    this.tableCells$ = this.tableService.columns$.pipe(map((cells) => cells?.filter((cell: TableCell) => !cell.alwaysVisible)));
-    this.visibleCells$ = this.tableCells$.pipe(map((cells) => cells?.filter((cell: TableCell) => !cell.hide)));
-    this.hiddenCells$ = this.tableCells$.pipe(map((cells) => cells?.filter((cell: TableCell) => !!cell.hide)));
+    this.tableCells$ = this.tableService.columns$.pipe(
+      map((cells) => cells?.filter((cell: TableCell) => !cell.alwaysVisible))
+    );
+    this.visibleCells$ = this.tableCells$.pipe(
+      map((cells) => cells?.filter((cell: TableCell) => !cell.hide))
+    );
+    this.hiddenCells$ = this.tableCells$.pipe(
+      map((cells) => cells?.filter((cell: TableCell) => !!cell.hide))
+    );
   }
 
-  @memo()
   public getCellLabel(cell: TableCell): string {
     return readPropValue(cell.label, cell);
   }
@@ -48,13 +54,19 @@ export class Lab900TableFilterMenuComponent {
   }
 
   public drop($event: CdkDragDrop<TableCell[]>): void {
-    this.visibleCells$.pipe(withLatestFrom(this.tableService.columns$), take(1)).subscribe(([visibleColumns, tableCells]) => {
-      moveItemInArray(visibleColumns, $event.previousIndex, $event.currentIndex);
-      visibleColumns.forEach((cell, newColumnOrder) => {
-        const index = tableCells.findIndex((c) => c.key === cell.key);
-        tableCells[index].columnOrder = newColumnOrder;
+    this.visibleCells$
+      .pipe(withLatestFrom(this.tableService.columns$), take(1))
+      .subscribe(([visibleColumns, tableCells]) => {
+        moveItemInArray(
+          visibleColumns,
+          $event.previousIndex,
+          $event.currentIndex
+        );
+        visibleColumns.forEach((cell, newColumnOrder) => {
+          const index = tableCells.findIndex((c) => c.key === cell.key);
+          tableCells[index].columnOrder = newColumnOrder;
+        });
+        this.filterChanged.emit(tableCells);
       });
-      this.filterChanged.emit(tableCells);
-    });
   }
 }

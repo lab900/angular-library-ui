@@ -2,44 +2,80 @@
   <div
     *ngIf="pageTitle || breadCrumbs?.length || actions?.length"
     class="lab900-page-header__main"
-    fxLayout.gt-sm="row"
-    fxLayoutGap="16px"
-    fxLayoutAlign.gt-sm="start center"
   >
     <div class="lab900-page-header__title">
       <h1 *ngIf="pageTitle">{{ pageTitle | translate: pageTitleArgs }}</h1>
-      <lab900-bread-crumbs *ngIf="breadCrumbs?.length" [breadCrumbs]="breadCrumbs" [data]="data"></lab900-bread-crumbs>
+      <lab900-bread-crumbs
+        *ngIf="breadCrumbs?.length"
+        [breadCrumbs]="breadCrumbs"
+        [data]="data"
+      ></lab900-bread-crumbs>
     </div>
 
     <div class="lab900-page-header__actions" *ngIf="actions?.length">
-      <div class="lab900-page-header__actions--left" fxLayoutGap="16px">
-        <mat-divider vertical="true" class="lab900-page-header__divider" *ngIf="leftActions?.length > 0"></mat-divider>
-        <lab900-action-button *ngFor="let action of leftActions" [action]="action" [data]="data"></lab900-action-button>
+      <div class="lab900-page-header__actions--left">
+        <mat-divider
+          vertical="true"
+          class="lab900-page-header__divider"
+          *ngIf="leftActions?.length > 0"
+        ></mat-divider>
+        <lab900-action-button
+          *ngFor="let action of leftActions"
+          [action]="action"
+          [data]="data"
+        ></lab900-action-button>
       </div>
-      <div class="lab900-page-header__actions--right" fxLayoutGap="16px">
-        <lab900-action-button *ngFor="let action of rightActions" [action]="action" [data]="data"></lab900-action-button>
+      <div class="lab900-page-header__actions--right">
+        <lab900-action-button
+          *ngFor="let action of rightActions"
+          [action]="action"
+          [data]="data"
+        ></lab900-action-button>
       </div>
     </div>
   </div>
-  <nav *ngIf="navItems?.length" class="lab900-page-header__nav" mat-tab-nav-bar>
+  <nav
+    *ngIf="navItems?.length && tabPanel"
+    class="lab900-page-header__nav"
+    mat-tab-nav-bar
+    [tabPanel]="tabPanel"
+    [fitInkBarToContent]="navFitInkBarToContent"
+    [mat-stretch-tabs]="navStretch"
+  >
     <ng-container *ngFor="let link of navItems">
       <a
         mat-tab-link
-        routerLinkActive
-        [routerLink]="getRoute(link.route)"
+        routerLinkActive="active"
+        [routerLink]="getRoute(link.route) ?? []"
         [queryParams]="link?.queryParams"
         #rla="routerLinkActive"
         [active]="rla.isActive"
         class="lab900-page-header__nav__item"
       >
-        <ng-container *ngIf="link.prefixIcon">
-          <mat-icon class="lab900-page-header__nav__item__prefix-icon" *ngIf="link.svgIcon" [svgIcon]="link.prefixIcon"></mat-icon>
-          <mat-icon class="lab900-page-header__nav__item__prefix-icon" *ngIf="!link.svgIcon">{{ link.prefixIcon }}</mat-icon>
+        <ng-container *ngIf="getIcon(link?.prefixIcon) as prefixIcon">
+          <mat-icon
+            class="lab900-page-header__nav__item__prefix-icon"
+            *ngIf="link.svgIcon"
+            [svgIcon]="prefixIcon"
+          ></mat-icon>
+          <mat-icon
+            class="lab900-page-header__nav__item__prefix-icon"
+            *ngIf="!link.svgIcon"
+            >{{ prefixIcon }}</mat-icon
+          >
         </ng-container>
         {{ getLabel(link) | translate }}
-        <ng-container *ngIf="link.suffixIcon">
-          <mat-icon class="lab900-page-header__nav__item__suffix-icon" *ngIf="link.svgIcon" [svgIcon]="link.suffixIcon"></mat-icon>
-          <mat-icon class="lab900-page-header__nav__item__suffix-icon" *ngIf="!link.svgIcon">{{ link.suffixIcon }}</mat-icon>
+        <ng-container *ngIf="getIcon(link?.suffixIcon) as suffixIcon">
+          <mat-icon
+            class="lab900-page-header__nav__item__suffix-icon"
+            *ngIf="link.svgIcon"
+            [svgIcon]="suffixIcon"
+          ></mat-icon>
+          <mat-icon
+            class="lab900-page-header__nav__item__suffix-icon"
+            *ngIf="!link.svgIcon"
+            >{{ suffixIcon }}</mat-icon
+          >
         </ng-container>
       </a>
     </ng-container>

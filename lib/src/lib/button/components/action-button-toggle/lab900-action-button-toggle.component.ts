@@ -16,7 +16,10 @@ export class Lab900ActionButtonToggleComponent {
 
   public getSelected(): ActionButton {
     for (const action of this.action.subActions) {
-      if ((typeof action.selected === 'function' && action.selected(this.data)) || action.selected === true) {
+      if (
+        (typeof action.selected === 'function' && action.selected(this.data)) ||
+        action.selected === true
+      ) {
         return action;
       }
     }
