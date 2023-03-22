@@ -22,7 +22,7 @@ import { MergerExampleComponent } from './examples/merger-example/merger-example
 import { CustomExampleComponent } from './examples/merger-example/custom-example.component';
 import { ButtonExampleComponent } from './examples/button-example/button-example.component';
 import { Lab900ButtonModule } from '@lab900/ui';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
 import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
 

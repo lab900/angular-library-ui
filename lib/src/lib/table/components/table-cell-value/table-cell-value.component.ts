@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Input } from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
-import { LegacyTooltipPosition as TooltipPosition } from '@angular/material/legacy-tooltip';
+import { TooltipPosition } from '@angular/material/tooltip';
 import { readPropValue } from '../../../utils/utils';
 
 function cellFormatter(cell: TableCell, data: any): string {

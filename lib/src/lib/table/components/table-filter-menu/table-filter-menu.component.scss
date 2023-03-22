@@ -2,11 +2,11 @@
   &__mat-menu {
     overflow: hidden;
 
-    ::ng-deep &.mat-menu-panel {
+    ::ng-deep &.mat-mdc-menu-panel {
       height: fit-content !important;
       min-height: fit-content !important;
 
-      .mat-menu-content {
+      .mat-mdc-menu-content {
         padding: 0;
       }
     }
@@ -49,15 +49,18 @@
     width: 100%;
 
     ::ng-deep {
+      /*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-label {
         margin-right: 10px;
         white-space: normal;
       }
 
+      /*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-layout {
         width: 100%;
       }
 
+      /*TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
       .mat-checkbox-inner-container {
         margin-left: auto;
         margin-right: 8px;

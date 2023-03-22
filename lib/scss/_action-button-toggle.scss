@@ -1,10 +1,14 @@
 @import '@angular/material/theming';
 
 @mixin lab900-action-button-toggle($config-or-theme) {
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   mat-button-toggle-group {
+    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
       line-height: 36px;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle-appearance-standard {
       button {
         margin: 0;
@@ -13,6 +17,7 @@
         border-radius: 4px;
       }
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-toggle-checked,
     .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
       background-color: mat-color(map-get($config-or-theme, primary));

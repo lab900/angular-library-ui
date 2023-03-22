@@ -13,10 +13,7 @@ import {
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { SortDirection } from '@angular/material/sort';
-import {
-  MatLegacyColumnDef as MatColumnDef,
-  MatLegacyTable as MatTable,
-} from '@angular/material/legacy-table';
+import { MatColumnDef, MatTable } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
 import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';

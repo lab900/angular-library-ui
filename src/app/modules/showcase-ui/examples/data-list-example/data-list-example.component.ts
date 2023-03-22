@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataListSharing, Paging, ActionButton } from '@lab900/ui';
-import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
+import { PageEvent } from '@angular/material/paginator';
 
 const dummyData: any[] = [
   {

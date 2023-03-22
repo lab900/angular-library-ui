@@ -1,31 +1,38 @@
-@import '@angular/material/theming';
+@use 'sass:map';
+@use '@angular/material' as mat;
 
 @mixin lab900-merger($config-or-theme) {
+  $color-config: mat.get-color-config($config-or-theme);
+  $primary-palette: map.get($color-config, 'primary');
+  $primary-color: mat.get-color-from-palette($primary-palette, 900);
+
   .selected {
-    border-left-color: mat-color(map-get($config-or-theme, primary)) !important;
+    border-left-color: $primary-color !important;
     border-left-width: 2px !important;
-    border-right-color: mat-color(map-get($config-or-theme, primary)) !important;
+    border-right-color: $primary-color !important;
     border-right-width: 2px !important;
   }
 
   .lab900-merger__row:first-of-type {
     .selected {
-      border-top-color: mat-color(map-get($config-or-theme, primary)) !important;
+      border-top-color: $primary-color !important;
       border-top-width: 2px !important;
     }
   }
 
   .lab900-merger__row:last-of-type {
     .selected {
-      border-bottom-color: mat-color(map-get($config-or-theme, primary)) !important;
+      border-bottom-color: $primary-color !important;
       border-bottom-width: 2px !important;
     }
   }
   .lab900-merger__row {
+    /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
     .mat-button-disabled {
       .mat-icon {
         cursor: not-allowed;
-        color: mat-color(map-get($config-or-theme, primary), 100);
+        color: mat.get-color-from-palette($primary-palette, 100);
+
         &.not-active {
           color: rgb(237, 237, 237);
         }

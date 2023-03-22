@@ -10,9 +10,9 @@
     background-color: #c7dad5;
   }
 
-  th.mat-header-cell,
-  td.mat-cell,
-  td.mat-footer-cell {
+  th.mat-mdc-header-cell,
+  td.mat-mdc-cell,
+  td.mat-mdc-footer-cell {
     text-align: left;
     padding-right: 16px;
     white-space: nowrap;
@@ -51,11 +51,12 @@
     margin-bottom: 8px;
   }
 
-  ::ng-deep .mat-paginator-container {
+  ::ng-deep .mat-mdc-paginator-container {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-appearance-outline .mat-form-field-infix {
       padding: 0.5em 0;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-wrapper {
       margin: 0;
       padding-bottom: 1em;
@@ -135,7 +136,7 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.cdk-drop-list-dragging .mat-row:not(.cdk-drag-placeholder) {
+.cdk-drop-list-dragging .mat-mdc-row:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
