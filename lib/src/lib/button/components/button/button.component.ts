@@ -37,6 +37,9 @@ export class Lab900ButtonComponent {
   public svgIcon = false;
 
   @Input()
+  public buttonType?: 'button' | 'reset' | 'submit' = 'button';
+
+  @Input()
   public containerClass?: string;
 
   @Output()

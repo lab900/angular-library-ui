@@ -7,6 +7,7 @@
     [color]="color || 'primary'"
     [disabled]="disabled"
     [ngClass]="classList"
+    [attr.type]="buttonType"
   >
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
@@ -18,6 +19,7 @@
     [color]="color || 'primary'"
     [disabled]="disabled"
     [ngClass]="classList"
+    [attr.type]="buttonType"
   >
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
@@ -29,6 +31,7 @@
     [color]="color || 'primary'"
     [disabled]="disabled"
     [ngClass]="classList"
+    [attr.type]="buttonType"
   >
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
@@ -40,6 +43,7 @@
     [color]="color || 'primary'"
     [disabled]="disabled"
     [ngClass]="classList"
+    [attr.type]="buttonType"
   >
     <ng-container *ngTemplateOutlet="innerButton"></ng-container>
   </button>
@@ -50,6 +54,7 @@
     mat-icon-button
     [color]="color || 'primary'"
     [disabled]="disabled"
+    [attr.type]="buttonType"
   >
     <mat-icon *ngIf="svgIcon" [svgIcon]="label"></mat-icon>
     <mat-icon *ngIf="!svgIcon">{{ label }}</mat-icon>
@@ -61,6 +66,7 @@
     mat-fab
     [color]="color || 'primary'"
     [disabled]="disabled"
+    [attr.type]="buttonType"
   >
     <mat-icon *ngIf="svgIcon" [svgIcon]="label"></mat-icon>
     <mat-icon *ngIf="!svgIcon">{{ label }}</mat-icon>
@@ -72,6 +78,7 @@
     mat-mini-fab
     [color]="color || 'primary'"
     [disabled]="disabled"
+    [attr.type]="buttonType"
   >
     <mat-icon *ngIf="svgIcon" [svgIcon]="label"></mat-icon>
     <mat-icon *ngIf="!svgIcon">{{ label }}</mat-icon>
