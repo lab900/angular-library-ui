@@ -7,10 +7,10 @@ import {
 } from '@angular/core';
 import { MergeObject } from '../../models/merge-object.model';
 import { MergeConfig, MergeConfigBase } from '../../models/merge-config.model';
-import * as _ from 'lodash';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import MergeIcon from '../../../../assets/icons/merge';
+import { isDifferent } from '../../../utils/different.utils';
 
 @Component({
   selector: 'lab900-merger',
@@ -100,14 +100,7 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
       ? this.rightObject.data[parentAttribute][attribute]
       : this.rightObject.data[attribute];
 
-    return !_.isEqual(
-      Array.isArray(this.leftObject.data[attribute])
-        ? _.sortBy(leftValue)
-        : leftValue,
-      Array.isArray(this.rightObject.data[attribute])
-        ? _.sortBy(rightValue)
-        : rightValue
-    );
+    return isDifferent(leftValue, rightValue);
   }
 
   private getBase(active = false): T {
