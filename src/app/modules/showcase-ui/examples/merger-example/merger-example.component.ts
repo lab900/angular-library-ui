@@ -8,7 +8,11 @@ import { MergerDataExample } from './models/merger-data-example.model';
   selector: 'lab900-merger-example',
   template: `
     <div class="merger-example-header">
-      <button mat-flat-button color="primary" (click)="mergerComponent.reset()">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="mergerComponent?.reset()"
+      >
         {{ 'reset' | translate }}
       </button>
     </div>
@@ -41,7 +45,7 @@ export class MergerExampleComponent {
   public exampleSchema: MergeConfig<MergerDataExample>[] = mergerSchemaExample;
 
   @ViewChild(Lab900MergerComponent)
-  public mergerComponent: Lab900MergerComponent<MergerDataExample>;
+  public mergerComponent?: Lab900MergerComponent<MergerDataExample>;
 
   public showResult(): void {
     console.log(this.mergerComponent.result);
