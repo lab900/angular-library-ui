@@ -27,8 +27,8 @@ export class Lab900PageHeaderComponent implements OnChanges {
   public tabPanel?: MatTabNavPanel;
 
   @Input()
-  public navFitInkBarToContent: boolean = false;
-  public navStretch: boolean = false;
+  public navFitInkBarToContent = false;
+  public navStretch = false;
 
   @Input()
   public actions?: ActionButton[];
