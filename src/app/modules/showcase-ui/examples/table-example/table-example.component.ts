@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {
   ActionButton,
+  CellInputEditorComponent,
+  CellInputEditorOptions,
   CellWithAnchorRendererComponent,
   CellWithIconRendererComponent,
   CellWithIconRendererOptions,
@@ -199,14 +201,12 @@ export class TableExampleComponent {
       sortable: true,
       cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
-      click: (data, cell, mouseEvent) => {
-        mouseEvent.stopPropagation();
-        console.log(
-          'click cell content > function params:',
-          { data },
-          { cell },
-          { mouseEvent }
-        );
+      cellEditor: CellInputEditorComponent,
+      cellEditorOptions: <CellInputEditorOptions>{
+        placeholder: 'Enter a long name',
+        valueChanged: (value, data) => {
+          data.nameLong = value;
+        },
       },
     },
     {

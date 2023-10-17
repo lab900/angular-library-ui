@@ -4,7 +4,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CellRendererAbstract } from '../../directives/cell-renderer.abstract';
+import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CheckboxCellRendererOptions } from './checkbox-cell-renderer.options';
 import { combineLatest } from 'rxjs';

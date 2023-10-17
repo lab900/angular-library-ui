@@ -4,7 +4,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { ColumnHeaderRendererAbstract } from '../../directives/column-header-renderer-abstract.directive';
+import { ColumnHeaderRendererAbstract } from '../column-header-renderer-abstract.directive';
 import { ColumnHeaderSortingComponent } from '../column-header-sorting/column-header-sorting.component';
 import { ColumnHeaderWithIconRendererOptions } from './column-header-with-icon-renderer.options';
 import { MatIconModule } from '@angular/material/icon';

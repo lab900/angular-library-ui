@@ -4,7 +4,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { CellRendererAbstract } from '../../directives/cell-renderer.abstract';
+import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';

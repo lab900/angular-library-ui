@@ -117,6 +117,11 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly cellFooter$: Observable<string>;
   public readonly sort$: Observable<Lab900Sort[] | null>;
 
+  public readonly showEditorForElement$ = new ReplaySubject<T>();
+
+  public readonly defaultCellRenderer = DefaultCellRendererComponent;
+  public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
+
   public constructor(
     @Optional() @SkipSelf() public table: MatTable<any>,
     private tableService: Lab900TableService
@@ -164,6 +169,10 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       event.stopImmediatePropagation();
       event.preventDefault();
       cell.click(data, cell, event);
+    } else if (cell.cellEditor) {
+      event.stopImmediatePropagation();
+      event.preventDefault();
+      this.showEditorForElement$.next(data);
     }
   }
 

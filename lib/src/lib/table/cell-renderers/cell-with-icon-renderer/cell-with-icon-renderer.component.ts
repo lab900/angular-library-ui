@@ -4,7 +4,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { CellRendererAbstract } from '../../directives/cell-renderer.abstract';
+import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { MatIconModule } from '@angular/material/icon';
 import { CellWithIconRendererOptions } from './cell-with-icon-renderer.options';
 import { combineLatest, Observable } from 'rxjs';

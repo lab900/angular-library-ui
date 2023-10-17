@@ -13,43 +13,43 @@
       [style.width]="columnWidth | async"
       [style.max-width]="columnMaxWidth$ | async"
     >
-      <ng-container *ngIf="cell.headerRenderer">
-        <ng-container
-          *ngComponentOutlet="
-            cell.headerRenderer;
-            inputs: { columnConfig: cell, disableSort: disableSort }
-          "
-        ></ng-container>
-      </ng-container>
-      <ng-container *ngIf="!cell?.headerRenderer">
-        <lab900-default-column-header-renderer
-          [columnConfig]="cell"
-          [disableSort]="disableSort"
-        ></lab900-default-column-header-renderer>
-      </ng-container>
+      <ng-container
+        *ngComponentOutlet="
+          cell.headerRenderer || defaultHeaderRenderer;
+          inputs: { columnConfig: cell, disableSort: disableSort }
+        "
+      ></ng-container>
     </th>
     <td
+      #c
       mat-cell
       *matCellDef="let element"
       [style.width]="columnWidth | async"
       [style.max-width]="columnMaxWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
+      [class.editable]="cell.cellEditor"
+      [class.edit-mode]="(showEditorForElement$ | async) === element"
       (click)="handleCellClick($event, cell, element)"
     >
-      <ng-container *ngIf="cell.cellRenderer">
+      <div
+        *ngIf="(showEditorForElement$ | async) === element; else normalCell"
+        class="lab900-cell-editor-wrapper"
+      >
         <ng-container
           *ngComponentOutlet="
-            cell.cellRenderer;
+            cell.cellEditor;
             inputs: { data: element, columnConfig: cell }
           "
         ></ng-container>
-      </ng-container>
-      <ng-container *ngIf="!cell?.cellRenderer">
-        <lab900-default-cell-renderer
-          [data]="element"
-          [columnConfig]="cell"
-        ></lab900-default-cell-renderer>
-      </ng-container>
+      </div>
+      <ng-template #normalCell>
+        <ng-container
+          *ngComponentOutlet="
+            cell.cellRenderer || defaultCellRenderer;
+            inputs: { data: element, columnConfig: cell }
+          "
+        ></ng-container>
+      </ng-template>
     </td>
     <td
       mat-footer-cell

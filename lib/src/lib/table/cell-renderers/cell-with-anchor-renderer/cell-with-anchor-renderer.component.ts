@@ -4,7 +4,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { CellRendererAbstract } from '../../directives/cell-renderer.abstract';
+import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { CellWithAnchorRendererOptions } from './cell-with-anchor-renderer.options';
 import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';

@@ -2,13 +2,16 @@ import { propValue } from '../../utils/utils';
 import { TableCellTooltip } from './table-cell-tooltip.model';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { Type } from '@angular/core';
-import { CellRendererAbstract } from '../directives/cell-renderer.abstract';
-import { ColumnHeaderRendererAbstract } from '../directives/column-header-renderer-abstract.directive';
+import { CellRendererAbstract } from '../cell-renderers/cell-renderer.abstract';
+import { ColumnHeaderRendererAbstract } from '../column-header-renderers/column-header-renderer-abstract.directive';
+import { CellEditorAbstract } from '../cell-editors/cell-editor.abstract';
+import { CellEditorBaseOptions } from '../cell-editors/cell-editor.options';
 
 export interface TableCell<
   T = any,
   CellRenderOptions = any,
-  HeaderRenderOptions = any
+  HeaderRenderOptions = any,
+  CellEditorOptions extends CellEditorBaseOptions = CellEditorBaseOptions
 > {
   /**
    * Column key
@@ -86,16 +89,26 @@ export interface TableCell<
   cellRenderer?: Type<CellRendererAbstract<CellRenderOptions, T>>;
 
   /**
-   * Specify a renderer component specific options
+   * Specify cellRenderer component specific options
    */
   cellRenderOptions?: CellRenderOptions;
+
+  cellEditor?: Type<CellEditorAbstract<CellEditorOptions, T>>;
+  cellEditorOptions?: CellEditorOptions;
 
   /**
    * render a different column header template
    * @deprecated use headerRenderer instead
    */
   customHeaderCell?: boolean;
+  /**
+   * Specify a custom header renderer component to display the column header content in a different way
+   */
   headerRenderer?: Type<ColumnHeaderRendererAbstract<HeaderRenderOptions, T>>;
+
+  /**
+   * Specify headerRenderer component specific options
+   */
   headerRenderOptions?: HeaderRenderOptions;
 
   /**

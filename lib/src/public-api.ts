@@ -53,6 +53,8 @@ export * from './lib/table/models/table-cell-tooltip.model';
 export * from './lib/table/models/table-sort.model';
 export * from './lib/table/models/table-tabs.model';
 
+export * from './lib/table/cell-renderers/cell-renderer.abstract';
+
 export * from './lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.component';
 export * from './lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.options';
 
@@ -63,10 +65,19 @@ export * from './lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-r
 export * from './lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.component';
 
 export * from './lib/table/cell-renderers/default-cell-renderer/default-cell-renderer.component';
+
+export * from './lib/table/column-header-renderers/column-header-renderer-abstract.directive';
+
 export * from './lib/table/column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
 export * from './lib/table/column-header-renderers/column-header-sorting/column-header-sorting.component';
 export * from './lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.options';
 export * from './lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.component';
+
+export * from './lib/table/cell-editors/cell-editor.abstract';
+export * from './lib/table/cell-editors/cell-editor.options';
+
+export * from './lib/table/cell-editors/cell-input-editor/cell-input-editor.component';
+export * from './lib/table/cell-editors/cell-input-editor/cell-input-editor.options';
 
 // page header
 export * from './lib/page-header/page-header.module';
