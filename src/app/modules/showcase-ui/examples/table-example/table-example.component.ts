@@ -197,8 +197,6 @@ export class TableExampleComponent {
       key: 'nameLong',
       label: 'Long name',
       sortable: true,
-      cellClass: 'clickable-cell',
-      cellTooltip: { text: (data) => data.nameLong, onlyOnOverflow: true },
       cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
       columnOrder: 1,
       click: (data, cell, mouseEvent) => {

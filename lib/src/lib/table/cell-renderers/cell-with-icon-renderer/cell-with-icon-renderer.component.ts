@@ -9,11 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { CellWithIconRendererOptions } from './cell-with-icon-renderer.options';
 import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lab900-cell-with-icon-renderer',
   standalone: true,
-  imports: [NgIf, AsyncPipe, MatIconModule],
+  imports: [NgIf, AsyncPipe, MatIconModule, MatTooltipModule],
   templateUrl: './cell-with-icon-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -29,13 +30,11 @@ import { map, shareReplay } from 'rxjs/operators';
 export class CellWithIconRendererComponent<
   T = any
 > extends CellRendererAbstract<CellWithIconRendererOptions<T>, T> {
-  public readonly icon$: Observable<string>;
-
-  public constructor() {
-    super();
-    this.icon$ = combineLatest([this.rendererOptions$, this.cellValue$]).pipe(
-      map(([options, value]) => options.icon(value)),
-      shareReplay(1)
-    );
-  }
+  public readonly icon$: Observable<string> = combineLatest([
+    this.rendererOptions$,
+    this.data$,
+  ]).pipe(
+    map(([options, data]) => options.icon(data)),
+    shareReplay(1)
+  );
 }

@@ -1,6 +1,8 @@
 <div
   class="lab900-cell-value lab900-cell-value--with-icon"
   *ngIf="rendererOptions$ | async as options"
+  [matTooltip]="tooltip$ | async"
+  [matTooltipPosition]="tooltipPosition$ | async"
 >
   <ng-container>
     <mat-icon *ngIf="!options.svgIcon">{{ icon$ | async }}</mat-icon>

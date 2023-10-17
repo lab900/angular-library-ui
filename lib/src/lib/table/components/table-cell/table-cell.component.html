@@ -7,8 +7,11 @@
       [class.sortable]="!disableSort && cell.sortable"
       [ngClass]="cellHeaderClass$ | async"
       matTooltipClass="lab900-table__mat-tooltip"
+      [matTooltipDisabled]="!cell?.cellHeaderTooltip"
       [matTooltip]="cell?.cellHeaderTooltip | translate"
       [matTooltipPosition]="cell?.cellHeaderTooltipPosition || 'above'"
+      [style.width]="columnWidth | async"
+      [style.max-width]="columnMaxWidth$ | async"
     >
       <ng-container *ngIf="cell.headerRenderer">
         <ng-container
@@ -28,7 +31,8 @@
     <td
       mat-cell
       *matCellDef="let element"
-      [style.width]="cell?.width === '*' ? '100%' : cell?.width"
+      [style.width]="columnWidth | async"
+      [style.max-width]="columnMaxWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
       (click)="handleCellClick($event, cell, element)"
     >

@@ -338,7 +338,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   }
 
   public handleSelectRow(row: T): void {
-    console.log(row);
     this.selection.toggle(row);
     this.selectionChanged.emit(this.selection);
     this.rowSelectToggle.emit(row);

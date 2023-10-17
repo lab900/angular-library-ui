@@ -18,7 +18,13 @@ import {
   MatTableModule,
 } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
-import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  Observable,
+  ReplaySubject,
+  Subscription,
+} from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900Sort } from '../../models/table-sort.model';
@@ -63,6 +69,23 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       shareReplay(1)
     );
 
+  public readonly columnWidth: Observable<string> = this.cell$.pipe(
+    map((cell) => (cell?.width === '*' ? '100%' : cell?.width)),
+    shareReplay(1)
+  );
+
+  private readonly tableColumnMaxWidth$ = new BehaviorSubject<string>('100%');
+
+  public readonly columnMaxWidth$: Observable<string> = combineLatest([
+    this.cell$,
+    this.tableColumnMaxWidth$,
+  ]).pipe(
+    map(
+      ([cell, tableColumnMaxWidth]) => cell?.cellMaxWidth || tableColumnMaxWidth
+    ),
+    shareReplay(1)
+  );
+
   @Input()
   public set cell(value: TableCell<T>) {
     this._cell$.next(value);
@@ -82,7 +105,9 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
    * max column width, set by table input
    */
   @Input()
-  public maxColumnWidthFromTable?: string;
+  public set maxColumnWidthFromTable(value: string) {
+    this.tableColumnMaxWidth$.next(value);
+  }
 
   @Output()
   private readonly headerClick = new EventEmitter<TableCell<T>>();

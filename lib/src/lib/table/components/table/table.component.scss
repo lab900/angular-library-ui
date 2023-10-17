@@ -1,6 +1,12 @@
 .lab900-table {
   width: 100%;
 
+  .lab900-cell-value {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
   .lab900-table-wrapper {
     overflow: auto;
     width: 100%;

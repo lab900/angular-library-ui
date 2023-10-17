@@ -9,15 +9,18 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CheckboxCellRendererOptions } from './checkbox-cell-renderer.options';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lab900-checkbox-cell-renderer',
   standalone: true,
-  imports: [CommonModule, MatCheckboxModule],
+  imports: [CommonModule, MatCheckboxModule, MatTooltipModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `<mat-checkbox
     *ngIf="rendererOptions$ | async as options"
+    [matTooltip]="tooltip$ | async"
+    [matTooltipPosition]="tooltipPosition$ | async"
     [checked]="cellValue$ | async"
     [disabled]="options.disabled ?? false"
     [indeterminate]="options.indeterminate ?? false"
@@ -27,8 +30,8 @@ import { map } from 'rxjs/operators';
 })
 export class CheckboxCellRendererComponent extends CellRendererAbstract<CheckboxCellRendererOptions> {
   public onValueChange(newValue: boolean): void {
-    combineLatest([this.rendererOptions$, this.cellValue$])
-      .pipe(map(([options, value]) => options?.valueChange(newValue, value)))
+    combineLatest([this.rendererOptions$, this.data$])
+      .pipe(map(([options, data]) => options?.valueChange(newValue, data)))
       .subscribe();
   }
 }

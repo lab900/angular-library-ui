@@ -82,9 +82,7 @@ export class TableCellSelectComponent<T extends object = object>
   @Output()
   private readonly selectAll = new EventEmitter<boolean>();
 
-  public constructor(@Optional() @SkipSelf() public table: MatTable<any>) {
-    console.log('here');
-  }
+  public constructor(@Optional() @SkipSelf() public table: MatTable<any>) {}
 
   public ngOnInit(): void {
     this.columnDef.name = 'select';

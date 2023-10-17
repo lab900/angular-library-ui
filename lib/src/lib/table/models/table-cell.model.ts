@@ -114,7 +114,7 @@ export interface TableCell<
    * set max width of column, this will cause the content to overflow
    * @example: '300px'
    */
-  cellMaxWidth?: propValue<T>;
+  cellMaxWidth?: string;
   /**
    * Cell footer to be displayed
    */
