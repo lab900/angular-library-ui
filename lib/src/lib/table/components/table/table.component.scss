@@ -152,7 +152,6 @@
   border-radius: 0;
   box-sizing: border-box;
   outline: none;
-  background: transparent;
   position: absolute;
   display: inline-block;
   top: 0;
@@ -165,4 +164,5 @@
   font-size: var(--mat-table-row-item-label-text-size, 14px);
   font-weight: var(--mat-table-row-item-label-text-weight);
   letter-spacing: var(--mat-table-row-item-label-text-tracking);
+  background: rgba(#000, 0.1);
 }

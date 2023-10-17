@@ -31,7 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class CheckboxCellRendererComponent extends CellRendererAbstract<CheckboxCellRendererOptions> {
   public onValueChange(newValue: boolean): void {
     combineLatest([this.rendererOptions$, this.data$])
-      .pipe(map(([options, data]) => options?.valueChange(newValue, data)))
+      .pipe(map(([options, data]) => options?.valueChanged(newValue, data)))
       .subscribe();
   }
 }

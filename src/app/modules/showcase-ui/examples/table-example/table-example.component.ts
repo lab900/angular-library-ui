@@ -236,7 +236,7 @@ export class TableExampleComponent {
       columnOrder: 2,
       cellRenderer: CheckboxCellRendererComponent,
       cellRenderOptions: <CheckboxCellRendererOptions>{
-        valueChange: (checked, value) => console.log(checked, value),
+        valueChanged: (checked, value) => (value.active = checked),
       },
     },
     {
