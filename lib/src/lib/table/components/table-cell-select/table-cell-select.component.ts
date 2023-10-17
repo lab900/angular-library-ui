@@ -15,15 +15,22 @@ import {
 import { Observable, ReplaySubject } from 'rxjs';
 import { SelectableRows } from '../table/table.component';
 import { ThemePalette } from '@angular/material/core';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatColumnDef, MatTable } from '@angular/material/table';
+import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import {
+  MatColumnDef,
+  MatTable,
+  MatTableModule,
+} from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { map } from 'rxjs/operators';
+import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
-  selector: 'lab900-table-cell-select[options][selection]',
+  standalone: true,
+  selector: 'lab900-table-cell-select',
   templateUrl: './table-cell-select.component.html',
   encapsulation: ViewEncapsulation.None,
+  imports: [MatTableModule, MatCheckboxModule, AsyncPipe, NgIf],
 })
 export class TableCellSelectComponent<T extends object = object>
   implements OnInit, OnDestroy
@@ -46,7 +53,7 @@ export class TableCellSelectComponent<T extends object = object>
   private _selection: SelectionModel<T>;
   public allSelected$: Observable<boolean>;
 
-  @Input()
+  @Input({ required: true })
   public set selection(value: SelectionModel<T>) {
     this._selection = value;
     this.allSelected$ = this._selection.changed.pipe(
@@ -57,7 +64,7 @@ export class TableCellSelectComponent<T extends object = object>
     );
   }
 
-  @Input()
+  @Input({ required: true })
   public set options(value: SelectableRows<T>) {
     this._options$.next(value);
     this.color = value?.checkBoxColor ?? 'primary';
@@ -75,7 +82,9 @@ export class TableCellSelectComponent<T extends object = object>
   @Output()
   private readonly selectAll = new EventEmitter<boolean>();
 
-  public constructor(@Optional() @SkipSelf() public table: MatTable<any>) {}
+  public constructor(@Optional() @SkipSelf() public table: MatTable<any>) {
+    console.log('here');
+  }
 
   public ngOnInit(): void {
     this.columnDef.name = 'select';

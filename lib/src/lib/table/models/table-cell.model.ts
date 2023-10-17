@@ -1,8 +1,15 @@
 import { propValue } from '../../utils/utils';
 import { TableCellTooltip } from './table-cell-tooltip.model';
 import { TooltipPosition } from '@angular/material/tooltip';
+import { Type } from '@angular/core';
+import { CellRendererAbstract } from '../directives/cell-renderer.abstract';
+import { ColumnHeaderRendererAbstract } from '../directives/column-header-renderer-abstract.directive';
 
-export interface TableCell<T = any> {
+export interface TableCell<
+  T = any,
+  CellRenderOptions = any,
+  HeaderRenderOptions = any
+> {
   /**
    * Column key
    */
@@ -21,10 +28,12 @@ export interface TableCell<T = any> {
   cellHeaderClass?: propValue<TableCell<T>>;
   /**
    * Cell header icon
+   * @Deprecated use cellRenderer: ColumnHeaderWithIconRendererComponent instead
    */
   cellHeaderIcon?: propValue<TableCell<T>>;
   /**
    * Cell header svgicon
+   * @Deprecated use cellRenderer: ColumnHeaderWithIconRendererComponent instead
    */
   cellHeaderSvgIcon?: propValue<TableCell<T>>;
   /**
@@ -67,12 +76,28 @@ export interface TableCell<T = any> {
   click?: (data: T, cell: TableCell, mouseEvent?: MouseEvent) => any;
   /**
    * render a different cell template
+   * @deprecated use cellRenderer instead
    */
   customCellContent?: boolean;
+
+  /**
+   * Specify a custom cell renderer component to display the cell content in a different way
+   */
+  cellRenderer?: Type<CellRendererAbstract<CellRenderOptions, T>>;
+
+  /**
+   * Specify a renderer component specific options
+   */
+  cellRenderOptions?: CellRenderOptions;
+
   /**
    * render a different column header template
+   * @deprecated use headerRenderer instead
    */
   customHeaderCell?: boolean;
+  headerRenderer?: Type<ColumnHeaderRendererAbstract<HeaderRenderOptions, T>>;
+  headerRenderOptions?: HeaderRenderOptions;
+
   /**
    * Enable a tooltip for cell header, takes text to be displayed
    */
@@ -98,10 +123,12 @@ export interface TableCell<T = any> {
 
   /**
    * Cell prefixed icon, use cellFormatter to remove text if you want to only use the icon
+   * @Deprecated use cellRenderer: CellWithIconRendererComponent  instead
    */
   icon?: (data: T, cell: TableCell) => string;
   /**
    * Cell prefixed SVG icon
+   * @Deprecated use cellRenderer: CellWithIconRendererComponent  instead
    */
   svgIcon?: (data: T, cell: TableCell) => string;
 }

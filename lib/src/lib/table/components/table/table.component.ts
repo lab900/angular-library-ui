@@ -18,13 +18,11 @@ import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
-import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
 import { MatTable } from '@angular/material/table';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900Sort } from '../../models/table-sort.model';
-import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableLeftFooterDirective } from '../../directives/table-left-footer.directive';
 import {
@@ -221,7 +219,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   public maxColumnWidth?: string;
 
   @Input()
-  public onRowClick: (value: T, index: number, event: Event) => void;
+  public onRowClick?: (value: T, index: number, event: Event) => void;
 
   @Input()
   public preFooterTitle?: string;
@@ -261,12 +259,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 
   @ContentChild(Lab900TableTopContentDirective, { read: TemplateRef })
   public tableTopContent?: Lab900TableTopContentDirective;
-
-  @ContentChild(Lab900TableCustomCellDirective, { read: TemplateRef })
-  public customCellContent?: Lab900TableCustomCellDirective;
-
-  @ContentChild(Lab900TableCustomHeaderCellDirective, { read: TemplateRef })
-  public customHeaderCell?: Lab900TableCustomHeaderCellDirective;
 
   @ContentChild(Lab900TableLeftFooterDirective, { read: TemplateRef })
   public footerLeftContent?: Lab900TableLeftFooterDirective;
@@ -346,6 +338,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   }
 
   public handleSelectRow(row: T): void {
+    console.log(row);
     this.selection.toggle(row);
     this.selectionChanged.emit(this.selection);
     this.rowSelectToggle.emit(row);

@@ -43,21 +43,21 @@
       [dataSource]="data$ | async"
       (cdkDropListDropped)="tableRowOrderChange.emit($event)"
     >
-      <lab900-table-cell-select
-        *ngIf="selectableRows$ | async as options"
-        [showFooter]="showCellFooters$ | async"
-        [options]="options"
-        [selection]="selection"
-        (selectAll)="handleSelectAll($event)"
-        (selectRow)="handleSelectRow($event)"
-      ></lab900-table-cell-select>
+      <ng-container *ngIf="selectableRows$ | async as options">
+        <lab900-table-cell-select
+          [showFooter]="showCellFooters$ | async"
+          [options]="options"
+          [selection]="selection"
+          (selectAll)="handleSelectAll($event)"
+          (selectRow)="handleSelectRow($event)"
+        ></lab900-table-cell-select>
+      </ng-container>
+
       <lab900-table-cell
         *ngFor="let column of columns; trackBy: trackCellFn"
         [cell]="column"
         [disableSort]="disableSort"
         [maxColumnWidthFromTable]="maxColumnWidth"
-        [customCellContent]="customCellContent"
-        [customHeaderCell]="customHeaderCell"
         (headerClick)="handleHeaderClick($event)"
         [data]="data$ | async"
       ></lab900-table-cell>

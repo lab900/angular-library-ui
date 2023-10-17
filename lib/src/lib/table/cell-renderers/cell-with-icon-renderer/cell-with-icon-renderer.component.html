@@ -1,0 +1,12 @@
+<div
+  class="lab900-cell-value lab900-cell-value--with-icon"
+  *ngIf="rendererOptions$ | async as options"
+>
+  <ng-container>
+    <mat-icon *ngIf="!options.svgIcon">{{ icon$ | async }}</mat-icon>
+    <mat-icon *ngIf="options.svgIcon" [svgIcon]="icon$ | async"></mat-icon>
+  </ng-container>
+  <div class="lab900-cell-value" *ngIf="options.showCellValue">
+    {{ cellValue$ | async }}
+  </div>
+</div>

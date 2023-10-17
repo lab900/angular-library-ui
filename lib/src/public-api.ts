@@ -42,11 +42,8 @@ export * from './lib/table/components/table/table.component';
 export * from './lib/table/components/table-header/lab900-table-header.component';
 export * from './lib/table/components/table-filter-menu/table-filter-menu.component';
 export * from './lib/table/components/table-cell/table-cell.component';
-export * from './lib/table/components/table-cell-value/table-cell-value.component';
 export * from './lib/table/components/table-tabs/table-tabs.component';
 export * from './lib/table/directives/table-empty.directive';
-export * from './lib/table/directives/table-custom-cell.directive';
-export * from './lib/table/directives/table-custom-header-cell.directive';
 export * from './lib/table/directives/table-disabled.directive';
 export * from './lib/table/directives/table-header-content.directive';
 export * from './lib/table/directives/table-top-content.directive';
@@ -55,6 +52,21 @@ export * from './lib/table/models/table-cell.model';
 export * from './lib/table/models/table-cell-tooltip.model';
 export * from './lib/table/models/table-sort.model';
 export * from './lib/table/models/table-tabs.model';
+
+export * from './lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.component';
+export * from './lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.options';
+
+export * from './lib/table/cell-renderers/cell-with-anchor-renderer/cell-with-anchor-renderer.component';
+export * from './lib/table/cell-renderers/cell-with-anchor-renderer/cell-with-anchor-renderer.options';
+
+export * from './lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.options';
+export * from './lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.component';
+
+export * from './lib/table/cell-renderers/default-cell-renderer/default-cell-renderer.component';
+export * from './lib/table/column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
+export * from './lib/table/column-header-renderers/column-header-sorting/column-header-sorting.component';
+export * from './lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.options';
+export * from './lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.component';
 
 // page header
 export * from './lib/page-header/page-header.module';

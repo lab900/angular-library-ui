@@ -21,15 +21,12 @@ import { Lab900TableHeaderComponent } from './components/table-header/lab900-tab
 import { Lab900TableHeaderContentDirective } from './directives/table-header-content.directive';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Lab900ButtonModule } from '../button/button.module';
-import { Lab900TableCustomCellDirective } from './directives/table-custom-cell.directive';
-import { Lab900TableCustomHeaderCellDirective } from './directives/table-custom-header-cell.directive';
 import { Lab900TableTopContentDirective } from './directives/table-top-content.directive';
-import { Lab900TableCellComponent } from './components/table-cell/table-cell.component';
-import { Lab900TableCellValueComponent } from './components/table-cell-value/table-cell-value.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Lab900TableTabsComponent } from './components/table-tabs/table-tabs.component';
 import { Lab900TableLeftFooterDirective } from './directives/table-left-footer.directive';
 import { TableCellSelectComponent } from './components/table-cell-select/table-cell-select.component';
+import { Lab900TableCellComponent } from './components/table-cell/table-cell.component';
 
 @NgModule({
   declarations: [
@@ -38,15 +35,10 @@ import { TableCellSelectComponent } from './components/table-cell-select/table-c
     Lab900TableDisabledDirective,
     Lab900TableHeaderContentDirective,
     Lab900TableTopContentDirective,
-    Lab900TableCustomCellDirective,
-    Lab900TableCustomHeaderCellDirective,
     Lab900TableFilterMenuComponent,
     Lab900TableHeaderComponent,
-    Lab900TableCellComponent,
-    Lab900TableCellValueComponent,
     Lab900TableTabsComponent,
     Lab900TableLeftFooterDirective,
-    TableCellSelectComponent,
   ],
   exports: [
     Lab900TableComponent,
@@ -54,12 +46,8 @@ import { TableCellSelectComponent } from './components/table-cell-select/table-c
     Lab900TableDisabledDirective,
     Lab900TableHeaderContentDirective,
     Lab900TableTopContentDirective,
-    Lab900TableCustomCellDirective,
-    Lab900TableCustomHeaderCellDirective,
     Lab900TableFilterMenuComponent,
     Lab900TableHeaderComponent,
-    Lab900TableCellComponent,
-    Lab900TableCellValueComponent,
     Lab900TableTabsComponent,
     Lab900TableLeftFooterDirective,
   ],
@@ -82,6 +70,8 @@ import { TableCellSelectComponent } from './components/table-cell-select/table-c
     MatMenuModule,
     Lab900ButtonModule,
     DragDropModule,
+    Lab900TableCellComponent,
+    TableCellSelectComponent,
   ],
 })
 export class Lab900TableModule {}

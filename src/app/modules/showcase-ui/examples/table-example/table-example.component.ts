@@ -1,5 +1,16 @@
 import { Component } from '@angular/core';
-import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
+import {
+  ActionButton,
+  CellWithAnchorRendererComponent,
+  CellWithIconRendererComponent,
+  CellWithIconRendererOptions,
+  CheckboxCellRendererComponent,
+  CheckboxCellRendererOptions,
+  ColumnHeaderWithIconRendererComponent,
+  Lab900Sort,
+  Paging,
+  TableCell,
+} from '@lab900/ui';
 
 @Component({
   selector: 'lab900-table-example',
@@ -32,17 +43,7 @@ import { ActionButton, Lab900Sort, Paging, TableCell } from '@lab900/ui';
   >
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
-    <div *lab900TableCustomCell="let data">
-      <div *ngIf="data.cell.key === 'active'">
-        <mat-checkbox
-          color="primary"
-          [checked]="data.element?.active"
-        ></mat-checkbox>
-      </div>
-    </div>
-    <div *lab900TableCustomHeaderCell="let data">
-      <div *ngIf="data.cell.key === 'active'" class="rainbow">Active</div>
-    </div>
+
     <div *lab900TableEmpty>
       <div class="no-results">
         <p>No results template (can be anything)</p>
@@ -173,10 +174,17 @@ export class TableExampleComponent {
     {
       key: 'name',
       label: 'Name',
-      cellHeaderIcon: 'accessibility',
       cellHeaderClass: 'center-cell',
+      headerRenderer: ColumnHeaderWithIconRendererComponent,
+      headerRenderOptions: {
+        icon: 'accessibility',
+      },
+      cellRenderer: CellWithAnchorRendererComponent,
+      cellRenderOptions: {
+        url: (data) => `mailto:${data.email}`,
+        target: '_blank',
+      },
       sortable: true,
-      cellClass: 'clickable-cell',
       cellTooltip: {
         text: (data) => data.email,
         tooltipOptions: { tooltipPosition: 'left' },
@@ -225,10 +233,13 @@ export class TableExampleComponent {
     {
       key: 'active',
       label: 'Active',
-      customCellContent: true,
-      customHeaderCell: true,
+      cellHeaderClass: 'rainbow',
       cellClass: 'center-cell',
       columnOrder: 2,
+      cellRenderer: CheckboxCellRendererComponent,
+      cellRenderOptions: <CheckboxCellRendererOptions>{
+        valueChange: (checked, value) => console.log(checked, value),
+      },
     },
     {
       key: 'email',
@@ -248,7 +259,10 @@ export class TableExampleComponent {
       key: 'warning',
       label: 'Warning',
       cellFormatter: () => '',
-      icon: (data) => (data.warning ? 'warning' : 'check'),
+      cellRenderer: CellWithIconRendererComponent,
+      cellRenderOptions: <CellWithIconRendererOptions>{
+        icon: (data) => (data?.warning ? 'warning' : 'check'),
+      },
       cellTooltip: {
         text: (data) =>
           data.warning

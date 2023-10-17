@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostBinding,
@@ -11,25 +12,38 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
-import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
-import { SortDirection } from '@angular/material/sort';
-import { MatColumnDef, MatTable } from '@angular/material/table';
-import { readPropValue } from '../../../utils/utils';
-import { Lab900TableCustomHeaderCellDirective } from '../../directives/table-custom-header-cell.directive';
-import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
 import {
-  distinctUntilChanged,
-  filter,
-  map,
-  shareReplay,
-  withLatestFrom,
-} from 'rxjs/operators';
+  MatColumnDef,
+  MatTable,
+  MatTableModule,
+} from '@angular/material/table';
+import { readPropValue } from '../../../utils/utils';
+import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { filter, map, shareReplay } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900Sort } from '../../models/table-sort.model';
+import { AsyncPipe, NgClass, NgComponentOutlet, NgIf } from '@angular/common';
+import { DefaultCellRendererComponent } from '../../cell-renderers/default-cell-renderer/default-cell-renderer.component';
+import { DefaultColumnHeaderRendererComponent } from '../../column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
   templateUrl: './table-cell.component.html',
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    NgIf,
+    DefaultCellRendererComponent,
+    MatTableModule,
+    NgClass,
+    DefaultColumnHeaderRendererComponent,
+    MatTooltipModule,
+    TranslateModule,
+    NgComponentOutlet,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class Lab900TableCellComponent<T = any> implements OnDestroy {
@@ -64,12 +78,6 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   @Input()
   public disableSort = false;
 
-  @Input()
-  public customCellContent?: Lab900TableCustomCellDirective;
-
-  @Input()
-  public customHeaderCell?: Lab900TableCustomHeaderCellDirective;
-
   /**
    * max column width, set by table input
    */
@@ -77,15 +85,10 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public maxColumnWidthFromTable?: string;
 
   @Output()
-  public headerClick = new EventEmitter<TableCell<T>>();
+  private readonly headerClick = new EventEmitter<TableCell<T>>();
 
   public readonly cellHeaderClass$: Observable<string>;
-  public readonly cellHeaderIcon$: Observable<string>;
-  public readonly cellHeaderSvgIcon$: Observable<string>;
-  public readonly cellLabel$: Observable<string>;
   public readonly sticky$: Observable<boolean>;
-  public readonly sortDirection$: Observable<SortDirection>;
-  public readonly sortIcon$: Observable<'north' | 'south' | ''>;
   public readonly cellFooter$: Observable<string>;
   public readonly sort$: Observable<Lab900Sort[] | null>;
 
@@ -103,39 +106,11 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     });
 
     this.sticky$ = this.cell$.pipe(map((c) => !c?.hide && !!c?.sticky));
-    this.cellLabel$ = this.cell$.pipe(
-      map((c) => readPropValue<TableCell<T>>(c.label, c))
-    );
+
     this.cellHeaderClass$ = this.cell$.pipe(
       map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c))
     );
-    this.cellHeaderIcon$ = this.cell$.pipe(
-      filter((c) => !!c?.cellHeaderIcon),
-      map((c) => readPropValue<TableCell<T>>(c.cellHeaderIcon, c))
-    );
-    this.cellHeaderSvgIcon$ = this.cell$.pipe(
-      filter((c) => !!c?.cellHeaderSvgIcon),
-      map((c) => readPropValue<TableCell<T>>(c.cellHeaderSvgIcon, c))
-    );
-    this.sortDirection$ = this.sort$.pipe(
-      withLatestFrom(this.cell$),
-      map(
-        ([sort, cell]) =>
-          sort?.find((s) => s.id === (cell.sortKey ?? cell.key))?.direction ??
-          ''
-      )
-    );
-    this.sortIcon$ = this.sortDirection$.pipe(
-      distinctUntilChanged(),
-      map((dir) => {
-        if (dir === 'asc') {
-          return 'north';
-        } else if (dir === 'desc') {
-          return 'south';
-        }
-        return '';
-      })
-    );
+
     this.cellFooter$ = combineLatest([
       this.cell$.pipe(filter((c) => !!c.footer)),
       this._data$.asObservable(),
@@ -157,5 +132,19 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     return typeof cell.cellClass === 'function'
       ? cell.cellClass(data, cell)
       : cell.cellClass;
+  }
+
+  public handleCellClick(event: MouseEvent, cell: TableCell<T>, data: T): void {
+    if (cell.click) {
+      event.stopImmediatePropagation();
+      event.preventDefault();
+      cell.click(data, cell, event);
+    }
+  }
+
+  public handleHeaderClick(cell: TableCell<T>): void {
+    if (this.disableSort) {
+      this.headerClick.emit(cell);
+    }
   }
 }

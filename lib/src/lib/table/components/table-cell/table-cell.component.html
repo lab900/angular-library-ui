@@ -3,49 +3,55 @@
     <th
       mat-header-cell
       *matHeaderCellDef
-      (click)="!disableSort ? headerClick.emit(cell) : undefined"
+      (click)="handleHeaderClick(cell)"
       [class.sortable]="!disableSort && cell.sortable"
       [ngClass]="cellHeaderClass$ | async"
       matTooltipClass="lab900-table__mat-tooltip"
       [matTooltip]="cell?.cellHeaderTooltip | translate"
       [matTooltipPosition]="cell?.cellHeaderTooltipPosition || 'above'"
     >
-      <ng-container *ngIf="cell?.customHeaderCell && customHeaderCell; else defaultHeader">
+      <ng-container *ngIf="cell.headerRenderer">
         <ng-container
-          *ngTemplateOutlet="customHeaderCell; context: { $implicit: { cell: cell, sortDirection: (sortDirection$ | async) } }"
+          *ngComponentOutlet="
+            cell.headerRenderer;
+            inputs: { columnConfig: cell, disableSort: disableSort }
+          "
         ></ng-container>
       </ng-container>
-      <ng-template #defaultHeader>
-        <div>
-          <mat-icon *ngIf="cellHeaderIcon$ | async as icon">{{ icon }}</mat-icon>
-          <mat-icon *ngIf="cellHeaderSvgIcon$ | async as icon" [svgIcon]="icon"></mat-icon>
-          {{ cellLabel$ | async | translate }}
-          <ng-container *ngIf="!disableSort && cell.sortable">
-            <span class="material-icons lab900-sort-arrow" *ngIf="sortIcon$ | async as icon">
-              {{ icon }}
-            </span>
-          </ng-container>
-        </div>
-      </ng-template>
+      <ng-container *ngIf="!cell?.headerRenderer">
+        <lab900-default-column-header-renderer
+          [columnConfig]="cell"
+          [disableSort]="disableSort"
+        ></lab900-default-column-header-renderer>
+      </ng-container>
     </th>
     <td
       mat-cell
       *matCellDef="let element"
       [style.width]="cell?.width === '*' ? '100%' : cell?.width"
       [ngClass]="getCellClass(cell, element)"
-      (click)="cell.click ? $event.stopPropagation() : undefined"
+      (click)="handleCellClick($event, cell, element)"
     >
-      <ng-container *ngIf="cell?.customCellContent && customCellContent">
-        <ng-container *ngTemplateOutlet="customCellContent; context: { $implicit: { cell: cell, element: element } }"></ng-container>
+      <ng-container *ngIf="cell.cellRenderer">
+        <ng-container
+          *ngComponentOutlet="
+            cell.cellRenderer;
+            inputs: { data: element, columnConfig: cell }
+          "
+        ></ng-container>
       </ng-container>
-      <ng-container *ngIf="!cell?.customCellContent">
-        <lab900-table-cell-value
+      <ng-container *ngIf="!cell?.cellRenderer">
+        <lab900-default-cell-renderer
           [data]="element"
-          [cell]="cell"
-          [maxColumnWidthFromTable]="maxColumnWidthFromTable"
-        ></lab900-table-cell-value>
+          [columnConfig]="cell"
+        ></lab900-default-cell-renderer>
       </ng-container>
     </td>
-    <td mat-footer-cell *matFooterCellDef [innerHtml]="cellFooter$ | async" [ngClass]="cell.footerCellClass"></td>
+    <td
+      mat-footer-cell
+      *matFooterCellDef
+      [innerHtml]="cellFooter$ | async"
+      [ngClass]="cell.footerCellClass"
+    ></td>
   </ng-container>
 </ng-container>
