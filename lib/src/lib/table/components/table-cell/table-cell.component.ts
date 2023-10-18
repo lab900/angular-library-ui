@@ -69,7 +69,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       shareReplay(1)
     );
 
-  public readonly columnWidth: Observable<string> = this.cell$.pipe(
+  public readonly columnWidth$: Observable<string> = this.cell$.pipe(
     map((cell) => (cell?.width === '*' ? '100%' : cell?.width)),
     shareReplay(1)
   );

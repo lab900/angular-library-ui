@@ -3,6 +3,8 @@ import {
   ActionButton,
   CellInputEditorComponent,
   CellInputEditorOptions,
+  CellSelectEditorComponent,
+  CellSelectEditorOptions,
   CellWithAnchorRendererComponent,
   CellWithIconRendererComponent,
   CellWithIconRendererOptions,
@@ -194,6 +196,20 @@ export class TableExampleComponent {
       columnOrder: 0,
       footer: '<a href="#">Click here!</a>',
       sticky: true,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      width: '150px',
+      cellFormatter: (data) => data.status ?? 'no status',
+      cellEditor: CellSelectEditorComponent,
+      cellEditorOptions: <CellSelectEditorOptions>{
+        options: ['blocked', 'inactive', 'active'],
+        valueChanged: (value, data) => {
+          data.status = value;
+        },
+        placeholder: 'Select a status',
+      },
     },
     {
       key: 'nameLong',

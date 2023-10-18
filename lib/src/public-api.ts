@@ -79,6 +79,9 @@ export * from './lib/table/cell-editors/cell-editor.options';
 export * from './lib/table/cell-editors/cell-input-editor/cell-input-editor.component';
 export * from './lib/table/cell-editors/cell-input-editor/cell-input-editor.options';
 
+export * from './lib/table/cell-editors/cell-select-editor/cell-select-editor.options';
+export * from './lib/table/cell-editors/cell-select-editor/cell-select-editor.component';
+
 // page header
 export * from './lib/page-header/page-header.module';
 export * from './lib/page-header/components/page-header/page-header.component';

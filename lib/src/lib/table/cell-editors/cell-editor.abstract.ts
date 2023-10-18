@@ -62,14 +62,18 @@ export abstract class CellEditorAbstract<
     return data?.[cell.key];
   }
 
-  public close(currentValue: any): void {
-    this.cellValue$
-      .pipe(take(1), withLatestFrom(this.editOptions$, this._data$))
-      .subscribe(([oldValue, editOptions, data]) => {
-        if (editOptions.valueChanged && isDifferent(currentValue, oldValue)) {
-          editOptions.valueChanged(currentValue, data);
-        }
-        this.tableCell.showEditorForElement$.next(undefined);
-      });
+  public close(currentValue?: any): void {
+    if (currentValue) {
+      this.cellValue$
+        .pipe(take(1), withLatestFrom(this.editOptions$, this._data$))
+        .subscribe(([oldValue, editOptions, data]) => {
+          if (editOptions.valueChanged && isDifferent(currentValue, oldValue)) {
+            editOptions.valueChanged(currentValue, data);
+          }
+          this.tableCell.showEditorForElement$.next(undefined);
+        });
+    } else {
+      this.tableCell.showEditorForElement$.next(undefined);
+    }
   }
 }
