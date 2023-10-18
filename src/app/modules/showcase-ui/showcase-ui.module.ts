@@ -9,7 +9,11 @@ import {
   Lab900MergerModule,
   Lab900PageHeaderModule,
   Lab900SharingModule,
-  Lab900TableModule,
+  Lab900TableComponent,
+  Lab900TableEmptyDirective,
+  Lab900TableHeaderContentDirective,
+  Lab900TableLeftFooterDirective,
+  Lab900TableTopContentDirective,
 } from '@lab900/ui';
 
 import { ShowcaseUiRoutingModule } from './showcase-ui-routing.module';
@@ -52,13 +56,17 @@ const examples = [
     Lab900DataListModule,
     Lab900SharingModule,
     AlertModule,
-    Lab900TableModule,
+    Lab900TableComponent,
     Lab900PageHeaderModule,
     Lab900MergerModule,
     Lab900ButtonModule,
     TranslateModule,
     Lab900ButtonModule,
     MatCheckboxModule,
+    Lab900TableTopContentDirective,
+    Lab900TableHeaderContentDirective,
+    Lab900TableEmptyDirective,
+    Lab900TableLeftFooterDirective,
   ],
 })
 export default class ShowcaseUiModule {}

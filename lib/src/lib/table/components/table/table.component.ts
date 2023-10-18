@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   EventEmitter,
@@ -14,13 +15,18 @@ import { Lab900TableEmptyDirective } from '../../directives/table-empty.directiv
 import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
 import { Paging } from '../../../common/models/paging.model';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
-import { MatTable } from '@angular/material/table';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDropList,
+} from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableTab } from '../../models/table-tabs.model';
@@ -34,6 +40,20 @@ import {
 } from 'rxjs';
 import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
+import { Lab900TableHeaderComponent } from '../table-header/lab900-table-header.component';
+import {
+  AsyncPipe,
+  NgClass,
+  NgForOf,
+  NgIf,
+  NgTemplateOutlet,
+} from '@angular/common';
+import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
+import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
+import { Lab900ButtonModule } from '../../../button/button.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -62,7 +82,28 @@ export interface SelectableRows<T = any> {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [Lab900TableService],
+  standalone: true,
+  imports: [
+    Lab900TableHeaderComponent,
+    AsyncPipe,
+    NgIf,
+    NgTemplateOutlet,
+    Lab900TableTabsComponent,
+    MatProgressBarModule,
+    NgClass,
+    MatTableModule,
+    CdkDropList,
+    TableCellSelectComponent,
+    Lab900TableCellComponent,
+    Lab900ButtonModule,
+    CdkDragHandle,
+    NgForOf,
+    CdkDrag,
+    TranslateModule,
+    MatPaginatorModule,
+  ],
 })
 export class Lab900TableComponent<T extends object = object, TabId = string>
   implements OnDestroy
@@ -249,19 +290,19 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   public readonly tableRowOrderChange = new EventEmitter<CdkDragDrop<T[]>>();
 
   @ContentChild(Lab900TableEmptyDirective, { read: TemplateRef })
-  public emptyTableTemplate?: Lab900TableEmptyDirective;
+  public emptyTableTemplate?: TemplateRef<any>;
 
   @ContentChild(Lab900TableDisabledDirective, { read: TemplateRef })
-  public disabledTableTemplate?: Lab900TableDisabledDirective;
+  public disabledTableTemplate?: TemplateRef<any>;
 
   @ContentChild(Lab900TableHeaderContentDirective, { read: TemplateRef })
-  public tableHeaderContent?: Lab900TableHeaderContentDirective;
+  public tableHeaderContent?: TemplateRef<any>;
 
   @ContentChild(Lab900TableTopContentDirective, { read: TemplateRef })
-  public tableTopContent?: Lab900TableTopContentDirective;
+  public tableTopContent?: TemplateRef<any>;
 
   @ContentChild(Lab900TableLeftFooterDirective, { read: TemplateRef })
-  public footerLeftContent?: Lab900TableLeftFooterDirective;
+  public footerLeftContent?: TemplateRef<any>;
 
   public readonly showCellFooters$: Observable<boolean>;
 

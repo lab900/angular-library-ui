@@ -1,15 +1,19 @@
-<div class="lab900-table-header">
-  <ng-content></ng-content>
-  <div class="lab900-table-header__action" *ngIf="tableHeaderActions?.length">
-    <lab900-action-button
-      *ngFor="let action of tableHeaderActions"
-      [action]="action"
-    ></lab900-action-button>
-  </div>
+<div class="lab900-table-header" *ngIf="showTableHeader$ | async">
+  <ng-container *ngIf="tableHeaderContent">
+    <ng-container *ngTemplateOutlet="tableHeaderContent"></ng-container>
+  </ng-container>
+  <ng-container *ngIf="tableHeaderActions$ | async as tableHeaderActions">
+    <div class="lab900-table-header__action" *ngIf="tableHeaderActions?.length">
+      <lab900-action-button
+        *ngFor="let action of tableHeaderActions"
+        [action]="action"
+      ></lab900-action-button>
+    </div>
+  </ng-container>
   <lab900-table-filter-menu
-    *ngIf="toggleColumns || toggleAndMoveColumns"
+    *ngIf="showFilterMenu$ | async"
     (filterChanged)="tableCellsFiltered.emit($event)"
-    [filterIcon]="filterIcon"
-    [toggleAndMoveColumns]="toggleAndMoveColumns"
+    [filterIcon]="filterIcon$ | async"
+    [toggleAndMoveColumns]="toggleAndMoveColumns$ | async"
   ></lab900-table-filter-menu>
 </div>

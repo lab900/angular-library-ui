@@ -8,10 +8,8 @@
     [toggleAndMoveColumns]="toggleAndMoveColumns"
     (tableCellsFiltered)="onTableCellsFiltered($event)"
     [filterIcon]="filterIcon"
+    [tableHeaderContent]="tableHeaderContent"
   >
-    <ng-container *ngIf="tableHeaderContent">
-      <ng-container *ngTemplateOutlet="tableHeaderContent"></ng-container>
-    </ng-container>
   </lab900-table-header>
 
   <ng-container *ngIf="tableTopContent">

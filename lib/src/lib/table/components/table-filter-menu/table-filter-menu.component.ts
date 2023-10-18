@@ -1,15 +1,54 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { TableCell } from '../../models/table-cell.model';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDragPlaceholder,
+  CdkDragPreview,
+  CdkDropList,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { map, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
 import { readPropValue } from '../../../utils/utils';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-table-filter-menu',
   templateUrl: './table-filter-menu.component.html',
   styleUrls: ['./table-filter-menu.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatMenuModule,
+    MatCheckboxModule,
+    TranslateModule,
+    MatIconModule,
+    AsyncPipe,
+    CdkDropList,
+    CdkDrag,
+    CdkDragPlaceholder,
+    CdkDragPreview,
+    CdkDragHandle,
+    NgIf,
+    MatButtonModule,
+    NgForOf,
+  ],
 })
 export class Lab900TableFilterMenuComponent {
   public readonly tableCells$: Observable<TableCell[]>;

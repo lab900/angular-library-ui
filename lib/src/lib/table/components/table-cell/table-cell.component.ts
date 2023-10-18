@@ -177,7 +177,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   }
 
   public handleHeaderClick(cell: TableCell<T>): void {
-    if (this.disableSort) {
+    if (!this.disableSort) {
       this.headerClick.emit(cell);
     }
   }

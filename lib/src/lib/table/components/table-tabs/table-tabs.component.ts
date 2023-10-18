@@ -1,10 +1,23 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Lab900TableTab } from '../../models/table-tabs.model';
+import { NgForOf, NgIf } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-table-tabs',
   templateUrl: './table-tabs.component.html',
   styleUrls: ['./table-tabs.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, NgForOf, TranslateModule],
 })
 export class Lab900TableTabsComponent<T = string> {
   @Input()

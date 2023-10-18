@@ -37,7 +37,6 @@ export * from './lib/sharing/components/sharing/sharing.component';
 export * from './lib/sharing/models/share-dialog-component.abstract';
 
 // table
-export * from './lib/table/table.module';
 export * from './lib/table/components/table/table.component';
 export * from './lib/table/components/table-header/lab900-table-header.component';
 export * from './lib/table/components/table-filter-menu/table-filter-menu.component';

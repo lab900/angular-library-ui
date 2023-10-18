@@ -27,7 +27,6 @@ import {
     [paging]="paging"
     [tableActionsBack]="tableActions"
     [tableHeaderActions]="tableHeaderActions"
-    [toggleColumns]="false"
     [toggleAndMoveColumns]="true"
     filterIcon="settings"
     [selectableRows]="{
