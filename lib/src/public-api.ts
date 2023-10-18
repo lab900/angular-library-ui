@@ -14,12 +14,10 @@ export * from './lib/dialog/components/confirmation-dialog/confirmation-dialog.c
 export * from './lib/dialog/directives/confirmation-dialog.directive';
 
 // alerts
-export * from './lib/alert/alert.module';
 export * from './lib/alert/components/alert/alert.component';
 export * from './lib/alert/models/alert';
 
 // nav list
-export * from './lib/nav-list/nav-list.module';
 export * from './lib/nav-list/models/nav-item.model';
 export * from './lib/nav-list/components/nav-list/nav-list.component';
 export * from './lib/nav-list/components/icon/icon.component';
@@ -32,7 +30,6 @@ export * from './lib/data-list/directives/data-list-empty.directive';
 export * from './lib/data-list/directives/data-list-item-info.directive';
 
 // sharing
-export * from './lib/sharing/sharing.module';
 export * from './lib/sharing/components/sharing/sharing.component';
 export * from './lib/sharing/models/share-dialog-component.abstract';
 
@@ -52,38 +49,9 @@ export * from './lib/table/models/table-cell-tooltip.model';
 export * from './lib/table/models/table-sort.model';
 export * from './lib/table/models/table-tabs.model';
 
-export * from './lib/table/cell-renderers/cell-renderer.abstract';
-
-export * from './lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.component';
-export * from './lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.options';
-
-export * from './lib/table/cell-renderers/cell-with-anchor-renderer/cell-with-anchor-renderer.component';
-export * from './lib/table/cell-renderers/cell-with-anchor-renderer/cell-with-anchor-renderer.options';
-
-export * from './lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.options';
-export * from './lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.component';
-
-export * from './lib/table/cell-renderers/default-cell-renderer/default-cell-renderer.component';
-
-export * from './lib/table/column-header-renderers/column-header-renderer-abstract.directive';
-
-export * from './lib/table/column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
-export * from './lib/table/column-header-renderers/column-header-sorting/column-header-sorting.component';
-export * from './lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.options';
-export * from './lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.component';
-
-export * from './lib/table/cell-editors/cell-editor.abstract';
-export * from './lib/table/cell-editors/cell-editor.options';
-
-export * from './lib/table/cell-editors/cell-input-editor/cell-input-editor.component';
-export * from './lib/table/cell-editors/cell-input-editor/cell-input-editor.options';
-
-export * from './lib/table/cell-editors/cell-select-editor/cell-select-editor.options';
-export * from './lib/table/cell-editors/cell-select-editor/cell-select-editor.component';
-
 // page header
-export * from './lib/page-header/page-header.module';
 export * from './lib/page-header/components/page-header/page-header.component';
+export * from './lib/page-header/components/page-header-nav-item/page-header-nav-item.component';
 export * from './lib/page-header/models/page-header-nav.model';
 
 // merger
@@ -101,6 +69,8 @@ export * from './lib/button/models/action-button.model';
 export * from './lib/button/models/button.model';
 
 // bread crumbs
-export * from './lib/bread-crumbs/bread-crumbs.module';
 export * from './lib/bread-crumbs/components/bread-crumbs/bread-crumbs.component';
 export * from './lib/bread-crumbs/models/bread-crumb.model';
+
+// table
+export * from './lib/table/table-api';

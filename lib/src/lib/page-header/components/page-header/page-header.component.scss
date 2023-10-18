@@ -18,20 +18,6 @@
     min-width: fit-content;
   }
 
-  &__nav {
-    &__item {
-      text-decoration: none;
-
-      &__prefix-icon {
-        margin-right: 10px;
-      }
-
-      &__suffix-icon {
-        margin-left: 10px;
-      }
-    }
-  }
-
   &__actions {
     min-width: unset !important;
     flex: 1;

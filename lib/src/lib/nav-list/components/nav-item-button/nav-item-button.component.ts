@@ -12,6 +12,11 @@ import {
   ReplaySubject,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AsyncPipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatListModule } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'lab900-nav-item-button',
@@ -19,6 +24,17 @@ import { map } from 'rxjs/operators';
   templateUrl: './nav-item-button.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgIf,
+    AsyncPipe,
+    IconComponent,
+    TranslateModule,
+    MatListModule,
+    NgClass,
+    NgTemplateOutlet,
+    RouterLink,
+  ],
 })
 export class NavItemButtonComponent {
   private readonly _item$ = new ReplaySubject<NavItem>();

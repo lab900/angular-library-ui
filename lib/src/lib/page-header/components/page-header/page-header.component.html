@@ -1,6 +1,6 @@
 <header class="lab900-page-header">
   <div
-    *ngIf="pageTitle || breadCrumbs?.length || actions?.length"
+    *ngIf="pageTitle || breadCrumbs?.length || (actions$ | async)"
     class="lab900-page-header__main"
   >
     <div class="lab900-page-header__title">
@@ -12,27 +12,32 @@
       ></lab900-bread-crumbs>
     </div>
 
-    <div class="lab900-page-header__actions" *ngIf="actions?.length">
-      <div class="lab900-page-header__actions--left">
-        <mat-divider
-          vertical="true"
-          class="lab900-page-header__divider"
-          *ngIf="leftActions?.length > 0"
-        ></mat-divider>
-        <lab900-action-button
-          *ngFor="let action of leftActions"
-          [action]="action"
-          [data]="data"
-        ></lab900-action-button>
+    <ng-container *ngIf="actions$ | async as actions">
+      <div class="lab900-page-header__actions" *ngIf="actions?.length">
+        <div
+          class="lab900-page-header__actions--left"
+          *ngIf="leftActions$ | async as leftActions"
+        >
+          <mat-divider
+            vertical="true"
+            class="lab900-page-header__divider"
+            *ngIf="leftActions?.length > 0"
+          ></mat-divider>
+          <lab900-action-button
+            *ngFor="let action of leftActions"
+            [action]="action"
+            [data]="data"
+          ></lab900-action-button>
+        </div>
+        <div class="lab900-page-header__actions--right">
+          <lab900-action-button
+            *ngFor="let action of rightActions$ | async"
+            [action]="action"
+            [data]="data"
+          ></lab900-action-button>
+        </div>
       </div>
-      <div class="lab900-page-header__actions--right">
-        <lab900-action-button
-          *ngFor="let action of rightActions"
-          [action]="action"
-          [data]="data"
-        ></lab900-action-button>
-      </div>
-    </div>
+    </ng-container>
   </div>
   <nav
     *ngIf="navItems?.length && tabPanel"
@@ -42,42 +47,10 @@
     [fitInkBarToContent]="navFitInkBarToContent"
     [mat-stretch-tabs]="navStretch"
   >
-    <ng-container *ngFor="let link of navItems">
-      <a
-        mat-tab-link
-        routerLinkActive="active"
-        [routerLink]="getRoute(link.route) ?? []"
-        [queryParams]="link?.queryParams"
-        #rla="routerLinkActive"
-        [active]="rla.isActive"
-        class="lab900-page-header__nav__item"
-      >
-        <ng-container *ngIf="getIcon(link?.prefixIcon) as prefixIcon">
-          <mat-icon
-            class="lab900-page-header__nav__item__prefix-icon"
-            *ngIf="link.svgIcon"
-            [svgIcon]="prefixIcon"
-          ></mat-icon>
-          <mat-icon
-            class="lab900-page-header__nav__item__prefix-icon"
-            *ngIf="!link.svgIcon"
-            >{{ prefixIcon }}</mat-icon
-          >
-        </ng-container>
-        {{ getLabel(link) | translate }}
-        <ng-container *ngIf="getIcon(link?.suffixIcon) as suffixIcon">
-          <mat-icon
-            class="lab900-page-header__nav__item__suffix-icon"
-            *ngIf="link.svgIcon"
-            [svgIcon]="suffixIcon"
-          ></mat-icon>
-          <mat-icon
-            class="lab900-page-header__nav__item__suffix-icon"
-            *ngIf="!link.svgIcon"
-            >{{ suffixIcon }}</mat-icon
-          >
-        </ng-container>
-      </a>
-    </ng-container>
+    <lab900-page-header-nav-item
+      *ngFor="let item of navItems"
+      [item]="item"
+      [data]="data"
+    ></lab900-page-header-nav-item>
   </nav>
 </header>

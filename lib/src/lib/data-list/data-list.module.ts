@@ -9,11 +9,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { Lab900SharingModule } from '../sharing/sharing.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Lab900ButtonModule } from '../button/button.module';
+import { Lab900SharingComponent } from '../sharing/components/sharing/sharing.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,7 @@ import { Lab900ButtonModule } from '../button/button.module';
     MatIconModule,
     TranslateModule,
     MatMenuModule,
-    Lab900SharingModule,
+    Lab900SharingComponent,
     MatProgressSpinnerModule,
     MatPaginatorModule,
     Lab900ButtonModule,

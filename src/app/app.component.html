@@ -8,7 +8,12 @@
           </button>
         </div>
         <a [routerLink]="['/']" class="lab900-showcase__header__logo">
-          <img src="assets/images/logo-duo-dark.svg" />
+          <img
+            [ngSrc]="'assets/images/logo-duo-dark.svg'"
+            alt="{{ 'app.title' | translate }}"
+            width="40"
+            height="35"
+          />
           <h1>{{ 'app.title' | translate }}</h1>
         </a>
       </div>

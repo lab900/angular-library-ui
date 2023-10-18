@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
-import { PageHeaderNavItem, ActionButton, BreadCrumb } from '@lab900/ui';
+import { ActionButton, BreadCrumb, PageHeaderNavItem } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-page-header-example',
   template: ` <lab900-page-header
-    [pageTitle]="pageTitle"
-    [navItems]="navItems"
-    [actions]="actions"
-    [breadCrumbs]="breadCrumbs"
-    [data]="{ tab: 'Examples' }"
-  ></lab900-page-header>`,
+      [pageTitle]="pageTitle"
+      [navItems]="navItems"
+      [actions]="actions"
+      [breadCrumbs]="breadCrumbs"
+      [data]="{ tab: 'Examples' }"
+      [tabPanel]="tabNavPanel"
+    ></lab900-page-header>
+    <mat-tab-nav-panel #tabNavPanel></mat-tab-nav-panel>`,
 })
 export class PageHeaderExampleComponent {
   public pageTitle = 'Example page header';

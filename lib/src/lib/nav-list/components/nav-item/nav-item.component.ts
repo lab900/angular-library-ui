@@ -12,6 +12,8 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { SubscriptionBasedDirective } from '../../../common/directives/subscription-based.directive';
 import { filter } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { NavItemButtonComponent } from '../nav-item-button/nav-item-button.component';
 
 @Component({
   selector: 'lab900-nav-item',
@@ -19,6 +21,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   styleUrls: ['./nav-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgIf, NavItemButtonComponent, AsyncPipe, NgForOf],
 })
 export class NavItemComponent
   extends SubscriptionBasedDirective

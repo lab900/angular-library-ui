@@ -7,5 +7,5 @@ export interface SharingDialogData {
 }
 
 export abstract class ShareDialogComponent {
-  public constructor(public data: SharingDialogData) {}
+  protected constructor(public data: SharingDialogData) {}
 }

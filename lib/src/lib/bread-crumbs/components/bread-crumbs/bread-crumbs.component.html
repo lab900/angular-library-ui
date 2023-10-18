@@ -1,15 +1,12 @@
 <div class="bread-crumbs" *ngIf="breadCrumbs?.length">
-  <div *ngFor="let breadCrumb of breadCrumbs; let last = last" [class.active]="last">
-    <a
-      *ngIf="breadCrumb.route; else staticBreadCrumb"
-      [routerLink]="getRoute(breadCrumb.route)"
-      [queryParams]="getQueryParams(breadCrumb.queryParams)"
-    >
-      {{ getTitle(breadCrumb.title) | translate }}
-    </a>
-    <ng-template #staticBreadCrumb>
-      <span>{{ getTitle(breadCrumb.title) | translate }}</span>
-    </ng-template>
+  <div
+    *ngFor="let breadCrumb of breadCrumbs; let last = last"
+    [class.active]="last"
+  >
+    <lab900-bread-crumb-item
+      [item]="breadCrumb"
+      [data]="data"
+    ></lab900-bread-crumb-item>
     <span *ngIf="!last" class="divider">{{ breadCrumb.divider || '>' }}</span>
   </div>
 </div>

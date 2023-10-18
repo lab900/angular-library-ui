@@ -8,6 +8,11 @@ import { NavItem, NavItemGroup } from '../../models/nav-item.model';
 import { IsActiveMatchOptions } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatListModule } from '@angular/material/list';
+import { NavItemComponent } from '../nav-item/nav-item.component';
 
 const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   return typeof i?.hide === 'function' ? i.hide() : i?.hide ?? false;
@@ -19,8 +24,18 @@ const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   styleUrls: ['./nav-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    NgIf,
+    NgForOf,
+    IconComponent,
+    TranslateModule,
+    MatListModule,
+    NavItemComponent,
+  ],
 })
-export class NavListComponent {
+export class Lab900NavListComponent {
   private readonly _navItemGroups$ = new ReplaySubject<NavItemGroup[]>();
   public readonly filtersGroups$: Observable<NavItemGroup[]> =
     this._navItemGroups$.asObservable().pipe(

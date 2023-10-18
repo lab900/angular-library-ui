@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 import {
-  AlertModule,
+  AlertComponent,
   Lab900ButtonModule,
   Lab900DataListModule,
   Lab900MergerModule,
-  Lab900PageHeaderModule,
-  Lab900SharingModule,
+  Lab900NavListComponent,
+  Lab900PageHeaderComponent,
+  Lab900SharingComponent,
   Lab900TableComponent,
   Lab900TableEmptyDirective,
   Lab900TableHeaderContentDirective,
@@ -54,10 +55,9 @@ const examples = [
     ShowcaseUiRoutingModule,
     SharedModule,
     Lab900DataListModule,
-    Lab900SharingModule,
-    AlertModule,
+    Lab900SharingComponent,
     Lab900TableComponent,
-    Lab900PageHeaderModule,
+    Lab900PageHeaderComponent,
     Lab900MergerModule,
     Lab900ButtonModule,
     TranslateModule,
@@ -67,6 +67,8 @@ const examples = [
     Lab900TableHeaderContentDirective,
     Lab900TableEmptyDirective,
     Lab900TableLeftFooterDirective,
+    Lab900NavListComponent,
+    AlertComponent,
   ],
 })
 export default class ShowcaseUiModule {}

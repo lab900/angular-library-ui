@@ -1,16 +1,42 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  ViewEncapsulation,
+} from '@angular/core';
 import { PageHeaderNavItem } from '../../models/page-header-nav.model';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { BreadCrumb } from '../../../bread-crumbs/models/bread-crumb.model';
-import { readPropValue } from '../../../utils/utils';
-import { MatTabNavPanel } from '@angular/material/tabs';
+import { MatTabNavPanel, MatTabsModule } from '@angular/material/tabs';
+import { ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { PageHeaderNavItemComponent } from '../page-header-nav-item/page-header-nav-item.component';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { Lab900ButtonModule } from '../../../button/button.module';
+import { MatListModule } from '@angular/material/list';
+import { TranslateModule } from '@ngx-translate/core';
+import { BreadCrumbsComponent } from '../../../bread-crumbs/components/bread-crumbs/bread-crumbs.component';
 
 @Component({
   selector: 'lab900-page-header',
   templateUrl: './page-header.component.html',
   styleUrls: ['./page-header.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatTabsModule,
+    PageHeaderNavItemComponent,
+    NgForOf,
+    NgIf,
+    Lab900ButtonModule,
+    AsyncPipe,
+    MatListModule,
+    BreadCrumbsComponent,
+    TranslateModule,
+  ],
 })
-export class Lab900PageHeaderComponent implements OnChanges {
+export class Lab900PageHeaderComponent {
   @Input()
   public pageTitle?: string;
 
@@ -30,40 +56,24 @@ export class Lab900PageHeaderComponent implements OnChanges {
   public navFitInkBarToContent = false;
   public navStretch = false;
 
+  private readonly _actions$ = new ReplaySubject<ActionButton[]>();
+  public readonly actions$ = this._actions$.asObservable();
+  public readonly leftActions$ = this.actions$.pipe(
+    map(([...actions]) => actions?.filter((action) => action.align === 'left'))
+  );
+
+  public readonly rightActions$ = this.actions$.pipe(
+    map(([...actions]) => actions?.filter((action) => action.align !== 'left'))
+  );
+
   @Input()
-  public actions?: ActionButton[];
-  public leftActions?: ActionButton[];
-  public rightActions?: ActionButton[];
+  public set actions(actions: ActionButton[]) {
+    this._actions$.next(actions);
+  }
 
   @Input()
   public data?: any;
 
   @Input()
   public breadCrumbs?: BreadCrumb[];
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.actions) {
-      this.leftActions = this.actions?.filter(
-        (action) => action.align === 'left'
-      );
-      this.rightActions = this.actions?.filter(
-        (action) => action.align === 'right' || action.align == null
-      );
-    }
-  }
-
-  public getLabel(item: PageHeaderNavItem): string {
-    if (typeof item.label === 'function') {
-      return item.label(this.data);
-    }
-    return item.label;
-  }
-
-  public getRoute(route: ((data: any) => string) | string): string | null {
-    return readPropValue(route, this.data);
-  }
-
-  public getIcon(icon: ((data: any) => string) | string): string | null {
-    return readPropValue(icon, this.data);
-  }
 }

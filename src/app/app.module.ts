@@ -9,6 +9,8 @@ import { MarkdownModule } from 'ngx-markdown';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MergingTranslateLoader } from './utils/merging-translate-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Lab900NavListComponent } from '@lab900/ui';
+import { NgOptimizedImage } from '@angular/common';
 
 export function TranslationLoaderFactory(
   http: HttpClient
@@ -33,6 +35,8 @@ export function TranslationLoaderFactory(
       },
       defaultLanguage: 'en',
     }),
+    Lab900NavListComponent,
+    NgOptimizedImage,
   ],
   bootstrap: [AppComponent],
 })
