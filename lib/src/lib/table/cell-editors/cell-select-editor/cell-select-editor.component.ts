@@ -43,10 +43,10 @@ export class CellSelectEditorComponent
   extends CellEditorAbstract<CellSelectEditorOptions>
   implements AfterViewInit
 {
-  public readonly defaultCompareFn = (a: any, b: any): boolean => a === b;
-
   @ViewChild(MatSelect)
   private matSelect: MatSelect;
+
+  public readonly defaultCompareFn = (a: any, b: any): boolean => a === b;
 
   public ngAfterViewInit(): void {
     this.matSelect.open();
