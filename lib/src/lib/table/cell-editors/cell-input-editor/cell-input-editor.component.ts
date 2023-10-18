@@ -7,13 +7,14 @@ import { CellEditorAbstract } from '../cell-editor.abstract';
 import { A11yModule } from '@angular/cdk/a11y';
 import { AsyncPipe } from '@angular/common';
 import { CellInputEditorOptions } from './cell-input-editor.options';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-edit-input-renderer',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [A11yModule, AsyncPipe],
+  imports: [A11yModule, AsyncPipe, TranslateModule],
   template: `
     <input
       #input
@@ -25,7 +26,7 @@ import { CellInputEditorOptions } from './cell-input-editor.options';
       (keydown.enter)="close(input.value)"
       [value]="cellValue$ | async"
       [max]="(editOptions$ | async)?.maxLength"
-      [placeholder]="(editOptions$ | async)?.placeholder"
+      [placeholder]="(editOptions$ | async)?.placeholder | translate"
     />
   `,
 })

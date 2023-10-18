@@ -8,11 +8,18 @@ import { ColumnHeaderRendererAbstract } from '../column-header-renderer-abstract
 import { ColumnHeaderSortingComponent } from '../column-header-sorting/column-header-sorting.component';
 import { ColumnHeaderWithIconRendererOptions } from './column-header-with-icon-renderer.options';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-default-column-header-renderer',
   standalone: true,
-  imports: [AsyncPipe, ColumnHeaderSortingComponent, NgIf, MatIconModule],
+  imports: [
+    AsyncPipe,
+    ColumnHeaderSortingComponent,
+    NgIf,
+    MatIconModule,
+    TranslateModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -22,7 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
     >
       <mat-icon *ngIf="!options.svgIcon">{{ options.icon }}</mat-icon>
       <mat-icon *ngIf="options.svgIcon" [svgIcon]="options.icon"></mat-icon>
-      {{ columnLabel$ | async }}
+      {{ columnLabel$ | async | translate }}
       <lab900-column-header-sorting
         *ngIf="!disableSort"
         [columnConfig]="columnConfig$ | async"
