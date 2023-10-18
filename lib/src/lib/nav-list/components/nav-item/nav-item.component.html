@@ -11,7 +11,6 @@
       [depth]="depth"
       [expanded]="expanded$ | async"
       [disabled]="disabled$ | async"
-      [active]="routeIsActive(item)"
       [showLevelArrow]="showLevelArrows && !!item?.children?.length"
       (click)="onClick($event)"
     ></lab900-nav-item-button>
@@ -45,7 +44,6 @@
       [depth]="depth"
       [expanded]="expanded$ | async"
       [disabled]="disabled$ | async"
-      [active]="routeIsActive(item)"
       [showLevelArrow]="showLevelArrows && !!item?.children?.length"
     ></lab900-nav-item-button>
     <div class="nav-item--with-overlay__overlay mat-elevation-z4">

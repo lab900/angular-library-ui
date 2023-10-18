@@ -2,13 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnDestroy,
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
 import { IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SubscriptionBasedDirective } from '../../../common/directives/subscription-based.directive';
 import { filter } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -26,11 +25,9 @@ import { NavItemButtonComponent } from '../nav-item-button/nav-item-button.compo
 })
 export class NavItemComponent
   extends SubscriptionBasedDirective
-  implements OnInit, OnDestroy
+  implements OnInit
 {
-  private sub: Subscription;
-
-  @Input()
+  @Input({ required: true })
   public readonly item: NavItem;
 
   @Input()
@@ -64,7 +61,7 @@ export class NavItemComponent
   }
 
   @Input()
-  public navListMatchOptions: IsActiveMatchOptions;
+  public navListMatchOptions?: IsActiveMatchOptions;
 
   public constructor(
     public readonly router: Router,
@@ -94,25 +91,10 @@ export class NavItemComponent
     }
   }
 
-  public ngOnDestroy(): void {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
-
   public onClick(event: MouseEvent): void {
     if (this.item?.children?.length) {
       event.preventDefault();
       this._expanded$.next(!this._expanded$.value);
     }
-  }
-
-  public routeIsActive(item: NavItem): boolean {
-    return this.router.isActive(
-      this.router.createUrlTree([item.route ?? item.href?.url], {
-        queryParams: item.routeQueryParams,
-      }),
-      item.routeMatchOptions ?? this.navListMatchOptions
-    );
   }
 }

@@ -65,13 +65,7 @@ export class Lab900NavListComponent {
   public allowOverlayMenuUntil: string | string[] = 'xs';
 
   @Input()
-  public routeMatchOptions: IsActiveMatchOptions = {
-    // Default match options
-    paths: 'exact',
-    queryParams: 'subset',
-    matrixParams: 'subset',
-    fragment: 'ignored',
-  };
+  public routeMatchOptions?: IsActiveMatchOptions;
 
   private filterNavItems(items: NavItem[]): NavItem[] {
     return [...items]

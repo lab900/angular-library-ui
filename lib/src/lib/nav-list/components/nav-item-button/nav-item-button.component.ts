@@ -16,7 +16,11 @@ import { AsyncPipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatListModule } from '@angular/material/list';
-import { RouterLink } from '@angular/router';
+import {
+  IsActiveMatchOptions,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 
 @Component({
   selector: 'lab900-nav-item-button',
@@ -34,6 +38,7 @@ import { RouterLink } from '@angular/router';
     NgClass,
     NgTemplateOutlet,
     RouterLink,
+    RouterLinkActive,
   ],
 })
 export class NavItemButtonComponent {
@@ -64,7 +69,7 @@ export class NavItemButtonComponent {
   }
 
   @Input()
-  public readonly active: boolean;
+  public navListMatchOptions?: IsActiveMatchOptions;
 
   @Input()
   public readonly depth: number;

@@ -25,42 +25,40 @@
   </ng-template>
   <a
     *ngIf="item.route"
-    role="menuitem"
+    role="link"
     class="nav-item-btn"
     mat-list-item
     tabindex="-1"
     [disabled]="disabled$ | async"
-    [ngClass]="{ active: active }"
     [routerLink]="item.route"
     [queryParams]="item.routeQueryParams"
+    [routerLinkActiveOptions]="navListMatchOptions ?? { exact: false }"
+    routerLinkActive="active"
+    #rla="routerLinkActive"
+    [class.active]="rla.isActive"
   >
     <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
   </a>
   <a
     *ngIf="item.href"
-    role="menuitem"
+    role="link"
     class="nav-item-btn"
     mat-list-item
     tabindex="-1"
     [disabled]="disabled$ | async"
-    [ngClass]="{ active: active }"
     [href]="item.href?.url"
     [target]="item.href?.target"
   >
     <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
   </a>
   <a
-    *ngIf="item.children"
+    *ngIf="item?.children?.length"
     role="menuitem"
-    class="nav-item-btn"
+    class="nav-item-btn expandable"
     mat-list-item
     tabindex="-1"
     [disabled]="disabled$ | async"
-    [ngClass]="{
-      active: active,
-      expanded: expanded$ | async,
-      expandable: item?.children?.length
-    }"
+    [class.expanded]="expanded$ | async"
   >
     <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
   </a>
