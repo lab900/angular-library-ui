@@ -1,6 +1,13 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  ViewEncapsulation,
+} from '@angular/core';
 import { NavItem, NavItemGroup } from '../../models/nav-item.model';
 import { IsActiveMatchOptions } from '@angular/router';
+import { Observable, ReplaySubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   return typeof i?.hide === 'function' ? i.hide() : i?.hide ?? false;
@@ -10,10 +17,28 @@ const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   selector: 'lab900-nav-list',
   templateUrl: './nav-list.component.html',
   styleUrls: ['./nav-list.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavListComponent implements OnChanges {
-  @Input()
-  public navItemGroups: NavItemGroup[];
+export class NavListComponent {
+  private readonly _navItemGroups$ = new ReplaySubject<NavItemGroup[]>();
+  public readonly filtersGroups$: Observable<NavItemGroup[]> =
+    this._navItemGroups$.asObservable().pipe(
+      map(([...groups]) => {
+        return groups
+          .filter((g) => !hide(g))
+          .map((g) => {
+            g.items = this.filterNavItems(g.items);
+            return g;
+          })
+          .filter((g) => !!g.items?.length);
+      })
+    );
+
+  @Input({ required: true })
+  public set navItemGroups(value: NavItemGroup[]) {
+    this._navItemGroups$.next(value);
+  }
 
   @Input()
   public indentLevels = true;
@@ -32,20 +57,6 @@ export class NavListComponent implements OnChanges {
     matrixParams: 'subset',
     fragment: 'ignored',
   };
-
-  public filtersGroups: NavItemGroup[];
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.navItemGroups) {
-      this.filtersGroups = [...this.navItemGroups]
-        .filter((g) => !hide(g))
-        .map((g) => {
-          g.items = this.filterNavItems(g.items);
-          return g;
-        })
-        .filter((g) => !!g.items?.length);
-    }
-  }
 
   private filterNavItems(items: NavItem[]): NavItem[] {
     return [...items]

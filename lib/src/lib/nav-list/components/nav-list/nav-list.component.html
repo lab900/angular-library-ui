@@ -1,5 +1,5 @@
-<div class="lab900-nav-list" *ngIf="filtersGroups?.length">
-  <div *ngFor="let group of filtersGroups" class="nav-list-group">
+<div class="lab900-nav-list" *ngIf="filtersGroups$ | async as groups">
+  <div *ngFor="let group of groups" class="nav-list-group">
     <div *ngIf="group.label || group.icon" class="nav-list-group__wrapper">
       <lab900-icon
         class="nav-list-group__icon-left"

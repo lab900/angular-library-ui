@@ -1,7 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { SubscriptionBasedDirective } from '../../../common/directives/subscription-based.directive';
 import { filter } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -10,6 +17,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   selector: 'lab900-nav-item',
   templateUrl: './nav-item.component.html',
   styleUrls: ['./nav-item.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavItemComponent
   extends SubscriptionBasedDirective
@@ -32,11 +41,23 @@ export class NavItemComponent
   @Input()
   public readonly allowOverlayMenuUntil: string | string[] = Breakpoints.XSmall;
 
-  @Input()
-  public disabled = false;
+  private readonly _disabled$ = new BehaviorSubject<boolean>(false);
+  public readonly disabled$: Observable<boolean> =
+    this._disabled$.asObservable();
 
   @Input()
-  public expanded = false;
+  public set disabled(disabled: boolean) {
+    this._disabled$.next(disabled);
+  }
+
+  private readonly _expanded$ = new BehaviorSubject<boolean>(false);
+  public readonly expanded$: Observable<boolean> =
+    this._expanded$.asObservable();
+
+  @Input()
+  public set expanded(expanded: boolean) {
+    this._expanded$.next(expanded);
+  }
 
   @Input()
   public navListMatchOptions: IsActiveMatchOptions;
@@ -50,7 +71,7 @@ export class NavItemComponent
 
   public ngOnInit(): void {
     if (!(this.item.route || this.item.href || this.item.children)) {
-      this.disabled = true;
+      this._disabled$.next(true);
     } else {
       this.addSubscription(
         this.router.events.pipe(filter((e) => e instanceof NavigationEnd)),
@@ -58,8 +79,10 @@ export class NavItemComponent
           this.item.navigationFinished?.(true);
           const url = event.urlAfterRedirects;
           if (url && this.item?.children?.length) {
-            this.expanded = this.item.children.some(
-              (item: NavItem) => url.indexOf(`/${item.route}`) === 0
+            this._expanded$.next(
+              this.item.children.some(
+                (item: NavItem) => url.indexOf(`/${item.route}`) === 0
+              )
             );
           }
         }
@@ -76,7 +99,7 @@ export class NavItemComponent
   public onClick(event: MouseEvent): void {
     if (this.item?.children?.length) {
       event.preventDefault();
-      this.expanded = !this.expanded;
+      this._expanded$.next(!this._expanded$.value);
     }
   }
 
