@@ -10,11 +10,12 @@ import { CellWithIconRendererOptions } from './cell-with-icon-renderer.options';
 import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-with-icon-renderer',
   standalone: true,
-  imports: [NgIf, AsyncPipe, MatIconModule, MatTooltipModule],
+  imports: [NgIf, AsyncPipe, MatIconModule, MatTooltipModule, TranslateModule],
   templateUrl: './cell-with-icon-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

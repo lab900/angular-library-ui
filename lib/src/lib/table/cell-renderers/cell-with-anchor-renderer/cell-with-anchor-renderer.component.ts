@@ -10,11 +10,18 @@ import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-with-anchor',
   standalone: true,
-  imports: [NgIf, AsyncPipe, MatTooltipModule, MatCheckboxModule],
+  imports: [
+    NgIf,
+    AsyncPipe,
+    MatTooltipModule,
+    MatCheckboxModule,
+    TranslateModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `<div
@@ -24,7 +31,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     [matTooltipPosition]="tooltipPosition$ | async"
   >
     <a [target]="(rendererOptions$ | async).target ?? '_self'" [href]="href">
-      {{ cellValue$ | async }}
+      {{ cellValue$ | async | translate }}
     </a>
   </div>`,
 })

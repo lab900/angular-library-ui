@@ -149,7 +149,7 @@ export class TableExampleComponent {
     },
     {
       name: 'A name',
-      nameLong: 'A very very veeeeeeeeryyy loooooooooong name',
+      nameLong: 'test',
       id: 2,
       active: true,
       nested: {},
@@ -204,8 +204,8 @@ export class TableExampleComponent {
       cellEditor: CellSelectEditorComponent,
       cellEditorOptions: <CellSelectEditorOptions>{
         options: ['blocked', 'inactive', 'active'],
-        valueChanged: (value, data) => {
-          data.status = value;
+        valueChanged: (value, key, data) => {
+          data[key] = value;
         },
         placeholder: 'Select a status',
       },
@@ -219,8 +219,8 @@ export class TableExampleComponent {
       cellEditor: CellInputEditorComponent,
       cellEditorOptions: <CellInputEditorOptions>{
         placeholder: 'Enter a long name',
-        valueChanged: (value, data) => {
-          data.nameLong = value;
+        valueChanged: (value, key, data) => {
+          data[key] = value;
         },
       },
     },
@@ -251,7 +251,7 @@ export class TableExampleComponent {
       columnOrder: 2,
       cellRenderer: CheckboxCellRendererComponent,
       cellRenderOptions: <CheckboxCellRendererOptions>{
-        valueChanged: (checked, value) => (value.active = checked),
+        valueChanged: (checked, key, value) => (value[key] = checked),
       },
     },
     {

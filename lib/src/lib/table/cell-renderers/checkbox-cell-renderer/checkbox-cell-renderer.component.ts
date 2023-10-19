@@ -22,16 +22,28 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     [matTooltip]="tooltip$ | async"
     [matTooltipPosition]="tooltipPosition$ | async"
     [checked]="cellValue$ | async"
-    [disabled]="options.disabled ?? false"
+    [disabled]="disabled$ | async"
     [indeterminate]="options.indeterminate ?? false"
     [color]="options.theme ?? 'primary'"
     (change)="onValueChange($event.checked)"
   ></mat-checkbox>`,
 })
 export class CheckboxCellRendererComponent extends CellRendererAbstract<CheckboxCellRendererOptions> {
+  public readonly disabled$ = combineLatest([
+    this.columnConfig$,
+    this.data$,
+  ]).pipe(
+    map(
+      ([config, data]) => config?.cellEditorOptions?.disabled?.(data) ?? false
+    )
+  );
   public onValueChange(newValue: boolean): void {
-    combineLatest([this.rendererOptions$, this.data$])
-      .pipe(map(([options, data]) => options?.valueChanged(newValue, data)))
+    combineLatest([this.columnConfig$, this.data$])
+      .pipe(
+        map(([config, data]) =>
+          config?.cellEditorOptions?.valueChanged(newValue, config.key, data)
+        )
+      )
       .subscribe();
   }
 }

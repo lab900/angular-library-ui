@@ -69,8 +69,21 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       shareReplay(1)
     );
 
-  public readonly columnWidth$: Observable<string> = this.cell$.pipe(
-    map((cell) => (cell?.width === '*' ? '100%' : cell?.width)),
+  public readonly showEditorForElement$ = new BehaviorSubject<T>(undefined);
+  public readonly editorMinWidth$ = new BehaviorSubject<number>(undefined);
+
+  public readonly columnWidth$: Observable<string> = combineLatest([
+    this.cell$,
+    this.showEditorForElement$,
+    this.editorMinWidth$,
+  ]).pipe(
+    map(([cell, showEditor, editorMinWidth]) =>
+      showEditor && editorMinWidth
+        ? `${editorMinWidth}px`
+        : cell?.width === '*'
+        ? '100%'
+        : cell?.width
+    ),
     shareReplay(1)
   );
 
@@ -117,8 +130,6 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly cellFooter$: Observable<string>;
   public readonly sort$: Observable<Lab900Sort[] | null>;
 
-  public readonly showEditorForElement$ = new ReplaySubject<T>();
-
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
 
@@ -164,15 +175,20 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       : cell.cellClass;
   }
 
-  public handleCellClick(event: MouseEvent, cell: TableCell<T>, data: T): void {
+  public handleCellClick(
+    event: MouseEvent,
+    cell: TableCell<T>,
+    data: T,
+    cellElement: HTMLTableCellElement
+  ): void {
     if (cell.click) {
       event.stopImmediatePropagation();
       event.preventDefault();
       cell.click(data, cell, event);
-    } else if (cell.cellEditor) {
+    } else if (cell.cellEditor && !cell.cellEditorOptions.disabled?.(data)) {
       event.stopImmediatePropagation();
       event.preventDefault();
-      this.showEditorForElement$.next(data);
+      this.openEditor(data, cellElement);
     }
   }
 
@@ -180,5 +196,15 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     if (!this.disableSort) {
       this.headerClick.emit(cell);
     }
+  }
+
+  public openEditor(data: T, cellElement: HTMLTableCellElement): void {
+    this.editorMinWidth$.next(cellElement.clientWidth);
+    this.showEditorForElement$.next(data);
+  }
+
+  public closeEditor(): void {
+    this.showEditorForElement$.next(undefined);
+    this.editorMinWidth$.next(undefined);
   }
 }

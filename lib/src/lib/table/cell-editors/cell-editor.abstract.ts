@@ -65,15 +65,26 @@ export abstract class CellEditorAbstract<
   public close(currentValue?: any): void {
     if (currentValue) {
       this.cellValue$
-        .pipe(take(1), withLatestFrom(this.editOptions$, this._data$))
-        .subscribe(([oldValue, editOptions, data]) => {
-          if (editOptions.valueChanged && isDifferent(currentValue, oldValue)) {
-            editOptions.valueChanged(currentValue, data);
+        .pipe(take(1), withLatestFrom(this.columnConfig$, this._data$))
+        .subscribe(([oldValue, config, data]) => {
+          if (
+            config.cellEditorOptions?.valueChanged &&
+            isDifferent(currentValue, oldValue)
+          ) {
+            config.cellEditorOptions.valueChanged(
+              currentValue,
+              config.key,
+              data
+            );
           }
-          this.tableCell.showEditorForElement$.next(undefined);
+          this.resetTableCell();
         });
     } else {
-      this.tableCell.showEditorForElement$.next(undefined);
+      this.resetTableCell();
     }
+  }
+
+  private resetTableCell(): void {
+    this.tableCell.closeEditor();
   }
 }

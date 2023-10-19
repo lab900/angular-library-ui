@@ -9,6 +9,6 @@
     <mat-icon *ngIf="options.svgIcon" [svgIcon]="icon$ | async"></mat-icon>
   </ng-container>
   <div class="lab900-cell-value" *ngIf="options.showCellValue">
-    {{ cellValue$ | async }}
+    {{ cellValue$ | async | translate }}
   </div>
 </div>

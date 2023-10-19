@@ -1,4 +1,4 @@
 export interface CellEditorBaseOptions<T = any> {
-  disabled?: boolean;
-  valueChanged: (newValue: any, original: T) => void;
+  valueChanged: (newValue: any, key: string, original: T) => void;
+  disabled?: (data?: T) => boolean;
 }

@@ -20,7 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     [matTooltip]="tooltip$ | async"
     [matTooltipPosition]="tooltipPosition$ | async"
   >
-    {{ cellValue$ | async }}
+    {{ cellValue$ | async | translate }}
   </div>`,
 })
 export class DefaultCellRendererComponent extends CellRendererAbstract {}

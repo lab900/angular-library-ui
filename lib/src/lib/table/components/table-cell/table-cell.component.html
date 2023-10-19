@@ -21,7 +21,7 @@
       ></ng-container>
     </th>
     <td
-      #c
+      #cellElement
       mat-cell
       *matCellDef="let element"
       [style.min-width]="columnWidth$ | async"
@@ -29,7 +29,7 @@
       [ngClass]="getCellClass(cell, element)"
       [class.editable]="cell.cellEditor"
       [class.edit-mode]="(showEditorForElement$ | async) === element"
-      (click)="handleCellClick($event, cell, element)"
+      (click)="handleCellClick($event, cell, element, cellElement)"
     >
       <div
         *ngIf="(showEditorForElement$ | async) === element; else normalCell"
