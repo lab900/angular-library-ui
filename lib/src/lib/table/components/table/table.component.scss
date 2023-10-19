@@ -165,4 +165,14 @@
   font-weight: var(--mat-table-row-item-label-text-weight);
   letter-spacing: var(--mat-table-row-item-label-text-tracking);
   background: rgba(#000, 0.1);
+
+  &--with-toggle {
+    padding-right: 48px + 16px;
+  }
+}
+
+.lab900-cell-input-toggle {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 24px);
 }

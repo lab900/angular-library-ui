@@ -185,10 +185,13 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       event.stopImmediatePropagation();
       event.preventDefault();
       cell.click(data, cell, event);
-    } else if (cell.cellEditor && !cell.cellEditorOptions.disabled?.(data)) {
+    } else if (cell.cellEditor && !cell.cellEditorOptions?.disabled?.(data)) {
       event.stopImmediatePropagation();
       event.preventDefault();
-      this.openEditor(data, cellElement);
+      this.openEditor(
+        data,
+        cell.cellEditorOptions?.editCellMinWidth ?? cellElement.clientWidth
+      );
     }
   }
 
@@ -198,8 +201,8 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     }
   }
 
-  public openEditor(data: T, cellElement: HTMLTableCellElement): void {
-    this.editorMinWidth$.next(cellElement.clientWidth);
+  public openEditor(data: T, editCellMinWidth: number): void {
+    this.editorMinWidth$.next(editCellMinWidth);
     this.showEditorForElement$.next(data);
   }
 

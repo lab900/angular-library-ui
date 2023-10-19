@@ -48,3 +48,4 @@ export * from './cell-editors/cell-input-editor/cell-input-editor.component';
 export * from './cell-editors/cell-input-editor/cell-input-editor.options';
 export * from './cell-editors/cell-select-editor/cell-select-editor.options';
 export * from './cell-editors/cell-select-editor/cell-select-editor.component';
+export * from './cell-editors/cell-date-editor/cell-date-editor.component';

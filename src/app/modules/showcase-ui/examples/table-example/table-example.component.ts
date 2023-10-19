@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {
   ActionButton,
+  CellDateEditorComponent,
   CellInputEditorComponent,
   CellInputEditorOptions,
   CellSelectEditorComponent,
@@ -197,6 +198,19 @@ export class TableExampleComponent {
       sticky: true,
     },
     {
+      key: 'birthday',
+      label: 'Birthday',
+      cellEditor: CellDateEditorComponent,
+      columnOrder: 1,
+      width: '160px',
+      cellEditorOptions: <CellSelectEditorOptions>{
+        valueChanged: (value, key, data) => {
+          data[key] = value;
+        },
+        placeholder: 'Select a birthday',
+      },
+    },
+    {
       key: 'status',
       label: 'Status',
       width: '150px',
@@ -209,13 +223,14 @@ export class TableExampleComponent {
         },
         placeholder: 'Select a status',
       },
+      columnOrder: 2,
     },
     {
       key: 'nameLong',
       label: 'Long name',
       sortable: true,
       cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
-      columnOrder: 1,
+      columnOrder: 3,
       cellEditor: CellInputEditorComponent,
       cellEditorOptions: <CellInputEditorOptions>{
         placeholder: 'Enter a long name',
@@ -241,14 +256,14 @@ export class TableExampleComponent {
       sortable: true,
       cellClass: 'clickable-cell',
       width: '*',
-      columnOrder: 3,
+      columnOrder: 4,
     },
     {
       key: 'active',
       label: 'Active',
       cellHeaderClass: 'rainbow',
       cellClass: 'center-cell',
-      columnOrder: 2,
+      columnOrder: 5,
       cellRenderer: CheckboxCellRendererComponent,
       cellRenderOptions: <CheckboxCellRendererOptions>{
         valueChanged: (checked, key, value) => (value[key] = checked),
@@ -257,7 +272,7 @@ export class TableExampleComponent {
     {
       key: 'email',
       label: 'Email',
-      columnOrder: 4,
+      columnOrder: 6,
       hide: true,
     },
     {
@@ -265,7 +280,7 @@ export class TableExampleComponent {
       label: 'City',
       cellHeaderTooltip: 'This column shows the city',
       cellHeaderTooltipPosition: 'above',
-      columnOrder: 5,
+      columnOrder: 7,
       hide: true,
     },
     {

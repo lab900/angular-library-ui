@@ -11,6 +11,7 @@ import { MergingTranslateLoader } from './utils/merging-translate-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Lab900NavListComponent } from '@lab900/ui';
 import { NgOptimizedImage } from '@angular/common';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export function TranslationLoaderFactory(
   http: HttpClient
@@ -37,6 +38,7 @@ export function TranslationLoaderFactory(
     }),
     Lab900NavListComponent,
     NgOptimizedImage,
+    MatNativeDateModule,
   ],
   bootstrap: [AppComponent],
 })

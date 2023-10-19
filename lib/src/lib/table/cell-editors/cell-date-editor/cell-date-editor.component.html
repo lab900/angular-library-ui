@@ -1,0 +1,19 @@
+<input
+  #dateInput
+  [matDatepicker]="datePicker"
+  class="lab900-cell-input lab900-cell-input--with-toggle"
+  type="text"
+  cdkTrapFocus
+  cdkTrapFocusAutoCapture
+  (focus)="datePicker.open()"
+  [value]="cellValue$ | async"
+  [placeholder]="(editOptions$ | async)?.placeholder ?? '' | translate"
+/>
+<mat-datepicker-toggle
+  class="lab900-cell-input-toggle"
+  [for]="datePicker"
+></mat-datepicker-toggle>
+<mat-datepicker
+  #datePicker
+  (closed)="datePickerClosed(dateInput)"
+></mat-datepicker>

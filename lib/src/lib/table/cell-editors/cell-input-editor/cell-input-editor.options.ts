@@ -22,5 +22,4 @@ type HTMLInputTypeAttribute =
 export interface CellInputEditorOptions extends CellEditorBaseOptions {
   type?: HTMLInputTypeAttribute;
   maxLength?: number;
-  placeholder?: string;
 }

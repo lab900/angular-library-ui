@@ -5,5 +5,6 @@ export interface CellSelectEditorOptions<O = any>
   options: O[];
   compareWithFn?: (o1: O, o2: O) => boolean;
   optionLabelFn?: (o: O) => string;
-  placeholder?: string;
+  multiple?: boolean;
+  panelWidth?: string | number | null;
 }

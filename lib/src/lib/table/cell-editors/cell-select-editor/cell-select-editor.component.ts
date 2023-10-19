@@ -28,6 +28,8 @@ import { TranslateModule } from '@ngx-translate/core';
       (selectionChange)="close($event.value)"
       (openedChange)="openChanged($event)"
       [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
+      [multiple]="editOptions?.multiple"
+      [panelWidth]="editOptions?.panelWidth ?? 'auto'"
     >
       <mat-option *ngFor="let option of editOptions.options" [value]="option">
         {{
