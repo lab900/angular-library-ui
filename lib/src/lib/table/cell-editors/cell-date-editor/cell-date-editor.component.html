@@ -1,7 +1,7 @@
 <input
   #dateInput
   [matDatepicker]="datePicker"
-  class="lab900-cell-input lab900-cell-input--with-toggle"
+  class="lab900-cell-input"
   type="text"
   cdkTrapFocus
   cdkTrapFocusAutoCapture
@@ -9,10 +9,6 @@
   [value]="cellValue$ | async"
   [placeholder]="(placeholder$ | async) ?? '' | translate"
 />
-<mat-datepicker-toggle
-  class="lab900-cell-input-toggle"
-  [for]="datePicker"
-></mat-datepicker-toggle>
 <mat-datepicker
   #datePicker
   (closed)="datePickerClosed(dateInput)"

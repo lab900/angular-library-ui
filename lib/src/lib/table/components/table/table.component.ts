@@ -25,6 +25,7 @@ import {
   CdkDrag,
   CdkDragDrop,
   CdkDragHandle,
+  CdkDragPlaceholder,
   CdkDropList,
 } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
@@ -103,6 +104,7 @@ export interface SelectableRows<T = any> {
     CdkDrag,
     TranslateModule,
     MatPaginatorModule,
+    CdkDragPlaceholder,
   ],
 })
 export class Lab900TableComponent<T extends object = object, TabId = string>

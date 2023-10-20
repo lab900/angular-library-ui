@@ -30,6 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
       [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
       [multiple]="editOptions?.multiple ?? false"
       [panelWidth]="editOptions?.panelWidth ?? 'auto'"
+      class="lab900-table-select-editor"
     >
       <mat-option *ngFor="let option of editOptions.options" [value]="option">
         {{
