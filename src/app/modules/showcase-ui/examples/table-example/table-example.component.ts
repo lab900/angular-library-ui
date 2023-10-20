@@ -150,7 +150,6 @@ export class TableExampleComponent {
     },
     {
       name: 'A name',
-      nameLong: 'test',
       id: 2,
       active: true,
       nested: {},
@@ -214,7 +213,7 @@ export class TableExampleComponent {
       key: 'status',
       label: 'Status',
       width: '150px',
-      cellFormatter: (data) => data.status ?? 'no status',
+      cellFormatter: (data) => data?.status,
       cellEditor: CellSelectEditorComponent,
       cellEditorOptions: <CellSelectEditorOptions>{
         options: ['blocked', 'inactive', 'active'],

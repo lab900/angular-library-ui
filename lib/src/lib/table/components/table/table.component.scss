@@ -5,15 +5,15 @@
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    &.value-is-placeholder {
+      color: var(--labe900-table-placeholder-text-color);
+    }
   }
 
   .lab900-table-wrapper {
     overflow: auto;
     width: 100%;
-  }
-
-  .bg-green {
-    background-color: #c7dad5;
   }
 
   th.mat-mdc-header-cell,

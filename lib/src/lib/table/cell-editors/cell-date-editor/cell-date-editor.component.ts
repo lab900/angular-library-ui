@@ -13,7 +13,7 @@ import { CellEditorBaseOptions } from '../cell-editor.options';
   templateUrl: './cell-date-editor.component.html',
 })
 export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOptions> {
-  public datePickerClosed(dateInput): void {
+  public datePickerClosed(dateInput: HTMLInputElement): void {
     setTimeout(() => {
       this.close(dateInput.value);
     });

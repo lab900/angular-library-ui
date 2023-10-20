@@ -23,12 +23,12 @@ import { TranslateModule } from '@ngx-translate/core';
       *ngIf="editOptions$ | async as editOptions"
       cdkTrapFocus
       cdkTrapFocusAutoCapture
-      placeholder="{{ editOptions?.placeholder | translate }}"
+      placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
       [value]="cellValue$ | async"
       (selectionChange)="close($event.value)"
       (openedChange)="openChanged($event)"
       [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
-      [multiple]="editOptions?.multiple"
+      [multiple]="editOptions?.multiple ?? false"
       [panelWidth]="editOptions?.panelWidth ?? 'auto'"
     >
       <mat-option *ngFor="let option of editOptions.options" [value]="option">
@@ -46,12 +46,12 @@ export class CellSelectEditorComponent
   implements AfterViewInit
 {
   @ViewChild(MatSelect)
-  private matSelect: MatSelect;
+  private matSelect?: MatSelect;
 
   public readonly defaultCompareFn = (a: any, b: any): boolean => a === b;
 
   public ngAfterViewInit(): void {
-    this.matSelect.open();
+    this.matSelect?.open();
   }
 
   public openChanged(open: boolean): void {

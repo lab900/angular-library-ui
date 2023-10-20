@@ -7,7 +7,7 @@
   cdkTrapFocusAutoCapture
   (focus)="datePicker.open()"
   [value]="cellValue$ | async"
-  [placeholder]="(editOptions$ | async)?.placeholder ?? '' | translate"
+  [placeholder]="(placeholder$ | async) ?? '' | translate"
 />
 <mat-datepicker-toggle
   class="lab900-cell-input-toggle"

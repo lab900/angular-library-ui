@@ -44,7 +44,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
   }
 
   @ViewChild('.lab900-cell-value', { static: false, read: ElementRef })
-  public cellInnerElm: ElementRef;
+  public cellInnerElm?: ElementRef;
 
   public readonly rendererOptions$: Observable<CellRenderOptions | undefined> =
     this.columnConfig$.pipe(
@@ -96,7 +96,24 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
 
   protected getCellValue(): Observable<any> {
     return combineLatest([this.columnConfig$, this.data$]).pipe(
-      map(([config, data]) => this.cellFormatter(config, data)),
+      map(([config, data]) => {
+        const value = this.cellFormatter(config, data);
+        if (
+          !value &&
+          config.cellEditorOptions?.placeholder &&
+          !config.cellEditorOptions?.disablePlaceholderOutsideEditor &&
+          !config.cellEditorOptions?.disabled?.(data)
+        ) {
+          this.elm.nativeElement
+            .querySelector('.lab900-cell-value')
+            ?.classList.add('value-is-placeholder');
+          return config.cellEditorOptions?.placeholder;
+        }
+        this.elm.nativeElement
+          .querySelector('.lab900-cell-value')
+          ?.classList.remove('value-is-placeholder');
+        return value;
+      }),
       shareReplay(1)
     );
   }
@@ -112,7 +129,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
       }
       return value;
     }
-    return data?.[cell.key];
+    return data?.[cell.key as keyof T];
   }
 
   /**
@@ -123,7 +140,8 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
     this.observer?.unobserve(this.elm.nativeElement);
     this.observer = new ResizeObserver((entries) => {
       const innerScrollWidth =
-        this.elm.nativeElement.querySelector('.lab900-cell-value')?.scrollWidth;
+        this.elm.nativeElement.querySelector('.lab900-cell-value')
+          ?.scrollWidth ?? 0;
       const maxWidth = (entries[0].target as any).offsetWidth;
       this.textOverflowing$.next(innerScrollWidth > maxWidth);
     });

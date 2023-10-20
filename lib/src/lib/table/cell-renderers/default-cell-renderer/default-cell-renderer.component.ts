@@ -17,8 +17,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   encapsulation: ViewEncapsulation.None,
   template: `<div
     class="lab900-cell-value"
-    [matTooltip]="tooltip$ | async"
-    [matTooltipPosition]="tooltipPosition$ | async"
+    [matTooltip]="(tooltip$ | async) ?? undefined"
+    [matTooltipPosition]="(tooltipPosition$ | async) ?? undefined"
   >
     {{ cellValue$ | async | translate }}
   </div>`,

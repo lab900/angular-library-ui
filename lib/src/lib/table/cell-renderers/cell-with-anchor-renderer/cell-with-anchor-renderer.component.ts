@@ -27,10 +27,10 @@ import { TranslateModule } from '@ngx-translate/core';
   template: `<div
     class="lab900-cell-value lab900-cell-value--with-anchor"
     *ngIf="href$ | async as href"
-    [matTooltip]="tooltip$ | async"
-    [matTooltipPosition]="tooltipPosition$ | async"
+    [matTooltip]="(tooltip$ | async) ?? ''"
+    [matTooltipPosition]="(tooltipPosition$ | async) ?? undefined"
   >
-    <a [target]="(rendererOptions$ | async).target ?? '_self'" [href]="href">
+    <a [target]="(rendererOptions$ | async)?.target ?? '_self'" [href]="href">
       {{ cellValue$ | async | translate }}
     </a>
   </div>`,
@@ -42,7 +42,7 @@ export class CellWithAnchorRendererComponent<
     this.rendererOptions$,
     this.data$,
   ]).pipe(
-    map(([options, data]) => options.url(data)),
+    map(([options, data]) => options?.url(data) ?? ''),
     shareReplay(1)
   );
 }

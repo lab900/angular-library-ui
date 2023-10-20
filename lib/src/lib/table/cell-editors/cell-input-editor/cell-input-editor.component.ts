@@ -26,7 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
       (keydown.enter)="close(input.value)"
       [value]="cellValue$ | async"
       [max]="(editOptions$ | async)?.maxLength"
-      [placeholder]="(editOptions$ | async)?.placeholder | translate"
+      [placeholder]="(placeholder$ | async) ?? '' | translate"
     />
   `,
 })

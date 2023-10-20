@@ -16,6 +16,7 @@ export abstract class CellEditorAbstract<
   protected readonly _columnConfig$ = new ReplaySubject<
     TableCell<T, any, any, TCellEditorOptions>
   >();
+
   public readonly columnConfig$: Observable<
     TableCell<T, any, any, TCellEditorOptions>
   > = this._columnConfig$.asObservable().pipe(shareReplay(1));
@@ -39,13 +40,17 @@ export abstract class CellEditorAbstract<
       shareReplay(1)
     );
 
+  public readonly placeholder$: Observable<string> = this.editOptions$.pipe(
+    map((options) => options?.placeholder ?? '')
+  );
+
   public constructor(private readonly tableCell: Lab900TableCellComponent) {
     this.cellValue$ = this.getCellValue();
   }
 
   protected getCellValue(): Observable<any> {
     return combineLatest([this.columnConfig$, this.data$]).pipe(
-      map(([config, data]) => this.getUnformattedValue(config, data)),
+      map(([config, data]) => this.getUnformattedValue(config, data) ?? null),
       shareReplay(1)
     );
   }
@@ -59,7 +64,7 @@ export abstract class CellEditorAbstract<
       }
       return value;
     }
-    return data?.[cell.key];
+    return data?.[cell.key as keyof T];
   }
 
   public close(currentValue?: any): void {
