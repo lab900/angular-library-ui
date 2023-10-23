@@ -1,5 +1,7 @@
+import { CellValueChangeEvent } from '../models/table-cell.model';
+
 export interface CellEditorBaseOptions<T = any> {
-  valueChanged: (newValue: any, key: string, original: T) => void;
+  valueChanged: (event: CellValueChangeEvent<T>) => void;
   disabled?: (data?: T) => boolean;
   placeholder?: string;
   /**

@@ -58,6 +58,7 @@
         [maxColumnWidthFromTable]="maxColumnWidth"
         (headerClick)="handleHeaderClick($event)"
         [data]="data$ | async"
+        (valueChanged)="cellValueChanged.emit($event)"
       ></lab900-table-cell>
 
       <ng-container matColumnDef="actions-front">

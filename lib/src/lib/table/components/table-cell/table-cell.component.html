@@ -27,7 +27,7 @@
       [style.min-width]="columnWidth$ | async"
       [style.max-width]="columnMaxWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
-      [class.editable]="cell.cellEditor"
+      [class.editable]="canEdit$ | async"
       [class.edit-mode]="(showEditorForElement$ | async) === element"
       (click)="handleCellClick($event, cell, element, cellElement)"
     >
@@ -38,7 +38,11 @@
         <ng-container
           *ngComponentOutlet="
             cell.cellEditor;
-            inputs: { data: element, columnConfig: cell }
+            inputs: {
+              data: element,
+              columnConfig: cell,
+              handleValueChanged: handleValueChanged
+            }
           "
         ></ng-container>
       </div>
@@ -46,7 +50,11 @@
         <ng-container
           *ngComponentOutlet="
             cell.cellRenderer || defaultCellRenderer;
-            inputs: { data: element, columnConfig: cell }
+            inputs: {
+              data: element,
+              columnConfig: cell,
+              handleValueChanged: handleValueChanged
+            }
           "
         ></ng-container>
       </ng-template>

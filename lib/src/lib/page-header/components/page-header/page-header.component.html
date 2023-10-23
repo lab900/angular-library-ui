@@ -1,9 +1,12 @@
 <header class="lab900-page-header">
   <div
-    *ngIf="pageTitle || breadCrumbs?.length || (actions$ | async)"
+    *ngIf="pageTitle || breadCrumbs?.length || (actions$ | async)?.length"
     class="lab900-page-header__main"
   >
-    <div class="lab900-page-header__title">
+    <div
+      class="lab900-page-header__title"
+      *ngIf="pageTitle || breadCrumbs?.length"
+    >
       <h1 *ngIf="pageTitle">{{ pageTitle | translate: pageTitleArgs }}</h1>
       <lab900-bread-crumbs
         *ngIf="breadCrumbs?.length"

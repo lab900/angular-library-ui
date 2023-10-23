@@ -12,7 +12,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { Lab900TableEmptyDirective } from '../../directives/table-empty.directive';
-import { TableCell } from '../../models/table-cell.model';
+import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
 import { Paging } from '../../../common/models/paging.model';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -273,6 +273,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   @Input()
   public trackByTableFn?: TrackByFunction<T>;
 
+  @Input()
+  public set disabledEditing(value: boolean) {
+    this.tableService.updateDisableEditing(value);
+  }
+
   @Output()
   public activeTabIdChange = new EventEmitter<TabId>();
 
@@ -290,6 +295,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 
   @Output()
   public readonly tableRowOrderChange = new EventEmitter<CdkDragDrop<T[]>>();
+
+  @Output()
+  public readonly cellValueChanged = new EventEmitter<
+    CellValueChangeEvent<T>
+  >();
 
   @ContentChild(Lab900TableEmptyDirective, { read: TemplateRef })
   public emptyTableTemplate?: TemplateRef<any>;

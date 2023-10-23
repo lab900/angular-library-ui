@@ -34,6 +34,9 @@ export abstract class CellEditorAbstract<
     this._data$.next(value);
   }
 
+  @Input({ required: true })
+  public handleValueChanged!: (value: any, cell: TableCell<T>, row: T) => void;
+
   public readonly editOptions$: Observable<TCellEditorOptions | undefined> =
     this.columnConfig$.pipe(
       map((config) => config?.cellEditorOptions),
@@ -72,15 +75,8 @@ export abstract class CellEditorAbstract<
       this.cellValue$
         .pipe(take(1), withLatestFrom(this.columnConfig$, this._data$))
         .subscribe(([oldValue, config, data]) => {
-          if (
-            config.cellEditorOptions?.valueChanged &&
-            isDifferent(currentValue, oldValue)
-          ) {
-            config.cellEditorOptions.valueChanged(
-              currentValue,
-              config.key,
-              data
-            );
+          if (this.handleValueChanged && isDifferent(currentValue, oldValue)) {
+            this.handleValueChanged(currentValue, config, data);
           }
           this.resetTableCell();
         });

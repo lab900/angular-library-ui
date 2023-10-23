@@ -7,6 +7,12 @@ import { ColumnHeaderRendererAbstract } from '../column-header-renderers/column-
 import { CellEditorAbstract } from '../cell-editors/cell-editor.abstract';
 import { CellEditorBaseOptions } from '../cell-editors/cell-editor.options';
 
+export interface CellValueChangeEvent<T = any> {
+  value: any;
+  cell: TableCell<T>;
+  row: T;
+}
+
 export interface TableCell<
   T = any,
   CellRenderOptions = any,

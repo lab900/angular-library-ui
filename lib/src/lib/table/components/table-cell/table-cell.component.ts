@@ -11,7 +11,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { TableCell } from '../../models/table-cell.model';
+import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
 import {
   MatColumnDef,
   MatTable,
@@ -125,10 +125,14 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   @Output()
   private readonly headerClick = new EventEmitter<TableCell<T>>();
 
+  @Output()
+  private readonly valueChanged = new EventEmitter<CellValueChangeEvent<T>>();
+
   public readonly cellHeaderClass$: Observable<string>;
   public readonly sticky$: Observable<boolean>;
   public readonly cellFooter$: Observable<string>;
   public readonly sort$: Observable<Lab900Sort[] | null>;
+  public readonly canEdit$: Observable<boolean>;
 
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
@@ -162,7 +166,31 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
           : cell.footer
       )
     );
+
+    this.canEdit$ = combineLatest([
+      this.cell$,
+      this._data$.asObservable(),
+      this.tableService.disableEditing$,
+    ]).pipe(
+      map(
+        ([cell, data, disableEditing]) =>
+          !disableEditing &&
+          cell.cellEditor &&
+          !cell.cellEditorOptions?.disabled?.(data)
+      )
+    );
   }
+
+  public readonly handleValueChanged = (
+    value: any,
+    cell: TableCell<T>,
+    row: T
+  ): void => {
+    if (cell?.cellEditorOptions?.valueChanged) {
+      cell.cellEditorOptions.valueChanged({ value, cell, row });
+    }
+    this.valueChanged.emit({ value, cell, row });
+  };
 
   public ngOnDestroy(): void {
     this.cellSub?.unsubscribe();
@@ -185,7 +213,11 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       event.stopImmediatePropagation();
       event.preventDefault();
       cell.click(data, cell, event);
-    } else if (cell.cellEditor && !cell.cellEditorOptions?.disabled?.(data)) {
+    } else if (
+      !this.tableService._disableEditing$.value &&
+      cell.cellEditor &&
+      !cell.cellEditorOptions?.disabled?.(data)
+    ) {
       event.stopImmediatePropagation();
       event.preventDefault();
       this.openEditor(

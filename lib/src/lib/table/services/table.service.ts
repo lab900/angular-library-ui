@@ -16,6 +16,10 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   public readonly columns$: Observable<TableCell<T>[]>;
   public readonly visibleColumns$: Observable<TableCell<T>[]>;
 
+  public readonly _disableEditing$ = new BehaviorSubject<boolean>(false);
+  public readonly disableEditing$: Observable<boolean> =
+    this._disableEditing$.asObservable();
+
   private readonly _tabs$ = new BehaviorSubject<
     Lab900TableTab<TabId, T>[] | null
   >(null);
@@ -72,6 +76,10 @@ export class Lab900TableService<T extends object = object, TabId = string> {
 
   public updateTabId(tabId: TabId | null): void {
     this._tabId$.next(tabId);
+  }
+
+  public updateDisableEditing(value: boolean): void {
+    this._disableEditing$.next(value);
   }
 
   public updateTabs(tabs: Lab900TableTab<TabId, T>[] | null): void {

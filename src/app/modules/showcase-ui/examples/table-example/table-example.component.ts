@@ -6,11 +6,11 @@ import {
   CellInputEditorOptions,
   CellSelectEditorComponent,
   CellSelectEditorOptions,
+  CellValueChangeEvent,
   CellWithAnchorRendererComponent,
   CellWithIconRendererComponent,
   CellWithIconRendererOptions,
   CheckboxCellRendererComponent,
-  CheckboxCellRendererOptions,
   ColumnHeaderWithIconRendererComponent,
   Lab900Sort,
   Paging,
@@ -44,6 +44,7 @@ import {
     [maxColumnWidth]="'200px'"
     [tableFooterActions]="tableFooterActions"
     [preFooterTitle]="'Quantity Total'"
+    (cellValueChanged)="cellValueChanged($event)"
   >
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
@@ -207,6 +208,7 @@ export class TableExampleComponent {
           data[key] = value;
         },
         placeholder: 'Select a birthday',
+        disabled: () => true,
       },
     },
     {
@@ -217,8 +219,8 @@ export class TableExampleComponent {
       cellEditor: CellSelectEditorComponent,
       cellEditorOptions: <CellSelectEditorOptions>{
         options: ['blocked', 'inactive', 'active'],
-        valueChanged: (value, key, data) => {
-          data[key] = value;
+        valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
+          row[cell.key] = value;
         },
         placeholder: 'Select a status',
       },
@@ -233,9 +235,6 @@ export class TableExampleComponent {
       cellEditor: CellInputEditorComponent,
       cellEditorOptions: <CellInputEditorOptions>{
         placeholder: 'Enter a long name',
-        valueChanged: (value, key, data) => {
-          data[key] = value;
-        },
       },
     },
     {
@@ -264,9 +263,6 @@ export class TableExampleComponent {
       cellClass: 'center-cell',
       columnOrder: 5,
       cellRenderer: CheckboxCellRendererComponent,
-      cellRenderOptions: <CheckboxCellRendererOptions>{
-        valueChanged: (checked, key, value) => (value[key] = checked),
-      },
     },
     {
       key: 'email',
@@ -319,5 +315,9 @@ export class TableExampleComponent {
 
   public getRowClass(row: any): string {
     return row.active ? 'bg-green' : '';
+  }
+
+  public cellValueChanged(event: CellValueChangeEvent): void {
+    console.log('CellValueChangeEvent', event);
   }
 }

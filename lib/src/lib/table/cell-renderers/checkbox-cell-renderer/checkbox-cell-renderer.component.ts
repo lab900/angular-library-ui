@@ -26,6 +26,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     [indeterminate]="options.indeterminate ?? false"
     [color]="options.theme ?? 'primary'"
     (change)="onValueChange($event.checked)"
+    (click)="$event.stopImmediatePropagation()"
   ></mat-checkbox>`,
 })
 export class CheckboxCellRendererComponent extends CellRendererAbstract<CheckboxCellRendererOptions> {
@@ -41,7 +42,7 @@ export class CheckboxCellRendererComponent extends CellRendererAbstract<Checkbox
     combineLatest([this.columnConfig$, this.data$])
       .pipe(
         map(([config, data]) =>
-          config?.cellEditorOptions?.valueChanged(newValue, config.key, data)
+          this.handleValueChanged?.(newValue, config, data)
         )
       )
       .subscribe();

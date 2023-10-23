@@ -17,6 +17,7 @@ import {
 import { map, shareReplay } from 'rxjs/operators';
 import { readPropValue } from '../../utils/utils';
 import { TooltipPosition } from '@angular/material/tooltip';
+import { Lab900TableService } from '../services/table.service';
 
 @Directive()
 export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
@@ -43,6 +44,9 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
     this._data$.next(value);
   }
 
+  @Input()
+  public handleValueChanged?: (value: any, cell: TableCell<T>, row: T) => void;
+
   @ViewChild('.lab900-cell-value', { static: false, read: ElementRef })
   public cellInnerElm?: ElementRef;
 
@@ -56,7 +60,10 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
   public readonly tooltip$: Observable<string | undefined>;
   public readonly tooltipPosition$: Observable<TooltipPosition>;
 
-  public constructor(private elm: ElementRef<HTMLElement>) {
+  public constructor(
+    protected readonly elm: ElementRef<HTMLElement>,
+    protected readonly tableService: Lab900TableService
+  ) {
     this.cellValue$ = this.getCellValue();
 
     this.tooltipPosition$ = this.columnConfig$.pipe(
@@ -95,12 +102,17 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
   }
 
   protected getCellValue(): Observable<any> {
-    return combineLatest([this.columnConfig$, this.data$]).pipe(
-      map(([config, data]) => {
+    return combineLatest([
+      this.columnConfig$,
+      this.data$,
+      this.tableService.disableEditing$,
+    ]).pipe(
+      map(([config, data, disableEditing]) => {
         const value = this.cellFormatter(config, data);
         if (
           !value &&
           config.cellEditorOptions?.placeholder &&
+          !disableEditing &&
           !config.cellEditorOptions?.disablePlaceholderOutsideEditor &&
           !config.cellEditorOptions?.disabled?.(data)
         ) {
