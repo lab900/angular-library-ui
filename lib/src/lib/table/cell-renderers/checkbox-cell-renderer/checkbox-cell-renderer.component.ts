@@ -8,7 +8,7 @@ import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CheckboxCellRendererOptions } from './checkbox-cell-renderer.options';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take, withLatestFrom } from 'rxjs/operators';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -39,12 +39,15 @@ export class CheckboxCellRendererComponent extends CellRendererAbstract<Checkbox
     )
   );
   public onValueChange(newValue: boolean): void {
-    combineLatest([this.columnConfig$, this.data$])
-      .pipe(
-        map(([config, data]) =>
-          this.handleValueChanged?.(newValue, config, data)
-        )
-      )
-      .subscribe();
+    this.columnConfig$
+      .pipe(take(1), withLatestFrom(this.data$))
+      .subscribe(([config, data]) => {
+        if (!this.handleValueChanged) {
+          throw Error(
+            `No handleValueChanged method provided for column ${config.key}`
+          );
+        }
+        this.handleValueChanged?.(newValue, config, data);
+      });
   }
 }

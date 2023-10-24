@@ -72,10 +72,15 @@ export abstract class CellEditorAbstract<
 
   public close(currentValue?: any): void {
     if (currentValue) {
-      this.cellValue$
-        .pipe(take(1), withLatestFrom(this.columnConfig$, this._data$))
-        .subscribe(([oldValue, config, data]) => {
-          if (this.handleValueChanged && isDifferent(currentValue, oldValue)) {
+      this.columnConfig$
+        .pipe(take(1), withLatestFrom(this.cellValue$, this._data$))
+        .subscribe(([config, oldValue, data]) => {
+          if (!this.handleValueChanged) {
+            throw Error(
+              `No handleValueChanged method provided for column ${config.key}`
+            );
+          }
+          if (isDifferent(currentValue, oldValue)) {
             this.handleValueChanged(currentValue, config, data);
           }
           this.resetTableCell();
