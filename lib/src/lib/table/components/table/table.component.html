@@ -65,7 +65,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td
           mat-cell
-          *matCellDef="let element"
+          *matCellDef="let element; let index = index"
           (click)="$event.stopPropagation()"
         >
           <div
@@ -90,7 +90,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td
           mat-cell
-          *matCellDef="let element"
+          *matCellDef="let element; let index = index"
           (click)="$event.stopPropagation()"
         >
           <div class="table-row-actions-back" *ngIf="tableActionsBack?.length">
@@ -166,42 +166,6 @@
         <h3>{{ 'GENERAL.NO_RESULTS.TITLE' | translate }}</h3>
         <p>{{ 'GENERAL.NO_RESULTS.DESC' | translate }}</p>
       </ng-container>
-    </div>
-
-    <div
-      class="lab900-table__footer"
-      [class.left-content]="footerLeftContent"
-      *ngIf="
-        footerLeftContent ||
-        tableFooterActions?.length ||
-        (data?.length && paging)
-      "
-    >
-      <div class="lab900-table__footer__left" *ngIf="footerLeftContent">
-        <ng-container *ngTemplateOutlet="footerLeftContent"></ng-container>
-      </div>
-      <div class="lab900-table__footer__right">
-        <div>
-          <div
-            class="lab900-table__footer__actions"
-            *ngIf="tableFooterActions?.length"
-          >
-            <lab900-action-button
-              *ngFor="let action of tableFooterActions"
-              [action]="action"
-            ></lab900-action-button>
-          </div>
-        </div>
-        <mat-paginator
-          *ngIf="data?.length && paging"
-          [hidePageSize]="pageSizeConfig.hidePageSize"
-          [pageSizeOptions]="pageSizeConfig.pageSizeOptions"
-          [length]="paging.totalItems"
-          [pageSize]="paging.pageSize"
-          [pageIndex]="paging.pageIndex"
-          (page)="pageChange.emit($event)"
-        ></mat-paginator>
-      </div>
     </div>
 
     <div *ngIf="disabled">

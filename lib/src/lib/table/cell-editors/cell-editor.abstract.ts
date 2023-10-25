@@ -1,6 +1,6 @@
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { TableCell } from '../models/table-cell.model';
-import { Directive, Input } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 import { map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableCellComponent } from '../components/table-cell/table-cell.component';
 import { isDifferent } from '../../utils/different.utils';
@@ -10,7 +10,8 @@ import { CellEditorBaseOptions } from './cell-editor.options';
 export abstract class CellEditorAbstract<
   TCellEditorOptions extends CellEditorBaseOptions,
   T = any
-> {
+> implements AfterViewInit
+{
   public readonly cellValue$: Observable<any>;
 
   protected readonly _columnConfig$ = new ReplaySubject<
@@ -47,8 +48,23 @@ export abstract class CellEditorAbstract<
     map((options) => options?.placeholder ?? '')
   );
 
-  public constructor(private readonly tableCell: Lab900TableCellComponent) {
+  public constructor(
+    private readonly tableCell: Lab900TableCellComponent,
+    protected readonly elm: ElementRef<HTMLElement>
+  ) {
     this.cellValue$ = this.getCellValue();
+  }
+
+  public ngAfterViewInit(): void {
+    this.focusAfterViewInit();
+  }
+
+  protected focusAfterViewInit(): void {
+    const defaultInput =
+      this.elm.nativeElement?.querySelector('.lab900-cell-input');
+    if (defaultInput) {
+      (defaultInput as HTMLInputElement).focus();
+    }
   }
 
   protected getCellValue(): Observable<any> {

@@ -4,6 +4,7 @@
 @mixin lab900-ui($config-or-theme) {
   :root {
     --labe900-table-placeholder-text-color: rgba(0, 0, 0, 0.5);
+    --labe900-table-edit-background: rgba(0, 0, 0, 0.2);
   }
 
   .mat-mdc-table {

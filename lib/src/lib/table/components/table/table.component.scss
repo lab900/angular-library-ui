@@ -41,7 +41,7 @@
     }
 
     &.editable {
-      cursor: pointer;
+      cursor: text;
     }
   }
 
@@ -54,58 +54,14 @@
     margin-bottom: 8px;
   }
 
-  ::ng-deep .mat-mdc-paginator-container {
-    .mat-form-field-appearance-outline .mat-mdc-form-field-infix {
-      padding: 0.5em 0;
-    }
-
-    .mat-mdc-text-field-wrapper {
-      margin: 0;
-      padding-bottom: 1em;
-    }
-  }
-
   &__mat-tooltip {
     min-width: fit-content;
   }
+}
 
-  &__footer {
-    @media screen and (min-width: 600px) {
-      display: flex;
-
-      &.left-content {
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      &:not(.left-content) {
-        justify-content: flex-end;
-      }
-
-      &__right {
-        display: flex;
-        align-items: center;
-
-        > div {
-          flex: 1;
-        }
-      }
-    }
-
-    &__actions {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: center;
-      margin: 0 -4px;
-
-      @media screen and (max-width: 600px) {
-        margin: 10px -4px 0;
-      }
-
-      lab900-action-button {
-        padding: 0 4px;
-      }
-    }
+td.mat-mdc-cell {
+  &.edit-mode {
+    background: var(--labe900-table-edit-background);
   }
 }
 
@@ -164,10 +120,12 @@
   font-size: var(--mat-table-row-item-label-text-size, 14px);
   font-weight: var(--mat-table-row-item-label-text-weight);
   letter-spacing: var(--mat-table-row-item-label-text-tracking);
-  background: rgba(#000, 0.1);
+  background: transparent;
 
-  &--with-toggle {
-    padding-right: 48px + 16px;
+  & + .mat-datepicker-toggle {
+    position: absolute;
+    right: 0;
+    top: calc(50% - 24px);
   }
 }
 
@@ -177,6 +135,20 @@
   top: calc(50% - 24px);
 }
 
-.lab900-table-select-editor .mat-mdc-select-arrow-wrapper {
-  display: none;
+.lab900-table-select-editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex !important;
+  align-items: center;
+
+  .mat-mdc-select-trigger {
+    padding: 0 16px;
+  }
+
+  .mat-mdc-select-arrow-wrapper {
+    display: none;
+  }
 }

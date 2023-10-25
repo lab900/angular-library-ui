@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ViewChild,
@@ -9,20 +8,26 @@ import { CommonModule } from '@angular/common';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellSelectEditorOptions } from './cell-select-editor.options';
-import { A11yModule } from '@angular/cdk/a11y';
 import { TranslateModule } from '@ngx-translate/core';
+import { map } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { SelectAutoOpenDirective } from '../../directives/select-auto-open.directive';
 
 @Component({
   selector: 'lab900-cell-select-editor',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, MatSelectModule, A11yModule, TranslateModule],
+  imports: [
+    CommonModule,
+    MatSelectModule,
+    TranslateModule,
+    SelectAutoOpenDirective,
+  ],
   template: `
     <mat-select
+      [tabindex]="-2"
       *ngIf="editOptions$ | async as editOptions"
-      cdkTrapFocus
-      cdkTrapFocusAutoCapture
       placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
       [value]="cellValue$ | async"
       (selectionChange)="close($event.value)"
@@ -31,8 +36,14 @@ import { TranslateModule } from '@ngx-translate/core';
       [multiple]="editOptions?.multiple ?? false"
       [panelWidth]="editOptions?.panelWidth ?? 'auto'"
       class="lab900-table-select-editor"
+      lab900SelectAutoOpen
     >
-      <mat-option *ngFor="let option of editOptions.options" [value]="option">
+      <!-- fixes the select on tab -->
+      <mat-option style="display: none" />
+      <mat-option
+        *ngFor="let option of selectOptions$ | async"
+        [value]="option"
+      >
         {{
           editOptions?.optionLabelFn
             ? (editOptions.optionLabelFn(option) | translate)
@@ -42,20 +53,33 @@ import { TranslateModule } from '@ngx-translate/core';
     </mat-select>
   `,
 })
-export class CellSelectEditorComponent
-  extends CellEditorAbstract<CellSelectEditorOptions>
-  implements AfterViewInit
-{
+export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEditorOptions> {
+  public selectOptions$: Observable<any[]> = combineLatest([
+    this.editOptions$,
+    this.data$,
+  ]).pipe(
+    map(([o, data]) => {
+      if (o?.options) {
+        if (typeof o.options === 'function') {
+          return o.options(data);
+        }
+        return o.options;
+      }
+      return [];
+    })
+  );
+
   @ViewChild(MatSelect)
   private matSelect?: MatSelect;
 
   public readonly defaultCompareFn = (a: any, b: any): boolean => a === b;
 
-  public ngAfterViewInit(): void {
-    this.matSelect?.open();
+  protected focusAfterViewInit(): void {
+    this.matSelect?.focus();
   }
 
   public openChanged(open: boolean): void {
+    console.log('here');
     if (!open) {
       this.close();
     }

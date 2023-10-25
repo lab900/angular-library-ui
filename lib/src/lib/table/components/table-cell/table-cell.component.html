@@ -18,18 +18,21 @@
           cell.headerRenderer || defaultHeaderRenderer;
           inputs: { columnConfig: cell, disableSort: disableSort }
         "
-      ></ng-container>
+      />
     </th>
     <td
       #cellElement
       mat-cell
-      *matCellDef="let element"
+      *matCellDef="let element; let index = index"
       [style.min-width]="columnWidth$ | async"
       [style.max-width]="columnMaxWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
-      [class.editable]="canEdit$ | async"
+      [class.editable]="(canEdit$ | async) ?? false"
       [class.edit-mode]="(showEditorForElement$ | async) === element"
       (click)="handleCellClick($event, cell, element, cellElement)"
+      (focus)="handleCellFocus(cell, element, cellElement)"
+      [tabIndex]="index"
+      class="lab900-td"
     >
       <div
         *ngIf="(showEditorForElement$ | async) === element; else normalCell"
@@ -44,7 +47,7 @@
               handleValueChanged: handleValueChanged
             }
           "
-        ></ng-container>
+        />
       </div>
       <ng-template #normalCell>
         <ng-container
@@ -56,7 +59,7 @@
               handleValueChanged: handleValueChanged
             }
           "
-        ></ng-container>
+        />
       </ng-template>
     </td>
     <td

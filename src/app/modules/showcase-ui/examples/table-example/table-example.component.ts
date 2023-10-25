@@ -13,9 +13,9 @@ import {
   CheckboxCellRendererComponent,
   ColumnHeaderWithIconRendererComponent,
   Lab900Sort,
-  Paging,
   TableCell,
 } from '@lab900/ui';
+import moment from 'moment';
 
 @Component({
   selector: 'lab900-table-example',
@@ -25,7 +25,6 @@ import {
     [sort]="sort"
     (sortChange)="sortChange($event)"
     [data]="mockData"
-    [paging]="paging"
     [tableActionsBack]="tableActions"
     [tableHeaderActions]="tableHeaderActions"
     [toggleAndMoveColumns]="true"
@@ -42,7 +41,6 @@ import {
     [rowClass]="getRowClass"
     (tableCellsFiltered)="filtered($event)"
     [maxColumnWidth]="'200px'"
-    [tableFooterActions]="tableFooterActions"
     [preFooterTitle]="'Quantity Total'"
     (cellValueChanged)="cellValueChanged($event)"
   >
@@ -54,23 +52,11 @@ import {
         <p>No results template (can be anything)</p>
       </div>
     </div>
-    <div *lab900TableLeftFooter>Test content left side of footer</div>
   </lab900-table>`,
   styleUrls: ['table-example.component.scss'],
 })
 export class TableExampleComponent {
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
-
-  public tableFooterActions: ActionButton[] = [
-    {
-      label: 'Kies een locatie',
-      type: 'flat',
-    },
-    {
-      label: 'Button',
-      type: 'stroked',
-    },
-  ];
 
   public tableHeaderActions: ActionButton[] = [
     {
@@ -168,12 +154,6 @@ export class TableExampleComponent {
 
   public selectedItems = [this.mockData[0]];
 
-  public paging: Paging = {
-    pageIndex: 0,
-    pageSize: 5,
-    totalItems: this.mockData.length,
-  };
-
   public tableCells: TableCell[] = [
     {
       key: 'name',
@@ -203,12 +183,14 @@ export class TableExampleComponent {
       cellEditor: CellDateEditorComponent,
       columnOrder: 1,
       width: '160px',
+      cellFormatter: ({ birthday }) => {
+        return birthday ? moment(birthday).format('DD/MM/YYYY') : '';
+      },
       cellEditorOptions: <CellSelectEditorOptions>{
-        valueChanged: (value, key, data) => {
-          data[key] = value;
+        valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
+          row[cell.key] = value;
         },
         placeholder: 'Select a birthday',
-        disabled: () => true,
       },
     },
     {
@@ -235,6 +217,9 @@ export class TableExampleComponent {
       cellEditor: CellInputEditorComponent,
       cellEditorOptions: <CellInputEditorOptions>{
         placeholder: 'Enter a long name',
+        valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
+          row[cell.key] = value;
+        },
       },
     },
     {

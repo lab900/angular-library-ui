@@ -11,7 +11,6 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { ExampleViewerComponent } from './components/example-viewer/example-viewer.component';
 import { ShowcasePageComponent } from './components/showcase-page/showcase-page.component';
-import { ComponentLoaderDirective } from './directives/component-loader.directive';
 import { ShowcaseHomeComponent } from './components/showcase-home/showcase-home.component';
 import { MarkdownPageComponent } from './components/markdown-page/markdown-page.component';
 import { TranslateModule } from '@ngx-translate/core';
@@ -31,7 +30,6 @@ const material = [
   declarations: [
     ExampleViewerComponent,
     ShowcasePageComponent,
-    ComponentLoaderDirective,
     ShowcaseHomeComponent,
     MarkdownPageComponent,
   ],

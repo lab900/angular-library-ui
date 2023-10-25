@@ -4,7 +4,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CellEditorAbstract } from '../cell-editor.abstract';
-import { A11yModule } from '@angular/cdk/a11y';
 import { AsyncPipe } from '@angular/common';
 import { CellInputEditorOptions } from './cell-input-editor.options';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,14 +13,12 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [A11yModule, AsyncPipe, TranslateModule],
+  imports: [AsyncPipe, TranslateModule],
   template: `
     <input
       #input
       class="lab900-cell-input"
       [type]="(editOptions$ | async)?.type || 'text'"
-      cdkTrapFocus
-      cdkTrapFocusAutoCapture
       (blur)="close(input.value)"
       (keydown.enter)="close(input.value)"
       [value]="cellValue$ | async"

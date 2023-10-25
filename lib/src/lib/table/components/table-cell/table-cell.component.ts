@@ -203,6 +203,14 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       : cell.cellClass;
   }
 
+  public handleCellFocus(
+    cell: TableCell<T>,
+    data: T,
+    cellElement: HTMLTableCellElement
+  ): void {
+    this.enterEditMode(cell, data, cellElement);
+  }
+
   public handleCellClick(
     event: MouseEvent,
     cell: TableCell<T>,
@@ -239,7 +247,26 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   }
 
   public closeEditor(): void {
-    this.showEditorForElement$.next(undefined);
-    this.editorMinWidth$.next(undefined);
+    if (this.showEditorForElement$.value) {
+      this.showEditorForElement$.next(undefined);
+      this.editorMinWidth$.next(undefined);
+    }
+  }
+
+  private enterEditMode(
+    cell: TableCell<T>,
+    data: T,
+    cellElement: HTMLTableCellElement
+  ): void {
+    if (
+      !this.tableService._disableEditing$.value &&
+      cell.cellEditor &&
+      !cell.cellEditorOptions?.disabled?.(data)
+    ) {
+      this.openEditor(
+        data,
+        cell.cellEditorOptions?.editCellMinWidth ?? cellElement.clientWidth
+      );
+    }
   }
 }

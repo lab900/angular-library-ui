@@ -8,13 +8,16 @@ export * from './components/table-header/lab900-table-header.component';
 export * from './components/table-filter-menu/table-filter-menu.component';
 export * from './components/table-cell/table-cell.component';
 export * from './components/table-tabs/table-tabs.component';
+export * from './services/table.service';
 
 // table directives
 export * from './directives/table-empty.directive';
 export * from './directives/table-disabled.directive';
 export * from './directives/table-header-content.directive';
 export * from './directives/table-top-content.directive';
-export * from './directives/table-left-footer.directive';
+
+export * from './directives/select-auto-open.directive';
+export * from './directives/datepicker-auto-open.directive';
 
 // table models
 export * from './models/table-cell.model';

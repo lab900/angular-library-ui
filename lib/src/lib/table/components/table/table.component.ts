@@ -14,8 +14,6 @@ import {
 import { Lab900TableEmptyDirective } from '../../directives/table-empty.directive';
 import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
-import { Paging } from '../../../common/models/paging.model';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
@@ -55,6 +53,7 @@ import { TableCellSelectComponent } from '../table-cell-select/table-cell-select
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
 import { Lab900ButtonModule } from '../../../button/button.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { A11yModule } from '@angular/cdk/a11y';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -103,8 +102,8 @@ export interface SelectableRows<T = any> {
     NgForOf,
     CdkDrag,
     TranslateModule,
-    MatPaginatorModule,
     CdkDragPlaceholder,
+    A11yModule,
   ],
 })
 export class Lab900TableComponent<T extends object = object, TabId = string>
@@ -250,9 +249,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   @Output()
   public readonly sortChange = new EventEmitter<Lab900Sort[]>();
 
-  @Input()
-  public paging?: Paging;
-
   /**
    * set max width of all columns, can be individually overwritten per tableCell
    * this will create a tooltip with the content of the cell, when the text overflows
@@ -280,9 +276,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 
   @Output()
   public activeTabIdChange = new EventEmitter<TabId>();
-
-  @Output()
-  public readonly pageChange = new EventEmitter<PageEvent>();
 
   @Output()
   public readonly selectionChanged = new EventEmitter<SelectionModel<T>>();

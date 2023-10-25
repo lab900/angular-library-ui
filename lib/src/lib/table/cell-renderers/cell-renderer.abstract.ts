@@ -11,6 +11,7 @@ import {
   Directive,
   ElementRef,
   Input,
+  NgZone,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
@@ -62,7 +63,8 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
 
   public constructor(
     protected readonly elm: ElementRef<HTMLElement>,
-    protected readonly tableService: Lab900TableService
+    protected readonly tableService: Lab900TableService,
+    protected readonly ngZone: NgZone
   ) {
     this.cellValue$ = this.getCellValue();
 
@@ -149,14 +151,16 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
    * @protected
    */
   protected observeCellContentOverflow(): void {
-    this.observer?.unobserve(this.elm.nativeElement);
-    this.observer = new ResizeObserver((entries) => {
-      const innerScrollWidth =
-        this.elm.nativeElement.querySelector('.lab900-cell-value')
-          ?.scrollWidth ?? 0;
-      const maxWidth = (entries[0].target as any).offsetWidth;
-      this.textOverflowing$.next(innerScrollWidth > maxWidth);
+    this.ngZone.runOutsideAngular(() => {
+      this.observer?.unobserve(this.elm.nativeElement);
+      this.observer = new ResizeObserver((entries) => {
+        const innerScrollWidth =
+          this.elm.nativeElement.querySelector('.lab900-cell-value')
+            ?.scrollWidth ?? 0;
+        const maxWidth = (entries[0].target as any).offsetWidth;
+        this.textOverflowing$.next(innerScrollWidth > maxWidth);
+      });
+      this.observer.observe(this.elm.nativeElement);
     });
-    this.observer.observe(this.elm.nativeElement);
   }
 }

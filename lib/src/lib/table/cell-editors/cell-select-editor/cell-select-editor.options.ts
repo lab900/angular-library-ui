@@ -1,8 +1,8 @@
 import { CellEditorBaseOptions } from '../cell-editor.options';
 
-export interface CellSelectEditorOptions<O = any>
+export interface CellSelectEditorOptions<O = any, T = any>
   extends CellEditorBaseOptions {
-  options: O[];
+  options: O[] | ((data: T) => O[]);
   compareWithFn?: (o1: O, o2: O) => boolean;
   optionLabelFn?: (o: O) => string;
   multiple?: boolean;

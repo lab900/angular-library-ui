@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Input,
@@ -16,6 +17,7 @@ export interface ExampleFile {
   selector: 'lab900-example-viewer',
   templateUrl: './example-viewer.component.html',
   styleUrls: ['./example-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExampleViewerComponent implements AfterViewInit {
   @Input()

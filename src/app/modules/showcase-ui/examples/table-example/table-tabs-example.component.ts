@@ -68,7 +68,6 @@ const tableCellsAlt2: TableCell[] = [
   template: ` <lab900-table
     [loading]="true"
     [tableCells]="tableCells"
-    [data]="activeData"
     [tableTabs]="tabs"
     (activeTabIdChange)="switchData($event)"
   >

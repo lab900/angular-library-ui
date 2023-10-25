@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { SubscriptionBasedDirective } from '../../directives/subscription-based.directive';
@@ -7,6 +7,7 @@ import { SubscriptionBasedDirective } from '../../directives/subscription-based.
   selector: 'lab900-markdown-page',
   templateUrl: './markdown-page.component.html',
   styleUrls: ['./markdown-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarkdownPageComponent extends SubscriptionBasedDirective {
   @Input()
