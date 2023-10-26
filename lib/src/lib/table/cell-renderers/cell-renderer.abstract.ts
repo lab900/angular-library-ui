@@ -1,21 +1,32 @@
 import {
   BehaviorSubject,
   combineLatest,
-  debounceTime,
   Observable,
   ReplaySubject,
+  Subscription,
 } from 'rxjs';
 import { TableCell } from '../models/table-cell.model';
-import { Directive, ElementRef, Input, NgZone, ViewChild } from '@angular/core';
-import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  Input,
+  NgZone,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
+import { map, shareReplay } from 'rxjs/operators';
 import { readPropValue } from '../../utils/utils';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { Lab900TableService } from '../services/table.service';
 
 @Directive()
-export abstract class CellRendererAbstract<CellRenderOptions = any, T = any> {
+export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
+  implements AfterViewInit, OnDestroy
+{
   public readonly cellValue$: Observable<any>;
-  public readonly cellValueWithoutPlaceholder$: Observable<any>;
+  private observer?: ResizeObserver;
+  private observerSub?: Subscription;
 
   protected readonly _columnConfig$ = new ReplaySubject<TableCell<T>>();
   public readonly columnConfig$: Observable<TableCell<T, CellRenderOptions>> =
@@ -27,7 +38,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any> {
   }
 
   protected readonly _data$ = new ReplaySubject<T>();
-  public readonly data$ = this._data$.asObservable().pipe(shareReplay(1));
+  public readonly data$ = this._data$.asObservable();
 
   @Input({ required: true })
   public set data(value: T) {
@@ -46,13 +57,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any> {
       shareReplay(1)
     );
 
-  /**
-   * Calculating this value is expensive and should only be done when necessary
-   * This should only be set in the specific renderers as it's most likely not needed in all
-   * @protected
-   */
-  protected readonly textOverflowing$ = new BehaviorSubject<boolean>(false);
-
+  private readonly textOverflowing$ = new BehaviorSubject<boolean>(false);
   public readonly tooltip$: Observable<string | undefined>;
   public readonly tooltipPosition$: Observable<TooltipPosition>;
 
@@ -61,8 +66,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any> {
     protected readonly tableService: Lab900TableService,
     protected readonly ngZone: NgZone
   ) {
-    this.cellValueWithoutPlaceholder$ = this.getCellValue();
-    this.cellValue$ = this.getCellValueWithPlaceholder();
+    this.cellValue$ = this.getCellValue();
 
     this.tooltipPosition$ = this.columnConfig$.pipe(
       map(
@@ -73,10 +77,9 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any> {
     this.tooltip$ = combineLatest([
       this.columnConfig$,
       this.data$,
-      this.cellValueWithoutPlaceholder$,
-      this.textOverflowing$.asObservable().pipe(distinctUntilChanged()),
+      this.cellValue$,
+      this.textOverflowing$,
     ]).pipe(
-      debounceTime(100),
       map(([config, data, cellValue, textOverflowing]) => {
         if (
           config.cellTooltip?.text &&
@@ -91,21 +94,23 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any> {
     );
   }
 
-  protected getCellValue(): Observable<any> {
-    return combineLatest([this.columnConfig$, this.data$]).pipe(
-      map(([config, data]) => this.cellFormatter(config, data)),
-      shareReplay(1)
-    );
+  public ngAfterViewInit(): void {
+    this.observeCellContentOverflow();
   }
 
-  protected getCellValueWithPlaceholder(): Observable<any> {
+  public ngOnDestroy(): void {
+    this.observerSub?.unsubscribe();
+    this.observer?.unobserve(this.elm.nativeElement);
+  }
+
+  protected getCellValue(): Observable<any> {
     return combineLatest([
       this.columnConfig$,
-      this.cellValueWithoutPlaceholder$,
       this.data$,
       this.tableService.disableEditing$,
     ]).pipe(
-      map(([config, value, data, disableEditing]) => {
+      map(([config, data, disableEditing]) => {
+        const value = this.cellFormatter(config, data);
         if (
           !value &&
           config.cellEditorOptions?.placeholder &&
@@ -139,5 +144,23 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any> {
       return value;
     }
     return data?.[cell.key as keyof T];
+  }
+
+  /**
+   * Observe the cell content overflow and set the textOverflowing$ observable
+   * @protected
+   */
+  protected observeCellContentOverflow(): void {
+    this.ngZone.runOutsideAngular(() => {
+      this.observer?.unobserve(this.elm.nativeElement);
+      this.observer = new ResizeObserver((entries) => {
+        const innerScrollWidth =
+          this.elm.nativeElement.querySelector('.lab900-cell-value')
+            ?.scrollWidth ?? 0;
+        const maxWidth = (entries[0].target as any).offsetWidth;
+        this.textOverflowing$.next(innerScrollWidth > maxWidth);
+      });
+      this.observer.observe(this.elm.nativeElement);
+    });
   }
 }

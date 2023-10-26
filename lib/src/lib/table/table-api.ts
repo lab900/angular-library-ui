@@ -34,8 +34,6 @@ export * from './cell-renderers/cell-with-anchor-renderer/cell-with-anchor-rende
 export * from './cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.options';
 export * from './cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.component';
 export * from './cell-renderers/default-cell-renderer/default-cell-renderer.component';
-export * from './cell-renderers/cell-with-clearing-renderer/cell-with-clearing-renderer.component';
-export * from './cell-renderers/cell-with-clearing-renderer/cell-with-clearing-renderer.options';
 
 // table column header renderers
 

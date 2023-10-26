@@ -8,7 +8,6 @@ import {
   CellSelectEditorOptions,
   CellValueChangeEvent,
   CellWithAnchorRendererComponent,
-  CellWithClearingRendererComponent,
   CellWithIconRendererComponent,
   CellWithIconRendererOptions,
   CheckboxCellRendererComponent,
@@ -135,7 +134,6 @@ export class TableExampleComponent {
       city: 'New York City',
       quantity: 123,
       warning: true,
-      status: 'blocked',
     },
     {
       name: 'A name',
@@ -200,12 +198,11 @@ export class TableExampleComponent {
       label: 'Status',
       width: '150px',
       cellFormatter: (data) => data?.status,
-      cellRenderer: CellWithClearingRendererComponent,
       cellEditor: CellSelectEditorComponent,
       cellEditorOptions: <CellSelectEditorOptions>{
         options: ['blocked', 'inactive', 'active'],
-        valueChanged: ({ value, row }: CellValueChangeEvent) => {
-          row.status = value;
+        valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
+          row[cell.key] = value;
         },
         placeholder: 'Select a status',
       },
