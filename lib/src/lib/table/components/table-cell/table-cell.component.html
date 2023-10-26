@@ -18,7 +18,7 @@
           cell.headerRenderer || defaultHeaderRenderer;
           inputs: { columnConfig: cell, disableSort: disableSort }
         "
-      />
+      ></ng-container>
     </th>
     <td
       #cellElement
@@ -31,7 +31,7 @@
       [class.edit-mode]="(showEditorForElement$ | async) === element"
       (click)="handleCellClick($event, cell, element, cellElement)"
       (focus)="handleCellFocus(cell, element, cellElement)"
-      [tabIndex]="index"
+      [tabIndex]="(canEdit$ | async) ? index : -1"
       class="lab900-td"
     >
       <div
@@ -47,7 +47,7 @@
               handleValueChanged: handleValueChanged
             }
           "
-        />
+        ></ng-container>
       </div>
       <ng-template #normalCell>
         <ng-container
@@ -59,7 +59,7 @@
               handleValueChanged: handleValueChanged
             }
           "
-        />
+        ></ng-container>
       </ng-template>
     </td>
     <td

@@ -79,7 +79,6 @@ export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEdit
   }
 
   public openChanged(open: boolean): void {
-    console.log('here');
     if (!open) {
       this.close();
     }

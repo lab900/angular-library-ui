@@ -1,0 +1,17 @@
+<div
+  class="lab900-cell-value lab900-cell-value--with-icon"
+  [matTooltip]="tooltip$ | async"
+  [matTooltipPosition]="tooltipPosition$ | async"
+>
+  <div class="lab900-cell-value">
+    {{ cellValue$ | async | translate }}
+  </div>
+  <button
+    mat-icon-button
+    *ngIf="icon$ | async as icon"
+    (click)="handleClear($event)"
+  >
+    <mat-icon *ngIf="(svgIcon$ | async) === false">{{ icon }}</mat-icon>
+    <mat-icon *ngIf="(svgIcon$ | async) === true" [svgIcon]="icon"></mat-icon>
+  </button>
+</div>

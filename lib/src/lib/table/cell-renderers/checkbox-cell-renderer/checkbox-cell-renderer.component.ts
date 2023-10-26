@@ -21,7 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     *ngIf="rendererOptions$ | async as options"
     [matTooltip]="tooltip$ | async"
     [matTooltipPosition]="tooltipPosition$ | async"
-    [checked]="cellValue$ | async"
+    [checked]="cellValueWithoutPlaceholder$ | async"
     [disabled]="disabled$ | async"
     [indeterminate]="options.indeterminate ?? false"
     [color]="options.theme ?? 'primary'"
