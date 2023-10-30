@@ -7,7 +7,7 @@
     overflow: hidden;
 
     &.value-is-placeholder {
-      color: var(--labe900-table-placeholder-text-color);
+      color: var(--lab900-table-placeholder-text-color);
     }
   }
 
@@ -61,7 +61,7 @@
 
 td.mat-mdc-cell {
   &.edit-mode {
-    background: var(--labe900-table-edit-background);
+    background: var(--lab900-table-edit-background);
   }
 }
 
