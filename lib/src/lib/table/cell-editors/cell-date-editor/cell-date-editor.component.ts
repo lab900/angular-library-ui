@@ -31,8 +31,7 @@ import { DatepickerAutoOpenDirective } from '../../directives/datepicker-auto-op
       [value]="cellValue$ | async"
       [placeholder]="(placeholder$ | async) ?? '' | translate"
       (dateChange)="close($event.value)"
-  />
-  <mat-datepicker #dp1 (closed)="close()" />
-  `,
+    />
+    <mat-datepicker #dp1 (closed)="close()" />`,
 })
 export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOptions> {}

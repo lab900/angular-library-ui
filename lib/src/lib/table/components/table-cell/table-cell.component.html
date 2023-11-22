@@ -11,7 +11,7 @@
       [matTooltip]="cell?.cellHeaderTooltip | translate"
       [matTooltipPosition]="cell?.cellHeaderTooltipPosition || 'above'"
       [style.min-width]="columnWidth$ | async"
-      [style.max-width]="columnMaxWidth$ | async"
+      [style.max-width]="columnWidth$ | async"
     >
       <ng-container
         *ngComponentOutlet="
@@ -25,7 +25,7 @@
       mat-cell
       *matCellDef="let element; let index = index"
       [style.min-width]="columnWidth$ | async"
-      [style.max-width]="columnMaxWidth$ | async"
+      [style.max-width]="columnWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
       [class.editable]="(canEdit$ | async) ?? false"
       [class.edit-mode]="(showEditorForElement$ | async) === element"

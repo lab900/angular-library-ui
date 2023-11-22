@@ -29,6 +29,7 @@ import { TranslateModule } from '@ngx-translate/core';
     *ngIf="href$ | async as href"
     [matTooltip]="(tooltip$ | async) ?? ''"
     [matTooltipPosition]="(tooltipPosition$ | async) ?? undefined"
+    (click)="$event.stopImmediatePropagation()"
   >
     <a [target]="(rendererOptions$ | async)?.target ?? '_self'" [href]="href">
       {{ cellValue$ | async | translate }}

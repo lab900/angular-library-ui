@@ -72,30 +72,33 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly showEditorForElement$ = new BehaviorSubject<T>(undefined);
   public readonly editorMinWidth$ = new BehaviorSubject<number>(undefined);
 
-  public readonly columnWidth$: Observable<string> = combineLatest([
-    this.cell$,
-    this.showEditorForElement$,
-    this.editorMinWidth$,
-  ]).pipe(
-    map(([cell, showEditor, editorMinWidth]) =>
-      showEditor && editorMinWidth
-        ? `${editorMinWidth}px`
-        : cell?.width === '*'
-        ? '100%'
-        : cell?.width
-    ),
-    shareReplay(1)
-  );
-
   private readonly tableColumnMaxWidth$ = new BehaviorSubject<string>('100%');
 
-  public readonly columnMaxWidth$: Observable<string> = combineLatest([
+  private readonly columnMaxWidth$: Observable<string> = combineLatest([
     this.cell$,
     this.tableColumnMaxWidth$,
   ]).pipe(
     map(
       ([cell, tableColumnMaxWidth]) => cell?.cellMaxWidth || tableColumnMaxWidth
     ),
+    shareReplay(1)
+  );
+
+  public readonly columnWidth$: Observable<string> = combineLatest([
+    this.cell$,
+    this.showEditorForElement$,
+    this.editorMinWidth$,
+    this.columnMaxWidth$,
+  ]).pipe(
+    map(([cell, showEditor, editorMinWidth, maxWidth]) => {
+      if (showEditor && editorMinWidth) {
+        return `${editorMinWidth}px`;
+      }
+      if (cell?.width === '*') {
+        return maxWidth ?? '100%';
+      }
+      return cell?.width;
+    }),
     shareReplay(1)
   );
 
@@ -228,10 +231,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     ) {
       event.stopImmediatePropagation();
       event.preventDefault();
-      this.openEditor(
-        data,
-        cell.cellEditorOptions?.editCellMinWidth ?? cellElement.clientWidth
-      );
+      this.openEditor(data, cellElement.clientWidth);
     }
   }
 
@@ -263,10 +263,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       cell.cellEditor &&
       !cell.cellEditorOptions?.disabled?.(data)
     ) {
-      this.openEditor(
-        data,
-        cell.cellEditorOptions?.editCellMinWidth ?? cellElement.clientWidth
-      );
+      this.openEditor(data, cellElement.clientWidth);
     }
   }
 }

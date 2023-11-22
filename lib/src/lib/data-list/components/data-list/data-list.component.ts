@@ -1,10 +1,10 @@
 import {
   Component,
-  Input,
-  TemplateRef,
   ContentChild,
-  Output,
   EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
 } from '@angular/core';
 import { Lab900DataListEmptyDirective } from '../../directives/data-list-empty.directive';
 import { DataListSharing } from '../../models/data-list.model';
@@ -19,7 +19,7 @@ import { ActionButton } from '../../../button/models/action-button.model';
   styleUrls: ['./data-list.component.scss'],
 })
 export class Lab900DataListComponent {
-  @Input()
+  @Input({ required: true })
   public data: any[];
 
   @Input()
@@ -44,5 +44,5 @@ export class Lab900DataListComponent {
   public dataListItemInfoTemplate?: Lab900DataListItemInfoDirective;
 
   @Output()
-  public readonly pageChange: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
+  public readonly pageChange = new EventEmitter<PageEvent>();
 }
