@@ -98,7 +98,13 @@ td.mat-mdc-cell {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+.cdk-column-actions-front {
+  width: 0;
+  padding-left: 0 !important;
+}
+
 .cdk-column-actions-back {
+  width: 0;
   padding-right: 0 !important;
 }
 

@@ -1,21 +1,14 @@
 import { Component } from '@angular/core';
 import {
   ActionButton,
-  CellDateEditorComponent,
   CellInputEditorComponent,
   CellInputEditorOptions,
-  CellSelectEditorComponent,
   CellSelectEditorOptions,
   CellValueChangeEvent,
-  CellWithAnchorRendererComponent,
-  CellWithIconRendererComponent,
-  CellWithIconRendererOptions,
-  CheckboxCellRendererComponent,
-  ColumnHeaderWithIconRendererComponent,
   Lab900Sort,
   TableCell,
 } from '@lab900/ui';
-import moment from 'moment';
+import moment from 'moment/moment';
 
 @Component({
   selector: 'lab900-table-example',
@@ -25,17 +18,9 @@ import moment from 'moment';
     [sort]="sort"
     (sortChange)="sortChange($event)"
     [data]="mockData"
-    [tableActionsBack]="tableActions"
     [tableHeaderActions]="tableHeaderActions"
     [toggleAndMoveColumns]="true"
     filterIcon="settings"
-    [selectableRows]="{
-      enabled: true,
-      selectedItems: selectedItems,
-      disabled: true,
-      sticky: true,
-      position: 'left'
-    }"
     [onRowClick]="rowClick"
     [multiSort]="true"
     [rowClass]="getRowClass"
@@ -156,32 +141,20 @@ export class TableExampleComponent {
 
   public tableCells: TableCell[] = [
     {
-      key: 'name',
-      label: 'Name',
-      cellHeaderClass: 'center-cell',
-      headerRenderer: ColumnHeaderWithIconRendererComponent,
-      headerRenderOptions: {
-        icon: 'accessibility',
-      },
-      cellRenderer: CellWithAnchorRendererComponent,
-      cellRenderOptions: {
-        url: (data) => `mailto:${data.email}`,
-        target: '_blank',
-      },
-      sortable: true,
-      cellTooltip: {
-        text: (data) => data.email,
-        tooltipOptions: { tooltipPosition: 'left' },
-      },
-      columnOrder: 0,
-      footer: '<a href="#">Click here!</a>',
-      sticky: true,
+      key: 'type',
+      label: 'DOSSIER.TAB.TIMELOG.TYPE',
+      cellClass: (data) => (data.required ? 'table-cell-required-field' : ''),
+      width: '100px',
+    },
+    {
+      key: 'updatedBy.name',
+      label: 'DOSSIER.TAB.TIMELOG.FILLED_BY',
+      width: '100px',
     },
     {
       key: 'birthday',
       label: 'Birthday',
-      cellEditor: CellDateEditorComponent,
-      columnOrder: 1,
+      cellEditor: CellInputEditorComponent,
       width: '160px',
       cellFormatter: ({ birthday }) => {
         return birthday ? moment(birthday).format('DD/MM/YYYY') : '';
@@ -193,89 +166,17 @@ export class TableExampleComponent {
         placeholder: 'Select a birthday',
       },
     },
-    {
-      key: 'status',
-      label: 'Status',
-      width: '150px',
-      cellFormatter: (data) => data?.status,
-      cellEditor: CellSelectEditorComponent,
-      cellEditorOptions: <CellSelectEditorOptions>{
-        options: ['blocked', 'inactive', 'active'],
-        valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
-          row[cell.key] = value;
-        },
-        placeholder: 'Select a status',
-      },
-      columnOrder: 2,
-    },
+
     {
       key: 'nameLong',
       label: 'Long name',
       sortable: true,
-      cellMaxWidth: '300px', // overrides the maxColumnWidth on the table
-      columnOrder: 3,
       cellEditor: CellInputEditorComponent,
       cellEditorOptions: <CellInputEditorOptions>{
         placeholder: 'Enter a long name',
         valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
           row[cell.key] = value;
         },
-      },
-    },
-    {
-      key: 'quantity',
-      label: 'Quantity',
-      cellClass: 'clickable-cell',
-      footer: (tableData) => {
-        return tableData
-          .map((data) => data.quantity)
-          .reduce((valA, valB) => valA + valB, 0);
-      },
-      footerCellClass: 'table-footer-highlight',
-    },
-    {
-      key: 'id',
-      label: 'ID',
-      sortable: true,
-      cellClass: 'clickable-cell',
-      width: '*',
-      columnOrder: 4,
-    },
-    {
-      key: 'active',
-      label: 'Active',
-      cellHeaderClass: 'rainbow',
-      cellClass: 'center-cell',
-      columnOrder: 5,
-      cellRenderer: CheckboxCellRendererComponent,
-    },
-    {
-      key: 'email',
-      label: 'Email',
-      columnOrder: 6,
-      hide: true,
-    },
-    {
-      key: 'city',
-      label: 'City',
-      cellHeaderTooltip: 'This column shows the city',
-      cellHeaderTooltipPosition: 'above',
-      columnOrder: 7,
-      hide: true,
-    },
-    {
-      key: 'warning',
-      label: 'Warning',
-      cellFormatter: () => '',
-      cellRenderer: CellWithIconRendererComponent,
-      cellRenderOptions: <CellWithIconRendererOptions>{
-        icon: (data) => (data?.warning ? 'warning' : 'check'),
-      },
-      cellTooltip: {
-        text: (data) =>
-          data.warning
-            ? 'This is a dangerous entry'
-            : 'This is not a dangerous entry',
       },
     },
   ];

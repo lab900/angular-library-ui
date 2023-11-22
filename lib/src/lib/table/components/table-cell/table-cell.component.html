@@ -31,7 +31,7 @@
       [class.edit-mode]="(showEditorForElement$ | async) === element"
       (click)="handleCellClick($event, cell, element, cellElement)"
       (focus)="handleCellFocus(cell, element, cellElement)"
-      [tabIndex]="index"
+      [tabIndex]="(canEdit$ | async) ? index : -1"
       class="lab900-td"
     >
       <div
