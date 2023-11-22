@@ -1,5 +1,6 @@
 <div
   class="lab900-table {{ tableClass }}"
+  [class.fixed-widths]="fixedWidth$ | async"
   *ngIf="visibleColumns$ | async as columns"
 >
   <lab900-table-header
@@ -40,6 +41,8 @@
       [trackBy]="trackByTableFn"
       [dataSource]="data$ | async"
       (cdkDropListDropped)="tableRowOrderChange.emit($event)"
+      [class.has-back-actions]="tableActionsBack?.length"
+      [class.has-front-actions]="tableActionsFront?.length"
     >
       <ng-container *ngIf="selectableRows$ | async as options">
         <lab900-table-cell-select

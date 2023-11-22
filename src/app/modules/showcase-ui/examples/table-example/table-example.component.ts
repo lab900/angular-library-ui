@@ -13,7 +13,6 @@ import moment from 'moment/moment';
 @Component({
   selector: 'lab900-table-example',
   template: ` <lab900-table
-    [pageSizeConfig]="{ hidePageSize: true, pageSizeOptions: [5, 10] }"
     [tableCells]="tableCells"
     [sort]="sort"
     (sortChange)="sortChange($event)"

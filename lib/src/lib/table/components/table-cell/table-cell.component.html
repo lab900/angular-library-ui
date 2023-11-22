@@ -10,8 +10,8 @@
       [matTooltipDisabled]="!cell?.cellHeaderTooltip"
       [matTooltip]="cell?.cellHeaderTooltip | translate"
       [matTooltipPosition]="cell?.cellHeaderTooltipPosition || 'above'"
-      [style.min-width]="columnWidth$ | async"
-      [style.max-width]="columnWidth$ | async"
+      [style.width]="columnWidth$ | async"
+      [style.max-width]="columnMaxWidth$ | async"
     >
       <ng-container
         *ngComponentOutlet="
@@ -24,13 +24,13 @@
       #cellElement
       mat-cell
       *matCellDef="let element; let index = index"
-      [style.min-width]="columnWidth$ | async"
-      [style.max-width]="columnWidth$ | async"
+      [style.width]="columnWidth$ | async"
+      [style.max-width]="columnMaxWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
       [class.editable]="(canEdit$ | async) ?? false"
       [class.edit-mode]="(showEditorForElement$ | async) === element"
-      (click)="handleCellClick($event, cell, element, cellElement)"
-      (focus)="handleCellFocus(cell, element, cellElement)"
+      (click)="handleCellClick($event, cell, element)"
+      (focus)="handleCellFocus(cell, element)"
       [tabIndex]="(canEdit$ | async) ? index : -1"
       class="lab900-td"
     >

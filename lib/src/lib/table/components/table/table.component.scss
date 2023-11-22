@@ -11,6 +11,30 @@
     }
   }
 
+  &.fixed-widths {
+    .mat-mdc-table {
+      table-layout: fixed;
+
+      &:not(.has-back-actions) {
+        tr.mat-mdc-row {
+          > :last-child {
+            width: 100%;
+            background: red;
+          }
+        }
+      }
+
+      &.has-back-actions {
+        tr.mat-mdc-row {
+          > :nth-last-child(2) {
+            width: 100%;
+            background: red;
+          }
+        }
+      }
+    }
+  }
+
   .lab900-table-wrapper {
     overflow: auto;
     width: 100%;

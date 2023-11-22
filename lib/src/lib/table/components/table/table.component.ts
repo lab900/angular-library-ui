@@ -111,6 +111,25 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 {
   private readonly footerSub: Subscription;
 
+  private readonly _fixedWidth$ = new BehaviorSubject<boolean>(false);
+  public readonly fixedWidth$ = combineLatest([
+    this.tableService.visibleColumns$,
+    this._fixedWidth$.asObservable(),
+  ]).pipe(
+    map(([columns, fixedWidth]) => {
+      fixedWidth || columns?.some((c) => !!c?.width);
+    })
+  );
+
+  /**
+   * This will respect the defined widths of the table cells
+   * If any cell has a width defined, the table will have a fixed layout
+   */
+  @Input()
+  public set fixedWidths(fixedWidth: boolean) {
+    this._fixedWidth$.next(fixedWidth);
+  }
+
   @ViewChild(MatTable)
   public table?: MatTable<T>;
 
@@ -152,15 +171,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 
   @Input()
   public rowColor?: propFunction<T> | string;
-
-  @Input()
-  public pageSizeConfig: {
-    hidePageSize?: boolean;
-    pageSizeOptions?: number[];
-  } = {
-    hidePageSize: true,
-    pageSizeOptions: [5, 10, 50],
-  };
 
   @Input()
   public loading = false;

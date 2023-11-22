@@ -45,6 +45,7 @@ const tableCellsAlt: TableCell[] = [
   {
     key: 'id',
     label: 'ID',
+    width: '50px',
   },
   {
     key: 'name',
@@ -68,6 +69,7 @@ const tableCellsAlt2: TableCell[] = [
   template: ` <lab900-table
     [loading]="true"
     [tableCells]="tableCells"
+    [data]="activeData"
     [tableTabs]="tabs"
     (activeTabIdChange)="switchData($event)"
   >
@@ -90,6 +92,7 @@ export class TableTabsExampleComponent {
       key: 'id',
       label: 'ID',
       cellClass: 'test',
+      width: '50px',
     },
     {
       key: 'name',

@@ -78,6 +78,7 @@ export class TableDragAndDropExampleComponent {
     {
       key: 'id',
       label: 'ID',
+      width: '50px',
     },
     {
       key: 'name',
