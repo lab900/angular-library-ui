@@ -30,7 +30,7 @@ import { SelectAutoOpenDirective } from '../../directives/select-auto-open.direc
       *ngIf="editOptions$ | async as editOptions"
       placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
       [value]="cellValue$ | async"
-      (selectionChange)="close($event.value)"
+      (selectionChange)="closeAndSave($event.value)"
       (openedChange)="openChanged($event)"
       [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
       [multiple]="editOptions?.multiple ?? false"

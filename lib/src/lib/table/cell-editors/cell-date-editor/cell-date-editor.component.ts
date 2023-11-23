@@ -30,7 +30,7 @@ import { DatepickerAutoOpenDirective } from '../../directives/datepicker-auto-op
       type="text"
       [value]="cellValue$ | async"
       [placeholder]="(placeholder$ | async) ?? '' | translate"
-      (dateChange)="close($event.value)"
+      (dateChange)="closeAndSave($event.value)"
     />
     <mat-datepicker #dp1 (closed)="close()" />`,
 })

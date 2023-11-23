@@ -19,8 +19,8 @@ import { TranslateModule } from '@ngx-translate/core';
       #input
       class="lab900-cell-input"
       [type]="(editOptions$ | async)?.type || 'text'"
-      (blur)="close(input.value)"
-      (keydown.enter)="close(input.value)"
+      (blur)="closeAndSave(input.value)"
+      (keydown.enter)="closeAndSave(input.value)"
       [value]="cellValue$ | async"
       [max]="(editOptions$ | async)?.maxLength"
       [placeholder]="(placeholder$ | async) ?? '' | translate"
