@@ -1,5 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { ActionButton } from '../../models/action-button.model';
+import {
+  ActionButton,
+  ActionButtonComponent,
+} from '../../models/action-button.model';
 import { ThemePalette } from '@angular/material/core';
 import { readPropValue } from '../../../utils/utils';
 
@@ -7,14 +10,18 @@ import { readPropValue } from '../../../utils/utils';
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
 })
-export class Lab900ActionButtonToggleComponent {
-  @Input()
-  public action: ActionButton;
+export class Lab900ActionButtonToggleComponent<T = any>
+  implements ActionButtonComponent<T>
+{
+  private _disabled = false;
 
   @Input()
-  public data: any;
+  public action: ActionButton<T>;
 
-  public getSelected(): ActionButton {
+  @Input()
+  public data: T;
+
+  public getSelected(): ActionButton<T> {
     for (const action of this.action.subActions) {
       if (
         (typeof action.selected === 'function' && action.selected(this.data)) ||
@@ -39,7 +46,7 @@ export class Lab900ActionButtonToggleComponent {
   }
 
   public getDisabled(): boolean {
-    return readPropValue(this.action.disabled, this.data);
+    return this._disabled || readPropValue(this.action.disabled, this.data);
   }
 
   public getSubActionDisabled(action: ActionButton): boolean {
@@ -48,9 +55,7 @@ export class Lab900ActionButtonToggleComponent {
 
   public doAction(e: Event): void {
     e.stopPropagation();
-    if (this.action.action) {
-      this.action.action(this.data, e);
-    }
+    this.action?.action?.(this.data, e, this);
   }
 
   public getPrefixIcon(): string {
@@ -59,5 +64,13 @@ export class Lab900ActionButtonToggleComponent {
 
   public getSuffixIcon(): string {
     return readPropValue(this.action.suffixIcon, this.data);
+  }
+
+  public disable(): void {
+    this._disabled = true;
+  }
+
+  public enable(): void {
+    this._disabled = false;
   }
 }
