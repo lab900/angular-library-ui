@@ -128,7 +128,6 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly sticky$: Observable<boolean>;
   public readonly cellFooter$: Observable<string>;
   public readonly sort$: Observable<Lab900Sort[] | null>;
-  public readonly canEdit$: Observable<boolean>;
 
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
@@ -162,17 +161,15 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
           : cell.footer
       )
     );
+  }
 
-    this.canEdit$ = combineLatest([
-      this.cell$,
-      this._data$.asObservable(),
-      this.tableService.disableEditing$,
-    ]).pipe(
+  public canEdit(element: T): Observable<boolean> {
+    return combineLatest([this.cell$, this.tableService.disableEditing$]).pipe(
       map(
-        ([cell, data, disableEditing]) =>
+        ([cell, disableEditing]) =>
           !disableEditing &&
           cell.cellEditor &&
-          !cell.cellEditorOptions?.disabled?.(data)
+          !cell.cellEditorOptions?.disabled?.(element)
       )
     );
   }

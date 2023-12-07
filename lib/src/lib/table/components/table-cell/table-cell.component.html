@@ -21,17 +21,16 @@
       />
     </th>
     <td
-      #cellElement
       mat-cell
       *matCellDef="let element; let index = index"
       [style.width]="columnWidth$ | async"
       [style.max-width]="columnMaxWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
-      [class.editable]="(canEdit$ | async) ?? false"
+      [class.editable]="(canEdit(element) | async) ?? false"
       [class.edit-mode]="(showEditorForElement$ | async) === element"
       (click)="handleCellClick($event, cell, element)"
       (focus)="handleCellFocus(cell, element)"
-      [tabIndex]="(canEdit$ | async) ? index : -1"
+      [tabIndex]="(canEdit(element) | async) ? index : -1"
       class="lab900-td"
     >
       <div
