@@ -30,11 +30,10 @@ import { SelectAutoOpenDirective } from '../../directives/select-auto-open.direc
       *ngIf="editOptions$ | async as editOptions"
       placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
       [value]="cellValue$ | async"
-      (selectionChange)="closeAndSave($event.value)"
-      (openedChange)="openChanged($event)"
       [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
       [multiple]="editOptions?.multiple ?? false"
       [panelWidth]="editOptions?.panelWidth ?? 'auto'"
+      (keydown.tab)="closeAndSave()"
       class="lab900-table-select-editor"
       lab900SelectAutoOpen
     >
@@ -82,5 +81,9 @@ export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEdit
     if (!open) {
       this.close();
     }
+  }
+
+  public closeAndSave(): void {
+    super.closeAndSave(this.matSelect.value);
   }
 }

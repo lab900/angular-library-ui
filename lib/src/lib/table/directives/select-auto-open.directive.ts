@@ -6,10 +6,16 @@ import { MatSelect } from '@angular/material/select';
   standalone: true,
 })
 export class SelectAutoOpenDirective {
+  private count = 0;
   public constructor(select: MatSelect, ngZone: NgZone) {
     ngZone.runOutsideAngular(() => {
       const nativeEl = select._elementRef.nativeElement;
-      nativeEl.addEventListener('focus', () => select.open());
+      nativeEl.addEventListener('focus', () => {
+        if (this.count === 0) {
+          select.open();
+          this.count++;
+        }
+      });
     });
   }
 }
