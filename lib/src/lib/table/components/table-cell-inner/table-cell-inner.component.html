@@ -1,0 +1,29 @@
+<ng-container *ngIf="cell$ | async as cell">
+  <div
+    *ngIf="isEditing$ | async; else normalCell"
+    class="lab900-cell-editor-wrapper"
+  >
+    <ng-container
+      *ngComponentOutlet="
+        cell.cellEditor;
+        inputs: {
+          data: rowValue$ | async,
+          columnConfig: cell,
+          handleValueChanged: handleValueChanged
+        }
+      "
+    />
+  </div>
+  <ng-template #normalCell>
+    <ng-container
+      *ngComponentOutlet="
+        cell.cellRenderer || defaultCellRenderer;
+        inputs: {
+          data: rowValue$ | async,
+          columnConfig: cell,
+          handleValueChanged: handleValueChanged
+        }
+      "
+    />
+  </ng-template>
+</ng-container>

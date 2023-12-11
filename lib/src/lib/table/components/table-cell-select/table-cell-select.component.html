@@ -1,5 +1,9 @@
-<ng-container matColumnDef [sticky]="sticky === 'left'" [stickyEnd]="sticky === 'right'">
-  <th mat-header-cell *matHeaderCellDef class="checkbox-cell" (click)="$event.stopPropagation()">
+<ng-container
+  matColumnDef
+  [sticky]="sticky === 'left'"
+  [stickyEnd]="sticky === 'right'"
+>
+  <th mat-header-cell *matHeaderCellDef class="checkbox-cell">
     <mat-checkbox
       #selectAllCheckbox
       *ngIf="showSelectAll"
@@ -7,9 +11,11 @@
       [disabled]="disabled"
       [checked]="allSelected$ | async"
       (change)="handleSelectAllCheckbox($event)"
+      (click)="$event.stopImmediatePropagation()"
+      [disableRipple]="true"
     ></mat-checkbox>
   </th>
-  <td mat-cell *matCellDef="let row" class="checkbox-cell" (click)="$event.stopPropagation()">
+  <td mat-cell *matCellDef="let row" class="checkbox-cell">
     <ng-container *ngIf="!row?._hideSelectableRow">
       <mat-checkbox
         #rowCheckbox
@@ -17,6 +23,8 @@
         [checked]="isChecked(row)"
         [disabled]="isDisabled(row)"
         (change)="selectRow.emit(row)"
+        (click)="$event.stopImmediatePropagation()"
+        [disableRipple]="true"
       ></mat-checkbox>
     </ng-container>
   </td>

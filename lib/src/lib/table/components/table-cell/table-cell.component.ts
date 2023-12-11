@@ -1,5 +1,4 @@
 import {
-  AfterContentChecked,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
@@ -35,6 +34,7 @@ import { DefaultCellRendererComponent } from '../../cell-renderers/default-cell-
 import { DefaultColumnHeaderRendererComponent } from '../../column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
+import { TableCellInnerComponent } from '../table-cell-inner/table-cell-inner.component';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
@@ -50,20 +50,22 @@ import { TranslateModule } from '@ngx-translate/core';
     MatTooltipModule,
     TranslateModule,
     NgComponentOutlet,
+    TableCellInnerComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class Lab900TableCellComponent<T = any>
-  implements OnDestroy, AfterContentChecked
-{
+export class Lab900TableCellComponent<T = any> implements OnDestroy {
   private cellSub: Subscription;
 
   @HostBinding()
-  public className = 'lab900-table-cell';
+  public readonly className = 'lab900-table-cell';
 
   @ViewChild(MatColumnDef, { static: true })
-  private columnDef!: MatColumnDef;
+  public readonly columnDef!: MatColumnDef;
+
+  @ViewChild('.lab900-td')
+  public readonly tdElement!: any;
 
   private readonly _cell$ = new ReplaySubject<TableCell<T>>();
   public readonly cell$: Observable<TableCell<T>> = this._cell$
@@ -124,7 +126,7 @@ export class Lab900TableCellComponent<T = any>
   private readonly headerClick = new EventEmitter<TableCell<T>>();
 
   @Output()
-  private readonly valueChanged = new EventEmitter<CellValueChangeEvent<T>>();
+  public readonly valueChanged = new EventEmitter<CellValueChangeEvent<T>>();
 
   public readonly cellHeaderClass$: Observable<string>;
   public readonly sticky$: Observable<boolean>;
@@ -133,7 +135,6 @@ export class Lab900TableCellComponent<T = any>
 
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
-  public checked = 0;
 
   @Input({ required: true })
   public trackByTableFn!: TrackByFunction<T>;
@@ -169,59 +170,9 @@ export class Lab900TableCellComponent<T = any>
     );
   }
 
-  public ngAfterContentChecked(): void {
-    this.checked++;
-  }
-
-  public isEditing(element: T, cellIndex: number): Observable<boolean> {
-    return combineLatest([
-      this.cell$,
-      this.tableService.inlineEditingCellkey$.pipe(distinctUntilChanged()),
-    ]).pipe(
-      map(([cell, showEditorForElement]) => {
-        if (!showEditorForElement) {
-          return false;
-        }
-        const dataUniqueId = this.getUniqueKey(cell, element, cellIndex);
-        return (
-          showEditorForElement === dataUniqueId &&
-          cell.cellEditor &&
-          !cell.cellEditorOptions?.disabled?.(element)
-        );
-      })
-    );
-  }
-  public canEdit(element: T): Observable<boolean> {
-    return combineLatest([this.cell$, this.tableService.disableEditing$]).pipe(
-      map(
-        ([cell, disableEditing]) =>
-          !disableEditing &&
-          cell.cellEditor &&
-          !cell.cellEditorOptions?.disabled?.(element)
-      )
-    );
-  }
-
-  public readonly handleValueChanged = (
-    value: any,
-    cell: TableCell<T>,
-    row: T
-  ): void => {
-    if (cell?.cellEditorOptions?.valueChanged) {
-      cell.cellEditorOptions.valueChanged({ value, cell, row });
-    }
-    this.valueChanged.emit({ value, cell, row });
-  };
-
   public ngOnDestroy(): void {
     this.cellSub?.unsubscribe();
     this.table?.removeColumnDef(this.columnDef);
-  }
-
-  public getCellClass(cell: TableCell<T>, data: T): string {
-    return typeof cell.cellClass === 'function'
-      ? cell.cellClass(data, cell)
-      : cell.cellClass;
   }
 
   public handleCellFocus(cell: TableCell<T>, data: T, cellIndex: number): void {

@@ -22,44 +22,19 @@
     </th>
     <td
       mat-cell
-      *matCellDef="let element; let i = index"
+      *matCellDef="let element; let rowIndex = dataIndex"
       [style.width]="columnWidth$ | async"
       [style.max-width]="columnMaxWidth$ | async"
-      [ngClass]="getCellClass(cell, element)"
-      [class.editable]="(canEdit(element) | async) ?? false"
-      [class.edit-mode]="(isEditing(element, i) | async) ?? false"
-      (click)="handleCellClick($event, cell, element, i)"
-      (focus)="handleCellFocus(cell, element, i)"
-      [tabIndex]="(canEdit(element) | async) ? i : -1"
+      (click)="handleCellClick($event, cell, element, rowIndex)"
+      (focus)="handleCellFocus(cell, element, rowIndex)"
       class="lab900-td"
     >
-      <div
-        *ngIf="isEditing(element, i) | async; else normalCell"
-        class="lab900-cell-editor-wrapper"
-      >
-        <ng-container
-          *ngComponentOutlet="
-            cell.cellEditor;
-            inputs: {
-              data: element,
-              columnConfig: cell,
-              handleValueChanged: handleValueChanged
-            }
-          "
-        />
-      </div>
-      <ng-template #normalCell>
-        <ng-container
-          *ngComponentOutlet="
-            cell.cellRenderer || defaultCellRenderer;
-            inputs: {
-              data: element,
-              columnConfig: cell,
-              handleValueChanged: handleValueChanged
-            }
-          "
-        />
-      </ng-template>
+      <lab900-table-cell-inner
+        [cell]="cell"
+        [rowValue]="element"
+        [rowIndex]="rowIndex"
+        (valueChanged)="valueChanged.emit($event)"
+      />
     </td>
     <td
       mat-footer-cell

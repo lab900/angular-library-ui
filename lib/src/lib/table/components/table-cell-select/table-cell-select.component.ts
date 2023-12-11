@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -30,6 +31,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
   selector: 'lab900-table-cell-select',
   templateUrl: './table-cell-select.component.html',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatTableModule, MatCheckboxModule, AsyncPipe, NgIf],
 })
 export class TableCellSelectComponent<T extends object = object>
@@ -55,13 +57,15 @@ export class TableCellSelectComponent<T extends object = object>
 
   @Input({ required: true })
   public set selection(value: SelectionModel<T>) {
-    this._selection = value;
-    this.allSelected$ = this._selection.changed.pipe(
-      map(
-        (change) =>
-          change?.source?.selected?.length === this.rowCheckboxes?.length
-      )
-    );
+    if (value) {
+      this._selection = value;
+      this.allSelected$ = this._selection.changed.pipe(
+        map(
+          (change) =>
+            change?.source?.selected?.length === this.rowCheckboxes?.length
+        )
+      );
+    }
   }
 
   @Input({ required: true })
