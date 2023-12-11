@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, TrackByFunction } from '@angular/core';
 import {
   ActionButton,
+  CellDateEditorComponent,
   CellInputEditorComponent,
   CellInputEditorOptions,
   CellSelectEditorOptions,
@@ -20,13 +21,13 @@ import moment from 'moment/moment';
     [tableHeaderActions]="tableHeaderActions"
     [toggleAndMoveColumns]="true"
     filterIcon="settings"
-    [onRowClick]="rowClick"
     [multiSort]="true"
     [rowClass]="getRowClass"
     (tableCellsFiltered)="filtered($event)"
     [maxColumnWidth]="'200px'"
     [preFooterTitle]="'Quantity Total'"
     (cellValueChanged)="cellValueChanged($event)"
+    [trackByTableFn]="trackByTableFn"
   >
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
@@ -145,15 +146,11 @@ export class TableExampleComponent {
       cellClass: (data) => (data.required ? 'table-cell-required-field' : ''),
       width: '100px',
     },
-    {
-      key: 'updatedBy.name',
-      label: 'DOSSIER.TAB.TIMELOG.FILLED_BY',
-      width: '100px',
-    },
+
     {
       key: 'birthday',
       label: 'Birthday',
-      cellEditor: CellInputEditorComponent,
+      cellEditor: CellDateEditorComponent,
       width: '160px',
       cellFormatter: ({ birthday }) => {
         return birthday ? moment(birthday).format('DD/MM/YYYY') : '';
@@ -179,6 +176,7 @@ export class TableExampleComponent {
       },
     },
   ];
+  public trackByTableFn: TrackByFunction<any> = (index, item) => item.id;
 
   public sortChange(sort: Lab900Sort[]): void {
     sort.forEach((s) => {
@@ -190,10 +188,6 @@ export class TableExampleComponent {
     });
   }
 
-  public rowClick(row, i, event): void {
-    console.log('click row > function params:', { row }, { i }, { event });
-  }
-
   public filtered(tableCells: TableCell[]): void {
     console.log({ tableCells });
   }
@@ -203,6 +197,9 @@ export class TableExampleComponent {
   }
 
   public cellValueChanged(event: CellValueChangeEvent): void {
+    setTimeout(() => {
+      this.mockData = [...this.mockData.map((d) => ({ ...d }))];
+    }, 200);
     console.log('CellValueChangeEvent', event);
   }
 }

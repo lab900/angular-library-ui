@@ -12,6 +12,10 @@ import { Lab900Sort } from '../models/table-sort.model';
 
 @Injectable()
 export class Lab900TableService<T extends object = object, TabId = string> {
+  public readonly inlineEditingCellkey$ = new BehaviorSubject<
+    string | undefined
+  >(undefined);
+
   private readonly _columns$ = new ReplaySubject<TableCell<T>[]>();
   public readonly columns$: Observable<TableCell<T>[]>;
   public readonly visibleColumns$: Observable<TableCell<T>[]>;
@@ -126,5 +130,17 @@ export class Lab900TableService<T extends object = object, TabId = string> {
         this.updateSorting(sort);
         callback?.(sort);
       });
+  }
+
+  public startInlineEditing(cellKey: string): void {
+    if (this.inlineEditingCellkey$.value !== cellKey) {
+      this.inlineEditingCellkey$.next(cellKey);
+    }
+  }
+
+  public closeInlineEditing(): void {
+    if (this.inlineEditingCellkey$.value) {
+      this.inlineEditingCellkey$.next(undefined);
+    }
   }
 }

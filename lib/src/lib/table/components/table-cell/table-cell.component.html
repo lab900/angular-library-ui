@@ -22,19 +22,19 @@
     </th>
     <td
       mat-cell
-      *matCellDef="let element; let index = index"
+      *matCellDef="let element; let i = index"
       [style.width]="columnWidth$ | async"
       [style.max-width]="columnMaxWidth$ | async"
       [ngClass]="getCellClass(cell, element)"
       [class.editable]="(canEdit(element) | async) ?? false"
-      [class.edit-mode]="(showEditorForElement$ | async) === element"
-      (click)="handleCellClick($event, cell, element)"
-      (focus)="handleCellFocus(cell, element)"
-      [tabIndex]="(canEdit(element) | async) ? index : -1"
+      [class.edit-mode]="(isEditing(element, i) | async) ?? false"
+      (click)="handleCellClick($event, cell, element, i)"
+      (focus)="handleCellFocus(cell, element, i)"
+      [tabIndex]="(canEdit(element) | async) ? i : -1"
       class="lab900-td"
     >
       <div
-        *ngIf="(showEditorForElement$ | async) === element; else normalCell"
+        *ngIf="isEditing(element, i) | async; else normalCell"
         class="lab900-cell-editor-wrapper"
       >
         <ng-container

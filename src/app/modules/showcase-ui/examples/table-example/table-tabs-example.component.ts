@@ -72,6 +72,7 @@ const tableCellsAlt2: TableCell[] = [
     [data]="activeData"
     [tableTabs]="tabs"
     (activeTabIdChange)="switchData($event)"
+    [trackByTableFn]="trackByTableFn"
   >
   </lab900-table>`,
 })
@@ -100,6 +101,8 @@ export class TableTabsExampleComponent {
       cellClass: (data) => 'lcs-approval-status-cell ' + data.name,
     },
   ];
+
+  public trackByTableFn = (index: number, item: any): any => item.id;
 
   public switchData(tabId: 'a' | 'b' | 'c'): void {
     switch (tabId) {

@@ -1,4 +1,5 @@
 import {
+  AfterContentChecked,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
@@ -8,6 +9,7 @@ import {
   Optional,
   Output,
   SkipSelf,
+  TrackByFunction,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -33,7 +35,6 @@ import { DefaultCellRendererComponent } from '../../cell-renderers/default-cell-
 import { DefaultColumnHeaderRendererComponent } from '../../column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { isDifferent } from '../../../utils/different.utils';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
@@ -53,7 +54,9 @@ import { isDifferent } from '../../../utils/different.utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class Lab900TableCellComponent<T = any> implements OnDestroy {
+export class Lab900TableCellComponent<T = any>
+  implements OnDestroy, AfterContentChecked
+{
   private cellSub: Subscription;
 
   @HostBinding()
@@ -70,7 +73,6 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       shareReplay(1)
     );
 
-  public readonly showEditorForElement$ = new BehaviorSubject<T>(undefined);
   private readonly tableColumnMaxWidth$ = new BehaviorSubject<string>('100%');
 
   public readonly columnMaxWidth$: Observable<string> = combineLatest([
@@ -131,6 +133,10 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
 
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
+  public checked = 0;
+
+  @Input({ required: true })
+  public trackByTableFn!: TrackByFunction<T>;
 
   public constructor(
     @Optional() @SkipSelf() public table: MatTable<any>,
@@ -163,6 +169,28 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     );
   }
 
+  public ngAfterContentChecked(): void {
+    this.checked++;
+  }
+
+  public isEditing(element: T, cellIndex: number): Observable<boolean> {
+    return combineLatest([
+      this.cell$,
+      this.tableService.inlineEditingCellkey$.pipe(distinctUntilChanged()),
+    ]).pipe(
+      map(([cell, showEditorForElement]) => {
+        if (!showEditorForElement) {
+          return false;
+        }
+        const dataUniqueId = this.getUniqueKey(cell, element, cellIndex);
+        return (
+          showEditorForElement === dataUniqueId &&
+          cell.cellEditor &&
+          !cell.cellEditorOptions?.disabled?.(element)
+        );
+      })
+    );
+  }
   public canEdit(element: T): Observable<boolean> {
     return combineLatest([this.cell$, this.tableService.disableEditing$]).pipe(
       map(
@@ -196,11 +224,16 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       : cell.cellClass;
   }
 
-  public handleCellFocus(cell: TableCell<T>, data: T): void {
-    this.enterEditMode(cell, data);
+  public handleCellFocus(cell: TableCell<T>, data: T, cellIndex: number): void {
+    this.enterEditMode(cell, data, cellIndex);
   }
 
-  public handleCellClick(event: MouseEvent, cell: TableCell<T>, data: T): void {
+  public handleCellClick(
+    event: MouseEvent,
+    cell: TableCell<T>,
+    data: T,
+    cellIndex: number
+  ): void {
     if (cell.click) {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -212,7 +245,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     ) {
       event.stopImmediatePropagation();
       event.preventDefault();
-      this.openEditor(data);
+      this.openEditor(cell, data, cellIndex);
     }
   }
 
@@ -222,25 +255,27 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     }
   }
 
-  public openEditor(data: T): void {
-    if (isDifferent(this.showEditorForElement$.value, data)) {
-      this.showEditorForElement$.next(data);
-    }
+  public openEditor(cell: TableCell<T>, data: T, cellIndex: number): void {
+    this.tableService.startInlineEditing(
+      this.getUniqueKey(cell, data, cellIndex)
+    );
   }
 
   public closeEditor(): void {
-    if (this.showEditorForElement$.value) {
-      this.showEditorForElement$.next(undefined);
-    }
+    this.tableService.closeInlineEditing();
   }
 
-  private enterEditMode(cell: TableCell<T>, data: T): void {
+  private enterEditMode(cell: TableCell<T>, data: T, cellIndex: number): void {
     if (
       !this.tableService._disableEditing$.value &&
       cell.cellEditor &&
       !cell.cellEditorOptions?.disabled?.(data)
     ) {
-      this.openEditor(data);
+      this.openEditor(cell, data, cellIndex);
     }
+  }
+
+  private getUniqueKey(cell: TableCell<T>, data: T, cellIndex: number): string {
+    return cell.key + '_' + this.trackByTableFn(cellIndex, data);
   }
 }

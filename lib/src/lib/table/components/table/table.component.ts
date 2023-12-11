@@ -277,9 +277,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   public stickyHeader?: boolean;
 
   @Input()
-  public trackByTableFn?: TrackByFunction<T>;
-
-  @Input()
   public set disabledEditing(value: boolean) {
     this.tableService.updateDisableEditing(value);
   }
@@ -318,6 +315,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 
   @ContentChild(Lab900TableLeftFooterDirective, { read: TemplateRef })
   public footerLeftContent?: TemplateRef<any>;
+
+  @Input({ required: true })
+  public trackByTableFn!: TrackByFunction<T>;
 
   public readonly showCellFooters$: Observable<boolean>;
 

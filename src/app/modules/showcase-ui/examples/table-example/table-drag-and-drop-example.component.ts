@@ -25,6 +25,7 @@ import { SelectionModel } from '@angular/cdk/collections';
       hideSelectableRow: hideSelectableCheckboxForSarah
     }"
     (selectionChanged)="selectionChanged($event)"
+    [trackByTableFn]="trackByTableFn"
   >
   </lab900-table>`,
 })
@@ -86,6 +87,8 @@ export class TableDragAndDropExampleComponent {
     },
   ];
 
+  public trackByTableFn = (index: number, item: any): any => item.id;
+
   public dropTable(event: CdkDragDrop<any[]>): void {
     /**
      * You can do an api call here to save the new order
@@ -99,9 +102,6 @@ export class TableDragAndDropExampleComponent {
   }
 
   public hideSelectableCheckboxForSarah(row: any): boolean {
-    if (row?.name === 'Sarah') {
-      return true;
-    }
-    return false;
+    return row?.name === 'Sarah';
   }
 }

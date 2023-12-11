@@ -62,6 +62,7 @@
         (headerClick)="handleHeaderClick($event)"
         [data]="data$ | async"
         (valueChanged)="cellValueChanged.emit($event)"
+        [trackByTableFn]="trackByTableFn"
       ></lab900-table-cell>
 
       <ng-container matColumnDef="actions-front">
