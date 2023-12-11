@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostListener,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -11,7 +10,7 @@ import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellSelectEditorOptions } from './cell-select-editor.options';
 import { TranslateModule } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { SelectAutoOpenDirective } from '../../directives/select-auto-open.directive';
 
 @Component({
@@ -31,11 +30,11 @@ import { SelectAutoOpenDirective } from '../../directives/select-auto-open.direc
       *ngIf="editOptions$ | async as editOptions"
       placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
       [value]="cellValue$ | async"
+      (openedChange)="openChanged($event)"
       [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
       [multiple]="editOptions?.multiple ?? false"
       [panelWidth]="editOptions?.panelWidth ?? 'auto'"
-      (openedChange)="opened$.next($event)"
-      (keydown.tab)="closeAndSave()"
+      (keydown.tab)="openChanged(false)"
       class="lab900-table-select-editor"
       lab900SelectAutoOpen
     >
@@ -55,8 +54,6 @@ import { SelectAutoOpenDirective } from '../../directives/select-auto-open.direc
   `,
 })
 export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEditorOptions> {
-  public opened$ = new BehaviorSubject<boolean>(false);
-
   public selectOptions$: Observable<any[]> = combineLatest([
     this.editOptions$,
     this.data$,
@@ -75,20 +72,15 @@ export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEdit
   @ViewChild(MatSelect)
   private matSelect?: MatSelect;
 
-  @HostListener('document:click', ['$event'])
-  public clickOutside(event: any): void {
-    if (!this.elm.nativeElement.contains(event.target) && !this.opened$.value) {
-      this.closeAndSave();
-    }
-  }
-
   public readonly defaultCompareFn = (a: any, b: any): boolean => a === b;
 
   protected focusAfterViewInit(): void {
     this.matSelect?.focus();
   }
 
-  public closeAndSave(): void {
-    super.closeAndSave(this.matSelect?.value);
+  public openChanged(open: boolean): void {
+    if (!open) {
+      this.closeAndSave(this.matSelect.value);
+    }
   }
 }
