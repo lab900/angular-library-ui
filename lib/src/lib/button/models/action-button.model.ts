@@ -14,10 +14,7 @@ export interface ActionButtonComponent<T = any> {
 export interface ActionButton<T = any> {
   label: propValue<T>;
   action?: (data?: T, e?: Event, comp?: ActionButtonComponent<T>) => any;
-  type?: propValue<
-    { data: T; action: ActionButton<T> },
-    'toggle' | Lab900ButtonType
-  >;
+  type?: propValue<T, 'toggle' | Lab900ButtonType>;
   color?: propValue<T, ThemePalette>;
   disabled?: propValue<T, boolean>;
   selected?: propValue<T, boolean>;

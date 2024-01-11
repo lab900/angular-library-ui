@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   ActionButton,
   ActionButtonComponent,
@@ -24,7 +18,6 @@ import { filter, map, shareReplay, take } from 'rxjs/operators';
 @Component({
   selector: 'lab900-action-button',
   templateUrl: './lab900-action-button.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Lab900ActionButtonComponent<T = any>
   implements ActionButtonComponent<T>
