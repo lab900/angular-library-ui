@@ -1,7 +1,8 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ActionButton } from '../../models/action-button.model';
 import { MatMenu } from '@angular/material/menu';
-import { readPropValue } from '../../../utils/utils';
+import { coerceObservable, readPropValue } from '../../../utils/utils';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lab900-action-button-menu',
@@ -21,8 +22,8 @@ export class Lab900ActionButtonMenuComponent {
     return readPropValue(action.label, this.data);
   }
 
-  public getDisabled(action: ActionButton): boolean {
-    return readPropValue(action.disabled, this.data);
+  public getDisabled(action: ActionButton): Observable<boolean> {
+    return coerceObservable(readPropValue(action.disabled, this.data));
   }
 
   public doAction(e: Event, action: ActionButton): void {

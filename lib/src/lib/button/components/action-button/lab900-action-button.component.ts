@@ -6,12 +6,13 @@ import {
 import { TooltipPosition } from '@angular/material/tooltip';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
-import { readPropValue } from '../../../utils/utils';
+import { coerceObservable, readPropValue } from '../../../utils/utils';
 import {
   BehaviorSubject,
   combineLatest,
   Observable,
   ReplaySubject,
+  switchMap,
 } from 'rxjs';
 import { filter, map, shareReplay, take } from 'rxjs/operators';
 
@@ -64,10 +65,12 @@ export class Lab900ActionButtonComponent<T = any>
     this.buttonType$ = stream.pipe(map(([a, d]) => readPropValue(a.type, d)));
     this.color$ = stream.pipe(map(([a, d]) => readPropValue(a.color, d)));
     this.label$ = stream.pipe(map(([a, d]) => readPropValue(a.label, d)));
-    this.hidden$ = stream.pipe(map(([a, d]) => readPropValue(a.hide, d)));
+    this.hidden$ = stream.pipe(
+      switchMap(([a, d]) => coerceObservable(readPropValue(a.hide, d)))
+    );
     this.disabled$ = combineLatest([stream, this._disabled$]).pipe(
-      map(([[a, d], disabled]) => {
-        return disabled || readPropValue(a.disabled, d);
+      switchMap(([[a, d], disabled]) => {
+        return coerceObservable(disabled || readPropValue(a.disabled, d));
       })
     );
 

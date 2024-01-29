@@ -3,8 +3,8 @@ import {
   ActionButton,
   ActionButtonComponent,
 } from '../../models/action-button.model';
-import { ThemePalette } from '@angular/material/core';
-import { readPropValue } from '../../../utils/utils';
+import { coerceObservable, readPropValue } from '../../../utils/utils';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lab900-action-button-toggle',
@@ -33,37 +33,23 @@ export class Lab900ActionButtonToggleComponent<T = any>
     return null;
   }
 
-  public getColor(): ThemePalette {
-    return readPropValue(this.action.color, this.data);
+  public getHidden(): Observable<boolean> {
+    return coerceObservable(readPropValue(this.action.hide, this.data));
   }
 
-  public getLabel(): string {
-    return readPropValue(this.action.label, this.data);
+  public getDisabled(): Observable<boolean> {
+    return coerceObservable(
+      this._disabled || readPropValue(this.action.disabled, this.data)
+    );
   }
 
-  public getHidden(): boolean {
-    return readPropValue(this.action.hide, this.data);
-  }
-
-  public getDisabled(): boolean {
-    return this._disabled || readPropValue(this.action.disabled, this.data);
-  }
-
-  public getSubActionDisabled(action: ActionButton): boolean {
-    return readPropValue(action.disabled, this.data);
+  public getSubActionDisabled(action: ActionButton): Observable<boolean> {
+    return coerceObservable(readPropValue(action.disabled, this.data));
   }
 
   public doAction(e: Event): void {
     e.stopPropagation();
     this.action?.action?.(this.data, e, this);
-  }
-
-  public getPrefixIcon(): string {
-    return readPropValue(this.action.prefixIcon, this.data);
-  }
-
-  public getSuffixIcon(): string {
-    return readPropValue(this.action.suffixIcon, this.data);
   }
 
   public disable(): void {
