@@ -12,9 +12,8 @@ import {
   combineLatest,
   Observable,
   ReplaySubject,
-  switchMap,
 } from 'rxjs';
-import { filter, map, shareReplay, take } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'lab900-action-button',
