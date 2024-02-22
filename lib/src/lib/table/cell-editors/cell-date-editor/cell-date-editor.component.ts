@@ -8,7 +8,6 @@ import { AsyncPipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { BehaviorSubject } from 'rxjs';
-import moment from 'moment';
 import {
   MatDatepickerInputEvent,
   MatDatepickerModule,
@@ -70,7 +69,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
       return;
     }
 
-    if (event.value == null || moment(event.value).isValid()) {
+    if (event.value == null || !isNaN(Date.parse(event.value))) {
       this.updatedDate$.next(event.value);
       if (type === 'change') {
         super.closeAndSave(this.updatedDate$.value);
