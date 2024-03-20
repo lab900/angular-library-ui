@@ -26,6 +26,7 @@ import { SelectAutoOpenDirective } from '../../directives/select-auto-open.direc
   ],
   template: `
     <mat-select
+      #s
       [tabindex]="-2"
       *ngIf="editOptions$ | async as editOptions"
       placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
@@ -35,6 +36,8 @@ import { SelectAutoOpenDirective } from '../../directives/select-auto-open.direc
       [multiple]="editOptions?.multiple ?? false"
       [panelWidth]="editOptions?.panelWidth ?? 'auto'"
       (keydown.tab)="openChanged(false)"
+      [class.disable-td-event]="s.panelOpen"
+      (blur)="close()"
       class="lab900-table-select-editor"
       lab900SelectAutoOpen
     >
@@ -80,7 +83,7 @@ export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEdit
 
   public openChanged(open: boolean): void {
     if (!open) {
-      this.closeAndSave(this.matSelect.value);
+      this.closeAndSave(this.matSelect.value, false);
     }
   }
 }

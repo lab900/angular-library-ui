@@ -72,7 +72,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
     if (event.value == null || !isNaN(Date.parse(event.value))) {
       this.updatedDate$.next(event.value);
       if (type === 'change') {
-        super.closeAndSave(this.updatedDate$.value);
+        super.closeAndSave(this.updatedDate$.value, false);
       }
     }
   }
@@ -95,7 +95,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
     if (this.updatedDate$.value === undefined) {
       this.close();
     } else {
-      this.closeAndSave(this.updatedDate$.value);
+      this.closeAndSave(this.updatedDate$.value, false);
     }
   }
 }

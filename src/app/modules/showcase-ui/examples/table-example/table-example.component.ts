@@ -4,6 +4,7 @@ import {
   CellDateEditorComponent,
   CellInputEditorComponent,
   CellInputEditorOptions,
+  CellSelectEditorComponent,
   CellSelectEditorOptions,
   CellValueChangeEvent,
   Lab900Sort,
@@ -156,8 +157,12 @@ export class TableExampleComponent {
       label: 'DOSSIER.TAB.TIMELOG.TYPE',
       cellClass: (data) => (data.required ? 'table-cell-required-field' : ''),
       width: '100px',
+      cellEditor: CellSelectEditorComponent as any,
+      cellEditorOptions: <CellSelectEditorOptions>{
+        panelWidth: '200px',
+        options: ['option A', 'option B', 'option C'],
+      },
     },
-
     {
       key: 'birthday',
       label: 'Birthday',
@@ -208,6 +213,7 @@ export class TableExampleComponent {
   }
 
   public cellValueChanged(event: CellValueChangeEvent): void {
+    event.row[event.cell.key] = event.value;
     setTimeout(() => {
       this.mockData = [...this.mockData.map((d) => ({ ...d }))];
     }, 200);

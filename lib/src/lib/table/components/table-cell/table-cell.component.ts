@@ -1,13 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   HostBinding,
+  inject,
   Input,
   OnDestroy,
-  Optional,
   Output,
-  SkipSelf,
   TrackByFunction,
   ViewChild,
   ViewEncapsulation,
@@ -35,6 +35,7 @@ import { DefaultColumnHeaderRendererComponent } from '../../column-header-render
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { TableCellInnerComponent } from '../table-cell-inner/table-cell-inner.component';
+import { TableCellEventsDirective } from '../../directives/table-cell-events.directive';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
@@ -51,12 +52,15 @@ import { TableCellInnerComponent } from '../table-cell-inner/table-cell-inner.co
     TranslateModule,
     NgComponentOutlet,
     TableCellInnerComponent,
+    TableCellEventsDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class Lab900TableCellComponent<T = any> implements OnDestroy {
   private cellSub: Subscription;
+  private readonly tableService = inject(Lab900TableService);
+  public readonly table = inject(MatTable);
 
   @HostBinding()
   public readonly className = 'lab900-table-cell';
@@ -65,7 +69,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly columnDef!: MatColumnDef;
 
   @ViewChild('.lab900-td')
-  public readonly tdElement!: any;
+  public readonly tdElement!: ElementRef<HTMLTableCellElement>;
 
   private readonly _cell$ = new ReplaySubject<TableCell<T>>();
   public readonly cell$: Observable<TableCell<T>> = this._cell$
@@ -131,7 +135,8 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   public readonly cellHeaderClass$: Observable<string>;
   public readonly sticky$: Observable<boolean>;
   public readonly cellFooter$: Observable<string>;
-  public readonly sort$: Observable<Lab900Sort[] | null>;
+  public readonly sort$: Observable<Lab900Sort[] | null> =
+    this.tableService.sort$;
 
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
@@ -139,11 +144,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
   @Input({ required: true })
   public trackByTableFn!: TrackByFunction<T>;
 
-  public constructor(
-    @Optional() @SkipSelf() public table: MatTable<any>,
-    private tableService: Lab900TableService
-  ) {
-    this.sort$ = this.tableService.sort$;
+  public constructor() {
     this.cellSub = this.cell$.subscribe((cell) => {
       if (this.columnDef.name) {
         this.table?.removeColumnDef(this.columnDef);
@@ -175,58 +176,13 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     this.table?.removeColumnDef(this.columnDef);
   }
 
-  public handleCellFocus(cell: TableCell<T>, data: T, cellIndex: number): void {
-    this.enterEditMode(cell, data, cellIndex);
-  }
-
-  public handleCellClick(
-    event: MouseEvent,
-    cell: TableCell<T>,
-    data: T,
-    cellIndex: number
-  ): void {
-    if (cell.click) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-      cell.click(data, cell, event);
-    } else if (
-      !this.tableService._disableEditing$.value &&
-      cell.cellEditor &&
-      !cell.cellEditorOptions?.disabled?.(data)
-    ) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-      this.openEditor(cell, data, cellIndex);
-    }
-  }
-
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort) {
       this.headerClick.emit(cell);
     }
   }
 
-  public openEditor(cell: TableCell<T>, data: T, cellIndex: number): void {
-    this.tableService.startInlineEditing(
-      this.getUniqueKey(cell, data, cellIndex)
-    );
-  }
-
   public closeEditor(): void {
     this.tableService.closeInlineEditing();
-  }
-
-  private enterEditMode(cell: TableCell<T>, data: T, cellIndex: number): void {
-    if (
-      !this.tableService._disableEditing$.value &&
-      cell.cellEditor &&
-      !cell.cellEditorOptions?.disabled?.(data)
-    ) {
-      this.openEditor(cell, data, cellIndex);
-    }
-  }
-
-  private getUniqueKey(cell: TableCell<T>, data: T, cellIndex: number): string {
-    return cell.key + '_' + this.trackByTableFn(cellIndex, data);
   }
 }

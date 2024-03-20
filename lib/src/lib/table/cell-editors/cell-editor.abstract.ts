@@ -90,7 +90,7 @@ export abstract class CellEditorAbstract<
     this.resetTableCell();
   }
 
-  public closeAndSave(updatedValue: any): void {
+  public closeAndSave(updatedValue: any, close = true): void {
     this.columnConfig$
       .pipe(take(1), withLatestFrom(this.cellValue$, this._data$))
       .subscribe(([config, oldValue, data]) => {
@@ -102,7 +102,9 @@ export abstract class CellEditorAbstract<
           }
           this.handleValueChanged(updatedValue, config, data);
         }
-        this.resetTableCell();
+        if (close) {
+          this.resetTableCell();
+        }
       });
   }
 
