@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
-import { NavItemGroup } from '@lab900/ui';
+import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-nav-list-example',
+  standalone: true,
+  imports: [Lab900NavListComponent],
   template:
-    '<lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true" [routeMatchOptions]="matchOptions"></lab900-nav-list>',
+    '<lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true" [routeMatchOptions]="matchOptions"/>',
 })
 export class NavListExampleComponent {
   public matchOptions: IsActiveMatchOptions = {

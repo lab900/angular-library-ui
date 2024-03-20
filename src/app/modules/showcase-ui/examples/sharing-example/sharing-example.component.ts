@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Lab900SharingComponent } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-sharing-example',
@@ -6,7 +7,9 @@ import { Component } from '@angular/core';
     [users]="users"
     [userLabelFn]="userLabelFn"
     [userImageFn]="userImageFn"
-  ></lab900-sharing>`,
+  />`,
+  standalone: true,
+  imports: [Lab900SharingComponent],
 })
 export class SharingExampleComponent {
   public users = [

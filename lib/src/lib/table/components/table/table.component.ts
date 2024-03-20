@@ -3,6 +3,7 @@ import {
   Component,
   ContentChild,
   EventEmitter,
+  inject,
   Input,
   OnDestroy,
   Output,
@@ -109,6 +110,8 @@ export interface SelectableRows<T = any> {
 export class Lab900TableComponent<T extends object = object, TabId = string>
   implements OnDestroy
 {
+  private readonly tableService: Lab900TableService<T, TabId> =
+    inject(Lab900TableService);
   private readonly footerSub: Subscription;
 
   private readonly _fixedWidth$ = new BehaviorSubject<boolean>(false);
@@ -321,15 +324,14 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 
   public readonly showCellFooters$: Observable<boolean>;
 
-  public readonly visibleColumns$: Observable<TableCell<T>[]>;
-  public readonly tabId$: Observable<TabId>;
-  public readonly tabs$: Observable<Lab900TableTab<TabId, T>[]>;
+  public readonly visibleColumns$: Observable<TableCell<T>[]> =
+    this.tableService.visibleColumns$;
+  public readonly tabId$: Observable<TabId> = this.tableService.tabId$;
+  public readonly tabs$: Observable<Lab900TableTab<TabId, T>[]> =
+    this.tableService.tabs$;
   public readonly displayedColumns$: Observable<string[]>;
 
-  public constructor(private tableService: Lab900TableService<T, TabId>) {
-    this.visibleColumns$ = this.tableService.visibleColumns$;
-    this.tabId$ = this.tableService.tabId$;
-    this.tabs$ = this.tableService.tabs$;
+  public constructor() {
     this.showCellFooters$ = this.visibleColumns$.pipe(
       map((columns) => !!columns?.some((c) => !!c?.footer)),
       shareReplay(1)

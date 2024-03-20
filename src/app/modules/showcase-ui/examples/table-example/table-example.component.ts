@@ -7,12 +7,23 @@ import {
   CellSelectEditorOptions,
   CellValueChangeEvent,
   Lab900Sort,
+  Lab900TableComponent,
+  Lab900TableEmptyDirective,
+  Lab900TableHeaderContentDirective,
+  Lab900TableTopContentDirective,
   TableCell,
 } from '@lab900/ui';
 import moment from 'moment/moment';
 
 @Component({
   selector: 'lab900-table-example',
+  standalone: true,
+  imports: [
+    Lab900TableComponent,
+    Lab900TableTopContentDirective,
+    Lab900TableHeaderContentDirective,
+    Lab900TableEmptyDirective,
+  ],
   template: ` <lab900-table
     [tableCells]="tableCells"
     [sort]="sort"

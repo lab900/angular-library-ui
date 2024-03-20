@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DataListSharing, Paging, ActionButton } from '@lab900/ui';
+import {
+  ActionButton,
+  DataListSharing,
+  Lab900DataListModule,
+  Paging,
+} from '@lab900/ui';
 import { PageEvent } from '@angular/material/paginator';
 
 const dummyData: any[] = [
@@ -69,6 +74,8 @@ const dummyData: any[] = [
       </div>
     </lab900-data-list>
   `,
+  standalone: true,
+  imports: [Lab900DataListModule],
 })
 export class DataListExampleComponent implements OnInit {
   public data: any[];

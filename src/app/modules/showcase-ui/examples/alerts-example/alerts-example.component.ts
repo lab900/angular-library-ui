@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Alert } from '@lab900/ui';
+import { Alert, AlertComponent } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-alerts-example',
+  standalone: true,
+  imports: [AlertComponent],
   template: `
     <lab900-alert [type]="Error">This is an error!</lab900-alert>
     <br />

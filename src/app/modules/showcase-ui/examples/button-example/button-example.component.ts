@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { Lab900ButtonModule } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-button-example',
   styles: ['p {margin: 10px 0}'],
+  standalone: true,
+  imports: [Lab900ButtonModule],
   template: `
     <p>Flat button</p>
     <lab900-button

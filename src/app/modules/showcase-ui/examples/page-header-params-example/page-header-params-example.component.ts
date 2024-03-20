@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { PageHeaderNavItem, ActionButton } from '@lab900/ui';
+import {
+  ActionButton,
+  Lab900PageHeaderComponent,
+  PageHeaderNavItem,
+} from '@lab900/ui';
 
 @Component({
   selector: 'lab900-page-header-params-example',
@@ -8,6 +12,8 @@ import { PageHeaderNavItem, ActionButton } from '@lab900/ui';
     [navItems]="navItems"
     [actions]="actions"
   ></lab900-page-header>`,
+  standalone: true,
+  imports: [Lab900PageHeaderComponent],
 })
 export class PageHeaderParamsExampleComponent {
   public pageTitle = 'Example page header';

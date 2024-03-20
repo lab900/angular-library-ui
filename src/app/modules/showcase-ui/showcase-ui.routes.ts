@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { ShowcaseRoute } from '../shared/models/showcase-route.model';
 import { ShowcaseExample } from '../shared/models/showcase-example.model';
 import { SharingExampleComponent } from './examples/sharing-example/sharing-example.component';
@@ -18,7 +17,7 @@ import { MarkdownPageComponent } from '../shared/components/markdown-page/markdo
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
 import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
 
-const routes: Routes = [
+export default [
   {
     path: '',
     component: ShowcaseHomeComponent,
@@ -62,10 +61,4 @@ const routes: Routes = [
   new ShowcaseRoute('merger', 'Merger', [
     new ShowcaseExample(MergerExampleComponent, 'Merger'),
   ]),
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ShowcaseUiRoutingModule {}
+] satisfies Routes;

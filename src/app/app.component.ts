@@ -1,21 +1,46 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NavItemGroup } from '@lab900/ui';
+import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
 import { showcaseUiNavItems } from './modules/showcase-ui/showcase-ui.nav-items';
-import { TranslateService } from '@ngx-translate/core';
-import { MatIconRegistry } from '@angular/material/icon';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import packageInfo from '../../package.json';
-import { MatDrawer, MatDrawerMode } from '@angular/material/sidenav';
-import { NavigationEnd, Router } from '@angular/router';
+import {
+  MatDrawer,
+  MatDrawerMode,
+  MatSidenavModule,
+} from '@angular/material/sidenav';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { SubscriptionBasedDirective } from './modules/shared/directives/subscription-based.directive';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [
+    MatToolbarModule,
+    MatIconModule,
+    RouterLink,
+    NgOptimizedImage,
+    TranslateModule,
+    MatButtonModule,
+    MatSidenavModule,
+    RouterOutlet,
+    AsyncPipe,
+    Lab900NavListComponent,
+  ],
 })
 export class AppComponent
   extends SubscriptionBasedDirective

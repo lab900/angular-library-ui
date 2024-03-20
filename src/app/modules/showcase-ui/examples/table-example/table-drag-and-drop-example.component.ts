@@ -10,6 +10,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'lab900-table-example',
+  standalone: true,
+  imports: [Lab900TableComponent],
   template: `<lab900-table
     [tableCells]="tableCells"
     [data]="mockData"
@@ -26,8 +28,7 @@ import { SelectionModel } from '@angular/cdk/collections';
     }"
     (selectionChanged)="selectionChanged($event)"
     [trackByTableFn]="trackByTableFn"
-  >
-  </lab900-table>`,
+  />`,
 })
 export class TableDragAndDropExampleComponent {
   @ViewChild(Lab900TableComponent)

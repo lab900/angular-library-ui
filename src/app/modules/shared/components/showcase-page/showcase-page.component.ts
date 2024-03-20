@@ -1,14 +1,26 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShowcaseRouteData } from '../../models/showcase-route.model';
-import { PageHeaderNavItem } from '@lab900/ui';
+import { Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
 import { SubscriptionBasedDirective } from '../../directives/subscription-based.directive';
+import { CommonModule } from '@angular/common';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MarkdownPageComponent } from '../markdown-page/markdown-page.component';
+import { ExampleViewerComponent } from '../example-viewer/example-viewer.component';
 
 @Component({
   selector: 'lab900-showcase-page',
   templateUrl: './showcase-page.component.html',
   styleUrls: ['./showcase-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTabsModule,
+    MarkdownPageComponent,
+    ExampleViewerComponent,
+    Lab900PageHeaderComponent,
+  ],
 })
 export class ShowcasePageComponent extends SubscriptionBasedDirective {
   private readonly guideNav: PageHeaderNavItem = {

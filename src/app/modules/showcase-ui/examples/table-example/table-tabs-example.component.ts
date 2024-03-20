@@ -66,6 +66,8 @@ const tableCellsAlt2: TableCell[] = [
 
 @Component({
   selector: 'lab900-table-tabs-example',
+  standalone: true,
+  imports: [Lab900TableComponent],
   template: ` <lab900-table
     [loading]="true"
     [tableCells]="tableCells"
@@ -73,8 +75,7 @@ const tableCellsAlt2: TableCell[] = [
     [tableTabs]="tabs"
     (activeTabIdChange)="switchData($event)"
     [trackByTableFn]="trackByTableFn"
-  >
-  </lab900-table>`,
+  />`,
 })
 export class TableTabsExampleComponent {
   @ViewChild(Lab900TableComponent)
