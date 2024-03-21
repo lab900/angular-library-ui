@@ -1,4 +1,4 @@
-<ng-container *ngIf="action && !getHidden()">
+<ng-container *ngIf="(getHidden() | async) !== true">
   <ng-container *ngIf="action?.subActions?.length">
     <mat-button-toggle-group
       [value]="getSelected()"

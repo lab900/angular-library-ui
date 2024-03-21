@@ -15,7 +15,7 @@ export class Lab900ActionButtonToggleComponent<T = any>
 {
   private _disabled = false;
 
-  @Input()
+  @Input({ required: true })
   public action: ActionButton<T>;
 
   @Input()
