@@ -147,6 +147,10 @@ export class TableExampleComponent {
       id: 3,
       quantity: 789,
     },
+    ...Array.from({ length: 50 }).map((_, i) => ({
+      id: i + 3,
+      name: `Name ${i}`,
+    })),
   ];
 
   public selectedItems = [this.mockData[0]];
@@ -191,6 +195,10 @@ export class TableExampleComponent {
         },
       },
     },
+    ...Array.from({ length: 10 }).map((_, i) => ({
+      key: `key${i}`,
+      label: `Key ${i}`,
+    })),
   ];
   public trackByTableFn: TrackByFunction<any> = (index, item) => item.id;
 

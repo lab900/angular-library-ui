@@ -60,6 +60,20 @@ export class PageHeaderExampleComponent {
 
   public actions: ActionButton[] = [
     {
+      type: 'toggle',
+      label: '',
+      subActions: [
+        {
+          label: 'Action 1',
+          action: () => console.log('action 1'),
+        },
+        {
+          label: 'Action 2',
+          action: () => console.log('action 2'),
+        },
+      ],
+    },
+    {
       label: 'Cancel',
       prefixIcon: 'edit',
       action: () => console.log('cancel'),
