@@ -24,8 +24,8 @@ import { Lab900TableService } from '../services/table.service';
 @Directive()
 export abstract class CellRendererAbstract<
   CellRenderOptions = any,
-  T = unknown,
-  V = unknown
+  T = any,
+  V = any
 > implements AfterViewInit, OnDestroy
 {
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
