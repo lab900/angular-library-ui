@@ -1,19 +1,29 @@
-import { Directive, ElementRef, inject, Input, NgZone } from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  inject,
+  Input,
+  NgZone,
+  OnDestroy,
+} from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { Lab900TableService } from '../services/table.service';
 import { TableCell } from '../models/table-cell.model';
-import { fromEvent } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fromEvent, Subject, takeUntil } from 'rxjs';
 
 @Directive({
   selector: 'td[lab900TableCellEvents]',
   standalone: true,
 })
-export class TableCellEventsDirective<T = any> {
+export class TableCellEventsDirective<T = any>
+  implements AfterViewInit, OnDestroy
+{
   private readonly matTable = inject(MatTable);
   private readonly tableService = inject(Lab900TableService);
   private readonly elm: ElementRef<HTMLTableCellElement> = inject(ElementRef);
   private readonly ngZone = inject(NgZone);
+  private readonly destroy$ = new Subject<void>();
 
   @Input({ required: true })
   public cellData: T;
@@ -24,10 +34,22 @@ export class TableCellEventsDirective<T = any> {
   @Input({ required: true })
   public rowIndex: number;
 
-  public constructor() {
+  private siblingCells?: HTMLTableCellElement[];
+  private siblingRows?: HTMLTableRowElement[];
+  private rowIdx?: number;
+  private cellIdx?: number;
+
+  public ngAfterViewInit(): void {
     if (!this.matTable || !this.matTable.dataSource) {
       throw new Error('MatTable [dataSource] is required');
     }
+
+    this.siblingCells = this.getAllSiblingCells();
+    this.cellIdx = this.siblingCells.indexOf(this.elm.nativeElement);
+    this.siblingRows = this.getAllSiblingRows();
+    this.rowIdx = this.siblingRows.indexOf(
+      this.elm.nativeElement.parentElement as HTMLTableRowElement
+    );
 
     /**
      * Listen to keydown, focus and click events on the cell
@@ -36,23 +58,28 @@ export class TableCellEventsDirective<T = any> {
      */
     this.ngZone.runOutsideAngular(() => {
       fromEvent(this.elm.nativeElement, 'keydown')
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntil(this.destroy$))
         .subscribe((event) => {
           this.onKeydown(event as KeyboardEvent);
         });
 
       fromEvent(this.elm.nativeElement, 'focus')
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntil(this.destroy$))
         .subscribe(() => {
           this.onFocus();
         });
 
       fromEvent(this.elm.nativeElement, 'click')
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntil(this.destroy$))
         .subscribe((event) => {
           this.onClick(event as MouseEvent);
         });
     });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private getTableData(): T[] {
@@ -132,13 +159,11 @@ export class TableCellEventsDirective<T = any> {
   }
 
   private getNextEditableSibling(position: 'before' | 'after'): void {
-    const elm: HTMLTableCellElement = this.elm.nativeElement;
-    const siblings = this.getAllSiblingCells();
-    const idx = siblings.indexOf(elm);
+    const siblings = [...this.siblingCells];
     const cells =
       position === 'before'
-        ? siblings.slice(0, idx).reverse()
-        : siblings.slice(idx + 1);
+        ? siblings.slice(0, this.cellIdx).reverse()
+        : siblings.slice(this.cellIdx + 1);
     const matching = cells.filter((cell) => this.matchingCell(cell, false));
     if (matching?.[0]) {
       matching[0].focus();
@@ -151,13 +176,11 @@ export class TableCellEventsDirective<T = any> {
     position: 'before' | 'after',
     sameColumn = true
   ): void {
-    const elm: HTMLTableCellElement = this.elm.nativeElement;
-    const allRows = this.getAllSiblingRows();
-    const idx = allRows.indexOf(elm.parentElement as HTMLTableRowElement);
+    const allRows = [...this.siblingRows];
     const rows =
       position === 'before'
-        ? allRows.slice(0, idx).reverse()
-        : allRows.slice(idx + 1);
+        ? allRows.slice(0, this.rowIdx).reverse()
+        : allRows.slice(this.rowIdx + 1);
     const matching = rows.map((row) => {
       const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
       return (

@@ -6,7 +6,6 @@ import {
   ElementRef,
   inject,
   Input,
-  NgZone,
 } from '@angular/core';
 import { map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableCellComponent } from '../components/table-cell/table-cell.component';
@@ -24,7 +23,6 @@ export abstract class CellEditorAbstract<
     Lab900TableCellComponent
   );
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
-  protected readonly ngZone = inject(NgZone);
 
   protected readonly _columnConfig$ = new ReplaySubject<
     TableCell<T, any, any, TCellEditorOptions>
@@ -111,10 +109,8 @@ export abstract class CellEditorAbstract<
               `No handleValueChanged method provided for column ${config.key}`
             );
           }
-          this.ngZone.run(() => {
-            this.data = updateObject(config.key, updatedValue, data);
-            this.handleValueChanged(updatedValue, config, data);
-          });
+          this.data = updateObject(config.key, updatedValue, data);
+          this.handleValueChanged(updatedValue, config, data);
         }
         if (close) {
           this.resetTableCell();
