@@ -212,7 +212,9 @@ export class TableCellEventsDirective<T = any>
   ): boolean {
     return (
       (!sameColumnKey ||
-        cell.classList?.contains('cdk-column-' + this.cell.key)) &&
+        cell.classList?.contains(
+          'cdk-column-' + this.cell.key.replace('.', '-')
+        )) &&
       cell.classList?.contains('editable')
     );
   }

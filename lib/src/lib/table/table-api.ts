@@ -15,6 +15,8 @@ export * from './directives/table-empty.directive';
 export * from './directives/table-disabled.directive';
 export * from './directives/table-header-content.directive';
 export * from './directives/table-top-content.directive';
+export * from './directives/table-left-footer.directive';
+export * from './directives/table-cell-events.directive';
 
 // table models
 export * from './models/table-cell.model';
