@@ -89,7 +89,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       ([cell, tableColumnMaxWidth]) => cell?.cellMaxWidth || tableColumnMaxWidth
     ),
     distinctUntilChanged(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   public readonly columnWidth$: Observable<string> = this.cell$.pipe(
@@ -100,7 +100,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       return cell?.width;
     }),
     distinctUntilChanged(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   @Input()

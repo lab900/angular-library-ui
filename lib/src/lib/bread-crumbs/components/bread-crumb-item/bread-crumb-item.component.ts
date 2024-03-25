@@ -30,7 +30,7 @@ export class BreadCrumbItemComponent {
   private readonly _item$ = new ReplaySubject<BreadCrumb>();
   private readonly item$: Observable<BreadCrumb> = this._item$
     .asObservable()
-    .pipe(shareReplay(1));
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set item(item: BreadCrumb) {
@@ -38,7 +38,9 @@ export class BreadCrumbItemComponent {
   }
 
   private readonly _data$ = new BehaviorSubject<any>(undefined);
-  private readonly data$ = this._data$.asObservable().pipe(shareReplay(1));
+  private readonly data$ = this._data$
+    .asObservable()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input()
   public set data(data: any) {
@@ -50,7 +52,9 @@ export class BreadCrumbItemComponent {
   public readonly queryParams$: Observable<object>;
 
   public constructor() {
-    const stream = combineLatest([this.item$, this.data$]).pipe(shareReplay(1));
+    const stream = combineLatest([this.item$, this.data$]).pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
     this.title$ = stream.pipe(map(([a, d]) => readPropValue(a.title, d)));
     this.route$ = stream.pipe(map(([a, d]) => readPropValue(a.route, d)));
     this.queryParams$ = stream.pipe(

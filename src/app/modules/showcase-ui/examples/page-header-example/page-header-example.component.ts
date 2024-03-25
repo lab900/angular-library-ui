@@ -6,6 +6,7 @@ import {
   PageHeaderNavItem,
 } from '@lab900/ui';
 import { MatTabsModule } from '@angular/material/tabs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'lab900-page-header-example',
@@ -62,6 +63,7 @@ export class PageHeaderExampleComponent {
     {
       type: 'toggle',
       label: '',
+      disabled: () => of(true),
       subActions: [
         {
           label: 'Action 1',

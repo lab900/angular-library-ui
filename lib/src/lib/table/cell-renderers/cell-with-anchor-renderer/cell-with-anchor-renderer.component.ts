@@ -44,6 +44,6 @@ export class CellWithAnchorRendererComponent<
     this.data$,
   ]).pipe(
     map(([options, data]) => options?.url(data) ?? ''),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 }

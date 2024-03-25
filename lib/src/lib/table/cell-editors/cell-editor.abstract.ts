@@ -30,7 +30,9 @@ export abstract class CellEditorAbstract<
 
   public readonly columnConfig$: Observable<
     TableCell<T, any, any, TCellEditorOptions>
-  > = this._columnConfig$.asObservable().pipe(shareReplay(1));
+  > = this._columnConfig$
+    .asObservable()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set columnConfig(value: TableCell<T, any, any, TCellEditorOptions>) {

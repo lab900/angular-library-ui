@@ -6,12 +6,7 @@
     >
       <mat-button-toggle
         *ngFor="let actionButton of action.subActions"
-        (click)="
-          !getDisabled() &&
-            !getSubActionDisabled(actionButton) &&
-            actionButton.action &&
-            actionButton.action(data)
-        "
+        (click)="actionButton.action?.(data)"
         [value]="actionButton"
         [disabled]="getSubActionDisabled(actionButton) | async"
       >

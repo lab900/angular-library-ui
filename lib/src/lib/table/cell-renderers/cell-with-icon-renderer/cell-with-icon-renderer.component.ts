@@ -36,6 +36,6 @@ export class CellWithIconRendererComponent<
     this.data$,
   ]).pipe(
     map(([options, data]) => options?.icon(data) ?? ''),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 }

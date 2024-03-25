@@ -37,7 +37,7 @@ export class ColumnHeaderSortingComponent {
   protected readonly _columnConfig$ = new ReplaySubject<TableCell>();
   public readonly columnConfig$: Observable<TableCell> = this._columnConfig$
     .asObservable()
-    .pipe(shareReplay(1));
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set columnConfig(value: TableCell) {

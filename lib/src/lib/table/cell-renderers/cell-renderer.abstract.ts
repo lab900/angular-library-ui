@@ -37,7 +37,9 @@ export abstract class CellRendererAbstract<
 
   protected readonly _columnConfig$ = new ReplaySubject<TableCell<T>>();
   public readonly columnConfig$: Observable<TableCell<T, CellRenderOptions>> =
-    this._columnConfig$.asObservable().pipe(shareReplay(1));
+    this._columnConfig$
+      .asObservable()
+      .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set columnConfig(value: TableCell<T, CellRenderOptions>) {
