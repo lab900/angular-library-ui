@@ -59,3 +59,21 @@ export function isDifferent<T = unknown>(newValue: T, oldValue: T): boolean {
   }
   return newValue !== oldValue;
 }
+
+export function updateObject<T = object>(
+  keyName: string,
+  newVal: unknown,
+  obj: T
+): T {
+  const results: T = {} as T;
+  for (const key in obj) {
+    if (key === keyName) {
+      results[key] = newVal as any;
+    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+      results[key] = updateObject(keyName, newVal, obj[key]);
+    } else {
+      results[key] = obj[key];
+    }
+  }
+  return results;
+}

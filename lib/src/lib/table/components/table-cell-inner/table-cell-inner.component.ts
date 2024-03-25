@@ -41,7 +41,7 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
     .asObservable()
     .pipe(
       filter((c) => !!c?.key),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
   @Input({ required: true })

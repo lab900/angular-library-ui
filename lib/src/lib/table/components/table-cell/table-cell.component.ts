@@ -76,7 +76,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     .asObservable()
     .pipe(
       filter((c) => !!c?.key),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
   private readonly tableColumnMaxWidth$ = new BehaviorSubject<string>('100%');

@@ -51,7 +51,7 @@
           [selection]="selection"
           (selectAll)="handleSelectAll($event)"
           (selectRow)="handleSelectRow($event)"
-        ></lab900-table-cell-select>
+        />
       </ng-container>
 
       <lab900-table-cell
@@ -63,7 +63,7 @@
         [data]="data$ | async"
         (valueChanged)="cellValueChanged.emit($event)"
         [trackByTableFn]="trackByTableFn"
-      ></lab900-table-cell>
+      />
 
       <ng-container matColumnDef="actions-front">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -82,7 +82,7 @@
               [action]="action"
               cdkDragHandle
               [cdkDragHandleDisabled]="!action?.draggable"
-            ></lab900-action-button>
+            />
           </div>
         </td>
         <ng-container *ngIf="showCellFooters$ | async">

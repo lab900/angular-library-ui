@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   HostListener,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
@@ -14,7 +13,6 @@ import {
 } from '@angular/material/datepicker';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellEditorBaseOptions } from '../cell-editor.options';
-import { Lab900TableCellComponent } from '../../components/table-cell/table-cell.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,13 +51,6 @@ import { Lab900TableCellComponent } from '../../components/table-cell/table-cell
 export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOptions> {
   public readonly updatedDate$ = new BehaviorSubject<any>(undefined);
   public readonly opened$ = new BehaviorSubject<boolean>(false);
-
-  public constructor(
-    tableCell: Lab900TableCellComponent,
-    elm: ElementRef<HTMLElement>
-  ) {
-    super(tableCell, elm);
-  }
 
   public changeValue(
     event: MatDatepickerInputEvent<any>,

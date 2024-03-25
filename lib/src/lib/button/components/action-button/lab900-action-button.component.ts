@@ -58,7 +58,7 @@ export class Lab900ActionButtonComponent<T = any>
 
   public constructor() {
     const stream = combineLatest([this.action$, this.data$]).pipe(
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
     this.buttonType$ = stream.pipe(map(([a, d]) => readPropValue(a.type, d)));

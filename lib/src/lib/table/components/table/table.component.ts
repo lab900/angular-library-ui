@@ -334,7 +334,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   public constructor() {
     this.showCellFooters$ = this.visibleColumns$.pipe(
       map((columns) => !!columns?.some((c) => !!c?.footer)),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
     this.displayedColumns$ = combineLatest([
       this.visibleColumns$,
@@ -343,7 +343,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
       map(([columns, selectableRows]) =>
         this.getDisplayedColumns(columns, selectableRows)
       ),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
     this.data$ = combineLatest([
       this._selectableRows$.asObservable(),
@@ -357,7 +357,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
             }))
           : data
       ),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
     /**

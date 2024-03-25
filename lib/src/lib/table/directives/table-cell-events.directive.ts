@@ -6,7 +6,7 @@ import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
-  selector: '[lab900TableCellEvents]',
+  selector: 'td[lab900TableCellEvents]',
   standalone: true,
 })
 export class TableCellEventsDirective<T = any> {
@@ -14,8 +14,6 @@ export class TableCellEventsDirective<T = any> {
   private readonly tableService = inject(Lab900TableService);
   private readonly elm: ElementRef<HTMLTableCellElement> = inject(ElementRef);
   private readonly ngZone = inject(NgZone);
-
-  private data?: T[];
 
   @Input({ required: true })
   public cellData: T;
@@ -30,18 +28,16 @@ export class TableCellEventsDirective<T = any> {
     if (!this.matTable || !this.matTable.dataSource) {
       throw new Error('MatTable [dataSource] is required');
     }
-    this.data = this.matTable.dataSource as T[];
 
     /**
      * Listen to keydown, focus and click events on the cell
-     * The will be run outside of angular zone to prevent change detection
-     * Wrap the event handlers in ngZone.run to trigger change detection
+     * This will be run outside of Angular zone to prevent change detection
+     * Wrap the event handlers in `ngZone.run` to trigger change detection
      */
     this.ngZone.runOutsideAngular(() => {
       fromEvent(this.elm.nativeElement, 'keydown')
         .pipe(takeUntilDestroyed())
         .subscribe((event) => {
-          console.log('keydown', event);
           this.onKeydown(event as KeyboardEvent);
         });
 
@@ -54,12 +50,22 @@ export class TableCellEventsDirective<T = any> {
       fromEvent(this.elm.nativeElement, 'click')
         .pipe(takeUntilDestroyed())
         .subscribe((event) => {
-          this.onCLick(event as MouseEvent);
+          this.onClick(event as MouseEvent);
         });
     });
   }
 
-  private onCLick(event: MouseEvent): void {
+  private getTableData(): T[] {
+    return this.matTable.dataSource as T[];
+  }
+
+  private onClick(event: MouseEvent): void {
+    if (
+      !event.shiftKey &&
+      (event.target as HTMLElement)?.classList?.contains('disable-td-event')
+    ) {
+      return;
+    }
     if (this.cell.click) {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -81,15 +87,10 @@ export class TableCellEventsDirective<T = any> {
 
   private onKeydown(event: KeyboardEvent): void {
     switch (event.key) {
-      case 'Tab': {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        this.getNextEditableSibling(event.shiftKey ? 'before' : 'after', false);
-        break;
-      }
       case 'ArrowUp':
       case 'ArrowDown': {
         if (
+          !event.shiftKey &&
           (event.target as HTMLElement)?.classList?.contains('disable-td-event')
         ) {
           return;
@@ -101,13 +102,16 @@ export class TableCellEventsDirective<T = any> {
         );
         break;
       }
+      case 'Tab':
       case 'ArrowRight':
       case 'ArrowLeft': {
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.getNextEditableSibling(
-          event.key === 'ArrowRight' ? 'after' : 'before'
-        );
+        const position =
+          event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey)
+            ? 'before'
+            : 'after';
+        this.getNextEditableSibling(position);
         break;
       }
       default:
@@ -119,7 +123,7 @@ export class TableCellEventsDirective<T = any> {
     return (
       !this.tableService._disableEditing$.value &&
       this.cell.cellEditor &&
-      !this.cell.cellEditorOptions?.disabled?.(this.data)
+      !this.cell.cellEditorOptions?.disabled?.(this.getTableData())
     );
   }
 
@@ -127,10 +131,7 @@ export class TableCellEventsDirective<T = any> {
     this.tableService.startInlineEditing(this.cell.key + '_' + this.rowIndex);
   }
 
-  private getNextEditableSibling(
-    position: 'before' | 'after',
-    sameColumn = true
-  ): void {
+  private getNextEditableSibling(position: 'before' | 'after'): void {
     const elm: HTMLTableCellElement = this.elm.nativeElement;
     const siblings = this.getAllSiblingCells();
     const idx = siblings.indexOf(elm);
@@ -142,7 +143,7 @@ export class TableCellEventsDirective<T = any> {
     if (matching?.[0]) {
       matching[0].focus();
     } else {
-      return this.getNextEditableSiblingOnAnotherRow(position, sameColumn);
+      return this.getNextEditableSiblingOnAnotherRow(position, false);
     }
   }
 
@@ -158,9 +159,10 @@ export class TableCellEventsDirective<T = any> {
         ? allRows.slice(0, idx).reverse()
         : allRows.slice(idx + 1);
     const matching = rows.map((row) => {
-      return (Array.from(row.childNodes) as HTMLTableCellElement[]).find(
-        (cell) => this.matchingCell(cell, sameColumn)
-      );
+      const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
+      return (
+        !sameColumn && position === 'before' ? childNodes.reverse() : childNodes
+      ).find((cell) => this.matchingCell(cell, sameColumn));
     });
     if (matching?.[0]) {
       matching[0].focus();
@@ -188,7 +190,7 @@ export class TableCellEventsDirective<T = any> {
     return (
       (!sameColumnKey ||
         cell.classList?.contains('cdk-column-' + this.cell.key)) &&
-      cell.classList.contains('editable')
+      cell.classList?.contains('editable')
     );
   }
 }
