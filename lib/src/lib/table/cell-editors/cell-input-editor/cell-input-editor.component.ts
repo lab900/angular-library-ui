@@ -28,4 +28,8 @@ import { TranslateModule } from '@ngx-translate/core';
     />
   `,
 })
-export class CellInputEditorComponent extends CellEditorAbstract<CellInputEditorOptions> {}
+export class CellInputEditorComponent extends CellEditorAbstract<CellInputEditorOptions> {
+  public isDifferent(updatedValue: any, oldValue: any): boolean {
+    return super.isDifferent(updatedValue ?? '', oldValue ?? '');
+  }
+}

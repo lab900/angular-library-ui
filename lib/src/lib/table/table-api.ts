@@ -15,9 +15,8 @@ export * from './directives/table-empty.directive';
 export * from './directives/table-disabled.directive';
 export * from './directives/table-header-content.directive';
 export * from './directives/table-top-content.directive';
-
-export * from './directives/select-auto-open.directive';
-export * from './directives/datepicker-auto-open.directive';
+export * from './directives/table-left-footer.directive';
+export * from './directives/table-cell-events.directive';
 
 // table models
 export * from './models/table-cell.model';
@@ -36,7 +35,6 @@ export * from './cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.co
 export * from './cell-renderers/default-cell-renderer/default-cell-renderer.component';
 
 // table column header renderers
-
 export * from './column-header-renderers/column-header-renderer-abstract.directive';
 export * from './column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
 export * from './column-header-renderers/column-header-sorting/column-header-sorting.component';
@@ -44,7 +42,6 @@ export * from './column-header-renderers/column-header-with-icon-renderer/column
 export * from './column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.component';
 
 // table cell editors
-
 export * from './cell-editors/cell-editor.abstract';
 export * from './cell-editors/cell-editor.options';
 export * from './cell-editors/cell-input-editor/cell-input-editor.component';

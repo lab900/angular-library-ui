@@ -10,6 +10,7 @@ import {
   AfterViewInit,
   Directive,
   ElementRef,
+  inject,
   Input,
   NgZone,
   OnDestroy,
@@ -21,16 +22,24 @@ import { TooltipPosition } from '@angular/material/tooltip';
 import { Lab900TableService } from '../services/table.service';
 
 @Directive()
-export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
-  implements AfterViewInit, OnDestroy
+export abstract class CellRendererAbstract<
+  CellRenderOptions = any,
+  T = any,
+  V = any
+> implements AfterViewInit, OnDestroy
 {
-  public readonly cellValue$: Observable<any>;
+  protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
+  protected readonly tableService = inject(Lab900TableService);
+  protected readonly ngZone = inject(NgZone);
+
   private observer?: ResizeObserver;
   private observerSub?: Subscription;
 
   protected readonly _columnConfig$ = new ReplaySubject<TableCell<T>>();
   public readonly columnConfig$: Observable<TableCell<T, CellRenderOptions>> =
-    this._columnConfig$.asObservable().pipe(shareReplay(1));
+    this._columnConfig$
+      .asObservable()
+      .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set columnConfig(value: TableCell<T, CellRenderOptions>) {
@@ -46,7 +55,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
   }
 
   @Input()
-  public handleValueChanged?: (value: any, cell: TableCell<T>, row: T) => void;
+  public handleValueChanged?: (value: V, cell: TableCell<T>, row: T) => void;
 
   @ViewChild('.lab900-cell-value', { static: false, read: ElementRef })
   public cellInnerElm?: ElementRef;
@@ -54,45 +63,37 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
   public readonly rendererOptions$: Observable<CellRenderOptions | undefined> =
     this.columnConfig$.pipe(
       map((config) => config.cellRenderOptions),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
+  public readonly cellValue$: Observable<V> = this.getCellValue();
+
   private readonly textOverflowing$ = new BehaviorSubject<boolean>(false);
-  public readonly tooltip$: Observable<string | undefined>;
-  public readonly tooltipPosition$: Observable<TooltipPosition>;
+  public readonly tooltip$: Observable<string | undefined> = combineLatest([
+    this.columnConfig$,
+    this.data$,
+    this.cellValue$,
+    this.textOverflowing$,
+  ]).pipe(
+    map(([config, data, cellValue, textOverflowing]) => {
+      if (
+        config.cellTooltip?.text &&
+        (!config.cellTooltip?.onlyOnOverflow || textOverflowing)
+      ) {
+        return readPropValue(config.cellTooltip.text, data);
+      } else if (textOverflowing) {
+        return String(cellValue);
+      }
+      return undefined;
+    })
+  );
 
-  public constructor(
-    protected readonly elm: ElementRef<HTMLElement>,
-    protected readonly tableService: Lab900TableService,
-    protected readonly ngZone: NgZone
-  ) {
-    this.cellValue$ = this.getCellValue();
-
-    this.tooltipPosition$ = this.columnConfig$.pipe(
+  public readonly tooltipPosition$: Observable<TooltipPosition> =
+    this.columnConfig$.pipe(
       map(
         (cell) => cell.cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below'
       )
     );
-
-    this.tooltip$ = combineLatest([
-      this.columnConfig$,
-      this.data$,
-      this.cellValue$,
-      this.textOverflowing$,
-    ]).pipe(
-      map(([config, data, cellValue, textOverflowing]) => {
-        if (
-          config.cellTooltip?.text &&
-          (!config.cellTooltip?.onlyOnOverflow || textOverflowing)
-        ) {
-          return readPropValue(config.cellTooltip.text, data);
-        } else if (textOverflowing) {
-          return cellValue;
-        }
-        return undefined;
-      })
-    );
-  }
 
   public ngAfterViewInit(): void {
     this.observeCellContentOverflow();
@@ -103,13 +104,15 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
     this.observer?.unobserve(this.elm.nativeElement);
   }
 
-  protected getCellValue(): Observable<any> {
-    return combineLatest([
-      this.columnConfig$,
-      this.data$,
-      this.tableService.disableEditing$,
-    ]).pipe(
-      map(([config, data, disableEditing]) => {
+  protected getCellValue(): Observable<V> {
+    const sources$ = {
+      config: this.columnConfig$,
+      data: this.data$,
+      disableEditing: this.tableService.disableEditing$,
+    };
+
+    return combineLatest(sources$).pipe(
+      map(({ config, data, disableEditing }) => {
         const value = this.cellFormatter(config, data);
         if (
           !value &&
@@ -128,7 +131,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any>
           ?.classList.remove('value-is-placeholder');
         return value;
       }),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
   }
 

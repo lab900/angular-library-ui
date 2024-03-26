@@ -62,11 +62,11 @@ export class Lab900TableService<T extends object = object, TabId = string> {
       filter((columns) => columns != null),
       map((columns) => columns.sort(Lab900TableService.reorderColumnsFn)),
       map((columns) => columns.filter((c) => !!c.key)),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
     this.visibleColumns$ = this.columns$.pipe(
       map((columns) => columns.filter((c) => !c.hide)),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
   }
 

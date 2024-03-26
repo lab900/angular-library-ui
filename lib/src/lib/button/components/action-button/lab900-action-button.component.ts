@@ -25,7 +25,7 @@ export class Lab900ActionButtonComponent<T = any>
   private readonly _action$ = new ReplaySubject<ActionButton<T>>();
   public readonly action$: Observable<ActionButton> = this._action$
     .asObservable()
-    .pipe(shareReplay(1));
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
   public readonly tooltipPosition$: Observable<TooltipPosition> =
     this.action$.pipe(map((action) => action.tooltip?.position ?? 'above'));
 
@@ -35,7 +35,9 @@ export class Lab900ActionButtonComponent<T = any>
   }
 
   private readonly _data$ = new BehaviorSubject<any>(undefined);
-  public readonly data$ = this._data$.asObservable().pipe(shareReplay(1));
+  public readonly data$ = this._data$
+    .asObservable()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input()
   public set data(data: any) {
@@ -58,7 +60,7 @@ export class Lab900ActionButtonComponent<T = any>
 
   public constructor() {
     const stream = combineLatest([this.action$, this.data$]).pipe(
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
     this.buttonType$ = stream.pipe(map(([a, d]) => readPropValue(a.type, d)));

@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   NgZone,
   OnDestroy,
@@ -16,7 +17,6 @@ import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
 import { filter, map, shareReplay } from 'rxjs/operators';
 import { DefaultCellRendererComponent } from '../../cell-renderers/default-cell-renderer/default-cell-renderer.component';
 import { Lab900TableService } from '../../services/table.service';
-import { Lab900TableComponent } from '../table/table.component';
 
 @Component({
   selector: 'lab900-table-cell-inner',
@@ -27,6 +27,10 @@ import { Lab900TableComponent } from '../table/table.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
+  private readonly tableService = inject(Lab900TableService);
+  private readonly elRef = inject(ElementRef);
+  private readonly ngZone = inject(NgZone);
+
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
 
   private readonly _rowValue = new ReplaySubject<T>();
@@ -37,7 +41,7 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
     .asObservable()
     .pipe(
       filter((c) => !!c?.key),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
   @Input({ required: true })
@@ -61,13 +65,9 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
 
   private classSub?: Subscription;
   public readonly cellClasses$: Observable<string[]>;
+  private previousClasses: string[] = [];
 
-  public constructor(
-    private readonly tableService: Lab900TableService,
-    private readonly table: Lab900TableComponent,
-    private readonly elRef: ElementRef,
-    private readonly ngZone: NgZone
-  ) {
+  public constructor() {
     this.canEdit$ = combineLatest([
       this.cell$,
       this.rowValue$,
@@ -91,7 +91,7 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
         if (!canEdit || !showEditorForElement) {
           return false;
         }
-        const dataUniqueId = this.getUniqueKey(cell, rowValue, this.rowIndex);
+        const dataUniqueId = cell.key + '_' + this.rowIndex;
         return (
           showEditorForElement === dataUniqueId &&
           cell.cellEditor &&
@@ -118,11 +118,21 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
           this.canEdit$,
           this.cellClasses$,
         ]).subscribe(([isEditing, canEdit, cellClasses]) => {
-          parentElm.classList.toggle('edit-mode', isEditing);
-          parentElm.classList.toggle('editable', canEdit);
+          if (isEditing) {
+            parentElm.classList.add('edit-mode');
+          } else {
+            parentElm.classList.remove('edit-mode');
+          }
+          if (canEdit) {
+            parentElm.classList.add('editable');
+          } else {
+            parentElm.classList.remove('editable');
+          }
           parentElm.tabIndex = canEdit ? 0 : -1;
           if (cellClasses) {
+            parentElm.classList.remove(...this.previousClasses);
             parentElm.classList.add(...cellClasses);
+            this.previousClasses = cellClasses;
           }
         });
       }
@@ -143,10 +153,6 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
     }
     this.valueChanged.emit({ value, cell, row });
   };
-
-  private getUniqueKey(cell: TableCell<T>, data: T, rowIndex: number): string {
-    return cell.key + '_' + this.table.trackByTableFn(rowIndex, data as any);
-  }
 
   private getCellClasses(cell: TableCell<T>, data: T): string {
     return typeof cell.cellClass === 'function'

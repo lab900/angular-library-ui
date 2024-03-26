@@ -40,7 +40,7 @@ export class PageHeaderNavItemComponent {
   private readonly _item$ = new ReplaySubject<PageHeaderNavItem>();
   public readonly item$: Observable<PageHeaderNavItem> = this._item$
     .asObservable()
-    .pipe(shareReplay(1));
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set item(item: PageHeaderNavItem) {
@@ -48,7 +48,9 @@ export class PageHeaderNavItemComponent {
   }
 
   private readonly _data$ = new BehaviorSubject<any>(undefined);
-  public readonly data$ = this._data$.asObservable().pipe(shareReplay(1));
+  public readonly data$ = this._data$
+    .asObservable()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input()
   public set data(data: any) {
@@ -61,7 +63,9 @@ export class PageHeaderNavItemComponent {
   public readonly prefixIcon$: Observable<string>;
 
   public constructor() {
-    const stream = combineLatest([this.item$, this.data$]).pipe(shareReplay(1));
+    const stream = combineLatest([this.item$, this.data$]).pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
     this.label$ = stream.pipe(map(([a, d]) => readPropValue(a.label, d)));
     this.route$ = stream.pipe(map(([a, d]) => readPropValue(a.route, d) ?? []));
     this.suffixIcon$ = stream.pipe(

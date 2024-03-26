@@ -33,22 +33,6 @@ export * from './lib/data-list/directives/data-list-item-info.directive';
 export * from './lib/sharing/components/sharing/sharing.component';
 export * from './lib/sharing/models/share-dialog-component.abstract';
 
-// table
-export * from './lib/table/components/table/table.component';
-export * from './lib/table/components/table-header/lab900-table-header.component';
-export * from './lib/table/components/table-filter-menu/table-filter-menu.component';
-export * from './lib/table/components/table-cell/table-cell.component';
-export * from './lib/table/components/table-tabs/table-tabs.component';
-export * from './lib/table/directives/table-empty.directive';
-export * from './lib/table/directives/table-disabled.directive';
-export * from './lib/table/directives/table-header-content.directive';
-export * from './lib/table/directives/table-top-content.directive';
-export * from './lib/table/directives/table-left-footer.directive';
-export * from './lib/table/models/table-cell.model';
-export * from './lib/table/models/table-cell-tooltip.model';
-export * from './lib/table/models/table-sort.model';
-export * from './lib/table/models/table-tabs.model';
-
 // page header
 export * from './lib/page-header/components/page-header/page-header.component';
 export * from './lib/page-header/components/page-header-nav-item/page-header-nav-item.component';

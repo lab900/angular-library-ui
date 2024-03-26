@@ -4,6 +4,7 @@ import {
   CellDateEditorComponent,
   CellInputEditorComponent,
   CellInputEditorOptions,
+  CellSelectEditorComponent,
   CellSelectEditorOptions,
   CellValueChangeEvent,
   Lab900Sort,
@@ -130,6 +131,8 @@ export class TableExampleComponent {
       city: 'New York City',
       quantity: 123,
       warning: true,
+      apiType: { id: 1, name: 'Type 1' },
+      type: { id: 2, name: 'Type 2' },
     },
     {
       name: 'A name',
@@ -139,13 +142,19 @@ export class TableExampleComponent {
       email: 'b@name.com',
       quantity: 456,
       warning: false,
+      apiType: { id: 1, name: 'Type 1' },
     },
     {
       name: '',
       nameLong: 'A name very long :)',
       id: 3,
       quantity: 789,
+      apiType: { id: 1, name: 'Type 1' },
     },
+    ...Array.from({ length: 50 }).map((_, i) => ({
+      id: i + 3,
+      name: `Name ${i}`,
+    })),
   ];
 
   public selectedItems = [this.mockData[0]];
@@ -153,11 +162,25 @@ export class TableExampleComponent {
   public tableCells: TableCell[] = [
     {
       key: 'type',
-      label: 'DOSSIER.TAB.TIMELOG.TYPE',
+      label: 'NORMAL SELECT',
       cellClass: (data) => (data.required ? 'table-cell-required-field' : ''),
       width: '100px',
+      cellEditor: CellSelectEditorComponent,
+      cellFormatter: ({ type }) => type?.name ?? '',
+      cellEditorOptions: <CellSelectEditorOptions>{
+        panelWidth: '200px',
+        placeholder: 'Select a type 2',
+        compareWithFn: (a, b) => a?.id === b?.id,
+        optionLabelFn: (option) => option?.name ?? '?',
+        options: [
+          { id: 1, name: 'Type 1' },
+          { id: 2, name: 'Type 2' },
+        ],
+        valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
+          row[cell.key] = value;
+        },
+      },
     },
-
     {
       key: 'birthday',
       label: 'Birthday',
@@ -186,6 +209,10 @@ export class TableExampleComponent {
         },
       },
     },
+    ...Array.from({ length: 10 }).map((_, i) => ({
+      key: `key${i}`,
+      label: `Key ${i}`,
+    })),
   ];
   public trackByTableFn: TrackByFunction<any> = (index, item) => item.id;
 
@@ -208,6 +235,7 @@ export class TableExampleComponent {
   }
 
   public cellValueChanged(event: CellValueChangeEvent): void {
+    event.row[event.cell.key] = event.value;
     setTimeout(() => {
       this.mockData = [...this.mockData.map((d) => ({ ...d }))];
     }, 200);

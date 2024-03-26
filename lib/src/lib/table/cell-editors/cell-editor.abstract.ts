@@ -1,18 +1,28 @@
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { TableCell } from '../models/table-cell.model';
-import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  inject,
+  Input,
+} from '@angular/core';
 import { map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableCellComponent } from '../components/table-cell/table-cell.component';
-import { isDifferent } from '../../utils/different.utils';
+import { isDifferent, updateObject } from '../../utils/different.utils';
 import { CellEditorBaseOptions } from './cell-editor.options';
 
 @Directive()
 export abstract class CellEditorAbstract<
   TCellEditorOptions extends CellEditorBaseOptions,
-  T = any
+  T = object,
+  V = unknown
 > implements AfterViewInit
 {
-  public readonly cellValue$: Observable<any>;
+  private readonly tableCell: Lab900TableCellComponent = inject(
+    Lab900TableCellComponent
+  );
+  protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
 
   protected readonly _columnConfig$ = new ReplaySubject<
     TableCell<T, any, any, TCellEditorOptions>
@@ -20,7 +30,9 @@ export abstract class CellEditorAbstract<
 
   public readonly columnConfig$: Observable<
     TableCell<T, any, any, TCellEditorOptions>
-  > = this._columnConfig$.asObservable().pipe(shareReplay(1));
+  > = this._columnConfig$
+    .asObservable()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set columnConfig(value: TableCell<T, any, any, TCellEditorOptions>) {
@@ -36,24 +48,19 @@ export abstract class CellEditorAbstract<
   }
 
   @Input({ required: true })
-  public handleValueChanged!: (value: any, cell: TableCell<T>, row: T) => void;
+  public handleValueChanged!: (value: V, cell: TableCell<T>, row: T) => void;
 
   public readonly editOptions$: Observable<TCellEditorOptions | undefined> =
     this.columnConfig$.pipe(
       map((config) => config?.cellEditorOptions),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
 
   public readonly placeholder$: Observable<string> = this.editOptions$.pipe(
     map((options) => options?.placeholder ?? '')
   );
 
-  public constructor(
-    private readonly tableCell: Lab900TableCellComponent,
-    protected readonly elm: ElementRef<HTMLElement>
-  ) {
-    this.cellValue$ = this.getCellValue();
-  }
+  public readonly cellValue$: Observable<V> = this.getCellValue();
 
   public ngAfterViewInit(): void {
     this.focusAfterViewInit();
@@ -67,42 +74,49 @@ export abstract class CellEditorAbstract<
     }
   }
 
-  protected getCellValue(): Observable<any> {
+  protected getCellValue(): Observable<V> {
     return combineLatest([this.columnConfig$, this.data$]).pipe(
       map(([config, data]) => this.getUnformattedValue(config, data) ?? null),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
   }
 
-  protected getUnformattedValue(cell: TableCell<T>, data: T): any {
+  protected getUnformattedValue(cell: TableCell<T>, data: T): V {
     if (cell.key.includes('.')) {
       const keys = cell.key.split('.');
-      let value: any = data;
+      let value: unknown = data;
       for (const key of keys) {
         value = value?.[key];
       }
-      return value;
+      return value as V;
     }
-    return data?.[cell.key as keyof T];
+    return data?.[cell.key as keyof T] as V;
   }
 
   public close(): void {
     this.resetTableCell();
   }
 
-  public closeAndSave(updatedValue: any): void {
+  public isDifferent(updatedValue: V, oldValue: V): boolean {
+    return isDifferent(updatedValue, oldValue);
+  }
+
+  public closeAndSave(updatedValue: V, close = true): void {
     this.columnConfig$
       .pipe(take(1), withLatestFrom(this.cellValue$, this._data$))
       .subscribe(([config, oldValue, data]) => {
-        if (isDifferent(updatedValue, oldValue)) {
+        if (this.isDifferent(updatedValue, oldValue)) {
           if (!this.handleValueChanged) {
             throw Error(
               `No handleValueChanged method provided for column ${config.key}`
             );
           }
+          this.data = updateObject(config.key, updatedValue, data);
           this.handleValueChanged(updatedValue, config, data);
         }
-        this.resetTableCell();
+        if (close) {
+          this.resetTableCell();
+        }
       });
   }
 

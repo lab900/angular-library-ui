@@ -12,7 +12,7 @@ export abstract class ColumnHeaderRendererAbstract<
   protected readonly _columnConfig$ = new ReplaySubject<TableCell<T>>();
   public readonly columnConfig$: Observable<TableCell<T>> = this._columnConfig$
     .asObservable()
-    .pipe(shareReplay(1));
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input({ required: true })
   public set columnConfig(value: TableCell<T>) {
@@ -26,7 +26,7 @@ export abstract class ColumnHeaderRendererAbstract<
     ColumnHeaderRenderOptions | undefined
   > = this.columnConfig$.pipe(
     map((config) => config.headerRenderOptions),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   public readonly columnLabel$ = this.columnConfig$.pipe(

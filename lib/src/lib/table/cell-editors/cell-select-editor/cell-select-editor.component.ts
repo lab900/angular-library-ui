@@ -9,34 +9,28 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellSelectEditorOptions } from './cell-select-editor.options';
 import { TranslateModule } from '@ngx-translate/core';
-import { map } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { combineLatest, Observable } from 'rxjs';
-import { SelectAutoOpenDirective } from '../../directives/select-auto-open.directive';
 
 @Component({
   selector: 'lab900-cell-select-editor',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    CommonModule,
-    MatSelectModule,
-    TranslateModule,
-    SelectAutoOpenDirective,
-  ],
+  imports: [CommonModule, MatSelectModule, TranslateModule],
   template: `
     <mat-select
-      [tabindex]="-2"
       *ngIf="editOptions$ | async as editOptions"
+      #matSelect
       placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
       [value]="cellValue$ | async"
       (openedChange)="openChanged($event)"
       [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
       [multiple]="editOptions?.multiple ?? false"
       [panelWidth]="editOptions?.panelWidth ?? 'auto'"
-      (keydown.tab)="openChanged(false)"
+      [class.disable-td-event]="matSelect.panelOpen"
+      panelClass="lab900-table-select-editor-panel"
       class="lab900-table-select-editor"
-      lab900SelectAutoOpen
     >
       <!-- fixes the select on tab -->
       <mat-option style="display: none" />
@@ -66,21 +60,33 @@ export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEdit
         return o.options;
       }
       return [];
-    })
+    }),
+    distinctUntilChanged()
   );
 
+  private _matSelect?: MatSelect;
+
   @ViewChild(MatSelect)
-  private matSelect?: MatSelect;
-
-  public readonly defaultCompareFn = (a: any, b: any): boolean => a === b;
-
-  protected focusAfterViewInit(): void {
-    this.matSelect?.focus();
+  private set matSelect(value: MatSelect) {
+    this._matSelect = value;
+    setTimeout(() => {
+      if (this._matSelect && !this._matSelect.panelOpen) {
+        this._matSelect.focus();
+        this._matSelect.open();
+      }
+    });
   }
+
+  private get matSelect(): MatSelect {
+    return this._matSelect;
+  }
+
+  public readonly defaultCompareFn = (a: unknown, b: unknown): boolean =>
+    a === b;
 
   public openChanged(open: boolean): void {
     if (!open) {
-      this.closeAndSave(this.matSelect.value);
+      this.closeAndSave(this.matSelect.value, false);
     }
   }
 }

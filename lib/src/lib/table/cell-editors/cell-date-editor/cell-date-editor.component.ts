@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   HostListener,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
@@ -14,7 +13,6 @@ import {
 } from '@angular/material/datepicker';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellEditorBaseOptions } from '../cell-editor.options';
-import { Lab900TableCellComponent } from '../../components/table-cell/table-cell.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,13 +52,6 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
   public readonly updatedDate$ = new BehaviorSubject<any>(undefined);
   public readonly opened$ = new BehaviorSubject<boolean>(false);
 
-  public constructor(
-    tableCell: Lab900TableCellComponent,
-    elm: ElementRef<HTMLElement>
-  ) {
-    super(tableCell, elm);
-  }
-
   public changeValue(
     event: MatDatepickerInputEvent<any>,
     type: 'input' | 'change'
@@ -72,7 +63,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
     if (event.value == null || !isNaN(Date.parse(event.value))) {
       this.updatedDate$.next(event.value);
       if (type === 'change') {
-        super.closeAndSave(this.updatedDate$.value);
+        super.closeAndSave(this.updatedDate$.value, false);
       }
     }
   }
@@ -95,7 +86,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
     if (this.updatedDate$.value === undefined) {
       this.close();
     } else {
-      this.closeAndSave(this.updatedDate$.value);
+      this.closeAndSave(this.updatedDate$.value, false);
     }
   }
 }
