@@ -150,7 +150,7 @@ export class TableCellEventsDirective<T = any>
     return (
       !this.tableService._disableEditing$.value &&
       this.cell.cellEditor &&
-      !this.cell.cellEditorOptions?.disabled?.(this.getTableData())
+      !this.cell.cellEditorOptions?.disabled?.(this.cellData)
     );
   }
 

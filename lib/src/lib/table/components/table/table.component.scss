@@ -87,6 +87,9 @@ td.mat-mdc-cell {
   &.edit-mode {
     background: var(--lab900-table-edit-background);
   }
+  &:focus {
+    outline: none;
+  }
 }
 
 .cdk-drag-preview {
