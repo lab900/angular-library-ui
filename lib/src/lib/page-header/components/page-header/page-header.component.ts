@@ -53,6 +53,9 @@ export class Lab900PageHeaderComponent {
   public tabPanel?: MatTabNavPanel;
 
   @Input()
+  public showActionsFixedOnMobile = true;
+
+  @Input()
   public navFitInkBarToContent = false;
   public navStretch = false;
 

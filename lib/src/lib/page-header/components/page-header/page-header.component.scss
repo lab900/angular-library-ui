@@ -3,30 +3,26 @@
     h1 {
       margin: 0;
     }
+  }
 
+  &.fixed-mobile-action &__main {
     @media screen and (min-width: 960px) {
       display: flex;
       flex-wrap: wrap;
-
-      > :not(:last-child) {
-        margin-right: 16px;
-      }
+      gap: 8px;
+      align-items: center;
     }
   }
 
-  ::ng-deep .lab900-merger__row__icon {
-    button {
-      padding: 0 !important;
-      width: 50px;
-      height: 50px;
+  &:not(.fixed-mobile-action) &__main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
 
-      .mat-icon,
-      svg {
-        font-size: 50px;
-        width: 50px;
-        height: 50px;
-      }
-    }
+  .mat-divider {
+    height: 100%;
   }
 
   &__title {
@@ -43,20 +39,20 @@
     &--left {
       display: flex;
       justify-content: flex-start;
-
-      > :not(:last-child) {
-        margin-right: 16px;
-      }
+      gap: 8px;
+      align-items: center;
     }
 
     &--right {
       display: flex;
       justify-content: flex-end;
       flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
 
-      > :not(:last-child) {
-        margin-right: 16px;
-      }
+    .mat-mdc-icon-button {
+      padding: 0;
     }
   }
 
@@ -71,25 +67,30 @@
   }
 
   @media screen and (max-width: 959px) {
-    &__main h1 {
-      padding: 24px 16px 16px;
+    h1 {
+      font-size: 1.4em;
     }
 
-    &__actions {
-      padding: 8px 16px;
-      background: #fff;
-      border-top: 1px solid rgba(#000, 0.2);
-      z-index: 10;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      align-items: center;
-      justify-content: center;
-    }
+    &.fixed-mobile-action {
+      .lab900-page-header__main h1 {
+        padding: 24px 16px 16px;
+      }
+      .lab900-page-header__actions {
+        padding: 8px 16px;
+        background: #fff;
+        border-top: 1px solid rgba(#000, 0.2);
+        z-index: 10;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        align-items: center;
+        justify-content: center;
+      }
 
-    &__divider {
-      display: none;
+      .lab900-page-header__divider {
+        display: none;
+      }
     }
   }
 

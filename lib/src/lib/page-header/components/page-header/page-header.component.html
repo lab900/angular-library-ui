@@ -1,4 +1,7 @@
-<header class="lab900-page-header">
+<header
+  class="lab900-page-header"
+  [class.fixed-mobile-action]="showActionsFixedOnMobile"
+>
   <div
     *ngIf="pageTitle || breadCrumbs?.length || (actions$ | async)?.length"
     class="lab900-page-header__main"
@@ -7,12 +10,12 @@
       class="lab900-page-header__title"
       *ngIf="pageTitle || breadCrumbs?.length"
     >
-      <h1 *ngIf="pageTitle">{{ pageTitle | translate: pageTitleArgs }}</h1>
+      <h1 *ngIf="pageTitle">{{ pageTitle | translate : pageTitleArgs }}</h1>
       <lab900-bread-crumbs
         *ngIf="breadCrumbs?.length"
         [breadCrumbs]="breadCrumbs"
         [data]="data"
-      ></lab900-bread-crumbs>
+      />
     </div>
 
     <ng-container *ngIf="actions$ | async as actions">
@@ -25,19 +28,19 @@
             vertical="true"
             class="lab900-page-header__divider"
             *ngIf="leftActions?.length > 0"
-          ></mat-divider>
+          />
           <lab900-action-button
             *ngFor="let action of leftActions"
             [action]="action"
             [data]="data"
-          ></lab900-action-button>
+          />
         </div>
         <div class="lab900-page-header__actions--right">
           <lab900-action-button
             *ngFor="let action of rightActions$ | async"
             [action]="action"
             [data]="data"
-          ></lab900-action-button>
+          />
         </div>
       </div>
     </ng-container>
@@ -54,6 +57,6 @@
       *ngFor="let item of navItems"
       [item]="item"
       [data]="data"
-    ></lab900-page-header-nav-item>
+    />
   </nav>
 </header>

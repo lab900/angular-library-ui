@@ -11,7 +11,8 @@ import {
     [pageTitle]="pageTitle"
     [navItems]="navItems"
     [actions]="actions"
-  ></lab900-page-header>`,
+    [showActionsFixedOnMobile]="false"
+  />`,
   standalone: true,
   imports: [Lab900PageHeaderComponent],
 })
@@ -35,9 +36,9 @@ export class PageHeaderParamsExampleComponent {
 
   public actions: ActionButton[] = [
     {
-      label: 'Cancel',
+      label: 'close',
       action: () => console.log('cancel'),
-      type: 'flat',
+      type: 'icon',
     },
     {
       label: 'Left btn',

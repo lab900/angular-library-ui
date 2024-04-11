@@ -19,8 +19,8 @@ import { of } from 'rxjs';
       [breadCrumbs]="breadCrumbs"
       [data]="{ tab: 'Examples' }"
       [tabPanel]="tabNavPanel"
-    ></lab900-page-header>
-    <mat-tab-nav-panel #tabNavPanel></mat-tab-nav-panel>`,
+    />
+    <mat-tab-nav-panel #tabNavPanel />`,
 })
 export class PageHeaderExampleComponent {
   public pageTitle = 'Example page header';
