@@ -61,7 +61,7 @@ export class NavItemComponent
   }
 
   @Input()
-  public navListMatchOptions?: IsActiveMatchOptions;
+  public navListMatchOptions?: IsActiveMatchOptions | { exact: boolean };
 
   public constructor(
     public readonly router: Router,

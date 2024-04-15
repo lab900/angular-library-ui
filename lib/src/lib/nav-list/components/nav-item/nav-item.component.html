@@ -45,6 +45,7 @@
       [expanded]="expanded$ | async"
       [disabled]="disabled$ | async"
       [showLevelArrow]="showLevelArrows && !!item?.children?.length"
+      [navListMatchOptions]="navListMatchOptions"
     ></lab900-nav-item-button>
     <div class="nav-item--with-overlay__overlay mat-elevation-z4">
       <lab900-nav-item
@@ -52,6 +53,7 @@
         [item]="child"
         [depth]="0"
         [showLevelArrows]="showLevelArrows"
+        [navListMatchOptions]="navListMatchOptions"
       ></lab900-nav-item>
     </div>
   </div>

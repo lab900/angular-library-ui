@@ -69,7 +69,7 @@ export class NavItemButtonComponent {
   }
 
   @Input()
-  public navListMatchOptions?: IsActiveMatchOptions;
+  public navListMatchOptions?: IsActiveMatchOptions | { exact: boolean };
 
   @Input()
   public readonly depth: number;
