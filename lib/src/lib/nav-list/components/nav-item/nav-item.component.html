@@ -12,7 +12,7 @@
       [expanded]="expanded$ | async"
       [disabled]="disabled$ | async"
       [showLevelArrow]="showLevelArrows && !!item?.children?.length"
-      [navListMatchOptions]="navListMatchOptions"
+      [navListMatchOptions]="item?.routeMatchOptions ?? navListMatchOptions"
       (click)="onClick($event)"
     />
     <!-- Children -->

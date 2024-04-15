@@ -12,7 +12,7 @@ export interface NavItem {
   childrenInOverlay?: boolean;
   hide?: (() => boolean) | boolean;
   navigationFinished?: (navigationResult: boolean | null) => void;
-  routeMatchOptions?: IsActiveMatchOptions;
+  routeMatchOptions?: IsActiveMatchOptions | { exact: boolean };
 }
 
 export interface NavItemGroup {
