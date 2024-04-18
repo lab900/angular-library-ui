@@ -15,11 +15,15 @@ import {
   CustomComponent,
   CustomComponentAbstract,
 } from '../../abstracts/custom-component.abstract';
+import { TranslateModule } from '@ngx-translate/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'lab900-merger-item',
   templateUrl: './merger-item.component.html',
   styleUrls: ['./merger-item.component.scss'],
+  standalone: true,
+  imports: [TranslateModule, AsyncPipe],
 })
 export class Lab900MergerItemComponent<T>
   implements CustomComponentAbstract<T>, AfterViewInit, OnChanges
@@ -61,7 +65,7 @@ export class Lab900MergerItemComponent<T>
 
   public display(
     config: MergeConfig<T>,
-    parentAttribute?: string
+    parentAttribute?: string,
   ): Observable<any> {
     const value = parentAttribute
       ? this.data[parentAttribute][config.attribute]
@@ -72,7 +76,7 @@ export class Lab900MergerItemComponent<T>
 
   private createComponent(): void {
     this.customComponentRef = this.customComponentContainer.createComponent(
-      this.config.component
+      this.config.component,
     );
     setTimeout(() => {
       this.customComponentRef.instance.data = this.data;

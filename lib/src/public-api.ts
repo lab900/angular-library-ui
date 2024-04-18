@@ -39,8 +39,8 @@ export * from './lib/page-header/components/page-header-nav-item/page-header-nav
 export * from './lib/page-header/models/page-header-nav.model';
 
 // merger
-export * from './lib/merger/merger.module';
 export * from './lib/merger/components/merger/merger.component';
+export * from './lib/merger/components/merger-item/merger-item.component';
 export * from './lib/merger/models/merge-object.model';
 export * from './lib/merger/models/merge-config.model';
 export * from './lib/merger/abstracts/custom-component.abstract';
