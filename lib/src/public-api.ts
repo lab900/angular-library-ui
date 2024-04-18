@@ -8,10 +8,11 @@ export * from './lib/utils/utils';
 export * from './lib/utils/different.utils';
 
 // dialogs
-export * from './lib/dialog/dialog.module';
 export * from './lib/dialog/components/alert-dialog/alert-dialog.component';
 export * from './lib/dialog/components/confirmation-dialog/confirmation-dialog.component';
 export * from './lib/dialog/directives/confirmation-dialog.directive';
+export * from './lib/dialog/models/alertDialog';
+export * from './lib/dialog/models/confirmationDialog';
 
 // alerts
 export * from './lib/alert/components/alert/alert.component';
