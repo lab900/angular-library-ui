@@ -1,36 +1,39 @@
-<a
-  *ngIf="item$ | async as item"
-  mat-tab-link
-  routerLinkActive="active"
-  [routerLink]="route$ | async"
-  [queryParams]="item?.queryParams"
-  #rla="routerLinkActive"
-  [active]="rla.isActive"
-  class="lab900-page-header__nav__item"
->
-  <ng-container *ngIf="prefixIcon$ | async as prefixIcon">
-    <mat-icon
-      class="lab900-page-header__nav__item__prefix-icon"
-      *ngIf="item.svgIcon"
-      [svgIcon]="prefixIcon"
-    ></mat-icon>
-    <mat-icon
-      class="lab900-page-header__nav__item__prefix-icon"
-      *ngIf="!item.svgIcon"
-      >{{ prefixIcon }}</mat-icon
-    >
-  </ng-container>
-  {{ label$ | async | translate }}
-  <ng-container *ngIf="suffixIcon$ | async as suffixIcon">
-    <mat-icon
-      class="lab900-page-header__nav__item__suffix-icon"
-      *ngIf="item.svgIcon"
-      [svgIcon]="suffixIcon"
-    ></mat-icon>
-    <mat-icon
-      class="lab900-page-header__nav__item__suffix-icon"
-      *ngIf="!item.svgIcon"
-      >{{ suffixIcon }}</mat-icon
-    >
-  </ng-container>
-</a>
+@if (item$ | async; as item) {
+  <a
+    mat-tab-link
+    routerLinkActive="active"
+    [routerLink]="route$ | async"
+    [queryParams]="item?.queryParams"
+    #rla="routerLinkActive"
+    [active]="rla.isActive"
+    class="lab900-page-header__nav__item"
+  >
+    @if (prefixIcon$ | async; as prefixIcon) {
+      @if (item.svgIcon) {
+        <mat-icon
+          class="lab900-page-header__nav__item__prefix-icon"
+          [svgIcon]="prefixIcon"
+        ></mat-icon>
+      }
+      @if (!item.svgIcon) {
+        <mat-icon class="lab900-page-header__nav__item__prefix-icon">{{
+          prefixIcon
+        }}</mat-icon>
+      }
+    }
+    {{ label$ | async | translate }}
+    @if (suffixIcon$ | async; as suffixIcon) {
+      @if (item.svgIcon) {
+        <mat-icon
+          class="lab900-page-header__nav__item__suffix-icon"
+          [svgIcon]="suffixIcon"
+        ></mat-icon>
+      }
+      @if (!item.svgIcon) {
+        <mat-icon class="lab900-page-header__nav__item__suffix-icon">{{
+          suffixIcon
+        }}</mat-icon>
+      }
+    }
+  </a>
+}

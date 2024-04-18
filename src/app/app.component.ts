@@ -61,7 +61,7 @@ export class AppComponent
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private router: Router,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
   ) {
     super();
 
@@ -71,14 +71,14 @@ export class AppComponent
     this.matIconRegistry.addSvgIcon(
       'github',
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        'assets/images/github-logo.svg'
-      )
+        'assets/images/github-logo.svg',
+      ),
     );
     this.matIconRegistry.addSvgIcon(
       'lab900',
       this.domSanitizer.bypassSecurityTrustResourceUrl(
-        'assets/images/logo-duo-dark.svg'
-      )
+        'assets/images/logo-duo-dark.svg',
+      ),
     );
 
     this.sideNavMode$ = this.breakpointObserver
@@ -93,12 +93,12 @@ export class AppComponent
           ([e, sideNavMode]) =>
             e instanceof NavigationEnd &&
             sideNavMode === 'over' &&
-            this.drawer.opened
-        )
+            this.drawer.opened,
+        ),
       ),
       () => {
         this.drawer.close();
-      }
+      },
     );
   }
 

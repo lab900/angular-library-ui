@@ -33,7 +33,7 @@ export function equalObjects(object1: object, object2: object): boolean {
 
 export function equalArrays(
   array1: Array<unknown>,
-  array2: Array<unknown>
+  array2: Array<unknown>,
 ): boolean {
   if (array1.length !== array2.length) {
     return false;
@@ -63,7 +63,7 @@ export function isDifferent<T = unknown>(newValue: T, oldValue: T): boolean {
 export function updateObject<T = object>(
   keyName: string,
   newVal: unknown,
-  obj: T
+  obj: T,
 ): T {
   const results: T = {} as T;
   for (const key in obj) {

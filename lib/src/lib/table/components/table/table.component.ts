@@ -41,13 +41,7 @@ import {
 import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900TableHeaderComponent } from '../table-header/lab900-table-header.component';
-import {
-  AsyncPipe,
-  NgClass,
-  NgForOf,
-  NgIf,
-  NgTemplateOutlet,
-} from '@angular/common';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
@@ -89,7 +83,6 @@ export interface SelectableRows<T = any> {
   imports: [
     Lab900TableHeaderComponent,
     AsyncPipe,
-    NgIf,
     NgTemplateOutlet,
     Lab900TableTabsComponent,
     MatProgressBarModule,
@@ -99,7 +92,6 @@ export interface SelectableRows<T = any> {
     TableCellSelectComponent,
     Lab900TableCellComponent,
     CdkDragHandle,
-    NgForOf,
     CdkDrag,
     TranslateModule,
     CdkDragPlaceholder,

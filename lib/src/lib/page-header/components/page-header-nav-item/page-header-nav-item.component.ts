@@ -12,7 +12,7 @@ import {
 } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { readPropValue } from '../../../utils/utils';
@@ -29,7 +29,6 @@ import { PageHeaderNavItem } from '../../models/page-header-nav.model';
   imports: [
     MatIconModule,
     MatTabsModule,
-    NgIf,
     RouterLinkActive,
     TranslateModule,
     RouterLink,
@@ -64,15 +63,15 @@ export class PageHeaderNavItemComponent {
 
   public constructor() {
     const stream = combineLatest([this.item$, this.data$]).pipe(
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.label$ = stream.pipe(map(([a, d]) => readPropValue(a.label, d)));
     this.route$ = stream.pipe(map(([a, d]) => readPropValue(a.route, d) ?? []));
     this.suffixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.suffixIcon, d))
+      map(([a, d]) => readPropValue(a.suffixIcon, d)),
     );
     this.prefixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.prefixIcon, d))
+      map(([a, d]) => readPropValue(a.prefixIcon, d)),
     );
   }
 }

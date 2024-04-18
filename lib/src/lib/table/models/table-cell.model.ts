@@ -17,7 +17,7 @@ export interface TableCell<
   T = any,
   CellRenderOptions = any,
   HeaderRenderOptions = any,
-  CellEditorOptions extends CellEditorBaseOptions = CellEditorBaseOptions
+  CellEditorOptions extends CellEditorBaseOptions = CellEditorBaseOptions,
 > {
   /**
    * Column key

@@ -41,7 +41,7 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
     .asObservable()
     .pipe(
       filter((c) => !!c?.key),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
   @Input({ required: true })
@@ -77,8 +77,8 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
         ([cell, rowValue, disableEditing]) =>
           !disableEditing &&
           cell.cellEditor &&
-          !cell.cellEditorOptions?.disabled?.(rowValue)
-      )
+          !cell.cellEditorOptions?.disabled?.(rowValue),
+      ),
     );
 
     this.isEditing$ = combineLatest([
@@ -97,7 +97,7 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
           cell.cellEditor &&
           !cell.cellEditorOptions?.disabled?.(rowValue)
         );
-      })
+      }),
     );
 
     this.cellClasses$ = combineLatest([this.cell$, this.rowValue$]).pipe(
@@ -105,7 +105,7 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
         return (
           this.getCellClasses(cell, rowValue)?.trim().split(' ') ?? []
         ).filter((s) => !!s?.length);
-      })
+      }),
     );
   }
 
@@ -146,7 +146,7 @@ export class TableCellInnerComponent<T = any> implements OnInit, OnDestroy {
   public readonly handleValueChanged = (
     value: any,
     cell: TableCell<T>,
-    row: T
+    row: T,
   ): void => {
     if (cell?.cellEditorOptions?.valueChanged) {
       cell.cellEditorOptions.valueChanged({ value, cell, row });

@@ -7,13 +7,14 @@
     class="lab900-cell-value"
     [innerHTML]="cellValue$ | async | translate"
   ></div>
-  <button
-    style="margin-left: 6px"
-    mat-icon-button
-    *ngIf="(disabled$ | async) === false"
-    (click)="handleClear($event)"
-    [tabIndex]="-1"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
+  @if ((disabled$ | async) === false) {
+    <button
+      style="margin-left: 6px"
+      mat-icon-button
+      (click)="handleClear($event)"
+      [tabIndex]="-1"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  }
 </div>

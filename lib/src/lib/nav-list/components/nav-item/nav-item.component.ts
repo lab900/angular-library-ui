@@ -11,7 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SubscriptionBasedDirective } from '../../../common/directives/subscription-based.directive';
 import { filter } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { NavItemButtonComponent } from '../nav-item-button/nav-item-button.component';
 
 @Component({
@@ -21,7 +21,7 @@ import { NavItemButtonComponent } from '../nav-item-button/nav-item-button.compo
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, NavItemButtonComponent, AsyncPipe, NgForOf],
+  imports: [NavItemButtonComponent, AsyncPipe],
 })
 export class NavItemComponent
   extends SubscriptionBasedDirective
@@ -65,7 +65,7 @@ export class NavItemComponent
 
   public constructor(
     public readonly router: Router,
-    public readonly breakpointObserver: BreakpointObserver
+    public readonly breakpointObserver: BreakpointObserver,
   ) {
     super();
   }
@@ -82,11 +82,11 @@ export class NavItemComponent
           if (url && this.item?.children?.length) {
             this._expanded$.next(
               this.item.children.some(
-                (item: NavItem) => url.indexOf(`/${item.route}`) === 0
-              )
+                (item: NavItem) => url.indexOf(`/${item.route}`) === 0,
+              ),
             );
           }
-        }
+        },
       );
     }
   }

@@ -5,7 +5,7 @@ import {
   SharingDialogData,
 } from '../../models/share-dialog-component.abstract';
 import { ComponentType } from '@angular/cdk/portal';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -18,14 +18,7 @@ const materialIconBase64 =
   templateUrl: './sharing.component.html',
   styleUrls: ['./sharing.component.scss'],
   standalone: true,
-  imports: [
-    NgIf,
-    NgForOf,
-    MatButtonModule,
-    MatIconModule,
-    MatDialogModule,
-    MatTooltipModule,
-  ],
+  imports: [MatButtonModule, MatIconModule, MatDialogModule, MatTooltipModule],
 })
 export class Lab900SharingComponent {
   @Input()

@@ -16,7 +16,7 @@ import {
   ReplaySubject,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AsyncPipe, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Lab900TableFilterMenuComponent } from '../table-filter-menu/table-filter-menu.component';
 import { Lab900ActionButtonComponent } from '../../../button/components/action-button/lab900-action-button.component';
 
@@ -29,9 +29,7 @@ import { Lab900ActionButtonComponent } from '../../../button/components/action-b
   standalone: true,
   imports: [
     AsyncPipe,
-    NgIf,
     Lab900TableFilterMenuComponent,
-    NgForOf,
     NgTemplateOutlet,
     Lab900ActionButtonComponent,
   ],

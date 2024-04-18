@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { SubscriptionBasedDirective } from '../../directives/subscription-based.directive';
 import { MarkdownModule } from 'ngx-markdown';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'lab900-markdown-page',
@@ -11,7 +10,7 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./markdown-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [MarkdownModule, NgIf],
+  imports: [MarkdownModule],
 })
 export class MarkdownPageComponent extends SubscriptionBasedDirective {
   @Input()
@@ -22,11 +21,11 @@ export class MarkdownPageComponent extends SubscriptionBasedDirective {
     this.addSubscription(
       this.activatedRoute.data.pipe(
         filter((data: { filePath: string }) => !!data?.filePath),
-        take(1)
+        take(1),
       ),
       (data) => {
         this.filePath = data.filePath;
-      }
+      },
     );
   }
 }

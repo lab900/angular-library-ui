@@ -39,7 +39,7 @@ bootstrapApplication(AppComponent, {
           deps: [HttpClient],
         },
         defaultLanguage: 'en',
-      })
+      }),
     ),
   ],
 }).catch((err) => console.error(err));

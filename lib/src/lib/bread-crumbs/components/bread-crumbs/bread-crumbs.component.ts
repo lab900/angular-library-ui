@@ -5,7 +5,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { BreadCrumb } from '../../models/bread-crumb.model';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { BreadCrumbItemComponent } from '../bread-crumb-item/bread-crumb-item.component';
@@ -15,13 +15,7 @@ import { BreadCrumbItemComponent } from '../bread-crumb-item/bread-crumb-item.co
   templateUrl: './bread-crumbs.component.html',
   styleUrls: ['./bread-crumbs.component.scss'],
   standalone: true,
-  imports: [
-    NgIf,
-    NgForOf,
-    RouterLink,
-    TranslateModule,
-    BreadCrumbItemComponent,
-  ],
+  imports: [RouterLink, TranslateModule, BreadCrumbItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })

@@ -48,7 +48,7 @@ export class TableCellEventsDirective<T = any>
     this.cellIdx = this.siblingCells.indexOf(this.elm.nativeElement);
     this.siblingRows = this.getAllSiblingRows();
     this.rowIdx = this.siblingRows.indexOf(
-      this.elm.nativeElement.parentElement as HTMLTableRowElement
+      this.elm.nativeElement.parentElement as HTMLTableRowElement,
     );
 
     /**
@@ -125,7 +125,7 @@ export class TableCellEventsDirective<T = any>
         event.preventDefault();
         event.stopImmediatePropagation();
         this.getNextEditableSiblingOnAnotherRow(
-          event.key === 'ArrowDown' ? 'after' : 'before'
+          event.key === 'ArrowDown' ? 'after' : 'before',
         );
         break;
       }
@@ -174,7 +174,7 @@ export class TableCellEventsDirective<T = any>
 
   private getNextEditableSiblingOnAnotherRow(
     position: 'before' | 'after',
-    sameColumn = true
+    sameColumn = true,
   ): void {
     const allRows = [...this.siblingRows];
     const rows =
@@ -208,12 +208,12 @@ export class TableCellEventsDirective<T = any>
 
   private matchingCell(
     cell: HTMLTableCellElement,
-    sameColumnKey: boolean
+    sameColumnKey: boolean,
   ): boolean {
     return (
       (!sameColumnKey ||
         cell.classList?.contains(
-          'cdk-column-' + this.cell.key.replace('.', '-')
+          'cdk-column-' + this.cell.key.replace('.', '-'),
         )) &&
       cell.classList?.contains('editable')
     );

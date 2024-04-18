@@ -1,117 +1,117 @@
-<div *ngIf="tableCells$ | async as cells" class="lab900-table-filter-menu">
-  <button [matMenuTriggerFor]="filterMenu" color="primary" mat-icon-button>
-    <mat-icon>{{ filterIcon }}</mat-icon>
-  </button>
-  <mat-menu #filterMenu class="lab900-table-filter-menu__mat-menu">
-    <ng-container *ngIf="!toggleAndMoveColumns; else moveColumnsRef">
-      <div *ngFor="let cell of cells" class="lab900-table-filter-menu__option">
-        <div class="lab900-table-filter-menu__option--padding">
-          <mat-checkbox
-            (click)="handleCheckboxClick($event, cell)"
-            [checked]="!cell.hide"
-            color="primary"
-          >
-            {{ getCellLabel(cell) | translate }}
-          </mat-checkbox>
-        </div>
-      </div>
-    </ng-container>
-    <ng-template #moveColumnsRef>
-      <!-- ACTIVE COLUMNS -->
-      <ng-container *ngIf="visibleCells$ | async as visibleCells">
-        <div
-          (click)="$event.stopPropagation(); $event.preventDefault()"
-          *ngIf="visibleCells?.length > 0"
-          class="
-            lab900-table-filter-menu__option
-            lab900-table-filter-menu__option--bold
-            lab900-table-filter-menu__title
-          "
-        >
-          {{ 'ui.table.active_columns' | translate }}
-        </div>
-        <div cdkScrollable class="lab900-table-filter-menu__items-container">
-          <div
-            (cdkDropListDropped)="drop($event)"
-            [cdkDropListData]="visibleCells"
-            cdkDropList
-          >
-            <div
-              (click)="handleCheckboxClick($event, cell)"
-              *ngFor="let cell of visibleCells"
-              cdkDrag
-              class="lab900-table-filter-menu__option"
-            >
-              <div class="lab900-table-filter-menu__option--padding center-row">
-                <!-- placeholder-->
-                <div
-                  *cdkDragPlaceholder
-                  class="lab900-table-filter-menu__drag-placeholder"
-                >
-                  <mat-icon class="lab900-table-filter-menu__drag-icon"
-                    >drag_handle
-                  </mat-icon>
-                </div>
-                <!-- preview -->
-                <div *cdkDragPreview>
-                  <mat-icon class="lab900-table-filter-menu__drag-icon"
-                    >drag_handle
-                  </mat-icon>
-                  {{ getCellLabel(cell) | translate }}
-                </div>
-                <!-- content -->
-                <mat-icon
-                  cdkDragHandle
-                  class="lab900-table-filter-menu__drag-icon"
-                >
-                  drag_handle
-                </mat-icon>
-                <mat-checkbox
-                  [checked]="!cell.hide"
-                  [labelPosition]="'before'"
-                  class="lab900-table-filter-menu__checkbox"
-                  color="primary"
-                >
-                  {{ getCellLabel(cell) | translate }}
-                </mat-checkbox>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <!-- INACTIVE COLUMNS -->
-      <ng-container *ngIf="hiddenCells$ | async as hiddenCells">
-        <div
-          (click)="$event.stopPropagation(); $event.preventDefault()"
-          *ngIf="hiddenCells?.length > 0"
-          class="
-            lab900-table-filter-menu__option
-            lab900-table-filter-menu__option--bold
-            lab900-table-filter-menu__title
-            lab900-table-filter-menu__title--middle
-          "
-        >
-          {{ 'ui.table.inactive_columns' | translate }}
-        </div>
-        <div class="lab900-table-filter-menu__items-container">
-          <div
-            (click)="handleCheckboxClick($event, cell)"
-            *ngFor="let cell of hiddenCells"
-            class="lab900-table-filter-menu__option"
-          >
+@if (tableCells$ | async; as cells) {
+  <div class="lab900-table-filter-menu">
+    <button [matMenuTriggerFor]="filterMenu" color="primary" mat-icon-button>
+      <mat-icon>{{ filterIcon }}</mat-icon>
+    </button>
+    <mat-menu #filterMenu class="lab900-table-filter-menu__mat-menu">
+      @if (!toggleAndMoveColumns) {
+        @for (cell of cells; track cell.key) {
+          <div class="lab900-table-filter-menu__option">
             <div class="lab900-table-filter-menu__option--padding">
               <mat-checkbox
+                (click)="handleCheckboxClick($event, cell)"
                 [checked]="!cell.hide"
-                [labelPosition]="'before'"
-                class="lab900-table-filter-menu__checkbox"
                 color="primary"
               >
                 {{ getCellLabel(cell) | translate }}
               </mat-checkbox>
             </div>
           </div>
-        </div>
-      </ng-container>
-    </ng-template>
-  </mat-menu>
-</div>
+        }
+      } @else {
+        <!-- ACTIVE COLUMNS -->
+        @if (visibleCells$ | async; as visibleCells) {
+          @if (visibleCells?.length > 0) {
+            <div
+              (click)="$event.stopPropagation(); $event.preventDefault()"
+              class="lab900-table-filter-menu__option lab900-table-filter-menu__option--bold lab900-table-filter-menu__title"
+            >
+              {{ 'ui.table.active_columns' | translate }}
+            </div>
+          }
+          <div cdkScrollable class="lab900-table-filter-menu__items-container">
+            <div
+              (cdkDropListDropped)="drop($event)"
+              [cdkDropListData]="visibleCells"
+              cdkDropList
+            >
+              @for (cell of visibleCells; track cell.key) {
+                <div
+                  (click)="handleCheckboxClick($event, cell)"
+                  cdkDrag
+                  class="lab900-table-filter-menu__option"
+                >
+                  <div
+                    class="lab900-table-filter-menu__option--padding center-row"
+                  >
+                    <!-- placeholder-->
+                    <div
+                      *cdkDragPlaceholder
+                      class="lab900-table-filter-menu__drag-placeholder"
+                    >
+                      <mat-icon class="lab900-table-filter-menu__drag-icon"
+                        >drag_handle
+                      </mat-icon>
+                    </div>
+                    <!-- preview -->
+                    <div *cdkDragPreview>
+                      <mat-icon class="lab900-table-filter-menu__drag-icon"
+                        >drag_handle
+                      </mat-icon>
+                      {{ getCellLabel(cell) | translate }}
+                    </div>
+                    <!-- content -->
+                    <mat-icon
+                      cdkDragHandle
+                      class="lab900-table-filter-menu__drag-icon"
+                    >
+                      drag_handle
+                    </mat-icon>
+                    <mat-checkbox
+                      [checked]="!cell.hide"
+                      [labelPosition]="'before'"
+                      class="lab900-table-filter-menu__checkbox"
+                      color="primary"
+                    >
+                      {{ getCellLabel(cell) | translate }}
+                    </mat-checkbox>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+        <!-- INACTIVE COLUMNS -->
+        @if (hiddenCells$ | async; as hiddenCells) {
+          @if (hiddenCells?.length > 0) {
+            <div
+              (click)="$event.stopPropagation(); $event.preventDefault()"
+              class="lab900-table-filter-menu__option lab900-table-filter-menu__option--bold lab900-table-filter-menu__title lab900-table-filter-menu__title--middle"
+            >
+              {{ 'ui.table.inactive_columns' | translate }}
+            </div>
+          }
+          <div class="lab900-table-filter-menu__items-container">
+            @for (cell of hiddenCells; track cell.key) {
+              <div
+                (click)="handleCheckboxClick($event, cell)"
+                class="lab900-table-filter-menu__option"
+              >
+                <div class="lab900-table-filter-menu__option--padding">
+                  <mat-checkbox
+                    [checked]="!cell.hide"
+                    [labelPosition]="'before'"
+                    class="lab900-table-filter-menu__checkbox"
+                    color="primary"
+                  >
+                    {{ getCellLabel(cell) | translate }}
+                  </mat-checkbox>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      }
+    </mat-menu>
+  </div>
+}

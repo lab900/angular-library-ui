@@ -2993,7 +2993,7 @@ export class TableExampleComponent {
     sort.forEach((s) => {
       this.mockData.sort(
         (a: any, b: any) =>
-          (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1)
+          (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1),
       );
       this.mockData = [...this.mockData];
     });

@@ -3,7 +3,7 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CellWithClearingRendererOptions } from './cell-with-clearing-renderer.options';
 import { combineLatest } from 'rxjs';
@@ -17,7 +17,6 @@ import { CellRendererAbstract } from '../cell-renderer.abstract';
   selector: 'lab900-cell-with-clearing-renderer',
   standalone: true,
   imports: [
-    NgIf,
     AsyncPipe,
     MatIconModule,
     MatTooltipModule,
@@ -43,12 +42,12 @@ import { CellRendererAbstract } from '../cell-renderer.abstract';
   ],
 })
 export class CellWithClearingRendererComponent<
-  T = any
+  T = any,
 > extends CellRendererAbstract<CellWithClearingRendererOptions, T> {
   public readonly tooltipWithoutHtml$ = this.tooltip$.pipe(
     map((tooltip) => {
       return tooltip?.replace(/<[^>]*>/g, '');
-    })
+    }),
   );
   public readonly disabled$ = combineLatest([
     this.columnConfig$,
@@ -58,7 +57,7 @@ export class CellWithClearingRendererComponent<
       const value = this.cellFormatter(config, data);
       const disabled = config?.cellEditorOptions?.disabled?.(data) ?? false;
       return !value || disabled;
-    })
+    }),
   );
 
   public handleClear(event: MouseEvent): void {
@@ -69,7 +68,7 @@ export class CellWithClearingRendererComponent<
       .subscribe(([config, data]) => {
         if (!this.handleValueChanged) {
           throw Error(
-            `No handleValueChanged method provided for column ${config.key}`
+            `No handleValueChanged method provided for column ${config.key}`,
           );
         }
         this.data = { ...data, [config.key]: null };

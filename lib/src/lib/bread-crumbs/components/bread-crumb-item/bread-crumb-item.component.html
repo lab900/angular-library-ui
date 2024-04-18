@@ -1,15 +1,15 @@
-<ng-container *ngIf="route$ | async as route">
-  <a
-    *ngIf="route; else staticBreadCrumb"
-    class="lab900-bread-crumb-item"
-    [routerLink]="route"
-    [queryParams]="queryParams$ | async"
-  >
-    {{ title$ | async | translate }}
-  </a>
-</ng-container>
-<ng-template #staticBreadCrumb>
-  <span class="lab900-bread-crumb-item lab900-bread-crumb-item--static">{{
-    title$ | async | translate
-  }}</span>
-</ng-template>
+@if (route$ | async; as route) {
+  @if (route) {
+    <a
+      class="lab900-bread-crumb-item"
+      [routerLink]="route"
+      [queryParams]="queryParams$ | async"
+    >
+      {{ title$ | async | translate }}
+    </a>
+  } @else {
+    <span class="lab900-bread-crumb-item lab900-bread-crumb-item--static">{{
+      title$ | async | translate
+    }}</span>
+  }
+}

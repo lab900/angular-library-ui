@@ -3,7 +3,7 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { MatIconModule } from '@angular/material/icon';
 import { CellWithIconRendererOptions } from './cell-with-icon-renderer.options';
@@ -15,7 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'lab900-cell-with-icon-renderer',
   standalone: true,
-  imports: [NgIf, AsyncPipe, MatIconModule, MatTooltipModule, TranslateModule],
+  imports: [AsyncPipe, MatIconModule, MatTooltipModule, TranslateModule],
   templateUrl: './cell-with-icon-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -29,13 +29,13 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
 })
 export class CellWithIconRendererComponent<
-  T = any
+  T = any,
 > extends CellRendererAbstract<CellWithIconRendererOptions<T>, T> {
   public readonly icon$: Observable<string> = combineLatest([
     this.rendererOptions$,
     this.data$,
   ]).pipe(
     map(([options, data]) => options?.icon(data) ?? ''),
-    shareReplay({ bufferSize: 1, refCount: true })
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 }

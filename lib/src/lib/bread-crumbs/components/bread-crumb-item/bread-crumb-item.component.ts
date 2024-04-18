@@ -13,7 +13,7 @@ import {
 import { map, shareReplay } from 'rxjs/operators';
 import { BreadCrumb } from '../../models/bread-crumb.model';
 import { readPropValue } from '../../../utils/utils';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
 
@@ -22,7 +22,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   templateUrl: './bread-crumb-item.component.html',
   styleUrls: ['./bread-crumb-item.component.scss'],
-  imports: [NgIf, TranslateModule, AsyncPipe, RouterLink],
+  imports: [TranslateModule, AsyncPipe, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
@@ -53,12 +53,12 @@ export class BreadCrumbItemComponent {
 
   public constructor() {
     const stream = combineLatest([this.item$, this.data$]).pipe(
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.title$ = stream.pipe(map(([a, d]) => readPropValue(a.title, d)));
     this.route$ = stream.pipe(map(([a, d]) => readPropValue(a.route, d)));
     this.queryParams$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.queryParams, d))
+      map(([a, d]) => readPropValue(a.queryParams, d)),
     );
   }
 }

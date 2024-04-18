@@ -11,7 +11,7 @@ import { MatTabNavPanel, MatTabsModule } from '@angular/material/tabs';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PageHeaderNavItemComponent } from '../page-header-nav-item/page-header-nav-item.component';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { TranslateModule } from '@ngx-translate/core';
 import { BreadCrumbsComponent } from '../../../bread-crumbs/components/bread-crumbs/bread-crumbs.component';
@@ -27,8 +27,6 @@ import { Lab900ActionButtonComponent } from '../../../button/components/action-b
   imports: [
     MatTabsModule,
     PageHeaderNavItemComponent,
-    NgForOf,
-    NgIf,
     AsyncPipe,
     MatListModule,
     BreadCrumbsComponent,

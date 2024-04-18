@@ -12,7 +12,7 @@ import {
   ReplaySubject,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AsyncPipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatListModule } from '@angular/material/list';
@@ -30,7 +30,6 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
     AsyncPipe,
     IconComponent,
     TranslateModule,
@@ -85,7 +84,7 @@ export class NavItemButtonComponent {
           return 'navigate_next';
         }
         return expanded ? 'expand_less' : 'expand_more';
-      })
+      }),
     );
   }
 }

@@ -47,14 +47,14 @@ export default [
     new ShowcaseExample(TableExampleComponent, 'Table'),
     new ShowcaseExample(
       TableDragAndDropExampleComponent,
-      'Table with re-arrangeable rows'
+      'Table with re-arrangeable rows',
     ),
     new ShowcaseExample(TableTabsExampleComponent, 'Table with different tabs'),
   ]),
   new ShowcaseRoute('page-header', 'Page header', [
     new ShowcaseExample(
       PageHeaderParamsExampleComponent,
-      'Page header from request params'
+      'Page header from request params',
     ),
     new ShowcaseExample(PageHeaderExampleComponent, 'Page header'),
   ]),

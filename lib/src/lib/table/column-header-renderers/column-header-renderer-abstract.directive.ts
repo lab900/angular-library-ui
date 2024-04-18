@@ -7,7 +7,7 @@ import { readPropValue } from '../../utils/utils';
 @Directive()
 export abstract class ColumnHeaderRendererAbstract<
   ColumnHeaderRenderOptions = any,
-  T = any
+  T = any,
 > {
   protected readonly _columnConfig$ = new ReplaySubject<TableCell<T>>();
   public readonly columnConfig$: Observable<TableCell<T>> = this._columnConfig$
@@ -26,10 +26,10 @@ export abstract class ColumnHeaderRendererAbstract<
     ColumnHeaderRenderOptions | undefined
   > = this.columnConfig$.pipe(
     map((config) => config.headerRenderOptions),
-    shareReplay({ bufferSize: 1, refCount: true })
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   public readonly columnLabel$ = this.columnConfig$.pipe(
-    map((c) => readPropValue<TableCell<T>>(c.label, c))
+    map((c) => readPropValue<TableCell<T>>(c.label, c)),
   );
 }
