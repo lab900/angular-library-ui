@@ -62,6 +62,10 @@ export class Lab900ActionButtonToggleComponent<T = any>
     return coerceObservable(readPropValue(action.disabled, this.data));
   }
 
+  public getLabel(action: ActionButton): Observable<string> {
+    return coerceObservable(readPropValue(action.label, this.data));
+  }
+
   public doAction(e: Event): void {
     e.stopPropagation();
     this.action?.action?.(this.data, e, this);

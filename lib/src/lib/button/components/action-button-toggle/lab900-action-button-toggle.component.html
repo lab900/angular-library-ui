@@ -14,7 +14,7 @@
             <mat-icon>{{ actionButton.prefixIcon }}</mat-icon>
           }
           @if (actionButton.label) {
-            {{ actionButton.label | translate }}
+            {{ getLabel(actionButton) | async | translate }}
           }
           @if (actionButton.suffixIcon) {
             <mat-icon>{{ actionButton.suffixIcon }}</mat-icon>
