@@ -24,9 +24,9 @@ export * from './lib/nav-list/components/nav-list/nav-list.component';
 export * from './lib/nav-list/components/icon/icon.component';
 
 // data list
-export * from './lib/data-list/data-list.module';
 export * from './lib/data-list/models/data-list.model';
 export * from './lib/data-list/components/data-list/data-list.component';
+export * from './lib/data-list/components/data-list-item/data-list-item.component';
 export * from './lib/data-list/directives/data-list-empty.directive';
 export * from './lib/data-list/directives/data-list-item-info.directive';
 
