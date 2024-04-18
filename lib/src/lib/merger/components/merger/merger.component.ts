@@ -16,7 +16,6 @@ import { CommonModule } from '@angular/common';
 import { MatRadioButton } from '@angular/material/radio';
 import { Lab900MergerItemComponent } from '../merger-item/merger-item.component';
 import { MatIconButton } from '@angular/material/button';
-import { load } from '@angular-devkit/build-angular/src/utils/server-rendering/esm-in-memory-loader/loader-hooks';
 
 @Component({
   selector: 'lab900-merger',
@@ -164,6 +163,4 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
     this.selected = this.selected === 'right' ? 'left' : 'right';
     this.reset();
   }
-
-  protected readonly load = load;
 }
