@@ -12,7 +12,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { Lab900ButtonModule } from '../button/button.module';
 import { Lab900SharingComponent } from '../sharing/components/sharing/sharing.component';
 
 @NgModule({
@@ -37,7 +36,6 @@ import { Lab900SharingComponent } from '../sharing/components/sharing/sharing.co
     Lab900SharingComponent,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    Lab900ButtonModule,
   ],
 })
 export class Lab900DataListModule {}

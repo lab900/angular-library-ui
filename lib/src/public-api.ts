@@ -47,9 +47,10 @@ export * from './lib/merger/models/merge-config.model';
 export * from './lib/merger/abstracts/custom-component.abstract';
 
 // buttons
-export * from './lib/button/button.module';
 export * from './lib/button/components/button/button.component';
 export * from './lib/button/components/action-button/lab900-action-button.component';
+export * from './lib/button/components/action-button-menu/lab900-action-button-menu.component';
+export * from './lib/button/components/action-button-toggle/lab900-action-button-toggle.component';
 export * from './lib/button/models/action-button.model';
 export * from './lib/button/models/button.model';
 

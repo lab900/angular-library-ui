@@ -12,10 +12,10 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PageHeaderNavItemComponent } from '../page-header-nav-item/page-header-nav-item.component';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { Lab900ButtonModule } from '../../../button/button.module';
 import { MatListModule } from '@angular/material/list';
 import { TranslateModule } from '@ngx-translate/core';
 import { BreadCrumbsComponent } from '../../../bread-crumbs/components/bread-crumbs/bread-crumbs.component';
+import { Lab900ActionButtonComponent } from '../../../button/components/action-button/lab900-action-button.component';
 
 @Component({
   selector: 'lab900-page-header',
@@ -29,11 +29,11 @@ import { BreadCrumbsComponent } from '../../../bread-crumbs/components/bread-cru
     PageHeaderNavItemComponent,
     NgForOf,
     NgIf,
-    Lab900ButtonModule,
     AsyncPipe,
     MatListModule,
     BreadCrumbsComponent,
     TranslateModule,
+    Lab900ActionButtonComponent,
   ],
 })
 export class Lab900PageHeaderComponent {
@@ -63,11 +63,11 @@ export class Lab900PageHeaderComponent {
   public readonly actions$: Observable<ActionButton[]> =
     this._actions$.asObservable();
   public readonly leftActions$ = this.actions$.pipe(
-    map(([...actions]) => actions?.filter((action) => action.align === 'left'))
+    map(([...actions]) => actions?.filter((action) => action.align === 'left')),
   );
 
   public readonly rightActions$ = this.actions$.pipe(
-    map(([...actions]) => actions?.filter((action) => action.align !== 'left'))
+    map(([...actions]) => actions?.filter((action) => action.align !== 'left')),
   );
 
   @Input()

@@ -37,7 +37,7 @@
       cdkDropList
       [cdkDropListDisabled]="!draggableRows"
       class="mat-elevation-z0"
-      multiTemplateDataRows
+      [multiTemplateDataRows]="true"
       [trackBy]="trackByTableFn"
       [dataSource]="data$ | async"
       (cdkDropListDropped)="tableRowOrderChange.emit($event)"

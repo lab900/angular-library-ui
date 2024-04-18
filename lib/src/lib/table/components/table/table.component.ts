@@ -52,9 +52,9 @@ import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
-import { Lab900ButtonModule } from '../../../button/button.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { A11yModule } from '@angular/cdk/a11y';
+import { Lab900ActionButtonComponent } from '../../../button/components/action-button/lab900-action-button.component';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -98,13 +98,13 @@ export interface SelectableRows<T = any> {
     CdkDropList,
     TableCellSelectComponent,
     Lab900TableCellComponent,
-    Lab900ButtonModule,
     CdkDragHandle,
     NgForOf,
     CdkDrag,
     TranslateModule,
     CdkDragPlaceholder,
     A11yModule,
+    Lab900ActionButtonComponent,
   ],
 })
 export class Lab900TableComponent<T extends object = object, TabId = string>
@@ -121,7 +121,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   ]).pipe(
     map(([columns, fixedWidth]) => {
       fixedWidth || columns?.some((c) => !!c?.width);
-    })
+    }),
   );
 
   /**
@@ -219,7 +219,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
       this._selectableRows$.next(value);
       this.selection = new SelectionModel<any>(
         !value?.singleSelect,
-        value?.selectedItems ?? []
+        value?.selectedItems ?? [],
       );
     } else {
       this._selectableRows$.next(null);
@@ -334,16 +334,16 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   public constructor() {
     this.showCellFooters$ = this.visibleColumns$.pipe(
       map((columns) => !!columns?.some((c) => !!c?.footer)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.displayedColumns$ = combineLatest([
       this.visibleColumns$,
       this._selectableRows$.asObservable(),
     ]).pipe(
       map(([columns, selectableRows]) =>
-        this.getDisplayedColumns(columns, selectableRows)
+        this.getDisplayedColumns(columns, selectableRows),
       ),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.data$ = combineLatest([
       this._selectableRows$.asObservable(),
@@ -355,9 +355,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
               ...v,
               _hideSelectableRow: options.hideSelectableRow(v),
             }))
-          : data
+          : data,
       ),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
     /**
@@ -385,7 +385,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
       this.data$.pipe(take(1)).subscribe((data) => {
         if (data?.length) {
           this.selection.select(
-            ...data.filter((row) => !(row as any)._hideSelectableRow)
+            ...data.filter((row) => !(row as any)._hideSelectableRow),
           );
           this.selectionChanged.emit(this.selection);
         }
@@ -418,7 +418,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
     classes.push(
       (typeof this.rowClass === 'function'
         ? this.rowClass(row)
-        : this.rowClass) ?? ''
+        : this.rowClass) ?? '',
     );
     return classes.join(' ') || '';
   }
@@ -444,7 +444,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort && cell.sortable) {
       this.tableService.updateColumnSorting(cell, this.multiSort, (sort) =>
-        this.sortChange.emit(sort)
+        this.sortChange.emit(sort),
       );
     }
   }
@@ -461,7 +461,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string>
 
   private getDisplayedColumns(
     columns: TableCell<T>[],
-    selectableRows: SelectableRows<T>
+    selectableRows: SelectableRows<T>,
   ): string[] {
     const displayColumns = columns?.map((c) => c.key);
     if (this.tableActionsFront?.length) {

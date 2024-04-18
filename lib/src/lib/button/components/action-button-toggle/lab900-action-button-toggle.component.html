@@ -1,25 +1,26 @@
-<ng-container *ngIf="(getHidden() | async) !== true">
-  <ng-container *ngIf="action?.subActions?.length">
+@if ((getHidden() | async) !== true) {
+  @if (action?.subActions?.length) {
     <mat-button-toggle-group
       [value]="getSelected()"
       [disabled]="getDisabled() | async"
     >
-      <mat-button-toggle
-        *ngFor="let actionButton of action.subActions"
-        (click)="actionButton.action?.(data)"
-        [value]="actionButton"
-        [disabled]="getSubActionDisabled(actionButton) | async"
-      >
-        <mat-icon *ngIf="actionButton.prefixIcon">{{
-          actionButton.prefixIcon
-        }}</mat-icon>
-        <ng-container *ngIf="actionButton.label">
-          {{ actionButton.label | translate }}
-        </ng-container>
-        <mat-icon *ngIf="actionButton.suffixIcon">{{
-          actionButton.suffixIcon
-        }}</mat-icon>
-      </mat-button-toggle>
+      @for (actionButton of action.subActions; track actionButton.label) {
+        <mat-button-toggle
+          (click)="actionButton.action?.(data)"
+          [value]="actionButton"
+          [disabled]="getSubActionDisabled(actionButton) | async"
+        >
+          @if (actionButton.prefixIcon) {
+            <mat-icon>{{ actionButton.prefixIcon }}</mat-icon>
+          }
+          @if (actionButton.label) {
+            {{ actionButton.label | translate }}
+          }
+          @if (actionButton.suffixIcon) {
+            <mat-icon>{{ actionButton.suffixIcon }}</mat-icon>
+          }
+        </mat-button-toggle>
+      }
     </mat-button-toggle-group>
-  </ng-container>
-</ng-container>
+  }
+}

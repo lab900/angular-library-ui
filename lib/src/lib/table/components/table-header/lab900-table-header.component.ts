@@ -17,8 +17,8 @@ import {
 } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AsyncPipe, NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
-import { Lab900ButtonModule } from '../../../button/button.module';
 import { Lab900TableFilterMenuComponent } from '../table-filter-menu/table-filter-menu.component';
+import { Lab900ActionButtonComponent } from '../../../button/components/action-button/lab900-action-button.component';
 
 @Component({
   selector: 'lab900-table-header',
@@ -30,10 +30,10 @@ import { Lab900TableFilterMenuComponent } from '../table-filter-menu/table-filte
   imports: [
     AsyncPipe,
     NgIf,
-    Lab900ButtonModule,
     Lab900TableFilterMenuComponent,
     NgForOf,
     NgTemplateOutlet,
+    Lab900ActionButtonComponent,
   ],
 })
 export class Lab900TableHeaderComponent {
@@ -97,6 +97,6 @@ export class Lab900TableHeaderComponent {
   ]).pipe(
     map(([filterMenu, actions]) => {
       return filterMenu || actions?.length > 0 || !!this.tableHeaderContent;
-    })
+    }),
   );
 }

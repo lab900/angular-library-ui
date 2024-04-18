@@ -3,7 +3,7 @@ import {
   ActionButton,
   ActionButtonComponent,
 } from '../../models/action-button.model';
-import { TooltipPosition } from '@angular/material/tooltip';
+import { MatTooltip, TooltipPosition } from '@angular/material/tooltip';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 import { coerceObservable, readPropValue } from '../../../utils/utils';
@@ -14,10 +14,26 @@ import {
   ReplaySubject,
 } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
+import { Lab900ButtonComponent } from '../button/button.component';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { Lab900ActionButtonMenuComponent } from '../action-button-menu/lab900-action-button-menu.component';
+import { Lab900ActionButtonToggleComponent } from '../action-button-toggle/lab900-action-button-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button',
   templateUrl: './lab900-action-button.component.html',
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    Lab900ButtonComponent,
+    MatTooltip,
+    MatMenuTrigger,
+    Lab900ActionButtonMenuComponent,
+    Lab900ActionButtonToggleComponent,
+    TranslateModule,
+  ],
 })
 export class Lab900ActionButtonComponent<T = any>
   implements ActionButtonComponent<T>
@@ -60,29 +76,29 @@ export class Lab900ActionButtonComponent<T = any>
 
   public constructor() {
     const stream = combineLatest([this.action$, this.data$]).pipe(
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
     this.buttonType$ = stream.pipe(map(([a, d]) => readPropValue(a.type, d)));
     this.color$ = stream.pipe(map(([a, d]) => readPropValue(a.color, d)));
     this.label$ = stream.pipe(map(([a, d]) => readPropValue(a.label, d)));
     this.hidden$ = stream.pipe(
-      switchMap(([a, d]) => coerceObservable(readPropValue(a.hide, d)))
+      switchMap(([a, d]) => coerceObservable(readPropValue(a.hide, d))),
     );
     this.disabled$ = combineLatest([stream, this._disabled$]).pipe(
       switchMap(([[a, d], disabled]) => {
         return coerceObservable(disabled || readPropValue(a.disabled, d));
-      })
+      }),
     );
 
     this.prefixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.prefixIcon, d))
+      map(([a, d]) => readPropValue(a.prefixIcon, d)),
     );
     this.suffixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.suffixIcon, d))
+      map(([a, d]) => readPropValue(a.suffixIcon, d)),
     );
     this.containerClass$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.containerClass, d))
+      map(([a, d]) => readPropValue(a.containerClass, d)),
     );
   }
 
@@ -91,7 +107,7 @@ export class Lab900ActionButtonComponent<T = any>
     combineLatest([this.action$, this.data$])
       .pipe(
         take(1),
-        filter(([a]) => !!a.action)
+        filter(([a]) => !!a.action),
       )
       .subscribe(([a, d]) => {
         a.action(d, e, this);
