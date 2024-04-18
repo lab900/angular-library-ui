@@ -21,18 +21,6 @@
     "pretty:html:fix": "prettier --no-config --print-width=140 --write \"{src,lib}/**/**.html\"",
     "clean": "rm -rf node_modules/ && npm install"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "ng lint --fix"
-    }
-  },
-  "lint-staged": {
-    "**/*.{js,ts,json,css,scss,html,md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "dependencies": {
     "@angular/animations": "^17.3.5",
     "@angular/cdk": "^17.3.5",
@@ -69,7 +57,6 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^4.3.8",
     "jasmine-core": "~3.10.1",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "~6.4.1",
@@ -77,7 +64,6 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "lint-staged": "^10.5.4",
     "ng-packagr": "^17.3.0",
     "prettier": "3.2.5",
     "protractor": "~7.0.0",
