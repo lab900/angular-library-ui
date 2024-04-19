@@ -17,7 +17,6 @@ If you want to use for example the Lab900Table you just import it in the compone
 
 ```ts
 import { Lab900TableComponent } from '@lab900/ui';
-import { publish } from 'rxjs/src';
 
 @Component({
   selector: 'my-component',
@@ -34,7 +33,7 @@ export class myComponent {
 Include the library stylesheet in your scss file.
 
 ```scss
-@use '~@lab900/ui/theming' as theme;
+@use '@lab900/ui/theming' as theme;
 
 @include theme.lab900-ui(YOUR_MATERIAL_THEME);
 ```
