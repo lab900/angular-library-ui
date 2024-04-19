@@ -2,7 +2,7 @@
   "name": "angular-library-ui",
   "version": "17.0.0",
   "repository": "https://github.com/lab900/angular-library-ui",
-  "homepage": "https://lab900.github.io/angular-libraries",
+  "homepage": "https://github.com/lab900/angular-library-ui",
   "author": "Lab900 <info@lab900.com> (https://lab900.com)",
   "license": "MIT",
   "scripts": {
@@ -54,6 +54,7 @@
     "@types/node": "^20.11.1",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
+    "angular-cli-ghpages": "^2.0.0-beta.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
