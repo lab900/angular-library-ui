@@ -12,21 +12,20 @@ npm install --save @lab900/ui
 
 ## How to use
 
-The library isn't a single module but multiple component modules.
-If you want to use for example the Lab900TableModule you just import it in the module you need.
+The library isn't a single module but multiple standalone components.
+If you want to use for example the Lab900Table you just import it in the component or module you need.
 
 ```ts
-import {Lab900TableModule} from '@lab900/ui';
+import { Lab900TableComponent } from '@lab900/ui';
+import { publish } from 'rxjs/src';
 
-@NgModule({
-  imports: [
-    ...
-      Lab900TableModule,
-    ...
-  ],
-  bootstrap: [],
+@Component({
+  selector: 'my-component',
+  standalone: true,
+  imports: [Lab900TableComponent],
 })
-export class MyModule {
+export class myComponent {
+  // ...
 }
 ```
 

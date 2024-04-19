@@ -24,7 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -45,9 +45,7 @@ import { MatButtonModule } from '@angular/material/button';
     CdkDragPlaceholder,
     CdkDragPreview,
     CdkDragHandle,
-    NgIf,
     MatButtonModule,
-    NgForOf,
   ],
 })
 export class Lab900TableFilterMenuComponent {
@@ -68,13 +66,13 @@ export class Lab900TableFilterMenuComponent {
 
   public constructor(private tableService: Lab900TableService) {
     this.tableCells$ = this.tableService.columns$.pipe(
-      map((cells) => cells?.filter((cell: TableCell) => !cell.alwaysVisible))
+      map((cells) => cells?.filter((cell: TableCell) => !cell.alwaysVisible)),
     );
     this.visibleCells$ = this.tableCells$.pipe(
-      map((cells) => cells?.filter((cell: TableCell) => !cell.hide))
+      map((cells) => cells?.filter((cell: TableCell) => !cell.hide)),
     );
     this.hiddenCells$ = this.tableCells$.pipe(
-      map((cells) => cells?.filter((cell: TableCell) => !!cell.hide))
+      map((cells) => cells?.filter((cell: TableCell) => !!cell.hide)),
     );
   }
 
@@ -99,7 +97,7 @@ export class Lab900TableFilterMenuComponent {
         moveItemInArray(
           visibleColumns,
           $event.previousIndex,
-          $event.currentIndex
+          $event.currentIndex,
         );
         visibleColumns.forEach((cell, newColumnOrder) => {
           const index = tableCells.findIndex((c) => c.key === cell.key);

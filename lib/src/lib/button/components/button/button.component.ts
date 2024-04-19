@@ -8,6 +8,15 @@ import {
 } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import {
+  MatButton,
+  MatFabButton,
+  MatIconButton,
+  MatMiniFabButton,
+} from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-button',
@@ -15,10 +24,21 @@ import { Lab900ButtonType } from '../../models/button.model';
   styleUrls: ['./button.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgTemplateOutlet,
+    NgClass,
+    MatButton,
+    MatIconButton,
+    MatIcon,
+    MatFabButton,
+    TranslateModule,
+    MatMiniFabButton,
+  ],
 })
 export class Lab900ButtonComponent {
-  @Input()
-  public type?: Lab900ButtonType;
+  @Input({ required: true })
+  public type!: Lab900ButtonType;
 
   @Input()
   public color: ThemePalette = 'primary';

@@ -8,7 +8,7 @@ import { NavItem, NavItemGroup } from '../../models/nav-item.model';
 import { IsActiveMatchOptions } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatListModule } from '@angular/material/list';
@@ -27,8 +27,6 @@ const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   standalone: true,
   imports: [
     AsyncPipe,
-    NgIf,
-    NgForOf,
     IconComponent,
     TranslateModule,
     MatListModule,
@@ -47,7 +45,7 @@ export class Lab900NavListComponent {
             return g;
           })
           .filter((g) => !!g.items?.length);
-      })
+      }),
     );
 
   @Input({ required: true })

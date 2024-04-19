@@ -16,11 +16,11 @@ import { CellEditorBaseOptions } from './cell-editor.options';
 export abstract class CellEditorAbstract<
   TCellEditorOptions extends CellEditorBaseOptions,
   T = object,
-  V = unknown
+  V = unknown,
 > implements AfterViewInit
 {
   private readonly tableCell: Lab900TableCellComponent = inject(
-    Lab900TableCellComponent
+    Lab900TableCellComponent,
   );
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
 
@@ -53,11 +53,11 @@ export abstract class CellEditorAbstract<
   public readonly editOptions$: Observable<TCellEditorOptions | undefined> =
     this.columnConfig$.pipe(
       map((config) => config?.cellEditorOptions),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
   public readonly placeholder$: Observable<string> = this.editOptions$.pipe(
-    map((options) => options?.placeholder ?? '')
+    map((options) => options?.placeholder ?? ''),
   );
 
   public readonly cellValue$: Observable<V> = this.getCellValue();
@@ -77,7 +77,7 @@ export abstract class CellEditorAbstract<
   protected getCellValue(): Observable<V> {
     return combineLatest([this.columnConfig$, this.data$]).pipe(
       map(([config, data]) => this.getUnformattedValue(config, data) ?? null),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
@@ -108,7 +108,7 @@ export abstract class CellEditorAbstract<
         if (this.isDifferent(updatedValue, oldValue)) {
           if (!this.handleValueChanged) {
             throw Error(
-              `No handleValueChanged method provided for column ${config.key}`
+              `No handleValueChanged method provided for column ${config.key}`,
             );
           }
           this.data = updateObject(config.key, updatedValue, data);

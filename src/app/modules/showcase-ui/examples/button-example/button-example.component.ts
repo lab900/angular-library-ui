@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Lab900ButtonModule } from '@lab900/ui';
+import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-button-example',
   styles: ['p {margin: 10px 0}'],
   standalone: true,
-  imports: [Lab900ButtonModule],
+  imports: [Lab900ButtonComponent, Lab900ActionButtonComponent],
   template: `
     <p>Flat button</p>
     <lab900-button
@@ -15,31 +15,24 @@ import { Lab900ButtonModule } from '@lab900/ui';
       type="flat"
       label="hello world"
       suffixIcon="remove_red_eye"
-    ></lab900-button>
+    />
     <p>Flat button</p>
     <lab900-button
       color="primary"
       type="stroked"
       label="hello world"
       prefixIcon="edit"
-    ></lab900-button>
+    />
     <p>Raised button</p>
-    <lab900-button
-      color="accent"
-      type="raised"
-      label="hello world"
-    ></lab900-button>
+    <lab900-button color="accent" type="raised" label="hello world" />
     <p>Icon button</p>
-    <lab900-button type="icon" label="delete"></lab900-button>
+    <lab900-button type="icon" label="delete" />
     <p>Fab icon button</p>
-    <lab900-button type="fab" label="delete"></lab900-button>
+    <lab900-button type="fab" label="delete" />
     <p>Fab-mini icon button</p>
-    <lab900-button type="mini-fab" label="delete"></lab900-button>
+    <lab900-button type="mini-fab" label="delete" />
     <p>Toggle action button</p>
-    <lab900-action-button
-      [data]="[]"
-      [action]="toggleActionButton"
-    ></lab900-action-button>
+    <lab900-action-button [data]="[]" [action]="toggleActionButton" />
   `,
 })
 export class ButtonExampleComponent {

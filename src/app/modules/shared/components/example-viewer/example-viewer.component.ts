@@ -11,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MarkdownModule } from 'ngx-markdown';
-import { LowerCasePipe, NgForOf, NgIf } from '@angular/common';
+import { LowerCasePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -35,8 +35,6 @@ export interface ExampleFile {
     LowerCasePipe,
     MatIconModule,
     MatTooltipModule,
-    NgForOf,
-    NgIf,
   ],
 })
 export class ExampleViewerComponent implements AfterViewInit {
@@ -69,7 +67,7 @@ export class ExampleViewerComponent implements AfterViewInit {
     this.exampleName =
       this.exampleComponent?.nativeElement?.children?.[0]?.localName.replace(
         'lab900-',
-        ''
+        '',
       );
   }
 }

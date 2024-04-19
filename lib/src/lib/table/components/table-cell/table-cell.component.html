@@ -1,5 +1,5 @@
 <ng-container matColumnDef [sticky]="sticky$ | async">
-  <ng-container *ngIf="cell$ | async as cell">
+  @if (cell$ | async; as cell) {
     <th
       mat-header-cell
       *matHeaderCellDef
@@ -44,5 +44,5 @@
       [innerHtml]="cellFooter$ | async"
       [ngClass]="cell.footerCellClass"
     ></td>
-  </ng-container>
+  }
 </ng-container>

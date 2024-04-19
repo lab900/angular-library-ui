@@ -1,38 +1,34 @@
 <mat-menu #actionMenu>
-  <ng-container *ngFor="let action of actions">
-    <button
-      *ngIf="!action.subActions; else nested"
-      mat-menu-item
-      (click)="doAction($event, action)"
-      [disabled]="getDisabled(action) | async"
-    >
-      <mat-icon *ngIf="action?.prefixIcon">{{
-        getPrefixIcon(action)
-      }}</mat-icon>
-      <span>{{ getLabel(action) | translate }}</span>
-      <mat-icon *ngIf="action?.suffixIcon">{{
-        getSuffixIcon(action)
-      }}</mat-icon>
-    </button>
-    <ng-template #nested>
+  @for (action of actions; track action.label) {
+    @if (!action.subActions) {
       <button
-        *ngIf="!action?.hide"
+        mat-menu-item
+        (click)="doAction($event, action)"
+        [disabled]="getDisabled(action) | async"
+      >
+        @if (action.prefixIcon) {
+          <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
+        }
+        <span>{{ getLabel(action) | translate }}</span>
+        @if (action.suffixIcon) {
+          <mat-icon>{{ getSuffixIcon(action) }}</mat-icon>
+        }
+      </button>
+    } @else if (!action?.hide) {
+      <button
         mat-menu-item
         [matMenuTriggerFor]="innerMenu.actionMenu"
         [disabled]="getDisabled(action) | async"
       >
-        <mat-icon *ngIf="action?.prefixIcon">{{
-          getPrefixIcon(action)
-        }}</mat-icon>
+        @if (action.prefixIcon) {
+          <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
+        }
         <span>{{ getLabel(action) | translate }}</span>
-        <mat-icon *ngIf="action?.suffixIcon">{{
-          getSuffixIcon(action)
-        }}</mat-icon>
+        @if (action.suffixIcon) {
+          <mat-icon>{{ getSuffixIcon(action) }}</mat-icon>
+        }
       </button>
-      <lab900-action-button-menu
-        #innerMenu
-        [actions]="action.subActions"
-      ></lab900-action-button-menu>
-    </ng-template>
-  </ng-container>
+      <lab900-action-button-menu #innerMenu [actions]="action.subActions" />
+    }
+  }
 </mat-menu>

@@ -24,7 +24,7 @@ import {
 } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { map } from 'rxjs/operators';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -32,7 +32,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
   templateUrl: './table-cell-select.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTableModule, MatCheckboxModule, AsyncPipe, NgIf],
+  imports: [MatTableModule, MatCheckboxModule, AsyncPipe],
 })
 export class TableCellSelectComponent<T extends object = object>
   implements OnInit, OnDestroy
@@ -62,8 +62,8 @@ export class TableCellSelectComponent<T extends object = object>
       this.allSelected$ = this._selection.changed.pipe(
         map(
           (change) =>
-            change?.source?.selected?.length === this.rowCheckboxes?.length
-        )
+            change?.source?.selected?.length === this.rowCheckboxes?.length,
+        ),
       );
     }
   }

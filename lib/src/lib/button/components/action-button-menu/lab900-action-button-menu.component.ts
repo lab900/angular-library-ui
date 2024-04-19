@@ -1,18 +1,30 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ActionButton } from '../../models/action-button.model';
-import { MatMenu } from '@angular/material/menu';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { coerceObservable, readPropValue } from '../../../utils/utils';
 import { Observable } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button-menu',
   templateUrl: './lab900-action-button-menu.component.html',
+  standalone: true,
+  imports: [
+    MatMenu,
+    MatIcon,
+    MatMenuItem,
+    MatMenuTrigger,
+    AsyncPipe,
+    TranslateModule,
+  ],
 })
 export class Lab900ActionButtonMenuComponent {
   @ViewChild('actionMenu', { static: true })
   public actionMenu: MatMenu;
 
-  @Input()
+  @Input({ required: true })
   public actions: ActionButton[];
 
   @Input()

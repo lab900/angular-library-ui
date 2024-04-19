@@ -19,32 +19,32 @@ import { combineLatest, Observable } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, MatSelectModule, TranslateModule],
   template: `
-    <mat-select
-      *ngIf="editOptions$ | async as editOptions"
-      #matSelect
-      placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
-      [value]="cellValue$ | async"
-      (openedChange)="openChanged($event)"
-      [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
-      [multiple]="editOptions?.multiple ?? false"
-      [panelWidth]="editOptions?.panelWidth ?? 'auto'"
-      [class.disable-td-event]="matSelect.panelOpen"
-      panelClass="lab900-table-select-editor-panel"
-      class="lab900-table-select-editor"
-    >
-      <!-- fixes the select on tab -->
-      <mat-option style="display: none" />
-      <mat-option
-        *ngFor="let option of selectOptions$ | async"
-        [value]="option"
+    @if (editOptions$ | async; as editOptions) {
+      <mat-select
+        #matSelect
+        placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
+        [value]="cellValue$ | async"
+        (openedChange)="openChanged($event)"
+        [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
+        [multiple]="editOptions?.multiple ?? false"
+        [panelWidth]="editOptions?.panelWidth ?? 'auto'"
+        [class.disable-td-event]="matSelect.panelOpen"
+        panelClass="lab900-table-select-editor-panel"
+        class="lab900-table-select-editor"
       >
-        {{
-          editOptions?.optionLabelFn
-            ? (editOptions.optionLabelFn(option) | translate)
-            : option
-        }}
-      </mat-option>
-    </mat-select>
+        <!-- fixes the select on tab -->
+        <mat-option style="display: none" />
+        @for (option of selectOptions$ | async; track option) {
+          <mat-option [value]="option">
+            {{
+              editOptions?.optionLabelFn
+                ? (editOptions.optionLabelFn(option) | translate)
+                : option
+            }}
+          </mat-option>
+        }
+      </mat-select>
+    }
   `,
 })
 export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEditorOptions> {
@@ -61,7 +61,7 @@ export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEdit
       }
       return [];
     }),
-    distinctUntilChanged()
+    distinctUntilChanged(),
   );
 
   private _matSelect?: MatSelect;

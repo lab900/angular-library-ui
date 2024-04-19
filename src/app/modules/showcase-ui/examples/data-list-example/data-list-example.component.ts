@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {
   ActionButton,
   DataListSharing,
-  Lab900DataListModule,
+  Lab900DataListComponent,
+  Lab900DataListEmptyDirective,
+  Lab900DataListItemInfoDirective,
   Paging,
 } from '@lab900/ui';
 import { PageEvent } from '@angular/material/paginator';
@@ -75,7 +77,11 @@ const dummyData: any[] = [
     </lab900-data-list>
   `,
   standalone: true,
-  imports: [Lab900DataListModule],
+  imports: [
+    Lab900DataListComponent,
+    Lab900DataListEmptyDirective,
+    Lab900DataListItemInfoDirective,
+  ],
 })
 export class DataListExampleComponent implements OnInit {
   public data: any[];
@@ -121,7 +127,7 @@ export class DataListExampleComponent implements OnInit {
   public paginate(data: any[], page: number): any[] {
     return data.slice(
       (page - 1) * this.paging.pageSize,
-      page * this.paging.pageSize
+      page * this.paging.pageSize,
     );
   }
 }

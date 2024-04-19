@@ -2,61 +2,55 @@
   class="lab900-page-header"
   [class.fixed-mobile-action]="showActionsFixedOnMobile"
 >
-  <div
-    *ngIf="pageTitle || breadCrumbs?.length || (actions$ | async)?.length"
-    class="lab900-page-header__main"
-  >
-    <div
-      class="lab900-page-header__title"
-      *ngIf="pageTitle || breadCrumbs?.length"
-    >
-      <h1 *ngIf="pageTitle">{{ pageTitle | translate : pageTitleArgs }}</h1>
-      <lab900-bread-crumbs
-        *ngIf="breadCrumbs?.length"
-        [breadCrumbs]="breadCrumbs"
-        [data]="data"
-      />
+  @if (pageTitle || breadCrumbs?.length || (actions$ | async)?.length) {
+    <div class="lab900-page-header__main">
+      @if (pageTitle || breadCrumbs?.length) {
+        <div class="lab900-page-header__title">
+          @if (pageTitle) {
+            <h1>{{ pageTitle | translate: pageTitleArgs }}</h1>
+          }
+          @if (breadCrumbs?.length) {
+            <lab900-bread-crumbs [breadCrumbs]="breadCrumbs" [data]="data" />
+          }
+        </div>
+      }
+      @if (actions$ | async; as actions) {
+        @if (actions?.length) {
+          <div class="lab900-page-header__actions">
+            @if (leftActions$ | async; as leftActions) {
+              <div class="lab900-page-header__actions--left">
+                @if (leftActions?.length > 0) {
+                  <mat-divider
+                    vertical="true"
+                    class="lab900-page-header__divider"
+                  />
+                }
+                @for (action of leftActions; track action) {
+                  <lab900-action-button [action]="action" [data]="data" />
+                }
+              </div>
+            }
+            <div class="lab900-page-header__actions--right">
+              @for (action of rightActions$ | async; track action) {
+                <lab900-action-button [action]="action" [data]="data" />
+              }
+            </div>
+          </div>
+        }
+      }
     </div>
-
-    <ng-container *ngIf="actions$ | async as actions">
-      <div class="lab900-page-header__actions" *ngIf="actions?.length">
-        <div
-          class="lab900-page-header__actions--left"
-          *ngIf="leftActions$ | async as leftActions"
-        >
-          <mat-divider
-            vertical="true"
-            class="lab900-page-header__divider"
-            *ngIf="leftActions?.length > 0"
-          />
-          <lab900-action-button
-            *ngFor="let action of leftActions"
-            [action]="action"
-            [data]="data"
-          />
-        </div>
-        <div class="lab900-page-header__actions--right">
-          <lab900-action-button
-            *ngFor="let action of rightActions$ | async"
-            [action]="action"
-            [data]="data"
-          />
-        </div>
-      </div>
-    </ng-container>
-  </div>
-  <nav
-    *ngIf="navItems?.length && tabPanel"
-    class="lab900-page-header__nav"
-    mat-tab-nav-bar
-    [tabPanel]="tabPanel"
-    [fitInkBarToContent]="navFitInkBarToContent"
-    [mat-stretch-tabs]="navStretch"
-  >
-    <lab900-page-header-nav-item
-      *ngFor="let item of navItems"
-      [item]="item"
-      [data]="data"
-    />
-  </nav>
+  }
+  @if (navItems?.length && tabPanel) {
+    <nav
+      class="lab900-page-header__nav"
+      mat-tab-nav-bar
+      [tabPanel]="tabPanel"
+      [fitInkBarToContent]="navFitInkBarToContent"
+      [mat-stretch-tabs]="navStretch"
+    >
+      @for (item of navItems; track item) {
+        <lab900-page-header-nav-item [item]="item" [data]="data" />
+      }
+    </nav>
+  }
 </header>

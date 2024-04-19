@@ -39,7 +39,7 @@ export class ShowcasePageComponent extends SubscriptionBasedDirective {
 
   public constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {
     super();
     this.addSubscription(this.activatedRoute.queryParams, (queryParams) => {

@@ -29,7 +29,7 @@ import {
 import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900Sort } from '../../models/table-sort.model';
-import { AsyncPipe, NgClass, NgComponentOutlet, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgComponentOutlet } from '@angular/common';
 import { DefaultCellRendererComponent } from '../../cell-renderers/default-cell-renderer/default-cell-renderer.component';
 import { DefaultColumnHeaderRendererComponent } from '../../column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -43,7 +43,6 @@ import { TableCellEventsDirective } from '../../directives/table-cell-events.dir
   standalone: true,
   imports: [
     AsyncPipe,
-    NgIf,
     DefaultCellRendererComponent,
     MatTableModule,
     NgClass,
@@ -76,7 +75,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     .asObservable()
     .pipe(
       filter((c) => !!c?.key),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
   private readonly tableColumnMaxWidth$ = new BehaviorSubject<string>('100%');
@@ -86,10 +85,11 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     this.tableColumnMaxWidth$,
   ]).pipe(
     map(
-      ([cell, tableColumnMaxWidth]) => cell?.cellMaxWidth || tableColumnMaxWidth
+      ([cell, tableColumnMaxWidth]) =>
+        cell?.cellMaxWidth || tableColumnMaxWidth,
     ),
     distinctUntilChanged(),
-    shareReplay({ bufferSize: 1, refCount: true })
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   public readonly columnWidth$: Observable<string> = this.cell$.pipe(
@@ -100,7 +100,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       return cell?.width;
     }),
     distinctUntilChanged(),
-    shareReplay({ bufferSize: 1, refCount: true })
+    shareReplay({ bufferSize: 1, refCount: true }),
   );
 
   @Input()
@@ -156,7 +156,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
     this.sticky$ = this.cell$.pipe(map((c) => !c?.hide && !!c?.sticky));
 
     this.cellHeaderClass$ = this.cell$.pipe(
-      map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c))
+      map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c)),
     );
 
     this.cellFooter$ = combineLatest([
@@ -166,8 +166,8 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy {
       map(([cell, data]) =>
         typeof cell.footer === 'function'
           ? cell.footer(data, cell)
-          : cell.footer
-      )
+          : cell.footer,
+      ),
     );
   }
 

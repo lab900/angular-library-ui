@@ -7,7 +7,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { Lab900TableTab } from '../../models/table-tabs.model';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -17,7 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, NgForOf, TranslateModule],
+  imports: [TranslateModule],
 })
 export class Lab900TableTabsComponent<T = string> {
   @Input()

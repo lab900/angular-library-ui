@@ -54,7 +54,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
 
   public changeValue(
     event: MatDatepickerInputEvent<any>,
-    type: 'input' | 'change'
+    type: 'input' | 'change',
   ): void {
     if (type === 'change' && this.opened$.value) {
       return;

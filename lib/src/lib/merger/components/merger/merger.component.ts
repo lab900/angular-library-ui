@@ -7,15 +7,29 @@ import {
 } from '@angular/core';
 import { MergeObject } from '../../models/merge-object.model';
 import { MergeConfig, MergeConfigBase } from '../../models/merge-config.model';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import MergeIcon from '../../../../assets/icons/merge';
 import { isDifferent } from '../../../utils/different.utils';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
+import { MatRadioButton } from '@angular/material/radio';
+import { Lab900MergerItemComponent } from '../merger-item/merger-item.component';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-merger',
   templateUrl: './merger.component.html',
   styleUrls: ['./merger.component.scss'],
+  standalone: true,
+  imports: [
+    MatProgressBar,
+    CommonModule,
+    MatRadioButton,
+    Lab900MergerItemComponent,
+    MatIcon,
+    MatIconButton,
+  ],
 })
 export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   @Input()
@@ -40,7 +54,7 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   public constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIconLiteral(
       'merge',
-      sanitizer.bypassSecurityTrustHtml(MergeIcon)
+      sanitizer.bypassSecurityTrustHtml(MergeIcon),
     );
   }
 
@@ -83,7 +97,7 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
       for (let i = 0; i < config?.nestedObject.length && !different; i++) {
         different = this.compareValues(
           config.nestedObject[i].attribute,
-          config.attribute
+          config.attribute,
         );
       }
       return different;

@@ -11,7 +11,7 @@ export class MergingTranslateLoader implements TranslateLoader {
   public constructor(
     private http: HttpClient,
     public prefix: string = '/assets/i18n/',
-    public suffix: string = '.json'
+    public suffix: string = '.json',
   ) {}
 
   /**
@@ -21,7 +21,7 @@ export class MergingTranslateLoader implements TranslateLoader {
     return this.http.get(`${this.prefix}${lang}${this.suffix}`).pipe(
       map((translations) => ({
         ...translations,
-      }))
+      })),
     );
   }
 }

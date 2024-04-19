@@ -5,10 +5,25 @@ import {
 } from '../../models/action-button.model';
 import { coerceObservable, readPropValue } from '../../../utils/utils';
 import { Observable } from 'rxjs';
+import {
+  MatButtonToggle,
+  MatButtonToggleGroup,
+} from '@angular/material/button-toggle';
+import { MatIcon } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
+  standalone: true,
+  imports: [
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatIcon,
+    TranslateModule,
+    AsyncPipe,
+  ],
 })
 export class Lab900ActionButtonToggleComponent<T = any>
   implements ActionButtonComponent<T>
@@ -39,12 +54,16 @@ export class Lab900ActionButtonToggleComponent<T = any>
 
   public getDisabled(): Observable<boolean> {
     return coerceObservable(
-      this._disabled || readPropValue(this.action.disabled, this.data)
+      this._disabled || readPropValue(this.action.disabled, this.data),
     );
   }
 
   public getSubActionDisabled(action: ActionButton): Observable<boolean> {
     return coerceObservable(readPropValue(action.disabled, this.data));
+  }
+
+  public getLabel(action: ActionButton): Observable<string> {
+    return coerceObservable(readPropValue(action.label, this.data));
   }
 
   public doAction(e: Event): void {

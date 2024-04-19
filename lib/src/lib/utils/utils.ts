@@ -5,7 +5,7 @@ export type propValue<T = any, R = string> = ((data?: T) => R) | R;
 
 export function readPropValue<T, R = string>(
   value: propValue<T, R>,
-  data?: T
+  data?: T,
 ): R {
   return typeof value === 'function'
     ? (value as (data?: T) => R)(...coerceArray(data))
@@ -13,7 +13,7 @@ export function readPropValue<T, R = string>(
 }
 
 export function coerceObservable<T = any>(
-  value: T | Observable<T>
+  value: T | Observable<T>,
 ): Observable<T> {
   return isObservable(value) ? value : of(value);
 }

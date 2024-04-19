@@ -1,65 +1,71 @@
-<ng-container *ngIf="item$ | async as item">
+@if (item$ | async; as item) {
   <ng-template #navItemContent>
     <div class="nav-item-btn__inner" [style.padding-left.px]="depth * 12">
-      <lab900-icon
-        class="nav-item-btn__icon-left"
-        [icon]="item.icon"
-        *ngIf="
-          item.icon && (item.icon?.position === 'left' || !item.icon?.position)
-        "
-      ></lab900-icon>
+      @if (
+        item.icon && (item.icon?.position === 'left' || !item.icon?.position)
+      ) {
+        <lab900-icon
+          class="nav-item-btn__icon-left"
+          [icon]="item.icon"
+        ></lab900-icon>
+      }
       <div class="nav-item-btn__label">
         {{ item.label | translate }}
       </div>
-      <lab900-icon
-        class="nav-item-btn__icon-right"
-        [icon]="item.icon"
-        *ngIf="!showLevelArrow && item?.icon?.position === 'right'"
-      ></lab900-icon>
-      <lab900-icon
-        class="nav-item-btn__icon-right"
-        [icon]="{ name: icon$ | async }"
-        *ngIf="showLevelArrow"
-      ></lab900-icon>
+      @if (!showLevelArrow && item?.icon?.position === 'right') {
+        <lab900-icon
+          class="nav-item-btn__icon-right"
+          [icon]="item.icon"
+        ></lab900-icon>
+      }
+      @if (showLevelArrow) {
+        <lab900-icon
+          class="nav-item-btn__icon-right"
+          [icon]="{ name: icon$ | async }"
+        ></lab900-icon>
+      }
     </div>
   </ng-template>
-  <a
-    *ngIf="item.route"
-    role="link"
-    class="nav-item-btn"
-    mat-list-item
-    tabindex="-1"
-    [disabled]="disabled$ | async"
-    [routerLink]="item.route"
-    [queryParams]="item.routeQueryParams"
-    [routerLinkActiveOptions]="navListMatchOptions ?? { exact: false }"
-    routerLinkActive="active"
-    #rla="routerLinkActive"
-    [class.active]="rla.isActive"
-  >
-    <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
-  </a>
-  <a
-    *ngIf="item.href"
-    role="link"
-    class="nav-item-btn"
-    mat-list-item
-    tabindex="-1"
-    [disabled]="disabled$ | async"
-    [href]="item.href?.url"
-    [target]="item.href?.target"
-  >
-    <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
-  </a>
-  <a
-    *ngIf="item?.children?.length"
-    role="menuitem"
-    class="nav-item-btn expandable"
-    mat-list-item
-    tabindex="-1"
-    [disabled]="disabled$ | async"
-    [class.expanded]="expanded$ | async"
-  >
-    <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
-  </a>
-</ng-container>
+  @if (item.route) {
+    <a
+      role="link"
+      class="nav-item-btn"
+      mat-list-item
+      tabindex="-1"
+      [disabled]="disabled$ | async"
+      [routerLink]="item.route"
+      [queryParams]="item.routeQueryParams"
+      [routerLinkActiveOptions]="navListMatchOptions ?? { exact: false }"
+      routerLinkActive="active"
+      #rla="routerLinkActive"
+      [class.active]="rla.isActive"
+    >
+      <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
+    </a>
+  }
+  @if (item.href) {
+    <a
+      role="link"
+      class="nav-item-btn"
+      mat-list-item
+      tabindex="-1"
+      [disabled]="disabled$ | async"
+      [href]="item.href?.url"
+      [target]="item.href?.target"
+    >
+      <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
+    </a>
+  }
+  @if (item?.children?.length) {
+    <a
+      role="menuitem"
+      class="nav-item-btn expandable"
+      mat-list-item
+      tabindex="-1"
+      [disabled]="disabled$ | async"
+      [class.expanded]="expanded$ | async"
+    >
+      <ng-container *ngTemplateOutlet="navItemContent"></ng-container>
+    </a>
+  }
+}

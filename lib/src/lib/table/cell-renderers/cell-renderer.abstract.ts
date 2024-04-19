@@ -23,10 +23,11 @@ import { Lab900TableService } from '../services/table.service';
 
 @Directive()
 export abstract class CellRendererAbstract<
-  CellRenderOptions = any,
-  T = any,
-  V = any
-> implements AfterViewInit, OnDestroy
+    CellRenderOptions = any,
+    T = any,
+    V = any,
+  >
+  implements AfterViewInit, OnDestroy
 {
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
   protected readonly tableService = inject(Lab900TableService);
@@ -63,7 +64,7 @@ export abstract class CellRendererAbstract<
   public readonly rendererOptions$: Observable<CellRenderOptions | undefined> =
     this.columnConfig$.pipe(
       map((config) => config.cellRenderOptions),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
 
   public readonly cellValue$: Observable<V> = this.getCellValue();
@@ -85,14 +86,14 @@ export abstract class CellRendererAbstract<
         return String(cellValue);
       }
       return undefined;
-    })
+    }),
   );
 
   public readonly tooltipPosition$: Observable<TooltipPosition> =
     this.columnConfig$.pipe(
       map(
-        (cell) => cell.cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below'
-      )
+        (cell) => cell.cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below',
+      ),
     );
 
   public ngAfterViewInit(): void {
@@ -131,7 +132,7 @@ export abstract class CellRendererAbstract<
           ?.classList.remove('value-is-placeholder');
         return value;
       }),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 

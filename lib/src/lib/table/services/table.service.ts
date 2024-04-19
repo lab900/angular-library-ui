@@ -35,7 +35,7 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   public readonly tabId$ = this._tabId$.asObservable().pipe(
     withLatestFrom(this.tabs$),
     map(([tabId, tabs]) => tabId ?? tabs?.[0]?.id),
-    filter((tabId) => tabId != null)
+    filter((tabId) => tabId != null),
   );
 
   private readonly _sort$ = new ReplaySubject<Lab900Sort[] | null>();
@@ -62,11 +62,11 @@ export class Lab900TableService<T extends object = object, TabId = string> {
       filter((columns) => columns != null),
       map((columns) => columns.sort(Lab900TableService.reorderColumnsFn)),
       map((columns) => columns.filter((c) => !!c.key)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.visibleColumns$ = this.columns$.pipe(
       map((columns) => columns.filter((c) => !c.hide)),
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
@@ -97,13 +97,13 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   public updateColumnSorting(
     column: TableCell<T>,
     multiSort: boolean,
-    callback?: (sort: Lab900Sort[] | null) => void
+    callback?: (sort: Lab900Sort[] | null) => void,
   ): void {
     const sortKey = column.sortKey ?? column.key;
     this.sort$
       .pipe(
         take(1),
-        map((sort) => sort ?? [])
+        map((sort) => sort ?? []),
       )
       .subscribe((sort) => {
         if (multiSort) {
