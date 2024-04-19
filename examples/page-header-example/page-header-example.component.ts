@@ -1,15 +1,26 @@
 import { Component } from '@angular/core';
-import { PageHeaderNavItem, ActionButton, BreadCrumb } from '@lab900/ui';
+import {
+  ActionButton,
+  BreadCrumb,
+  Lab900PageHeaderComponent,
+  PageHeaderNavItem,
+} from '@lab900/ui';
+import { MatTabsModule } from '@angular/material/tabs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'lab900-page-header-example',
+  standalone: true,
+  imports: [Lab900PageHeaderComponent, MatTabsModule],
   template: ` <lab900-page-header
-    [pageTitle]="pageTitle"
-    [navItems]="navItems"
-    [actions]="actions"
-    [breadCrumbs]="breadCrumbs"
-    [data]="{ tab: 'Examples' }"
-  ></lab900-page-header>`,
+      [pageTitle]="pageTitle"
+      [navItems]="navItems"
+      [actions]="actions"
+      [breadCrumbs]="breadCrumbs"
+      [data]="{ tab: 'Examples' }"
+      [tabPanel]="tabNavPanel"
+    />
+    <mat-tab-nav-panel #tabNavPanel />`,
 })
 export class PageHeaderExampleComponent {
   public pageTitle = 'Example page header';
@@ -49,6 +60,21 @@ export class PageHeaderExampleComponent {
   ];
 
   public actions: ActionButton[] = [
+    {
+      type: 'toggle',
+      label: '',
+      disabled: () => of(true),
+      subActions: [
+        {
+          label: 'Action 1',
+          action: () => console.log('action 1'),
+        },
+        {
+          label: 'Action 2',
+          action: () => console.log('action 2'),
+        },
+      ],
+    },
     {
       label: 'Cancel',
       prefixIcon: 'edit',

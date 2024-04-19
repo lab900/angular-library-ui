@@ -1,18 +1,25 @@
 import { Component, ViewChild } from '@angular/core';
-import { Lab900Sort, Lab900TableComponent, TableCell, TableRowAction } from '@lab900/ui';
+import {
+  Lab900Sort,
+  Lab900TableComponent,
+  TableCell,
+  TableRowAction,
+} from '@lab900/ui';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'lab900-table-example',
+  standalone: true,
+  imports: [Lab900TableComponent],
   template: `<lab900-table
     [tableCells]="tableCells"
     [data]="mockData"
     [tableActionsBack]="tableActions"
     (tableRowOrderChange)="dropTable($event)"
-    [selectableRows]="true"
     [stickyHeader]="true"
-    [selectableRowsOptions]="{
+    [selectableRows]="{
+      enabled: false,
       checkBoxColor: 'accent',
       position: 'right',
       sticky: true,
@@ -20,8 +27,8 @@ import { SelectionModel } from '@angular/cdk/collections';
       hideSelectableRow: hideSelectableCheckboxForSarah
     }"
     (selectionChanged)="selectionChanged($event)"
-  >
-  </lab900-table>`,
+    [trackByTableFn]="trackByTableFn"
+  />`,
 })
 export class TableDragAndDropExampleComponent {
   @ViewChild(Lab900TableComponent)
@@ -73,12 +80,15 @@ export class TableDragAndDropExampleComponent {
     {
       key: 'id',
       label: 'ID',
+      width: '50px',
     },
     {
       key: 'name',
       label: 'Name',
     },
   ];
+
+  public trackByTableFn = (index: number, item: any): any => item.id;
 
   public dropTable(event: CdkDragDrop<any[]>): void {
     /**
@@ -93,9 +103,6 @@ export class TableDragAndDropExampleComponent {
   }
 
   public hideSelectableCheckboxForSarah(row: any): boolean {
-    if (row?.name === 'Sarah') {
-      return true;
-    }
-    return false;
+    return row?.name === 'Sarah';
   }
 }
