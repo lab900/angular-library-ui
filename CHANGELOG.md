@@ -1,5 +1,9 @@
 # Changelog
 
+## 17.0.1
+
+- Fix click event on Lab900ActionButtonComponent
+
 ## 17.0.0
 
 Upgrade to Angular 17
