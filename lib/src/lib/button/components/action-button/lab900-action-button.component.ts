@@ -1,25 +1,27 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  input,
+  Output,
+  Signal,
+} from '@angular/core';
 import {
   ActionButton,
   ActionButtonComponent,
 } from '../../models/action-button.model';
-import { MatTooltip, TooltipPosition } from '@angular/material/tooltip';
+import { MatTooltip } from '@angular/material/tooltip';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 import { coerceObservable, readPropValue } from '../../../utils/utils';
-import {
-  BehaviorSubject,
-  combineLatest,
-  Observable,
-  ReplaySubject,
-} from 'rxjs';
-import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { AsyncPipe } from '@angular/common';
 import { Lab900ButtonComponent } from '../button/button.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Lab900ActionButtonMenuComponent } from '../action-button-menu/lab900-action-button-menu.component';
 import { Lab900ActionButtonToggleComponent } from '../action-button-toggle/lab900-action-button-toggle.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { combineLatest, switchMap } from 'rxjs';
 
 @Component({
   selector: 'lab900-action-button',
@@ -38,87 +40,63 @@ import { TranslateModule } from '@ngx-translate/core';
 export class Lab900ActionButtonComponent<T = any>
   implements ActionButtonComponent<T>
 {
-  private readonly _action$ = new ReplaySubject<ActionButton<T>>();
-  public readonly action$: Observable<ActionButton> = this._action$
-    .asObservable()
-    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
-  public readonly tooltipPosition$: Observable<TooltipPosition> =
-    this.action$.pipe(map((action) => action.tooltip?.position ?? 'above'));
+  public readonly data = input.required<T>();
+  public readonly action = input.required<ActionButton<T>>();
+  public readonly tooltipPosition = computed(
+    () => this.action()?.tooltip?.position ?? 'above',
+  );
 
-  @Input({ required: true })
-  public set action(action: ActionButton<T>) {
-    this._action$.next(action);
-  }
-
-  private readonly _data$ = new BehaviorSubject<any>(undefined);
-  public readonly data$ = this._data$
-    .asObservable()
-    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
-
-  @Input()
-  public set data(data: any) {
-    this._data$.next(data);
-  }
+  public readonly disabled = input(false, {
+    transform: (value: boolean | string) =>
+      typeof value === 'string' ? value === '' : value,
+  });
 
   @Output()
   public valueChanged = new EventEmitter<any>();
 
-  public readonly buttonType$: Observable<Lab900ButtonType | 'toggle'>;
-  public readonly color$: Observable<ThemePalette>;
-  public readonly label$: Observable<string>;
-  public readonly hidden$: Observable<boolean>;
+  public readonly buttonType: Signal<Lab900ButtonType | 'toggle'> = computed(
+    () => readPropValue(this.action()?.type, this.data()),
+  );
 
-  private readonly _disabled$ = new BehaviorSubject<boolean>(false);
-  public readonly disabled$: Observable<boolean>;
-  public readonly suffixIcon$: Observable<string>;
-  public readonly prefixIcon$: Observable<string>;
-  public readonly containerClass$: Observable<string>;
+  public readonly color: Signal<ThemePalette> = computed(() =>
+    readPropValue(this.action()?.color, this.data()),
+  );
 
-  public constructor() {
-    const stream = combineLatest([this.action$, this.data$]).pipe(
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
+  public readonly label: Signal<string> = computed(() =>
+    readPropValue(this.action()?.label, this.data()),
+  );
 
-    this.buttonType$ = stream.pipe(map(([a, d]) => readPropValue(a.type, d)));
-    this.color$ = stream.pipe(map(([a, d]) => readPropValue(a.color, d)));
-    this.label$ = stream.pipe(map(([a, d]) => readPropValue(a.label, d)));
-    this.hidden$ = stream.pipe(
-      switchMap(([a, d]) => coerceObservable(readPropValue(a.hide, d))),
-    );
-    this.disabled$ = combineLatest([stream, this._disabled$]).pipe(
-      switchMap(([[a, d], disabled]) => {
-        return coerceObservable(disabled || readPropValue(a.disabled, d));
-      }),
-    );
+  public readonly hidden = toSignal(
+    combineLatest([toObservable(this.action), toObservable(this.data)]).pipe(
+      switchMap(([action, data]) =>
+        coerceObservable(readPropValue(action?.hide, data)),
+      ),
+    ),
+    { initialValue: false },
+  );
 
-    this.prefixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.prefixIcon, d)),
-    );
-    this.suffixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.suffixIcon, d)),
-    );
-    this.containerClass$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.containerClass, d)),
-    );
-  }
+  public readonly suffixIcon: Signal<string> = computed(() =>
+    readPropValue(this.action()?.suffixIcon, this.data()),
+  );
+
+  public readonly prefixIcon: Signal<string> = computed(() =>
+    readPropValue(this.action()?.prefixIcon, this.data()),
+  );
+
+  public readonly containerClass: Signal<string> = computed(() =>
+    readPropValue(this.action()?.containerClass, this.data()),
+  );
 
   public doAction(e: Event): void {
     e.stopPropagation();
-    combineLatest([this.action$, this.data$])
-      .pipe(
-        take(1),
-        filter(([a]) => !!a.action),
-      )
-      .subscribe(([a, d]) => {
-        a.action(d, e, this);
-      });
+    this.action().action(this.data(), e, this);
   }
 
   public disable(): void {
-    this._disabled$.next(true);
+    this.disabled.set(true);
   }
 
   public enable(): void {
-    this._disabled$.next(false);
+    this.disabled.set(false);
   }
 }
