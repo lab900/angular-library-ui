@@ -1,7 +1,7 @@
 @if (action$ | async; as action) {
   @if ((hidden$ | async) !== true) {
     @if ((buttonType$ | async) !== 'toggle') {
-      @if (action?.subActions?.length) {
+      @if (!action?.subActions?.length) {
         <lab900-button
           [type]="$any(buttonType$ | async)"
           [color]="color$ | async"
