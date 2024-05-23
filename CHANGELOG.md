@@ -1,5 +1,9 @@
 # Changelog
 
+## 17.0.2
+
+- Fix required type in Lab900ButtonComponent
+
 ## 17.0.1
 
 - Fix click event on Lab900ActionButtonComponent
