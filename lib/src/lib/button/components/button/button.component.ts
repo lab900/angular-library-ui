@@ -37,8 +37,8 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
 })
 export class Lab900ButtonComponent {
-  @Input({ required: true })
-  public type!: Lab900ButtonType;
+  @Input()
+  public type?: Lab900ButtonType;
 
   @Input()
   public color: ThemePalette = 'primary';
