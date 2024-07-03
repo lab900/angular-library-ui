@@ -60,7 +60,7 @@
   }
   @case ('fab') {
     <button
-      (throttledClick)="handleClick($event)"
+      (throttledClick)="btnClick.emit($event)"
       [class]="containerClass"
       mat-fab
       [color]="color || 'primary'"
@@ -77,7 +77,7 @@
   }
   @case ('mini-fab') {
     <button
-      (throttledClick)="handleClick($event)"
+      (throttledClick)="btnClick.emit($event)"
       [class]="containerClass"
       mat-mini-fab
       [color]="color || 'primary'"
@@ -94,7 +94,7 @@
   }
   @default {
     <button
-      (throttledClick)="handleClick($event)"
+      (throttledClick)="btnClick.emit($event)"
       [class]="containerClass"
       mat-button
       [color]="color || 'primary'"
