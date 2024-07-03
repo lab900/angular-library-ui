@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
-import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
+import {
+  Lab900ActionButtonComponent,
+  Lab900ActionButtonMenuComponent,
+  Lab900ButtonComponent,
+} from '@lab900/ui';
 
 @Component({
   selector: 'lab900-button-example',
   styles: ['p {margin: 10px 0}'],
   standalone: true,
-  imports: [Lab900ButtonComponent, Lab900ActionButtonComponent],
+  imports: [
+    Lab900ButtonComponent,
+    Lab900ActionButtonComponent,
+    Lab900ActionButtonMenuComponent,
+  ],
   template: `
     <p>Flat button</p>
     <lab900-button
-      disabled="true"
+      disabled="false"
       (btnClick)="log('wuut')"
       color="primary"
       type="flat"
@@ -22,15 +30,29 @@ import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
       type="stroked"
       label="hello world"
       prefixIcon="edit"
+      (btnClick)="log('throtel test')"
     />
     <p>Raised button</p>
-    <lab900-button color="accent" type="raised" label="hello world" />
+    <lab900-button
+      color="accent"
+      type="raised"
+      label="hello world"
+      (btnClick)="log('Raised test')"
+    />
     <p>Icon button</p>
-    <lab900-button type="icon" label="delete" />
+    <lab900-button type="icon" label="delete" (btnClick)="log('Icon test')" />
     <p>Fab icon button</p>
-    <lab900-button type="fab" label="delete" />
+    <lab900-button
+      type="fab"
+      label="delete"
+      (btnClick)="log('Fab icon test')"
+    />
     <p>Fab-mini icon button</p>
-    <lab900-button type="mini-fab" label="delete" />
+    <lab900-button
+      type="mini-fab"
+      label="delete"
+      (btnClick)="log('Fab-mini icon test')"
+    />
     <p>Toggle action button</p>
     <lab900-action-button [data]="[]" [action]="toggleActionButton" />
   `,
@@ -38,7 +60,14 @@ import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
 export class ButtonExampleComponent {
   public toggleActionButton = {
     label: 'EntityDetailSectionToggleToggleButton',
-    type: 'toggle',
+    type: 'toggle' as
+      | 'toggle'
+      | 'raised'
+      | 'stroked'
+      | 'flat'
+      | 'icon'
+      | 'fab'
+      | 'mini-fab',
     subActions: [
       {
         label: 'Button 1',
@@ -56,7 +85,6 @@ export class ButtonExampleComponent {
       },
     ],
   };
-
   public log(message: string): void {
     console.log(message);
   }
