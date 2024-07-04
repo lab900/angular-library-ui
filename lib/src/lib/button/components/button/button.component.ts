@@ -69,6 +69,10 @@ export class Lab900ButtonComponent {
   @Output()
   public btnClick = new EventEmitter<any>();
 
+  public handleClick(event: Event): void {
+    this.btnClick.emit(event);
+  }
+
   public get classList(): { suffixIcon: boolean; prefixIcon: boolean } {
     return { suffixIcon: !!this.suffixIcon, prefixIcon: !!this.prefixIcon };
   }

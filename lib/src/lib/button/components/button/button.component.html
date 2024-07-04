@@ -2,7 +2,6 @@
   @case ('raised') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [throttleTimeInMs]="2000"
       [class]="containerClass"
       mat-raised-button
       [color]="color || 'primary'"
