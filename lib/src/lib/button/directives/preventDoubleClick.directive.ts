@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { timer } from 'rxjs';
-import { throttle } from 'rxjs/operators';
+import { filter, throttle } from 'rxjs/operators';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Directive({
@@ -18,6 +18,7 @@ export class PreventDoubleClickDirective {
   private readonly click = signal<Event | null>(null);
   private readonly throttledClick = toSignal(
     toObservable(this.click).pipe(
+      filter((click) => click != null),
       throttle(() => timer(this.throttleTimeInMs())),
     ),
   );
