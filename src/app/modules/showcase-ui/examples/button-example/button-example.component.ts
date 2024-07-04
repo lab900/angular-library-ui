@@ -15,81 +15,32 @@ import {
     Lab900ActionButtonMenuComponent,
   ],
   template: `
-    <p>Raised button</p>
+    <p>Flat button</p>
     <lab900-button
-      (btnClick)="log('Flat button')"
+      disabled="false"
+      (btnClick)="log('wuut')"
       color="primary"
-      type="raised"
-      label="hello world"
-      suffixIcon="remove_red_eye"
-    />
-    <p>Raised button disabled</p>
-    <lab900-button
-      (btnClick)="log('Flat button disabled')"
-      disabled="true"
-      color="primary"
-      type="raised"
+      type="flat"
       label="hello world"
       suffixIcon="remove_red_eye"
     />
     <p>Flat button</p>
     <lab900-button
-      (btnClick)="log('Flat button')"
-      color="primary"
-      type="flat"
-      label="hello world"
-      suffixIcon="remove_red_eye"
-    />
-    <p>Flat button disabled</p>
-    <lab900-button
-      disabled="true"
-      (btnClick)="log('Flat button disabled')"
-      color="primary"
-      type="flat"
-      label="hello world"
-      suffixIcon="remove_red_eye"
-    />
-    <p>Stroked button</p>
-    <lab900-button
       color="primary"
       type="stroked"
       label="hello world"
       prefixIcon="edit"
-      (btnClick)="log('Stroked button')"
-    />
-    <p>Stroked button disabled</p>
-    <lab900-button
-      disabled="true"
-      color="primary"
-      type="stroked"
-      label="hello world"
-      prefixIcon="edit"
-      (btnClick)="log('Stroked button disabled')"
+      (btnClick)="log('throtel test')"
     />
     <p>Raised button</p>
     <lab900-button
       color="accent"
       type="raised"
       label="hello world"
-      (btnClick)="log('Raised button')"
-    />
-    <p>Raised button disabled</p>
-    <lab900-button
-      disabled="true"
-      color="accent"
-      type="raised"
-      label="hello world"
-      (btnClick)="log('Raised button disabled')"
+      (btnClick)="log('Raised test')"
     />
     <p>Icon button</p>
-    <lab900-button type="icon" label="delete" (btnClick)="log('Icon button')" />
-    <p>Icon button disabled</p>
-    <lab900-button
-      disabled="true"
-      type="icon"
-      label="delete"
-      (btnClick)="log('Icon button disabled')"
-    />
+    <lab900-button type="icon" label="delete" (btnClick)="log('Icon test')" />
     <p>Fab icon button</p>
     <lab900-button
       type="fab"
