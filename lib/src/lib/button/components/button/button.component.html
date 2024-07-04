@@ -1,7 +1,7 @@
 @switch (type) {
   @case ('raised') {
     <button
-      (throttledClick)="btnClick.emit($event)"
+      (throttledClick)="handleClick($event)"
       [class]="containerClass"
       mat-raised-button
       [color]="color || 'primary'"
