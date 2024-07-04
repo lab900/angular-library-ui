@@ -10,7 +10,7 @@ export class PreventDoubleClickDirective {
   private clicks = new Subject<Event>();
   private isThrottled = false;
 
-  @Output() public throttledClick = new EventEmitter<Event>();
+  @Output() throttledClick = new EventEmitter<Event>();
 
   public constructor() {
     this.clicks.pipe(throttle(() => timer(1000))).subscribe((event) => {
