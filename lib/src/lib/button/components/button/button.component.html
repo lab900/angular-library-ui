@@ -15,7 +15,7 @@
   }
   @case ('stroked') {
     <button
-      (throttledClick)="btnClick.emit($event)"
+      (throttledClick)="handleClick($event)"
       [class]="containerClass"
       mat-stroked-button
       [color]="color || 'primary'"
@@ -29,7 +29,7 @@
   }
   @case ('flat') {
     <button
-      (throttledClick)="btnClick.emit($event)"
+      (throttledClick)="handleClick($event)"
       [class]="containerClass"
       mat-flat-button
       [color]="color || 'primary'"
@@ -43,7 +43,7 @@
   }
   @case ('icon') {
     <button
-      (throttledClick)="btnClick.emit($event)"
+      (throttledClick)="handleClick($event)"
       [class]="containerClass"
       mat-icon-button
       [color]="color || 'primary'"
