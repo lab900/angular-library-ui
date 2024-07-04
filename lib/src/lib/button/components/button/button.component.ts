@@ -17,6 +17,7 @@ import {
 } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
   selector: 'lab900-button',
@@ -34,6 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatFabButton,
     TranslateModule,
     MatMiniFabButton,
+    PreventDoubleClickDirective,
   ],
 })
 export class Lab900ButtonComponent {

@@ -12,6 +12,7 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { AsyncPipe } from '@angular/common';
+import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
   selector: 'lab900-action-button-toggle',
@@ -23,7 +24,8 @@ import { AsyncPipe } from '@angular/common';
     MatIcon,
     TranslateModule,
     AsyncPipe,
-  ],
+    PreventDoubleClickDirective
+  ]
 })
 export class Lab900ActionButtonToggleComponent<T = any>
   implements ActionButtonComponent<T>

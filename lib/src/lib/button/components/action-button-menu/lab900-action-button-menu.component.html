@@ -3,8 +3,9 @@
     @if (!action.subActions) {
       <button
         mat-menu-item
-        (click)="doAction($event, action)"
+        (throttledClick)="doAction($event, action)"
         [disabled]="getDisabled(action) | async"
+        lab900PreventDoubleClick
       >
         @if (action.prefixIcon) {
           <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
