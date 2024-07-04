@@ -17,7 +17,6 @@ import {
 } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
   selector: 'lab900-button',
@@ -35,7 +34,6 @@ import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick
     MatFabButton,
     TranslateModule,
     MatMiniFabButton,
-    PreventDoubleClickDirective,
   ],
 })
 export class Lab900ButtonComponent {
@@ -68,10 +66,6 @@ export class Lab900ButtonComponent {
 
   @Output()
   public btnClick = new EventEmitter<any>();
-
-  public handleClick(event: Event): void {
-    this.btnClick.emit(event);
-  }
 
   public get classList(): { suffixIcon: boolean; prefixIcon: boolean } {
     return { suffixIcon: !!this.suffixIcon, prefixIcon: !!this.prefixIcon };

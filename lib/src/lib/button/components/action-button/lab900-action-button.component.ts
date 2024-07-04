@@ -20,7 +20,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Lab900ActionButtonMenuComponent } from '../action-button-menu/lab900-action-button-menu.component';
 import { Lab900ActionButtonToggleComponent } from '../action-button-toggle/lab900-action-button-toggle.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
   selector: 'lab900-action-button',
@@ -34,7 +33,6 @@ import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick
     Lab900ActionButtonMenuComponent,
     Lab900ActionButtonToggleComponent,
     TranslateModule,
-    PreventDoubleClickDirective,
   ],
 })
 export class Lab900ActionButtonComponent<T = any>

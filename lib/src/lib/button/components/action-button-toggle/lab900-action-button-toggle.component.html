@@ -6,10 +6,9 @@
     >
       @for (actionButton of action.subActions; track actionButton.label) {
         <mat-button-toggle
-          (throttledClick)="actionButton.action?.(data)"
+          (click)="actionButton.action?.(data)"
           [value]="actionButton"
           [disabled]="getSubActionDisabled(actionButton) | async"
-          lab900PreventDoubleClick
         >
           @if (actionButton.prefixIcon) {
             <mat-icon>{{ actionButton.prefixIcon }}</mat-icon>

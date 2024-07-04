@@ -1,55 +1,51 @@
 @switch (type) {
   @case ('raised') {
     <button
-      (throttledClick)="handleClick($event)"
+      (click)="btnClick.emit($event)"
       [class]="containerClass"
       mat-raised-button
       [color]="color || 'primary'"
       [disabled]="disabled"
       [ngClass]="classList"
       [attr.type]="buttonType"
-      lab900PreventDoubleClick
     >
       <ng-container *ngTemplateOutlet="innerButton"></ng-container>
     </button>
   }
   @case ('stroked') {
     <button
-      (throttledClick)="handleClick($event)"
+      (click)="btnClick.emit($event)"
       [class]="containerClass"
       mat-stroked-button
       [color]="color || 'primary'"
       [disabled]="disabled"
       [ngClass]="classList"
       [attr.type]="buttonType"
-      lab900PreventDoubleClick
     >
       <ng-container *ngTemplateOutlet="innerButton"></ng-container>
     </button>
   }
   @case ('flat') {
     <button
-      (throttledClick)="handleClick($event)"
+      (click)="btnClick.emit($event)"
       [class]="containerClass"
       mat-flat-button
       [color]="color || 'primary'"
       [disabled]="disabled"
       [ngClass]="classList"
       [attr.type]="buttonType"
-      lab900PreventDoubleClick
     >
       <ng-container *ngTemplateOutlet="innerButton"></ng-container>
     </button>
   }
   @case ('icon') {
     <button
-      (throttledClick)="handleClick($event)"
+      (click)="btnClick.emit($event)"
       [class]="containerClass"
       mat-icon-button
       [color]="color || 'primary'"
       [disabled]="disabled"
       [attr.type]="buttonType"
-      lab900PreventDoubleClick
     >
       @if (svgIcon) {
         <mat-icon [svgIcon]="label"></mat-icon>
@@ -60,13 +56,12 @@
   }
   @case ('fab') {
     <button
-      (throttledClick)="handleClick($event)"
+      (click)="btnClick.emit($event)"
       [class]="containerClass"
       mat-fab
       [color]="color || 'primary'"
       [disabled]="disabled"
       [attr.type]="buttonType"
-      lab900PreventDoubleClick
     >
       @if (svgIcon) {
         <mat-icon [svgIcon]="label"></mat-icon>
@@ -77,13 +72,12 @@
   }
   @case ('mini-fab') {
     <button
-      (throttledClick)="handleClick($event)"
+      (click)="btnClick.emit($event)"
       [class]="containerClass"
       mat-mini-fab
       [color]="color || 'primary'"
       [disabled]="disabled"
       [attr.type]="buttonType"
-      lab900PreventDoubleClick
     >
       @if (svgIcon) {
         <mat-icon [svgIcon]="label"></mat-icon>
@@ -94,14 +88,13 @@
   }
   @default {
     <button
-      (throttledClick)="handleClick($event)"
+      (click)="btnClick.emit($event)"
       [class]="containerClass"
       mat-button
       [color]="color || 'primary'"
       [disabled]="disabled"
       [ngClass]="classList"
       [attr.type]="buttonType"
-      lab900PreventDoubleClick
     >
       <ng-container *ngTemplateOutlet="innerButton"></ng-container>
     </button>
