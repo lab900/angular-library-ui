@@ -12,7 +12,7 @@ steps:
   args:
     - -c
     - |
-      cd lib && grep version package.json | cut -c15-19 | gcloud secrets versions add ui-version --data-file=-
+      cd lib && grep version package.json | cut -c15-20 | gcloud secrets versions add ui-version --data-file=-
       echo "0" | gcloud secrets versions add ui-version-alpha --data-file=-
 availableSecrets:
   secretManager:
