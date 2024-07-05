@@ -16,7 +16,7 @@ import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
       label="hello world"
       suffixIcon="remove_red_eye"
     />
-    <p>Flat button</p>
+    <p>Stroked button</p>
     <lab900-button
       color="primary"
       type="stroked"
