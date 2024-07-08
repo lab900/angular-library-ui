@@ -2874,10 +2874,12 @@ export class TableExampleComponent {
         {
           label: 'Word',
           type: 'stroked',
+          action: () => console.log('Word'),
         },
         {
           label: 'PDF',
           type: 'stroked',
+          action: () => console.log('PDF'),
         },
       ],
     },

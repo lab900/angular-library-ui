@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
   selector: 'lab900-action-button-menu',
@@ -18,6 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatMenuTrigger,
     AsyncPipe,
     TranslateModule,
+    PreventDoubleClickDirective,
   ],
 })
 export class Lab900ActionButtonMenuComponent {
