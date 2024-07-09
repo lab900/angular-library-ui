@@ -49,6 +49,9 @@ export class PreventDoubleClickDirective {
       setTimeout(() => {
         this.isThrottled = false;
       }, this.throttleTimeInMs());
+    } else {
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 }
