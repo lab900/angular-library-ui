@@ -14,6 +14,7 @@ import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
       type="raised"
       label="hello world"
       suffixIcon="remove_red_eye"
+      throttleTimeInMs="1000"
     />
     <p>Raised button disabled</p>
     <lab900-button
