@@ -20,6 +20,7 @@
         mat-menu-item
         [matMenuTriggerFor]="innerMenu.actionMenu"
         [disabled]="getDisabled(action) | async"
+        lab900PreventDoubleClick
       >
         @if (action.prefixIcon) {
           <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
