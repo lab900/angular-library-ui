@@ -42,9 +42,6 @@ export class PreventDoubleClickDirective {
 
   @HostListener('click', ['$event'])
   public onClick(event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-
     if (!this.isThrottled) {
       this.isThrottled = true;
       this.click.set(event);
