@@ -1,9 +1,10 @@
 import {
   Directive,
-  effect,
+  EventEmitter,
   HostListener,
-  input,
-  output,
+  Input,
+  Output,
+  effect,
   signal,
 } from '@angular/core';
 import { timer } from 'rxjs';
@@ -19,7 +20,7 @@ export class PreventDoubleClickDirective {
   private readonly throttledClick = toSignal(
     toObservable(this.click).pipe(
       filter((click) => click != null),
-      throttle(() => timer(this.throttleTimeInMs())),
+      throttle(() => timer(this.throttleTimeInMs)),
     ),
   );
 
@@ -28,15 +29,17 @@ export class PreventDoubleClickDirective {
   /**
    * @default 500
    */
-  public readonly throttleTimeInMs = input(500);
-  public readonly throttledClickOutput = output<Event>({
-    alias: 'throttledClick',
-  });
+  @Input()
+  public throttleTimeInMs = 500;
+
+  @Output()
+  public readonly throttledClickOutput = new EventEmitter<Event>();
 
   public constructor() {
     effect(() => {
-      this.throttledClickOutput.emit(this.throttledClick());
-      this.isThrottled = false;
+      if (this.throttledClick() !== null) {
+        this.throttledClickOutput.emit(this.throttledClick());
+      }
     });
   }
 
@@ -48,7 +51,7 @@ export class PreventDoubleClickDirective {
 
       setTimeout(() => {
         this.isThrottled = false;
-      }, this.throttleTimeInMs());
+      }, this.throttleTimeInMs);
     } else {
       event.preventDefault();
       event.stopPropagation();
