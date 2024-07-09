@@ -35,13 +35,18 @@ export class PreventDoubleClickDirective {
 
   public constructor() {
     effect(() => {
-      this.throttledClickOutput.emit(this.throttledClick());
-      this.isThrottled = false;
+      const event = this.throttledClick();
+      if (event) {
+        this.throttledClickOutput.emit(event);
+      }
     });
   }
 
   @HostListener('click', ['$event'])
   public onClick(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (!this.isThrottled) {
       this.isThrottled = true;
       this.click.set(event);
