@@ -1,15 +1,35 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { MergeObject } from '../../models/merge-object.model';
 import { MergeConfig, MergeConfigBase } from '../../models/merge-config.model';
-import * as _ from 'lodash';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import MergeIcon from '../../../../assets/icons/merge';
+import { isDifferent } from '../../../utils/different.utils';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
+import { MatRadioButton } from '@angular/material/radio';
+import { Lab900MergerItemComponent } from '../merger-item/merger-item.component';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-merger',
   templateUrl: './merger.component.html',
   styleUrls: ['./merger.component.scss'],
+  standalone: true,
+  imports: [
+    MatProgressBar,
+    CommonModule,
+    MatRadioButton,
+    Lab900MergerItemComponent,
+    MatIcon,
+    MatIconButton,
+  ],
 })
 export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   @Input()
@@ -31,30 +51,40 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
 
   public result: T;
 
-  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIconLiteral('merge', sanitizer.bypassSecurityTrustHtml(MergeIcon));
+  public constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIconLiteral(
+      'merge',
+      sanitizer.bypassSecurityTrustHtml(MergeIcon),
+    );
   }
 
   public ngOnInit(): void {
     this.loading = !this.leftObject || !this.rightObject || !this.schema;
     this.result = { ...this.rightObject.data };
-    this.schema.forEach((s) => {
-      if (s.active) {
-        const baseValue = this.getBase(s.active)[s.attribute];
-        if (s.combine) {
-          this.result[s.attribute] = [...this.result[s.attribute], baseValue];
-        } else {
-          this.result[s.attribute] = baseValue;
-        }
-      }
-    });
+    this.setInitialValues(false);
   }
 
   public reset(): void {
     this.result = { ...this.getBase() };
+    this.setInitialValues(true);
+  }
+
+  public setInitialValues(reset: boolean): void {
     this.schema.forEach((s, index) => {
       if (s.active) {
-        this.schema[index].active = false;
+        if (reset && !s.disabled) {
+          this.schema[index].active = false;
+        } else {
+          const baseValue = this.getBase(s.active)[s.attribute];
+          if (s.combine) {
+            this.result[s.attribute] = [
+              ...this.result[s.attribute],
+              ...baseValue,
+            ];
+          } else {
+            this.result[s.attribute] = baseValue;
+          }
+        }
       }
     });
   }
@@ -65,7 +95,10 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
     } else if (config?.nestedObject) {
       let different = false;
       for (let i = 0; i < config?.nestedObject.length && !different; i++) {
-        different = this.compareValues(config.nestedObject[i].attribute, config.attribute);
+        different = this.compareValues(
+          config.nestedObject[i].attribute,
+          config.attribute,
+        );
       }
       return different;
     } else {
@@ -74,20 +107,25 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   }
 
   private compareValues(attribute: string, parentAttribute?: string): boolean {
-    const leftValue = parentAttribute ? this.leftObject.data[parentAttribute][attribute] : this.leftObject.data[attribute];
-    const rightValue = parentAttribute ? this.rightObject.data[parentAttribute][attribute] : this.rightObject.data[attribute];
+    const leftValue = parentAttribute
+      ? this.leftObject.data[parentAttribute][attribute]
+      : this.leftObject.data[attribute];
+    const rightValue = parentAttribute
+      ? this.rightObject.data[parentAttribute][attribute]
+      : this.rightObject.data[attribute];
 
-    return !_.isEqual(
-      Array.isArray(this.leftObject.data[attribute]) ? _.sortBy(leftValue) : leftValue,
-      Array.isArray(this.rightObject.data[attribute]) ? _.sortBy(rightValue) : rightValue,
-    );
+    return isDifferent(leftValue, rightValue);
   }
 
   private getBase(active = false): T {
     if (active) {
-      return this.selected === 'right' ? this.leftObject.data : this.rightObject.data;
+      return this.selected === 'right'
+        ? this.leftObject.data
+        : this.rightObject.data;
     }
-    return this.selected === 'right' ? this.rightObject.data : this.leftObject.data;
+    return this.selected === 'right'
+      ? this.rightObject.data
+      : this.leftObject.data;
   }
 
   public toggleActive(config: MergeConfig<T>, index: number): void {

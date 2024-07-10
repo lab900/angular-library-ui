@@ -1,12 +1,28 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 45 1 100%;
+  max-width: 45%;
+  box-sizing: border-box;
+}
+
 .lab900-merger-item {
   padding: 1rem;
-  height: 100%;
   border-top: 1px solid lightgray;
   border-left: 1px solid lightgray;
   border-right: 1px solid lightgray;
+  display: flex;
+  flex: 1;
 
   p,
   h2 {
     margin: 0;
+  }
+
+  &__sub {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
   }
 }

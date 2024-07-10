@@ -1,17 +1,36 @@
 <mat-menu #actionMenu>
-  <ng-container *ngFor="let action of actions">
-    <button *ngIf="!action.subActions; else nested" mat-menu-item (click)="doAction($event, action)" [disabled]="getDisabled(action)">
-      <mat-icon *ngIf="action?.prefixIcon">{{ getPrefixIcon(action) }}</mat-icon>
-      <span>{{ getLabel(action) | translate }}</span>
-      <mat-icon *ngIf="action?.suffixIcon">{{ getSuffixIcon(action) }}</mat-icon>
-    </button>
-    <ng-template #nested>
-      <button *ngIf="!action?.hide" mat-menu-item [matMenuTriggerFor]="innerMenu.actionMenu" [disabled]="getDisabled(action)">
-        <mat-icon *ngIf="action?.prefixIcon">{{ getPrefixIcon(action) }}</mat-icon>
+  @for (action of actions; track action.label) {
+    @if (!action.subActions) {
+      <button
+        mat-menu-item
+        (throttledClick)="doAction($event, action)"
+        [disabled]="getDisabled(action) | async"
+        lab900PreventDoubleClick
+      >
+        @if (action.prefixIcon) {
+          <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
+        }
         <span>{{ getLabel(action) | translate }}</span>
-        <mat-icon *ngIf="action?.suffixIcon">{{ getSuffixIcon(action) }}</mat-icon>
+        @if (action.suffixIcon) {
+          <mat-icon>{{ getSuffixIcon(action) }}</mat-icon>
+        }
       </button>
-      <lab900-action-button-menu #innerMenu [actions]="action.subActions"></lab900-action-button-menu>
-    </ng-template>
-  </ng-container>
+    } @else if (!action?.hide) {
+      <button
+        mat-menu-item
+        [matMenuTriggerFor]="innerMenu.actionMenu"
+        [disabled]="getDisabled(action) | async"
+        lab900PreventDoubleClick
+      >
+        @if (action.prefixIcon) {
+          <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
+        }
+        <span>{{ getLabel(action) | translate }}</span>
+        @if (action.suffixIcon) {
+          <mat-icon>{{ getSuffixIcon(action) }}</mat-icon>
+        }
+      </button>
+      <lab900-action-button-menu #innerMenu [actions]="action.subActions" />
+    }
+  }
 </mat-menu>

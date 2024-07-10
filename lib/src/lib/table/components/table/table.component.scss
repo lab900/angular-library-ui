@@ -1,25 +1,55 @@
 .lab900-table {
   width: 100%;
 
+  .lab900-cell-value {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &.value-is-placeholder {
+      color: var(--lab900-table-placeholder-text-color);
+    }
+  }
+
+  &.fixed-widths {
+    .mat-mdc-table {
+      table-layout: fixed;
+
+      &:not(.has-back-actions) {
+        tr.mat-mdc-row {
+          > :last-child {
+            width: 100%;
+            background: red;
+          }
+        }
+      }
+
+      &.has-back-actions {
+        tr.mat-mdc-row {
+          > :nth-last-child(2) {
+            width: 100%;
+            background: red;
+          }
+        }
+      }
+    }
+  }
+
   .lab900-table-wrapper {
     overflow: auto;
     width: 100%;
   }
 
-  .bg-green {
-    background-color: #c7dad5;
-  }
-
-  th.mat-header-cell,
-  td.mat-cell,
-  td.mat-footer-cell {
+  th.mat-mdc-header-cell,
+  td.mat-mdc-cell,
+  td.mat-mdc-footer-cell {
     text-align: left;
     padding-right: 16px;
     white-space: nowrap;
 
     &.checkbox-cell {
       width: 16px;
-      padding: 0 24px;
+      padding: 0 12px;
     }
 
     &.center-cell {
@@ -28,17 +58,14 @@
 
     &.sortable {
       cursor: pointer;
+    }
 
-      > div {
-        display: flex;
-        align-items: center;
-      }
+    &.edit-mode {
+      position: relative;
+    }
 
-      .lab900-sort-arrow {
-        font-size: 12px;
-        display: block;
-        margin-left: 4px;
-      }
+    &.editable {
+      cursor: text;
     }
   }
 
@@ -51,51 +78,25 @@
     margin-bottom: 8px;
   }
 
-  ::ng-deep .mat-paginator-container {
-    .mat-form-field-appearance-outline .mat-form-field-infix {
-      padding: 0.5em 0;
-    }
-    .mat-form-field-wrapper {
-      margin: 0;
-      padding-bottom: 1em;
-    }
-  }
-
   &__mat-tooltip {
     min-width: fit-content;
   }
+}
 
-  &__footer {
-    @media screen and (min-width: 600px) {
-      display: flex;
-      align-items: center;
-    }
-
-    > div {
-      flex: 1;
-    }
-
-    &__actions {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: center;
-      margin: 0 -4px;
-
-      @media screen and (max-width: 600px) {
-        margin: 10px -4px 0;
-      }
-
-      lab900-action-button {
-        padding: 0 4px;
-      }
-    }
+td.mat-mdc-cell {
+  &.edit-mode {
+    background: var(--lab900-table-edit-background);
+  }
+  &:focus {
+    outline: none;
   }
 }
 
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   background: #fff;
   display: table;
 
@@ -108,6 +109,10 @@
   }
 }
 
+.sticky-header {
+  overflow: visible !important;
+}
+
 .cdk-drag-placeholder {
   background-color: #ebebeb;
 }
@@ -116,6 +121,67 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.cdk-drop-list-dragging .mat-row:not(.cdk-drag-placeholder) {
+.cdk-drop-list-dragging .mat-mdc-row:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-column-actions-front {
+  width: 0;
+  padding-left: 0 !important;
+}
+
+.cdk-column-actions-back {
+  width: 0;
+  padding-right: 0 !important;
+}
+
+.lab900-cell-input {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  box-sizing: border-box;
+  outline: none;
+  position: absolute;
+  display: inline-block;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0 16px;
+  font-family: var(--mat-table-row-item-label-text-font, Roboto, sans-serif);
+  line-height: var(--mat-table-row-item-label-text-line-height);
+  font-size: var(--mat-table-row-item-label-text-size, 14px);
+  font-weight: var(--mat-table-row-item-label-text-weight);
+  letter-spacing: var(--mat-table-row-item-label-text-tracking);
+  background: transparent;
+
+  & + .mat-datepicker-toggle {
+    position: absolute;
+    right: 0;
+    top: calc(50% - 24px);
+  }
+}
+
+.lab900-cell-input-toggle {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 24px);
+}
+
+.lab900-table-select-editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex !important;
+  align-items: center;
+
+  .mat-mdc-select-trigger {
+    padding: 0 16px;
+  }
+
+  .mat-mdc-select-arrow-wrapper {
+    display: none;
+  }
 }

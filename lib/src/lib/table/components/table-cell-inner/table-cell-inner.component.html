@@ -1,0 +1,27 @@
+@if (cell$ | async; as cell) {
+  @if (isEditing$ | async) {
+    <div class="lab900-cell-editor-wrapper">
+      <ng-container
+        *ngComponentOutlet="
+          cell.cellEditor;
+          inputs: {
+            data: rowValue$ | async,
+            columnConfig: cell,
+            handleValueChanged: handleValueChanged
+          }
+        "
+      />
+    </div>
+  } @else {
+    <ng-container
+      *ngComponentOutlet="
+        cell.cellRenderer || defaultCellRenderer;
+        inputs: {
+          data: rowValue$ | async,
+          columnConfig: cell,
+          handleValueChanged: handleValueChanged
+        }
+      "
+    />
+  }
+}

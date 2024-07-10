@@ -1,5 +1,4 @@
 import { MergeConfig } from '@lab900/ui';
-import * as moment from 'moment';
 import { of } from 'rxjs';
 import { CustomExampleComponent } from '../custom-example.component';
 import { MergerDataExample } from '../models/merger-data-example.model';
@@ -29,7 +28,6 @@ export const mergerSchemaExample: MergeConfig<MergerDataExample>[] = [
   {
     attribute: 'dateOfBirth',
     label: 'label.birthday',
-    formatter: (data) => (data ? moment(data).format('DD/MM/YYYY') : ''),
   },
   {
     attribute: 'languages',
@@ -38,6 +36,7 @@ export const mergerSchemaExample: MergeConfig<MergerDataExample>[] = [
     nextLine: true,
     combine: true,
     active: true,
+    disabled: true,
   },
   {
     attribute: 'text',

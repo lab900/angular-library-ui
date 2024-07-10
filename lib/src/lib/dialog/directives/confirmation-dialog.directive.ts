@@ -1,37 +1,55 @@
-import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import {
+  Directive,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  Output,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
-import { SubscriptionBasedDirective } from '../../common/directives/subscription-based.directive';
+import { take } from 'rxjs/operators';
 
 @Directive({
   selector: '[lab900ConfirmationDialog]',
+  standalone: true,
 })
-export class ConfirmationDialogDirective extends SubscriptionBasedDirective {
-  @Input() public message: string;
-  @Input() public okButtonText: string;
-  @Input() public cancelButtonText: string;
+export class ConfirmationDialogDirective {
+  public readonly dialog: MatDialog = inject(MatDialog);
 
-  @Output() public confirmed: EventEmitter<void> = new EventEmitter<void>();
-  @Output() public cancelled: EventEmitter<void> = new EventEmitter<void>();
+  @Input()
+  public message?: string;
 
-  constructor(public dialog: MatDialog) {
-    super();
-  }
+  @Input()
+  public okButtonText?: string;
 
-  @HostListener('click') public onMouseEnter(): void {
-    const dialog = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        message: this.message,
-        okButtonText: this.okButtonText,
-        cancelButtonText: this.cancelButtonText,
-      },
-    });
-    this.addSubscription(dialog.beforeClosed(), (data) => {
-      if (data) {
-        this.confirmed.emit();
-      } else {
-        this.cancelled.emit();
-      }
-    });
+  @Input()
+  public cancelButtonText?: string;
+
+  @Output()
+  public readonly confirmed = new EventEmitter<void>();
+
+  @Output()
+  public readonly cancelled = new EventEmitter<void>();
+
+  @HostListener('click')
+  public onMouseEnter(): void {
+    this.dialog
+      .open(ConfirmationDialogComponent, {
+        data: {
+          message: this.message,
+          okButtonText: this.okButtonText,
+          cancelButtonText: this.cancelButtonText,
+        },
+      })
+      .beforeClosed()
+      .pipe(take(1))
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.confirmed.emit();
+        } else {
+          this.cancelled.emit();
+        }
+      });
   }
 }

@@ -1,20 +1,35 @@
-<div class="data-list-item" *ngIf="data" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
-  <div class="data-list-item__info" *ngIf="dataListItemInfoTemplate">
-    <ng-container *ngTemplateOutlet="dataListItemInfoTemplate; context: { $implicit: data }"></ng-container>
-  </div>
-  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="10px">
-    <div class="data-list-item__share" *ngIf="dataListSharing">
-      <lab900-sharing
-        [users]="dataListSharing.sharedUsersFn(data)"
-        [shareDialogTemplate]="dataListSharing.shareDialogTemplate"
-        [userImageFn]="dataListSharing.userImageFn"
-        [userLabelFn]="dataListSharing.userLabelFn"
-        [onShareFn]="dataListSharing.onShareFn"
-        [shareObject]="data"
-      ></lab900-sharing>
+@if (data) {
+  <div class="data-list-item">
+    @if (dataListItemInfoTemplate) {
+      <div class="data-list-item__info">
+        <ng-container
+          *ngTemplateOutlet="
+            $any(dataListItemInfoTemplate);
+            context: { $implicit: data }
+          "
+        ></ng-container>
+      </div>
+    }
+    <div class="data-list-item__side">
+      @if (dataListSharing) {
+        <div class="data-list-item__share">
+          <lab900-sharing
+            [users]="dataListSharing.sharedUsersFn(data)"
+            [shareDialogTemplate]="dataListSharing.shareDialogTemplate"
+            [userImageFn]="dataListSharing.userImageFn"
+            [userLabelFn]="dataListSharing.userLabelFn"
+            [onShareFn]="dataListSharing.onShareFn"
+            [shareObject]="data"
+          />
+        </div>
+      }
+      @if (actions?.length) {
+        <div class="data-list-item__actions">
+          @for (action of actions; track action.label) {
+            <lab900-action-button [action]="action" [data]="data" />
+          }
+        </div>
+      }
     </div>
-    <div class="data-list-item__actions" *ngIf="actions?.length">
-      <lab900-action-button *ngFor="let action of actions" [action]="action" [data]="data"></lab900-action-button>
-    </div>
   </div>
-</div>
+}

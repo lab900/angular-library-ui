@@ -1,60 +1,83 @@
 import { Component, Input } from '@angular/core';
-import { ActionButton } from '../../models/action-button.model';
-import { ThemePalette } from '@angular/material/core';
-import { readPropValue } from '../../../utils/utils';
+import {
+  ActionButton,
+  ActionButtonComponent,
+} from '../../models/action-button.model';
+import { coerceObservable, readPropValue } from '../../../utils/utils';
+import { Observable } from 'rxjs';
+import {
+  MatButtonToggle,
+  MatButtonToggleGroup,
+} from '@angular/material/button-toggle';
+import { MatIcon } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { AsyncPipe } from '@angular/common';
+import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
+  standalone: true,
+  imports: [
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatIcon,
+    TranslateModule,
+    AsyncPipe,
+    PreventDoubleClickDirective
+  ]
 })
-export class Lab900ActionButtonToggleComponent {
-  @Input()
-  public action: ActionButton;
+export class Lab900ActionButtonToggleComponent<T = any>
+  implements ActionButtonComponent<T>
+{
+  private _disabled = false;
+
+  @Input({ required: true })
+  public action: ActionButton<T>;
 
   @Input()
-  public data: any;
+  public data: T;
 
-  public getSelected(): ActionButton {
+  public getSelected(): ActionButton<T> {
     for (const action of this.action.subActions) {
-      if ((typeof action.selected === 'function' && action.selected(this.data)) || action.selected === true) {
+      if (
+        (typeof action.selected === 'function' && action.selected(this.data)) ||
+        action.selected === true
+      ) {
         return action;
       }
     }
     return null;
   }
 
-  public getColor(): ThemePalette {
-    return readPropValue(this.action.color, this.data);
+  public getHidden(): Observable<boolean> {
+    return coerceObservable(readPropValue(this.action.hide, this.data));
   }
 
-  public getLabel(): string {
-    return readPropValue(this.action.label, this.data);
+  public getDisabled(): Observable<boolean> {
+    return coerceObservable(
+      this._disabled || readPropValue(this.action.disabled, this.data),
+    );
   }
 
-  public getHidden(): boolean {
-    return readPropValue(this.action.hide, this.data);
+  public getSubActionDisabled(action: ActionButton): Observable<boolean> {
+    return coerceObservable(readPropValue(action.disabled, this.data));
   }
 
-  public getDisabled(): boolean {
-    return readPropValue(this.action.disabled, this.data);
-  }
-
-  public getSubActionDisabled(action: ActionButton): boolean {
-    return readPropValue(action.disabled, this.data);
+  public getLabel(action: ActionButton): Observable<string> {
+    return coerceObservable(readPropValue(action.label, this.data));
   }
 
   public doAction(e: Event): void {
     e.stopPropagation();
-    if (this.action.action) {
-      this.action.action(this.data, e);
-    }
+    this.action?.action?.(this.data, e, this);
   }
 
-  public getPrefixIcon(): string {
-    return readPropValue(this.action.prefixIcon, this.data);
+  public disable(): void {
+    this._disabled = true;
   }
 
-  public getSuffixIcon(): string {
-    return readPropValue(this.action.suffixIcon, this.data);
+  public enable(): void {
+    this._disabled = false;
   }
 }

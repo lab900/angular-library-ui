@@ -1,43 +1,56 @@
 import {
-  AfterContentInit,
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   EventEmitter,
+  inject,
   Input,
-  OnChanges,
+  OnDestroy,
   Output,
-  QueryList,
-  SimpleChanges,
   TemplateRef,
+  TrackByFunction,
   ViewChild,
-  ViewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { Lab900TableEmptyDirective } from '../../directives/table-empty.directive';
-import { TableCell } from '../../models/table-cell.model';
+import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
 import { Lab900TableDisabledDirective } from '../../directives/table-disabled.directive';
-import { Paging } from '../../../common/models/paging.model';
-import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
-import { Lab900TableCustomCellDirective } from '../../directives/table-custom-cell.directive';
-import { SortDirection } from '@angular/material/sort';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
-import { MatColumnDef, MatTable } from '@angular/material/table';
-import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDragPlaceholder,
+  CdkDropList,
+} from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { Lab900Sort } from '../../models/table-sort.model';
+import { Lab900TableTab } from '../../models/table-tabs.model';
+import { Lab900TableLeftFooterDirective } from '../../directives/table-left-footer.directive';
+import {
+  BehaviorSubject,
+  combineLatest,
+  Observable,
+  ReplaySubject,
+  Subscription,
+} from 'rxjs';
+import { filter, map, shareReplay, take, withLatestFrom } from 'rxjs/operators';
+import { Lab900TableService } from '../../services/table.service';
+import { Lab900TableHeaderComponent } from '../table-header/lab900-table-header.component';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
+import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { A11yModule } from '@angular/cdk/a11y';
+import { Lab900ActionButtonComponent } from '../../../button/components/action-button/lab900-action-button.component';
 
 type propFunction<T, R = string> = (data: T) => R;
-
-export interface Lab900Sort {
-  /** The id of the column being sorted. */
-  id: string;
-  /** The sort direction. */
-  direction: SortDirection;
-}
 
 export interface TableRowAction<T = any> extends ActionButton<T> {
   /**
@@ -46,7 +59,8 @@ export interface TableRowAction<T = any> extends ActionButton<T> {
   draggable?: boolean;
 }
 
-export interface SelectableRowsOptions<T = any> {
+export interface SelectableRows<T = any> {
+  enabled: boolean;
   checkBoxColor?: ThemePalette;
   position?: 'right' | 'left';
   sticky?: boolean;
@@ -55,6 +69,7 @@ export interface SelectableRowsOptions<T = any> {
   maxSelectableRows?: number;
   selectedItems?: T[];
   singleSelect?: boolean;
+  hideSelectableRow?: (row: T) => boolean;
 }
 
 @Component({
@@ -62,104 +77,146 @@ export interface SelectableRowsOptions<T = any> {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [Lab900TableService],
+  standalone: true,
+  imports: [
+    Lab900TableHeaderComponent,
+    AsyncPipe,
+    NgTemplateOutlet,
+    Lab900TableTabsComponent,
+    MatProgressBarModule,
+    NgClass,
+    MatTableModule,
+    CdkDropList,
+    TableCellSelectComponent,
+    Lab900TableCellComponent,
+    CdkDragHandle,
+    CdkDrag,
+    TranslateModule,
+    CdkDragPlaceholder,
+    A11yModule,
+    Lab900ActionButtonComponent,
+  ],
 })
-export class Lab900TableComponent<T extends object = object> implements OnChanges, AfterContentInit {
+export class Lab900TableComponent<T extends object = object, TabId = string>
+  implements OnDestroy
+{
+  private readonly tableService: Lab900TableService<T, TabId> =
+    inject(Lab900TableService);
+  private readonly footerSub: Subscription;
+
+  private readonly _fixedWidth$ = new BehaviorSubject<boolean>(false);
+  public readonly fixedWidth$ = combineLatest([
+    this.tableService.visibleColumns$,
+    this._fixedWidth$.asObservable(),
+  ]).pipe(
+    map(([columns, fixedWidth]) => {
+      fixedWidth || columns?.some((c) => !!c?.width);
+    }),
+  );
+
+  /**
+   * This will respect the defined widths of the table cells
+   * If any cell has a width defined, the table will have a fixed layout
+   */
   @Input()
-  public set tableCells(cells: TableCell<T>[]) {
-    this._tableCells = cells.sort(Lab900TableComponent.reorderColumnsFn);
-    this.reloadColumns();
-  }
-
-  public get tableCells(): TableCell<T>[] {
-    return this._tableCells;
-  }
-
-  public get selectCount(): number {
-    return this.selection.selected.length;
-  }
-
-  public get selectEnabled(): boolean {
-    if (this.selectableRowsOptions?.disabled) {
-      return false;
-    } else if (this.selectableRowsOptions?.maxSelectableRows) {
-      return this.selection.selected.length < this.selectableRowsOptions.maxSelectableRows;
-    } else {
-      return true;
-    }
-  }
-
-  public get draggableRows(): boolean {
-    return this.tableActionsBack?.some((a) => !!a?.draggable) || this.tableActionsFront?.some((a) => !!a?.draggable);
+  public set fixedWidths(fixedWidth: boolean) {
+    this._fixedWidth$.next(fixedWidth);
   }
 
   @ViewChild(MatTable)
-  public table!: MatTable<T>;
-
-  @ViewChildren(Lab900TableCellComponent)
-  public cellComponents!: QueryList<Lab900TableCellComponent<T>>;
-
-  @ViewChildren('rowCheckbox')
-  public rowCheckboxes!: QueryList<MatCheckbox>;
-
-  @ViewChild('selectAllCheckbox')
-  public selectAllCheckbox!: MatCheckbox;
+  public table?: MatTable<T>;
 
   @Input()
-  public selection = new SelectionModel<T>(true, []);
+  public set tableCells(columns: TableCell<T>[]) {
+    this.tableService.updateColumns(columns);
+  }
 
   @Input()
-  public data: any[];
+  public set tableTabs(tabs: Lab900TableTab<TabId, T>[]) {
+    this.tableService.updateTabs(tabs);
+  }
 
   @Input()
-  public tableClass: string;
+  public set activeTabId(tabId: TabId) {
+    this.tableService.updateTabId(tabId);
+  }
+
+  public get draggableRows(): boolean {
+    return (
+      this.tableActionsBack?.some((a) => !!a?.draggable) ||
+      this.tableActionsFront?.some((a) => !!a?.draggable)
+    );
+  }
+
+  private readonly _data$ = new ReplaySubject<T[] | null>();
+  public readonly data$: Observable<T[] | null>;
 
   @Input()
-  public rowClass: propFunction<T> | string;
+  public set data(value: T[] | null) {
+    this._data$.next(value);
+  }
 
   @Input()
-  public pageSizeConfig: { hidePageSize?: boolean; pageSizeOptions?: number[] } = {
-    hidePageSize: true,
-    pageSizeOptions: [5, 10, 50],
-  };
+  public tableClass?: string;
+
+  @Input()
+  public rowClass?: propFunction<T> | string;
+
+  @Input()
+  public rowColor?: propFunction<T> | string;
 
   @Input()
   public loading = false;
-
-  // tslint:disable-next-line:variable-name
-  private _tableCells: TableCell<T>[];
 
   /**
    * Show a set of actions at the top of the table
    */
   @Input()
-  public tableHeaderActions: ActionButton<T>[];
+  public tableHeaderActions?: ActionButton<T>[];
 
   /**
    * Show a set of actions at the bottom of the table
    */
   @Input()
-  public tableFooterActions: ActionButton<T>[];
+  public tableFooterActions?: ActionButton<T>[];
 
   /**
    * Show a set of actions at the start of each row
    */
   @Input()
-  public tableActionsFront: TableRowAction<T>[];
+  public tableActionsFront?: TableRowAction<T>[];
 
   /**
    * Show a set of actions at the end of each row
    */
   @Input()
-  public tableActionsBack: TableRowAction<T>[];
-
-  /**
-   * Enable checkboxes in front of the table rows
-   */
-  @Input()
-  public selectableRows: boolean;
+  public tableActionsBack?: TableRowAction<T>[];
 
   @Input()
-  public selectableRowsOptions: SelectableRowsOptions<T>;
+  public selection?: SelectionModel<T>;
+
+  private readonly _selectableRows$ =
+    new BehaviorSubject<SelectableRows<T> | null>(null);
+
+  public readonly selectableRows$: Observable<SelectableRows<T>> =
+    this._selectableRows$
+      .asObservable()
+      .pipe(filter((selectableRows) => !!selectableRows));
+
+  @Input()
+  public set selectableRows(value: SelectableRows<T> | undefined) {
+    if (value && value.enabled) {
+      this._selectableRows$.next(value);
+      this.selection = new SelectionModel<any>(
+        !value?.singleSelect,
+        value?.selectedItems ?? [],
+      );
+    } else {
+      this._selectableRows$.next(null);
+    }
+  }
 
   /**
    * Show columns filter to hide/show columns
@@ -184,16 +241,18 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   public disabled = false;
 
   @Input()
-  public sort: Lab900Sort[] = [];
+  public set sort(value: Lab900Sort[] | null) {
+    this.tableService.updateSorting(value);
+  }
 
   @Input()
   public multiSort = false;
 
+  @Input()
+  public disableSort = false;
+
   @Output()
   public readonly sortChange = new EventEmitter<Lab900Sort[]>();
-
-  @Input()
-  public paging?: Paging;
 
   /**
    * set max width of all columns, can be individually overwritten per tableCell
@@ -204,13 +263,21 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   public maxColumnWidth?: string;
 
   @Input()
-  public onRowClick: (value: T, index: number, event: Event) => void;
+  public onRowClick?: (value: T, index: number, event: Event) => void;
 
   @Input()
-  public preFooterTitle: string;
+  public preFooterTitle?: string;
+
+  @Input()
+  public stickyHeader?: boolean;
+
+  @Input()
+  public set disabledEditing(value: boolean) {
+    this.tableService.updateDisableEditing(value);
+  }
 
   @Output()
-  public readonly pageChange = new EventEmitter<PageEvent>();
+  public activeTabIdChange = new EventEmitter<TabId>();
 
   @Output()
   public readonly selectionChanged = new EventEmitter<SelectionModel<T>>();
@@ -224,62 +291,110 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   @Output()
   public readonly tableRowOrderChange = new EventEmitter<CdkDragDrop<T[]>>();
 
+  @Output()
+  public readonly cellValueChanged = new EventEmitter<
+    CellValueChangeEvent<T>
+  >();
+
   @ContentChild(Lab900TableEmptyDirective, { read: TemplateRef })
-  public emptyTableTemplate?: Lab900TableEmptyDirective;
+  public emptyTableTemplate?: TemplateRef<any>;
 
   @ContentChild(Lab900TableDisabledDirective, { read: TemplateRef })
-  public disabledTableTemplate?: Lab900TableDisabledDirective;
+  public disabledTableTemplate?: TemplateRef<any>;
 
   @ContentChild(Lab900TableHeaderContentDirective, { read: TemplateRef })
-  public tableHeaderContent?: Lab900TableHeaderContentDirective;
+  public tableHeaderContent?: TemplateRef<any>;
 
   @ContentChild(Lab900TableTopContentDirective, { read: TemplateRef })
-  public tableTopContent?: Lab900TableTopContentDirective;
+  public tableTopContent?: TemplateRef<any>;
 
-  @ContentChild(Lab900TableCustomCellDirective, { read: TemplateRef })
-  public customCellContent?: Lab900TableCustomCellDirective;
+  @ContentChild(Lab900TableLeftFooterDirective, { read: TemplateRef })
+  public footerLeftContent?: TemplateRef<any>;
 
-  public displayedColumns: string[] = [];
+  @Input({ required: true })
+  public trackByTableFn!: TrackByFunction<T>;
 
-  public showCellFooters = false;
+  public readonly showCellFooters$: Observable<boolean>;
 
-  // when columnOrder is not specified, put them in the back (position 10000)
-  public static reorderColumnsFn(a: TableCell, b: TableCell): number {
-    return (a.columnOrder ?? 10000) - (b.columnOrder ?? 10000);
+  public readonly visibleColumns$: Observable<TableCell<T>[]> =
+    this.tableService.visibleColumns$;
+  public readonly tabId$: Observable<TabId> = this.tableService.tabId$;
+  public readonly tabs$: Observable<Lab900TableTab<TabId, T>[]> =
+    this.tableService.tabs$;
+  public readonly displayedColumns$: Observable<string[]>;
+
+  public constructor() {
+    this.showCellFooters$ = this.visibleColumns$.pipe(
+      map((columns) => !!columns?.some((c) => !!c?.footer)),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+    this.displayedColumns$ = combineLatest([
+      this.visibleColumns$,
+      this._selectableRows$.asObservable(),
+    ]).pipe(
+      map(([columns, selectableRows]) =>
+        this.getDisplayedColumns(columns, selectableRows),
+      ),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+    this.data$ = combineLatest([
+      this._selectableRows$.asObservable(),
+      this._data$.asObservable(),
+    ]).pipe(
+      map(([options, data]) =>
+        options?.hideSelectableRow
+          ? data?.map((v) => ({
+              ...v,
+              _hideSelectableRow: options.hideSelectableRow(v),
+            }))
+          : data,
+      ),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+
+    /**
+     * Fix for rendering async footers
+     */
+    this.footerSub = this.data$
+      .pipe(withLatestFrom(this.showCellFooters$))
+      .subscribe(([data, showFooter]) => {
+        if (this.table) {
+          this.table.removeFooterRowDef(null);
+          if (data?.length && showFooter) {
+            this.table.renderRows();
+          }
+        }
+      });
   }
 
-  public ngAfterContentInit(): void {
-    this.showCellFooters = this.tableCells.some((cell) => cell.footer);
+  public ngOnDestroy(): void {
+    this.footerSub.unsubscribe();
   }
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    const selectableRowsOptions = changes.selectableRowsOptions?.currentValue;
-
-    if (selectableRowsOptions?.singleSelect) {
-      this.selection = new SelectionModel<any>(false, []);
-    }
-    if (selectableRowsOptions?.selectedItems) {
-      this.selection.clear();
-      this.selection.select(...this.selectableRowsOptions.selectedItems);
-    }
-    if (changes.data) {
-      this.reloadColumns();
+  public handleSelectAll(checked: boolean): void {
+    this.selection.clear();
+    if (checked) {
+      this.data$.pipe(take(1)).subscribe((data) => {
+        if (data?.length) {
+          this.selection.select(
+            ...data.filter((row) => !(row as any)._hideSelectableRow),
+          );
+          this.selectionChanged.emit(this.selection);
+        }
+      });
+    } else {
+      this.selectionChanged.emit(this.selection);
     }
   }
 
-  public selectRow(row: T): void {
+  public handleSelectRow(row: T): void {
     this.selection.toggle(row);
-
-    if (this.selectAllCheckbox) {
-      if (this.selection.selected.length === this.data.length) {
-        this.selectAllCheckbox.checked = true;
-      } else {
-        this.selectAllCheckbox.checked = false;
-      }
-    }
-
     this.selectionChanged.emit(this.selection);
     this.rowSelectToggle.emit(row);
+  }
+
+  public isRowSelected(row: T): boolean {
+    return this.selection?.isSelected(row);
   }
 
   public getRowClasses(row: T, index: number): string {
@@ -287,17 +402,25 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
     if (typeof this.onRowClick === 'function') {
       classes.push('lab900-row-clickable');
     }
-    if (this.selection && this.selection.isSelected(row)) {
-      classes.push('lab900-row-selected');
-    }
     if (index % 2 === 0) {
       classes.push('lab900-row-even');
     } else {
       classes.push('lab900-row-odd');
     }
-
-    classes.push(typeof this.rowClass === 'function' ? this.rowClass(row) : this.rowClass ?? '');
+    classes.push(
+      (typeof this.rowClass === 'function'
+        ? this.rowClass(row)
+        : this.rowClass) ?? '',
+    );
     return classes.join(' ') || '';
+  }
+
+  public getRowColor(row: T): string {
+    return (
+      (typeof this.rowColor === 'function'
+        ? this.rowColor(row)
+        : this.rowColor) ?? ''
+    );
   }
 
   public handleRowClick(event: Event, row: T, index: number): void {
@@ -311,89 +434,41 @@ export class Lab900TableComponent<T extends object = object> implements OnChange
   }
 
   public handleHeaderClick(cell: TableCell<T>): void {
-    if (cell.sortable) {
-      if (this.multiSort) {
-        const currentIndex = (this.sort || []).findIndex((s) => s.id === cell.key);
-        if (currentIndex >= 0) {
-          const { direction } = this.sort[currentIndex];
-          if (direction === 'desc') {
-            this.sort.splice(currentIndex, 1);
-          } else {
-            this.sort[currentIndex] = { ...this.sort[currentIndex], direction: 'desc' };
-          }
-        } else {
-          this.sort.push({ id: cell.key, direction: 'asc' });
-        }
-      } else {
-        const inCurrent = (this.sort || []).find((s) => s.id === cell.key);
-        this.sort = [{ id: cell.key, direction: inCurrent?.direction === 'asc' ? 'desc' : 'asc' }];
-      }
-      this.sortChange.emit(this.sort);
+    if (!this.disableSort && cell.sortable) {
+      this.tableService.updateColumnSorting(cell, this.multiSort, (sort) =>
+        this.sortChange.emit(sort),
+      );
     }
-  }
-
-  public handleSelectAllCheckbox({ checked }): void {
-    const rowCheckboxes = this.rowCheckboxes.toArray();
-    if (checked) {
-      this.selection.clear();
-      this.selection.select(...this.data);
-      rowCheckboxes.forEach((checkBox) => (checkBox.checked = true));
-    } else {
-      this.selection.clear();
-      rowCheckboxes.forEach((checkBox) => (checkBox.checked = false));
-    }
-
-    this.selectionChanged.emit(this.selection);
   }
 
   public onTableCellsFiltered(tableCells: TableCell[]): void {
-    this.tableCells = tableCells.sort(Lab900TableComponent.reorderColumnsFn);
-    this.addColumnsToTable();
+    this.tableCells = tableCells;
     this.tableCellsFiltered.emit(tableCells);
   }
 
-  private addColumnsToTable(): void {
-    let columns = [];
-    for (const column of this.cellComponents.toArray()) {
-      this.table.addColumnDef(column.columnDef);
-      if (!column.cell.hide) {
-        columns = [...columns, column.cell.key];
-      }
-    }
+  public onActiveTabChange(id: TabId): void {
+    this.activeTabId = id;
+    this.activeTabIdChange.emit(id);
+  }
+
+  private getDisplayedColumns(
+    columns: TableCell<T>[],
+    selectableRows: SelectableRows<T>,
+  ): string[] {
+    const displayColumns = columns?.map((c) => c.key);
     if (this.tableActionsFront?.length) {
-      columns.unshift('actions-front');
+      displayColumns.unshift('actions-front');
     }
     if (this.tableActionsBack?.length) {
-      columns.push('actions-back');
+      displayColumns.push('actions-back');
     }
-
-    if (this.selectableRows) {
-      if (this.selectableRowsOptions?.position === 'right') {
-        columns.push('select');
+    if (selectableRows) {
+      if (selectableRows?.position === 'right') {
+        displayColumns.push('select');
       } else {
-        columns.unshift('select');
+        displayColumns.unshift('select');
       }
     }
-
-    this.displayedColumns = columns;
-  }
-
-  private removeOldColumnsFromTable(): void {
-    const oldColumns: Set<MatColumnDef> = (this.table as any)?._customColumnDefs;
-    oldColumns?.forEach((oldColumn: MatColumnDef) => {
-      this.table.removeColumnDef(oldColumn);
-      // removing column also from the displayed columns (such array should match the dataSource!)
-      this.displayedColumns.splice(
-        this.displayedColumns.findIndex((column: string) => column === oldColumn.name),
-        1,
-      );
-    });
-  }
-
-  private reloadColumns(): void {
-    setTimeout(() => {
-      this.removeOldColumnsFromTable();
-      this.addColumnsToTable();
-    });
+    return displayColumns;
   }
 }

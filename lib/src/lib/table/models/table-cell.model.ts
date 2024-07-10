@@ -1,7 +1,24 @@
 import { propValue } from '../../utils/utils';
 import { TableCellTooltip } from './table-cell-tooltip.model';
+import { TooltipPosition } from '@angular/material/tooltip';
+import { Type } from '@angular/core';
+import { CellRendererAbstract } from '../cell-renderers/cell-renderer.abstract';
+import { ColumnHeaderRendererAbstract } from '../column-header-renderers/column-header-renderer-abstract.directive';
+import { CellEditorAbstract } from '../cell-editors/cell-editor.abstract';
+import { CellEditorBaseOptions } from '../cell-editors/cell-editor.options';
 
-export interface TableCell<T = any> {
+export interface CellValueChangeEvent<T = any> {
+  value: any;
+  cell: TableCell<T>;
+  row: T;
+}
+
+export interface TableCell<
+  T = any,
+  CellRenderOptions = any,
+  HeaderRenderOptions = any,
+  CellEditorOptions extends CellEditorBaseOptions = CellEditorBaseOptions,
+> {
   /**
    * Column key
    */
@@ -20,10 +37,12 @@ export interface TableCell<T = any> {
   cellHeaderClass?: propValue<TableCell<T>>;
   /**
    * Cell header icon
+   * @Deprecated use cellRenderer: ColumnHeaderWithIconRendererComponent instead
    */
   cellHeaderIcon?: propValue<TableCell<T>>;
   /**
    * Cell header svgicon
+   * @Deprecated use cellRenderer: ColumnHeaderWithIconRendererComponent instead
    */
   cellHeaderSvgIcon?: propValue<TableCell<T>>;
   /**
@@ -48,6 +67,11 @@ export interface TableCell<T = any> {
    */
   sortable?: boolean;
   /**
+   * sort key to be used
+   * defaults to `key` if not defined
+   */
+  sortKey?: string;
+  /**
    * Column is sticky
    */
   sticky?: boolean;
@@ -61,8 +85,46 @@ export interface TableCell<T = any> {
   click?: (data: T, cell: TableCell, mouseEvent?: MouseEvent) => any;
   /**
    * render a different cell template
+   * @deprecated use cellRenderer instead
    */
   customCellContent?: boolean;
+
+  /**
+   * Specify a custom cell renderer component to display the cell content in a different way
+   */
+  cellRenderer?: Type<CellRendererAbstract<CellRenderOptions, T>>;
+
+  /**
+   * Specify cellRenderer component specific options
+   */
+  cellRenderOptions?: CellRenderOptions;
+
+  cellEditor?: Type<CellEditorAbstract<CellEditorOptions, T>>;
+  cellEditorOptions?: CellEditorOptions;
+
+  /**
+   * render a different column header template
+   * @deprecated use headerRenderer instead
+   */
+  customHeaderCell?: boolean;
+  /**
+   * Specify a custom header renderer component to display the column header content in a different way
+   */
+  headerRenderer?: Type<ColumnHeaderRendererAbstract<HeaderRenderOptions, T>>;
+
+  /**
+   * Specify headerRenderer component specific options
+   */
+  headerRenderOptions?: HeaderRenderOptions;
+
+  /**
+   * Enable a tooltip for cell header, takes text to be displayed
+   */
+  cellHeaderTooltip?: string;
+  /**
+   * Define the position for the cell header tooltip
+   */
+  cellHeaderTooltipPosition?: TooltipPosition;
   /**
    * Enable a tooltip, displays the cell content in a tooltip
    */
@@ -71,10 +133,21 @@ export interface TableCell<T = any> {
    * set max width of column, this will cause the content to overflow
    * @example: '300px'
    */
-  cellMaxWidth?: propValue<T>;
+  cellMaxWidth?: string;
   /**
    * Cell footer to be displayed
    */
   footer?: ((data: T[], cell: TableCell) => string) | string;
   footerCellClass?: string;
+
+  /**
+   * Cell prefixed icon, use cellFormatter to remove text if you want to only use the icon
+   * @Deprecated use cellRenderer: CellWithIconRendererComponent  instead
+   */
+  icon?: (data: T, cell: TableCell) => string;
+  /**
+   * Cell prefixed SVG icon
+   * @Deprecated use cellRenderer: CellWithIconRendererComponent  instead
+   */
+  svgIcon?: (data: T, cell: TableCell) => string;
 }

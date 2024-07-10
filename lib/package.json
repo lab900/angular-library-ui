@@ -1,19 +1,17 @@
 {
   "name": "@lab900/ui",
-  "version": "4.0.0",
+  "version": "17.0.4",
   "author": "Lab900 <info@lab900.com> (https://lab900.com)",
   "licens": "MIT",
   "peerDependencies": {
-    "@angular/common": "~12.2.14",
-    "@angular/core": "~12.2.14",
-    "@angular/material": "~12.2.13",
-    "@angular/flex-layout": "^12.0.0-beta.35",
-    "@ngx-translate/core": "^13.0.0",
-    "lodash": "^4.17.20"
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0",
+    "@angular/material": ">=17.0.0",
+    "@ngx-translate/core": ">=15.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/lab900/angular-libraries.git"
+    "url": "git://github.com/lab900/angular-library-ui.git"
   },
   "dependencies": {
     "tslib": "^2.0.0"

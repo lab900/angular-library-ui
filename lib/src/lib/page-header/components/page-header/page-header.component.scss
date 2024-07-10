@@ -5,19 +5,28 @@
     }
   }
 
-  &__title {
-    min-width: fit-content;
+  &.fixed-mobile-action &__main {
+    @media screen and (min-width: 960px) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
   }
 
-  &__nav {
-    &__item {
-      &__prefix-icon {
-        margin-right: 10px;
-      }
-      &__suffix-icon {
-        margin-left: 10px;
-      }
-    }
+  &:not(.fixed-mobile-action) &__main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .mat-divider {
+    height: 100%;
+  }
+
+  &__title {
+    min-width: fit-content;
   }
 
   &__actions {
@@ -26,15 +35,24 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
     &--left {
       display: flex;
       justify-content: flex-start;
-      margin-right: 16px;
+      gap: 8px;
+      align-items: center;
     }
+
     &--right {
       display: flex;
       justify-content: flex-end;
       flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .mat-mdc-icon-button {
+      padding: 0;
     }
   }
 
@@ -49,25 +67,30 @@
   }
 
   @media screen and (max-width: 959px) {
-    &__main h1 {
-      padding: 24px 16px 16px;
+    h1 {
+      font-size: 1.4em;
     }
 
-    &__actions {
-      padding: 8px 16px;
-      background: #fff;
-      border-top: 1px solid rgba(#000, 0.2);
-      z-index: 10;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      align-items: center;
-      justify-content: center;
-    }
+    &.fixed-mobile-action {
+      .lab900-page-header__main h1 {
+        padding: 24px 16px 16px;
+      }
+      .lab900-page-header__actions {
+        padding: 8px 16px;
+        background: #fff;
+        border-top: 1px solid rgba(#000, 0.2);
+        z-index: 10;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        align-items: center;
+        justify-content: center;
+      }
 
-    &__divider {
-      display: none;
+      .lab900-page-header__divider {
+        display: none;
+      }
     }
   }
 

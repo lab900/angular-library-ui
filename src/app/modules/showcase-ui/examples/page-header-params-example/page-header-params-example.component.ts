@@ -1,9 +1,20 @@
 import { Component } from '@angular/core';
-import { PageHeaderNavItem, ActionButton } from '@lab900/ui';
+import {
+  ActionButton,
+  Lab900PageHeaderComponent,
+  PageHeaderNavItem,
+} from '@lab900/ui';
 
 @Component({
   selector: 'lab900-page-header-params-example',
-  template: `<lab900-page-header [pageTitle]="pageTitle" [navItems]="navItems" [actions]="actions"></lab900-page-header>`,
+  template: `<lab900-page-header
+    [pageTitle]="pageTitle"
+    [navItems]="navItems"
+    [actions]="actions"
+    [showActionsFixedOnMobile]="false"
+  />`,
+  standalone: true,
+  imports: [Lab900PageHeaderComponent],
 })
 export class PageHeaderParamsExampleComponent {
   public pageTitle = 'Example page header';
@@ -25,9 +36,9 @@ export class PageHeaderParamsExampleComponent {
 
   public actions: ActionButton[] = [
     {
-      label: 'Cancel',
+      label: 'close',
       action: () => console.log('cancel'),
-      type: 'flat',
+      type: 'icon',
     },
     {
       label: 'Left btn',

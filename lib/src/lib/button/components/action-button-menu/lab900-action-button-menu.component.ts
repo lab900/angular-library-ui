@@ -1,17 +1,32 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ActionButton } from '../../models/action-button.model';
-import { MatMenu } from '@angular/material/menu';
-import { readPropValue } from '../../../utils/utils';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { coerceObservable, readPropValue } from '../../../utils/utils';
+import { Observable } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
   selector: 'lab900-action-button-menu',
   templateUrl: './lab900-action-button-menu.component.html',
+  standalone: true,
+  imports: [
+    MatMenu,
+    MatIcon,
+    MatMenuItem,
+    MatMenuTrigger,
+    AsyncPipe,
+    TranslateModule,
+    PreventDoubleClickDirective,
+  ],
 })
 export class Lab900ActionButtonMenuComponent {
   @ViewChild('actionMenu', { static: true })
   public actionMenu: MatMenu;
 
-  @Input()
+  @Input({ required: true })
   public actions: ActionButton[];
 
   @Input()
@@ -21,8 +36,8 @@ export class Lab900ActionButtonMenuComponent {
     return readPropValue(action.label, this.data);
   }
 
-  public getDisabled(action: ActionButton): boolean {
-    return readPropValue(action.disabled, this.data);
+  public getDisabled(action: ActionButton): Observable<boolean> {
+    return coerceObservable(readPropValue(action.disabled, this.data));
   }
 
   public doAction(e: Event, action: ActionButton): void {

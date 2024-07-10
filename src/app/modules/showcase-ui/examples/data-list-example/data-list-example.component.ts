@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { DataListSharing, Paging, ActionButton } from '@lab900/ui';
+import {
+  ActionButton,
+  DataListSharing,
+  Lab900DataListComponent,
+  Lab900DataListEmptyDirective,
+  Lab900DataListItemInfoDirective,
+  Paging,
+} from '@lab900/ui';
 import { PageEvent } from '@angular/material/paginator';
 
 const dummyData: any[] = [
@@ -56,13 +63,25 @@ const dummyData: any[] = [
 @Component({
   selector: 'lab900-data-list-example',
   template: `
-    <lab900-data-list [data]="data" [actions]="actions" [dataListSharing]="sharing" [paging]="paging" (pageChange)="changePage($event)">
+    <lab900-data-list
+      [data]="data"
+      [actions]="actions"
+      [dataListSharing]="sharing"
+      [paging]="paging"
+      (pageChange)="changePage($event)"
+    >
       <div *lab900DataListEmpty>if this list is empty this appears</div>
       <div *lab900DataListItemInfo="let data">
         {{ data.title }}
       </div>
     </lab900-data-list>
   `,
+  standalone: true,
+  imports: [
+    Lab900DataListComponent,
+    Lab900DataListEmptyDirective,
+    Lab900DataListItemInfoDirective,
+  ],
 })
 export class DataListExampleComponent implements OnInit {
   public data: any[];
@@ -106,6 +125,9 @@ export class DataListExampleComponent implements OnInit {
   }
 
   public paginate(data: any[], page: number): any[] {
-    return data.slice((page - 1) * this.paging.pageSize, page * this.paging.pageSize);
+    return data.slice(
+      (page - 1) * this.paging.pageSize,
+      page * this.paging.pageSize,
+    );
   }
 }

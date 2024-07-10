@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { CustomComponentAbstract } from '@lab900/ui';
-import { MergerDataExample } from './models/merger-data-example.model';
 
 @Component({
   selector: 'lab900-custom-component-example',
-  template: `<div *ngIf="data">
-    <p>{{ data.text }}</p>
-  </div>`,
+  standalone: true,
+  template: ` @if (data) {
+    <div>
+      <p>{{ data.text }}</p>
+    </div>
+  }`,
+  imports: [],
 })
-export class CustomExampleComponent extends CustomComponentAbstract<MergerDataExample> {}
+export class CustomExampleComponent extends CustomComponentAbstract<any> {}

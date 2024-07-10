@@ -1,72 +1,124 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ActionButton } from '../../models/action-button.model';
-import { TooltipPosition } from '@angular/material/tooltip';
+import {
+  ActionButton,
+  ActionButtonComponent,
+} from '../../models/action-button.model';
+import { MatTooltip, TooltipPosition } from '@angular/material/tooltip';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
-import { readPropValue } from '../../../utils/utils';
+import { coerceObservable, readPropValue } from '../../../utils/utils';
+import {
+  BehaviorSubject,
+  combineLatest,
+  Observable,
+  ReplaySubject,
+} from 'rxjs';
+import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
+import { Lab900ButtonComponent } from '../button/button.component';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { Lab900ActionButtonMenuComponent } from '../action-button-menu/lab900-action-button-menu.component';
+import { Lab900ActionButtonToggleComponent } from '../action-button-toggle/lab900-action-button-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button',
   templateUrl: './lab900-action-button.component.html',
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    Lab900ButtonComponent,
+    MatTooltip,
+    MatMenuTrigger,
+    Lab900ActionButtonMenuComponent,
+    Lab900ActionButtonToggleComponent,
+    TranslateModule,
+  ],
 })
-export class Lab900ActionButtonComponent {
-  @Input()
-  public action: ActionButton;
+export class Lab900ActionButtonComponent<T = any>
+  implements ActionButtonComponent<T>
+{
+  private readonly _action$ = new ReplaySubject<ActionButton<T>>();
+  public readonly action$: Observable<ActionButton> = this._action$
+    .asObservable()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
+  public readonly tooltipPosition$: Observable<TooltipPosition> =
+    this.action$.pipe(map((action) => action.tooltip?.position ?? 'above'));
+
+  @Input({ required: true })
+  public set action(action: ActionButton<T>) {
+    this._action$.next(action);
+  }
+
+  private readonly _data$ = new BehaviorSubject<any>(undefined);
+  public readonly data$ = this._data$
+    .asObservable()
+    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
   @Input()
-  public data: any;
-
-  /* Properties only valid for toggle buttons --> ? */
-  @Input()
-  public selectedAction?: ActionButton;
+  public set data(data: any) {
+    this._data$.next(data);
+  }
 
   @Output()
   public valueChanged = new EventEmitter<any>();
 
-  public get tooltipPosition(): TooltipPosition {
-    return this.action?.tooltip?.position ?? 'above';
-  }
+  public readonly buttonType$: Observable<Lab900ButtonType | 'toggle'>;
+  public readonly color$: Observable<ThemePalette>;
+  public readonly label$: Observable<string>;
+  public readonly hidden$: Observable<boolean>;
 
-  public getButtonType(): Lab900ButtonType {
-    return this.getType() as Lab900ButtonType;
-  }
+  private readonly _disabled$ = new BehaviorSubject<boolean>(false);
+  public readonly disabled$: Observable<boolean>;
+  public readonly suffixIcon$: Observable<string>;
+  public readonly prefixIcon$: Observable<string>;
+  public readonly containerClass$: Observable<string>;
 
-  public getType(): 'toggle' | Lab900ButtonType {
-    return readPropValue(this.action.type, this.data);
-  }
+  public constructor() {
+    const stream = combineLatest([this.action$, this.data$]).pipe(
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
 
-  public getColor(): ThemePalette {
-    return readPropValue(this.action.color, this.data);
-  }
+    this.buttonType$ = stream.pipe(map(([a, d]) => readPropValue(a.type, d)));
+    this.color$ = stream.pipe(map(([a, d]) => readPropValue(a.color, d)));
+    this.label$ = stream.pipe(map(([a, d]) => readPropValue(a.label, d)));
+    this.hidden$ = stream.pipe(
+      switchMap(([a, d]) => coerceObservable(readPropValue(a.hide, d))),
+    );
+    this.disabled$ = combineLatest([stream, this._disabled$]).pipe(
+      switchMap(([[a, d], disabled]) => {
+        return coerceObservable(disabled || readPropValue(a.disabled, d));
+      }),
+    );
 
-  public getLabel(): string {
-    return readPropValue(this.action.label, this.data);
-  }
-
-  public getHidden(): boolean {
-    return readPropValue(this.action.hide, this.data);
-  }
-
-  public getDisabled(): boolean {
-    return readPropValue(this.action.disabled, this.data);
+    this.prefixIcon$ = stream.pipe(
+      map(([a, d]) => readPropValue(a.prefixIcon, d)),
+    );
+    this.suffixIcon$ = stream.pipe(
+      map(([a, d]) => readPropValue(a.suffixIcon, d)),
+    );
+    this.containerClass$ = stream.pipe(
+      map(([a, d]) => readPropValue(a.containerClass, d)),
+    );
   }
 
   public doAction(e: Event): void {
     e.stopPropagation();
-    if (this.action.action) {
-      this.action.action(this.data, e);
-    }
+    combineLatest([this.action$, this.data$])
+      .pipe(
+        take(1),
+        filter(([a]) => !!a.action),
+      )
+      .subscribe(([a, d]) => {
+        a.action(d, e, this);
+      });
   }
 
-  public getPrefixIcon(): string {
-    return readPropValue(this.action.prefixIcon, this.data);
+  public disable(): void {
+    this._disabled$.next(true);
   }
 
-  public getSuffixIcon(): string {
-    return readPropValue(this.action.suffixIcon, this.data);
-  }
-
-  public getContainerClass(): string {
-    return readPropValue(this.action.containerClass, this.data);
+  public enable(): void {
+    this._disabled$.next(false);
   }
 }

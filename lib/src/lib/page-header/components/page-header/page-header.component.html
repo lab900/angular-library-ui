@@ -1,47 +1,56 @@
-<header class="lab900-page-header">
-  <div
-    *ngIf="pageTitle || breadCrumbs?.length || actions?.length"
-    class="lab900-page-header__main"
-    fxLayout.gt-sm="row"
-    fxLayoutGap="16px"
-    fxLayoutAlign.gt-sm="start center"
-  >
-    <div class="lab900-page-header__title">
-      <h1 *ngIf="pageTitle">{{ pageTitle | translate: pageTitleArgs }}</h1>
-      <lab900-bread-crumbs *ngIf="breadCrumbs?.length" [breadCrumbs]="breadCrumbs" [data]="data"></lab900-bread-crumbs>
+<header
+  class="lab900-page-header"
+  [class.fixed-mobile-action]="showActionsFixedOnMobile"
+>
+  @if (pageTitle || breadCrumbs?.length || (actions$ | async)?.length) {
+    <div class="lab900-page-header__main">
+      @if (pageTitle || breadCrumbs?.length) {
+        <div class="lab900-page-header__title">
+          @if (pageTitle) {
+            <h1>{{ pageTitle | translate: pageTitleArgs }}</h1>
+          }
+          @if (breadCrumbs?.length) {
+            <lab900-bread-crumbs [breadCrumbs]="breadCrumbs" [data]="data" />
+          }
+        </div>
+      }
+      @if (actions$ | async; as actions) {
+        @if (actions?.length) {
+          <div class="lab900-page-header__actions">
+            @if (leftActions$ | async; as leftActions) {
+              <div class="lab900-page-header__actions--left">
+                @if (leftActions?.length > 0) {
+                  <mat-divider
+                    vertical="true"
+                    class="lab900-page-header__divider"
+                  />
+                }
+                @for (action of leftActions; track action) {
+                  <lab900-action-button [action]="action" [data]="data" />
+                }
+              </div>
+            }
+            <div class="lab900-page-header__actions--right">
+              @for (action of rightActions$ | async; track action) {
+                <lab900-action-button [action]="action" [data]="data" />
+              }
+            </div>
+          </div>
+        }
+      }
     </div>
-
-    <div class="lab900-page-header__actions" *ngIf="actions?.length">
-      <div class="lab900-page-header__actions--left" fxLayoutGap="16px">
-        <mat-divider vertical="true" class="lab900-page-header__divider" *ngIf="leftActions?.length > 0"></mat-divider>
-        <lab900-action-button *ngFor="let action of leftActions" [action]="action" [data]="data"></lab900-action-button>
-      </div>
-      <div class="lab900-page-header__actions--right" fxLayoutGap="16px">
-        <lab900-action-button *ngFor="let action of rightActions" [action]="action" [data]="data"></lab900-action-button>
-      </div>
-    </div>
-  </div>
-  <nav *ngIf="navItems?.length" class="lab900-page-header__nav" mat-tab-nav-bar>
-    <ng-container *ngFor="let link of navItems">
-      <a
-        mat-tab-link
-        routerLinkActive
-        [routerLink]="getRoute(link.route)"
-        [queryParams]="link?.queryParams"
-        #rla="routerLinkActive"
-        [active]="rla.isActive"
-        class="lab900-page-header__nav__item"
-      >
-        <ng-container *ngIf="link.prefixIcon">
-          <mat-icon class="lab900-page-header__nav__item__prefix-icon" *ngIf="link.svgIcon" [svgIcon]="link.prefixIcon"></mat-icon>
-          <mat-icon class="lab900-page-header__nav__item__prefix-icon" *ngIf="!link.svgIcon">{{ link.prefixIcon }}</mat-icon>
-        </ng-container>
-        {{ getLabel(link) | translate }}
-        <ng-container *ngIf="link.suffixIcon">
-          <mat-icon class="lab900-page-header__nav__item__suffix-icon" *ngIf="link.svgIcon" [svgIcon]="link.suffixIcon"></mat-icon>
-          <mat-icon class="lab900-page-header__nav__item__suffix-icon" *ngIf="!link.svgIcon">{{ link.suffixIcon }}</mat-icon>
-        </ng-container>
-      </a>
-    </ng-container>
-  </nav>
+  }
+  @if (navItems?.length && tabPanel) {
+    <nav
+      class="lab900-page-header__nav"
+      mat-tab-nav-bar
+      [tabPanel]="tabPanel"
+      [fitInkBarToContent]="navFitInkBarToContent"
+      [mat-stretch-tabs]="navStretch"
+    >
+      @for (item of navItems; track item) {
+        <lab900-page-header-nav-item [item]="item" [data]="data" />
+      }
+    </nav>
+  }
 </header>

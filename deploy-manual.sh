@@ -5,4 +5,4 @@ npm version prerelease --preid alpha
 cd ..
 npm run build:ui:prod
 cd dist/@lab900/ui || exit
-npm publish
+npm publish --ignore-scripts

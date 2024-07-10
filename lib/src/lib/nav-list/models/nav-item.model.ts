@@ -1,3 +1,5 @@
+import { IsActiveMatchOptions } from '@angular/router';
+
 export interface NavItem {
   label: string;
   icon?: Icon;
@@ -10,6 +12,7 @@ export interface NavItem {
   childrenInOverlay?: boolean;
   hide?: (() => boolean) | boolean;
   navigationFinished?: (navigationResult: boolean | null) => void;
+  routeMatchOptions?: IsActiveMatchOptions | { exact: boolean };
 }
 
 export interface NavItemGroup {

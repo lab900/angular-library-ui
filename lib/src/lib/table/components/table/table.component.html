@@ -1,176 +1,191 @@
-<div class="lab900-table {{ tableClass }}" *ngIf="tableCells?.length">
-  <lab900-table-header
-    [tableHeaderActions]="tableHeaderActions"
-    [tableCells]="tableCells"
-    [toggleColumns]="toggleColumns"
-    [toggleAndMoveColumns]="toggleAndMoveColumns"
-    (tableCellsFiltered)="onTableCellsFiltered($event)"
-    [filterIcon]="filterIcon"
+@if (visibleColumns$ | async; as columns) {
+  <div
+    class="lab900-table {{ tableClass }}"
+    [class.fixed-widths]="fixedWidth$ | async"
   >
-    <ng-container *ngIf="tableHeaderContent">
-      <ng-container *ngTemplateOutlet="tableHeaderContent"></ng-container>
-    </ng-container>
-  </lab900-table-header>
-
-  <ng-container *ngIf="tableTopContent">
-    <ng-container *ngTemplateOutlet="tableTopContent"></ng-container>
-  </ng-container>
-
-  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-
-  <div class="lab900-table-wrapper">
-    <table
-      mat-table
-      cdkDropList
-      [cdkDropListDisabled]="!draggableRows"
-      class="mat-elevation-z0"
-      *ngIf="(data?.length || neverHideTable) && !disabled"
-      multiTemplateDataRows
-      [dataSource]="data"
-      (cdkDropListDropped)="tableRowOrderChange.emit($event)"
+    <lab900-table-header
+      [tableHeaderActions]="tableHeaderActions"
+      [toggleColumns]="toggleColumns"
+      [toggleAndMoveColumns]="toggleAndMoveColumns"
+      (tableCellsFiltered)="onTableCellsFiltered($event)"
+      [filterIcon]="filterIcon"
+      [tableHeaderContent]="tableHeaderContent"
     >
+    </lab900-table-header>
+    @if (tableTopContent) {
+      <ng-container *ngTemplateOutlet="tableTopContent"></ng-container>
+    }
+    @if (tabs$ | async; as tabs) {
+      @if (tabs?.length) {
+        <lab900-table-tabs
+          [tableTabs]="tabs"
+          [activeTabId]="tabId$ | async"
+          (activeTabIdChange)="onActiveTabChange($event)"
+        ></lab900-table-tabs>
+      }
+    }
+    @if (loading) {
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
+    <div
+      class="lab900-table-wrapper"
+      [ngClass]="{ 'sticky-header': stickyHeader }"
+    >
+      <table
+        mat-table
+        cdkDropList
+        [cdkDropListDisabled]="!draggableRows"
+        class="mat-elevation-z0"
+        [multiTemplateDataRows]="true"
+        [trackBy]="trackByTableFn"
+        [dataSource]="data$ | async"
+        (cdkDropListDropped)="tableRowOrderChange.emit($event)"
+        [class.has-back-actions]="tableActionsBack?.length"
+        [class.has-front-actions]="tableActionsFront?.length"
       >
-      <ng-container
-        matColumnDef="select"
-        [sticky]="selectableRowsOptions?.position === 'left' && selectableRowsOptions.sticky"
-        [stickyEnd]="selectableRowsOptions?.position === 'right' && selectableRowsOptions.sticky"
-      >
-        <th mat-header-cell *matHeaderCellDef class="checkbox-cell">
-          <mat-checkbox
-            #selectAllCheckbox
-            *ngIf="selectableRowsOptions?.showSelectAllCheckbox"
-            [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
+        @if (selectableRows$ | async; as options) {
+          <lab900-table-cell-select
+            [showFooter]="showCellFooters$ | async"
+            [options]="options"
+            [selection]="selection"
+            (selectAll)="handleSelectAll($event)"
+            (selectRow)="handleSelectRow($event)"
+          />
+        }
+        @for (column of columns; track trackCellFn($index, column)) {
+          <lab900-table-cell
+            [cell]="column"
+            [disableSort]="disableSort"
+            [maxColumnWidthFromTable]="maxColumnWidth"
+            (headerClick)="handleHeaderClick($event)"
+            [data]="data$ | async"
+            (valueChanged)="cellValueChanged.emit($event)"
+            [trackByTableFn]="trackByTableFn"
+          />
+        }
+        <ng-container matColumnDef="actions-front">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let element; let index = index"
             (click)="$event.stopPropagation()"
-            (change)="handleSelectAllCheckbox($event)"
-          ></mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row" class="checkbox-cell">
-          <mat-checkbox
-            #rowCheckbox
-            [color]="selectableRowsOptions?.checkBoxColor ? selectableRowsOptions.checkBoxColor : 'primary'"
-            (click)="$event.stopPropagation()"
-            (change)="$event ? selectRow(row) : null"
-            [checked]="selection.isSelected(row)"
-            [disabled]="selection.isSelected(row) ? false : !selectEnabled"
-          ></mat-checkbox>
-        </td>
-
-        <ng-container *ngIf="showCellFooters">
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-      </ng-container>
-
-      <lab900-table-cell
-        *ngFor="let cell of tableCells; trackBy: trackCellFn"
-        [cell]="cell"
-        [sort]="sort"
-        [maxColumnWidthFromTable]="maxColumnWidth"
-        [customCellContent]="customCellContent"
-        (headerClick)="handleHeaderClick($event)"
-        [data]="data"
-      ></lab900-table-cell>
-
-      <ng-content select=".lab900-table-cell"></ng-content>
-
-      <ng-container *ngIf="preFooterTitle">
-        <ng-container matColumnDef="preFooterTitle">
-          <td mat-footer-cell *matFooterCellDef [attr.colspan]="tableCells.length + 1" class="lab900-table__pre-footer-title-cell">
-            {{ preFooterTitle | translate }}
+          >
+            @if (tableActionsFront?.length) {
+              <div class="table-row-actions-front">
+                @for (action of tableActionsFront; track action) {
+                  <lab900-action-button
+                    [data]="element"
+                    [action]="action"
+                    cdkDragHandle
+                    [cdkDragHandleDisabled]="!action?.draggable"
+                  />
+                }
+              </div>
+            }
           </td>
+          @if (showCellFooters$ | async) {
+            <td mat-footer-cell *matFooterCellDef></td>
+          }
         </ng-container>
-      </ng-container>
-
-      <ng-container matColumnDef="actions-front">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
-          <div style="width: 100%" fxLayout="row" fxLayoutGap="8" fxLayoutAlign="start center" *ngIf="tableActionsFront?.length">
-            <lab900-action-button
-              *ngFor="let action of tableActionsFront"
-              [data]="element"
-              [action]="action"
-              cdkDragHandle
-              [cdkDragHandleDisabled]="!action?.draggable"
-            ></lab900-action-button>
-          </div>
-        </td>
-        <ng-container *ngIf="showCellFooters">
-          <td mat-footer-cell *matFooterCellDef></td>
+        <ng-container matColumnDef="actions-back" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td
+            mat-cell
+            *matCellDef="let element; let index = index"
+            (click)="$event.stopPropagation()"
+          >
+            @if (tableActionsBack?.length) {
+              <div class="table-row-actions-back">
+                @for (action of tableActionsBack; track action) {
+                  <lab900-action-button
+                    [data]="element"
+                    [action]="action"
+                    cdkDragHandle
+                    [cdkDragHandleDisabled]="!action?.draggable"
+                  ></lab900-action-button>
+                }
+              </div>
+            }
+          </td>
+          @if (showCellFooters$ | async) {
+            <td mat-footer-cell *matFooterCellDef></td>
+          }
         </ng-container>
-      </ng-container>
-
-      <ng-container matColumnDef="actions-back" stickyEnd>
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td style="width: 0" mat-cell *matCellDef="let element">
-          <div style="width: 100%" fxLayout="row" fxLayoutGap="8" fxLayoutAlign="end center" *ngIf="tableActionsBack?.length">
-            <lab900-action-button
-              *ngFor="let action of tableActionsBack"
-              [data]="element"
-              [action]="action"
-              cdkDragHandle
-              [cdkDragHandleDisabled]="!action?.draggable"
-            ></lab900-action-button>
-          </div>
-        </td>
-        <ng-container *ngIf="showCellFooters">
-          <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
-        [ngClass]="getRowClasses(row, i)"
-        (click)="handleRowClick($event, row, i)"
-        cdkDrag
-        [cdkDragDisabled]="!draggableRows"
-      ></tr>
-      <ng-container *ngIf="preFooterTitle">
-        <tr mat-footer-row *matFooterRowDef="['preFooterTitle']" class="lab900-table__pre-footer-title-row"></tr>
-      </ng-container>
-      <ng-container *ngIf="showCellFooters">
-        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-      </ng-container>
-      <ng-container *ngIf="draggableRows">
-        <div *cdkDragPlaceholder></div>
-      </ng-container>
-    </table>
-  </div>
-
-  <div class="lab900-table__empty" *ngIf="data && !data.length && !disabled">
-    <ng-container *ngIf="emptyTableTemplate">
-      <ng-container *ngTemplateOutlet="emptyTableTemplate"></ng-container>
-    </ng-container>
-    <ng-container *ngIf="!emptyTableTemplate">
-      <h3>{{ 'GENERAL.NO_RESULTS.TITLE' | translate }}</h3>
-      <p>{{ 'GENERAL.NO_RESULTS.DESC' | translate }}</p>
-    </ng-container>
-  </div>
-
-  <div class="lab900-table__footer" *ngIf="tableFooterActions?.length || (data?.length && paging)">
-    <div>
-      <div class="lab900-table__footer__actions" *ngIf="tableFooterActions?.length">
-        <lab900-action-button *ngFor="let action of tableFooterActions" [action]="action"></lab900-action-button>
-      </div>
+        @if (displayedColumns$ | async; as displayedColumns) {
+          <!-- header row -->
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: stickyHeader"
+          ></tr>
+          <!-- content rows -->
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns; let i = dataIndex"
+            [ngClass]="getRowClasses(row, i)"
+            [class.lab900-row-selected]="isRowSelected(row)"
+            [style.background-color]="getRowColor(row)"
+            (click)="handleRowClick($event, row, i)"
+            cdkDrag
+            [cdkDragDisabled]="!draggableRows"
+          ></tr>
+          @if (showCellFooters$ | async) {
+            @if ((data$ | async)?.length) {
+              <div>
+                <!-- pre footer row -->
+                @if (preFooterTitle) {
+                  <ng-container matColumnDef="preFooterTitle">
+                    <td
+                      mat-footer-cell
+                      *matFooterCellDef
+                      [attr.colspan]="columns.length + 1"
+                      class="lab900-table__pre-footer-title-cell"
+                    >
+                      {{ preFooterTitle | translate }}
+                    </td>
+                  </ng-container>
+                  <tr
+                    mat-footer-row
+                    *matFooterRowDef="['preFooterTitle']"
+                    class="lab900-table__pre-footer-title-row"
+                  ></tr>
+                }
+                <!-- footer row -->
+                <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+              </div>
+            }
+          }
+          <!-- drag placeholder -->
+          @if (draggableRows) {
+            <div *cdkDragPlaceholder></div>
+          }
+        }
+      </table>
     </div>
-    <mat-paginator
-      *ngIf="data?.length && paging"
-      [hidePageSize]="pageSizeConfig.hidePageSize"
-      [pageSizeOptions]="pageSizeConfig.pageSizeOptions"
-      [length]="paging.totalItems"
-      [pageSize]="paging.pageSize"
-      [pageIndex]="paging.pageIndex"
-      (page)="pageChange.emit($event)"
-    ></mat-paginator>
+    @if (data$ | async; as data) {
+      @if (data && !data.length && !disabled) {
+        <div class="lab900-table__empty">
+          @if (emptyTableTemplate) {
+            <ng-container *ngTemplateOutlet="emptyTableTemplate"></ng-container>
+          }
+          @if (!emptyTableTemplate) {
+            <h3>{{ 'GENERAL.NO_RESULTS.TITLE' | translate }}</h3>
+            <p>{{ 'GENERAL.NO_RESULTS.DESC' | translate }}</p>
+          }
+        </div>
+      }
+      @if (disabled) {
+        <div>
+          @if (disabledTableTemplate) {
+            <ng-container
+              *ngTemplateOutlet="disabledTableTemplate"
+            ></ng-container>
+          }
+          @if (!disabledTableTemplate) {
+            <h3>{{ 'GENERAL.DISABLED.TITLE' | translate }}</h3>
+            <p>{{ 'GENERAL.DISABLED.DESC' | translate }}</p>
+          }
+        </div>
+      }
+    }
   </div>
-
-  <div *ngIf="disabled">
-    <ng-container *ngIf="disabledTableTemplate">
-      <ng-container *ngTemplateOutlet="disabledTableTemplate"></ng-container>
-    </ng-container>
-    <ng-container *ngIf="!disabledTableTemplate">
-      <h3>{{ 'GENERAL.DISABLED.TITLE' | translate }}</h3>
-      <p>{{ 'GENERAL.DISABLED.DESC' | translate }}</p>
-    </ng-container>
-  </div>
-</div>
+}
