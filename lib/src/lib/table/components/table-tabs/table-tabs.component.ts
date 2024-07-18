@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
-  Output,
+  input,
+  model,
   ViewEncapsulation,
 } from '@angular/core';
 import { Lab900TableTab } from '../../models/table-tabs.model';
@@ -20,17 +19,10 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [TranslateModule],
 })
 export class Lab900TableTabsComponent<T = string> {
-  @Input()
-  public tableTabs: Lab900TableTab<T>[];
-
-  @Input()
-  public activeTabId: T;
-
-  @Output()
-  public activeTabIdChange = new EventEmitter<T>();
+  public readonly tableTabs = input.required<Lab900TableTab<T>[]>();
+  public readonly activeTabId = model.required<T>();
 
   public changeTable(table: Lab900TableTab<T>): void {
-    this.activeTabId = table.id;
-    this.activeTabIdChange.emit(table.id);
+    this.activeTabId.set(table.id);
   }
 }

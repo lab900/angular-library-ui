@@ -1,44 +1,42 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellSelectEditorOptions } from './cell-select-editor.options';
 import { TranslateModule } from '@ngx-translate/core';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { combineLatest, Observable } from 'rxjs';
 
 @Component({
   selector: 'lab900-cell-select-editor',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, MatSelectModule, TranslateModule],
+  imports: [MatSelectModule, TranslateModule],
   template: `
-    @if (editOptions$ | async; as editOptions) {
+    @if (editOptions()) {
       <mat-select
         #matSelect
-        placeholder="{{ (placeholder$ | async) ?? '' | translate }}"
-        [value]="cellValue$ | async"
+        placeholder="{{ placeholder() | translate }}"
+        [value]="cellValue()"
         (openedChange)="openChanged($event)"
-        [compareWith]="editOptions?.compareWithFn ?? defaultCompareFn"
-        [multiple]="editOptions?.multiple ?? false"
-        [panelWidth]="editOptions?.panelWidth ?? 'auto'"
+        [compareWith]="editOptions()?.compareWithFn ?? defaultCompareFn"
+        [multiple]="editOptions()?.multiple ?? false"
+        [panelWidth]="editOptions()?.panelWidth ?? 'auto'"
         [class.disable-td-event]="matSelect.panelOpen"
         panelClass="lab900-table-select-editor-panel"
         class="lab900-table-select-editor"
       >
         <!-- fixes the select on tab -->
         <mat-option style="display: none" />
-        @for (option of selectOptions$ | async; track option) {
+        @for (option of selectOptions(); track option) {
           <mat-option [value]="option">
             {{
-              editOptions?.optionLabelFn
-                ? (editOptions.optionLabelFn(option) | translate)
+              editOptions()?.optionLabelFn
+                ? (editOptions().optionLabelFn(option) | translate)
                 : option
             }}
           </mat-option>
@@ -48,21 +46,16 @@ import { combineLatest, Observable } from 'rxjs';
   `,
 })
 export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEditorOptions> {
-  public selectOptions$: Observable<any[]> = combineLatest([
-    this.editOptions$,
-    this.data$,
-  ]).pipe(
-    map(([o, data]) => {
-      if (o?.options) {
-        if (typeof o.options === 'function') {
-          return o.options(data);
-        }
-        return o.options;
+  public readonly selectOptions = computed(() => {
+    const o = this.editOptions();
+    if (o?.options) {
+      if (typeof o.options === 'function') {
+        return o.options(this.data());
       }
-      return [];
-    }),
-    distinctUntilChanged(),
-  );
+      return o.options;
+    }
+    return [];
+  });
 
   private _matSelect?: MatSelect;
 

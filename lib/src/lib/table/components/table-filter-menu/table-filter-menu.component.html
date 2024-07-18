@@ -1,11 +1,11 @@
-@if (tableCells$ | async; as cells) {
+@if (tableCells()) {
   <div class="lab900-table-filter-menu">
     <button [matMenuTriggerFor]="filterMenu" color="primary" mat-icon-button>
-      <mat-icon>{{ filterIcon }}</mat-icon>
+      <mat-icon>{{ filterIcon() }}</mat-icon>
     </button>
     <mat-menu #filterMenu class="lab900-table-filter-menu__mat-menu">
-      @if (!toggleAndMoveColumns) {
-        @for (cell of cells; track cell.key) {
+      @if (!toggleAndMoveColumns()) {
+        @for (cell of tableCells(); track cell.key) {
           <div class="lab900-table-filter-menu__option">
             <div class="lab900-table-filter-menu__option--padding">
               <mat-checkbox
@@ -20,7 +20,7 @@
         }
       } @else {
         <!-- ACTIVE COLUMNS -->
-        @if (visibleCells$ | async; as visibleCells) {
+        @if (visibleCells()) {
           @if (visibleCells?.length > 0) {
             <div
               (click)="$event.stopPropagation(); $event.preventDefault()"
@@ -35,7 +35,7 @@
               [cdkDropListData]="visibleCells"
               cdkDropList
             >
-              @for (cell of visibleCells; track cell.key) {
+              @for (cell of visibleCells(); track cell.key) {
                 <div
                   (click)="handleCheckboxClick($event, cell)"
                   cdkDrag
@@ -82,7 +82,7 @@
           </div>
         }
         <!-- INACTIVE COLUMNS -->
-        @if (hiddenCells$ | async; as hiddenCells) {
+        @if (hiddenCells()) {
           @if (hiddenCells?.length > 0) {
             <div
               (click)="$event.stopPropagation(); $event.preventDefault()"
@@ -92,7 +92,7 @@
             </div>
           }
           <div class="lab900-table-filter-menu__items-container">
-            @for (cell of hiddenCells; track cell.key) {
+            @for (cell of hiddenCells(); track cell.key) {
               <div
                 (click)="handleCheckboxClick($event, cell)"
                 class="lab900-table-filter-menu__option"

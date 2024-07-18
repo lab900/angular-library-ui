@@ -1,13 +1,10 @@
 <div
   class="lab900-cell-value lab900-cell-value--with-icon"
-  [matTooltip]="(tooltipWithoutHtml$ | async) ?? ''"
-  [matTooltipPosition]="(tooltipPosition$ | async) ?? 'above'"
+  [matTooltip]="tooltipWithHtml()"
+  [matTooltipPosition]="tooltipPosition()"
 >
-  <div
-    class="lab900-cell-value"
-    [innerHTML]="cellValue$ | async | translate"
-  ></div>
-  @if ((disabled$ | async) === false) {
+  <div class="lab900-cell-value" [innerHTML]="cellValue() | translate"></div>
+  @if (disabled()) {
     <button
       style="margin-left: 6px"
       mat-icon-button

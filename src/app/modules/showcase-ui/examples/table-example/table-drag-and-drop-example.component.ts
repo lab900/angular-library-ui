@@ -19,9 +19,9 @@ import { SelectionModel } from '@angular/cdk/collections';
     (tableRowOrderChange)="dropTable($event)"
     [stickyHeader]="true"
     [selectableRows]="{
-      enabled: false,
+      enabled: true,
       checkBoxColor: 'accent',
-      position: 'right',
+      position: 'left',
       sticky: true,
       showSelectAllCheckbox: true,
       hideSelectableRow: hideSelectableCheckboxForSarah
@@ -95,7 +95,7 @@ export class TableDragAndDropExampleComponent {
      * You can do an api call here to save the new order
      */
     moveItemInArray(this.mockData, event.previousIndex, event.currentIndex);
-    this.table.table.renderRows();
+    this.table.table()?.renderRows();
   }
 
   public selectionChanged(selection: SelectionModel<any>): void {

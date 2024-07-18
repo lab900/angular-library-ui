@@ -1,9 +1,10 @@
 import {
   AfterViewInit,
+  computed,
   Directive,
   ElementRef,
   inject,
-  Input,
+  input,
   NgZone,
   OnDestroy,
 } from '@angular/core';
@@ -25,14 +26,17 @@ export class TableCellEventsDirective<T = any>
   private readonly ngZone = inject(NgZone);
   private readonly destroy$ = new Subject<void>();
 
-  @Input({ required: true })
-  public cellData: T;
+  public readonly cellData = input.required<T>();
+  public readonly cell = input.required<TableCell<T>>();
+  public readonly rowIndex = input.required<number>();
 
-  @Input({ required: true })
-  public cell: TableCell<T>;
-
-  @Input({ required: true })
-  public rowIndex: number;
+  private readonly editable = computed(() => {
+    return (
+      !this.tableService.disableEditing() &&
+      this.cell().cellEditor &&
+      !this.cell().cellEditorOptions?.disabled?.(this.cellData())
+    );
+  });
 
   private siblingCells?: HTMLTableCellElement[];
   private siblingRows?: HTMLTableRowElement[];
@@ -93,10 +97,12 @@ export class TableCellEventsDirective<T = any>
     ) {
       return;
     }
-    if (this.cell.click) {
+    if (this.cell().click) {
       event.stopImmediatePropagation();
       event.preventDefault();
-      this.ngZone.run(() => this.cell.click(this.cellData, this.cell, event));
+      this.ngZone.run(() =>
+        this.cell().click(this.cellData(), this.cell(), event),
+      );
     } else if (this.editable()) {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -146,16 +152,10 @@ export class TableCellEventsDirective<T = any>
     }
   }
 
-  private editable(): boolean {
-    return (
-      !this.tableService._disableEditing$.value &&
-      this.cell.cellEditor &&
-      !this.cell.cellEditorOptions?.disabled?.(this.cellData)
-    );
-  }
-
   private editMode(): void {
-    this.tableService.startInlineEditing(this.cell.key + '_' + this.rowIndex);
+    this.tableService.startInlineEditing(
+      this.cell().key + '_' + this.rowIndex(),
+    );
   }
 
   private getNextEditableSibling(position: 'before' | 'after'): void {
@@ -213,7 +213,7 @@ export class TableCellEventsDirective<T = any>
     return (
       (!sameColumnKey ||
         cell.classList?.contains(
-          'cdk-column-' + this.cell.key.replace('.', '-'),
+          'cdk-column-' + this.cell().key.replace('.', '-'),
         )) &&
       cell.classList?.contains('editable')
     );

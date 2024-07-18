@@ -3,7 +3,6 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import { ColumnHeaderRendererAbstract } from '../column-header-renderer-abstract.directive';
 import { ColumnHeaderSortingComponent } from '../column-header-sorting/column-header-sorting.component';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,15 +10,13 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'lab900-default-column-header-renderer',
   standalone: true,
-  imports: [AsyncPipe, ColumnHeaderSortingComponent, TranslateModule],
+  imports: [ColumnHeaderSortingComponent, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `<div class="lab900-column-header">
-    {{ columnLabel$ | async | translate }}
-    @if (!disableSort) {
-      <lab900-column-header-sorting
-        [columnConfig]="columnConfig$ | async"
-      ></lab900-column-header-sorting>
+    {{ columnLabel() | translate }}
+    @if (!disableSort()) {
+      <lab900-column-header-sorting [columnConfig]="columnConfig()" />
     }
   </div>`,
   styles: [

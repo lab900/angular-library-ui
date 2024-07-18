@@ -1,48 +1,46 @@
-<ng-container matColumnDef [sticky]="sticky$ | async">
-  @if (cell$ | async; as cell) {
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      (click)="handleHeaderClick(cell)"
-      [class.sortable]="!disableSort && cell.sortable"
-      [ngClass]="cellHeaderClass$ | async"
-      matTooltipClass="lab900-table__mat-tooltip"
-      [matTooltipDisabled]="!cell?.cellHeaderTooltip"
-      [matTooltip]="cell?.cellHeaderTooltip | translate"
-      [matTooltipPosition]="cell?.cellHeaderTooltipPosition || 'above'"
-      [style.width]="columnWidth$ | async"
-      [style.max-width]="columnMaxWidth$ | async"
-    >
-      <ng-container
-        *ngComponentOutlet="
-          cell.headerRenderer || defaultHeaderRenderer;
-          inputs: { columnConfig: cell, disableSort: disableSort }
-        "
-      />
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let element; let rowIndex = dataIndex"
-      [style.width]="columnWidth$ | async"
-      [style.max-width]="columnMaxWidth$ | async"
-      lab900TableCellEvents
-      [cellData]="element"
+<ng-container [matColumnDef]="cell().key" [sticky]="sticky()">
+  <th
+    mat-header-cell
+    *matHeaderCellDef
+    (click)="handleHeaderClick(cell())"
+    [class.sortable]="!disableSort() && cell().sortable"
+    [ngClass]="cellHeaderClass()"
+    matTooltipClass="lab900-table__mat-tooltip"
+    [matTooltipDisabled]="!cell()?.cellHeaderTooltip"
+    [matTooltip]="cell()?.cellHeaderTooltip | translate"
+    [matTooltipPosition]="cell()?.cellHeaderTooltipPosition || 'above'"
+    [style.width]="columnWidth()"
+    [style.max-width]="columnMaxWidth()"
+  >
+    <ng-container
+      *ngComponentOutlet="
+        cell().headerRenderer || defaultHeaderRenderer;
+        inputs: { columnConfig: cell(), disableSort: disableSort() }
+      "
+    />
+  </th>
+  <td
+    mat-cell
+    *matCellDef="let element; let rowIndex = dataIndex"
+    [style.width]="columnWidth()"
+    [style.max-width]="columnMaxWidth()"
+    lab900TableCellEvents
+    [cellData]="element"
+    [rowIndex]="rowIndex"
+    [cell]="cell()"
+    class="lab900-td"
+  >
+    <lab900-table-cell-inner
+      [cell]="cell()"
+      [rowValue]="element"
       [rowIndex]="rowIndex"
-      [cell]="cell"
-      class="lab900-td"
-    >
-      <lab900-table-cell-inner
-        [cell]="cell"
-        [rowValue]="element"
-        [rowIndex]="rowIndex"
-        (valueChanged)="valueChanged.emit($event)"
-      />
-    </td>
-    <td
-      mat-footer-cell
-      *matFooterCellDef
-      [innerHtml]="cellFooter$ | async"
-      [ngClass]="cell.footerCellClass"
-    ></td>
-  }
+      (valueChanged)="valueChanged.emit($event)"
+    />
+  </td>
+  <td
+    mat-footer-cell
+    *matFooterCellDef
+    [innerHtml]="cellFooter()"
+    [ngClass]="cell().footerCellClass"
+  ></td>
 </ng-container>

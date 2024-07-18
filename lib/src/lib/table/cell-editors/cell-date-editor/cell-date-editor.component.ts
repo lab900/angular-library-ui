@@ -3,7 +3,6 @@ import {
   Component,
   HostListener,
 } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { BehaviorSubject } from 'rxjs';
@@ -16,7 +15,7 @@ import { CellEditorBaseOptions } from '../cell-editor.options';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe, TranslateModule, MatButtonModule, MatDatepickerModule],
+  imports: [TranslateModule, MatButtonModule, MatDatepickerModule],
   selector: 'lab900-cell-date-editor',
   standalone: true,
   template: `
@@ -27,10 +26,10 @@ import { CellEditorBaseOptions } from '../cell-editor.options';
         class="lab900-cell-input lab900-cell-input--with-toggle"
         type="text"
         (focus)="input.select()"
-        [value]="cellValue$ | async"
+        [value]="cellValue()"
         (dateInput)="changeValue($event, 'input')"
         (dateChange)="changeValue($event, 'change')"
-        [placeholder]="(placeholder$ | async) ?? '' | translate"
+        [placeholder]="placeholder() | translate"
         (keydown.enter)="closeOrSave()"
         (keydown.tab)="closeOrSave()"
       />

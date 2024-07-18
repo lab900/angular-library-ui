@@ -2968,7 +2968,7 @@ export class TableExampleComponent {
       key: 'type',
       label: 'NORMAL SELECT',
       cellClass: (data) => (data.required ? 'table-cell-required-field' : ''),
-      width: '100px',
+      width: '160px',
       cellEditor: CellSelectEditorComponent,
       cellRenderer: CellWithClearingRendererComponent,
       cellFormatter: ({ type }) => type?.name ?? '',

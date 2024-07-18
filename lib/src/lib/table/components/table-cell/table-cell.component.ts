@@ -1,15 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
-  EventEmitter,
   HostBinding,
   inject,
-  Input,
+  input,
   OnDestroy,
-  Output,
-  TrackByFunction,
-  ViewChild,
+  OnInit,
+  output,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
@@ -19,30 +19,21 @@ import {
   MatTableModule,
 } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
-import {
-  BehaviorSubject,
-  combineLatest,
-  Observable,
-  ReplaySubject,
-  Subscription,
-} from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 import { Lab900TableService } from '../../services/table.service';
-import { Lab900Sort } from '../../models/table-sort.model';
-import { AsyncPipe, NgClass, NgComponentOutlet } from '@angular/common';
+import { NgClass, NgComponentOutlet } from '@angular/common';
 import { DefaultCellRendererComponent } from '../../cell-renderers/default-cell-renderer/default-cell-renderer.component';
 import { DefaultColumnHeaderRendererComponent } from '../../column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { TableCellInnerComponent } from '../table-cell-inner/table-cell-inner.component';
 import { TableCellEventsDirective } from '../../directives/table-cell-events.directive';
+import { CdkColumnDef } from '@angular/cdk/table';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
   templateUrl: './table-cell.component.html',
   standalone: true,
   imports: [
-    AsyncPipe,
     DefaultCellRendererComponent,
     MatTableModule,
     NgClass,
@@ -52,128 +43,75 @@ import { TableCellEventsDirective } from '../../directives/table-cell-events.dir
     NgComponentOutlet,
     TableCellInnerComponent,
     TableCellEventsDirective,
+    CdkColumnDef,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class Lab900TableCellComponent<T = any> implements OnDestroy {
-  private cellSub: Subscription;
+export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   private readonly tableService = inject(Lab900TableService);
   public readonly table = inject(MatTable);
 
   @HostBinding()
   public readonly className = 'lab900-table-cell';
 
-  @ViewChild(MatColumnDef, { static: true })
-  public readonly columnDef!: MatColumnDef;
+  public readonly columnDef = viewChild(MatColumnDef);
 
-  @ViewChild('.lab900-td')
-  public readonly tdElement!: ElementRef<HTMLTableCellElement>;
+  public readonly tdElement =
+    viewChild<ElementRef<HTMLTableCellElement>>('.lab900-td');
 
-  private readonly _cell$ = new ReplaySubject<TableCell<T>>();
-  public readonly cell$: Observable<TableCell<T>> = this._cell$
-    .asObservable()
-    .pipe(
-      filter((c) => !!c?.key),
-      shareReplay({ bufferSize: 1, refCount: true }),
+  public readonly cell = input.required<TableCell<T>>();
+  public readonly data = input.required<T[]>();
+  public readonly disableSort = input<boolean>(false);
+  public readonly maxColumnWidthFromTable = input<string | undefined>(
+    undefined,
+  );
+
+  public readonly columnMaxWidth = computed(() => {
+    return this.cell()?.cellMaxWidth ?? this.maxColumnWidthFromTable();
+  });
+
+  public readonly columnWidth = computed(() => {
+    if (this.cell()?.width === '*') {
+      return '100%';
+    }
+    return this.cell()?.width;
+  });
+
+  public readonly sticky = computed(
+    () => !this.cell()?.hide && !!this.cell()?.sticky,
+  );
+
+  public readonly cellFooter = computed(() => {
+    const footer = this.cell()?.footer;
+    return typeof footer === 'function'
+      ? footer(this.data(), this.cell())
+      : footer;
+  });
+
+  public readonly cellHeaderClass = computed(() => {
+    return readPropValue<TableCell<T>>(
+      this.cell().cellHeaderClass,
+      this.cell(),
     );
+  });
 
-  private readonly tableColumnMaxWidth$ = new BehaviorSubject<string>('100%');
+  public readonly headerClick = output<TableCell<T>>();
+  public readonly valueChanged = output<CellValueChangeEvent<T>>();
 
-  public readonly columnMaxWidth$: Observable<string> = combineLatest([
-    this.cell$,
-    this.tableColumnMaxWidth$,
-  ]).pipe(
-    map(
-      ([cell, tableColumnMaxWidth]) =>
-        cell?.cellMaxWidth || tableColumnMaxWidth,
-    ),
-    distinctUntilChanged(),
-    shareReplay({ bufferSize: 1, refCount: true }),
-  );
-
-  public readonly columnWidth$: Observable<string> = this.cell$.pipe(
-    map((cell) => {
-      if (cell?.width === '*') {
-        return '100%';
-      }
-      return cell?.width;
-    }),
-    distinctUntilChanged(),
-    shareReplay({ bufferSize: 1, refCount: true }),
-  );
-
-  @Input()
-  public set cell(value: TableCell<T>) {
-    this._cell$.next(value);
-  }
-
-  private readonly _data$ = new ReplaySubject<T[]>();
-
-  @Input()
-  public set data(value: T[]) {
-    this._data$.next(value);
-  }
-
-  @Input()
-  public disableSort = false;
-
-  /**
-   * max column width, set by table input
-   */
-  @Input()
-  public set maxColumnWidthFromTable(value: string) {
-    this.tableColumnMaxWidth$.next(value);
-  }
-
-  @Output()
-  private readonly headerClick = new EventEmitter<TableCell<T>>();
-
-  @Output()
-  public readonly valueChanged = new EventEmitter<CellValueChangeEvent<T>>();
-
-  public readonly cellHeaderClass$: Observable<string>;
-  public readonly sticky$: Observable<boolean>;
-  public readonly cellFooter$: Observable<string>;
-  public readonly sort$: Observable<Lab900Sort[] | null> =
-    this.tableService.sort$;
-
-  public readonly defaultCellRenderer = DefaultCellRendererComponent;
+  public readonly sort = this.tableService.sort;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
 
-  @Input({ required: true })
-  public trackByTableFn!: TrackByFunction<T>;
-
-  public constructor() {
-    this.cellSub = this.cell$.subscribe((cell) => {
-      if (this.columnDef.name) {
-        this.table?.removeColumnDef(this.columnDef);
-      }
-      this.columnDef.name = cell.key;
-      this.table?.addColumnDef(this.columnDef);
-    });
-
-    this.sticky$ = this.cell$.pipe(map((c) => !c?.hide && !!c?.sticky));
-
-    this.cellHeaderClass$ = this.cell$.pipe(
-      map((c) => readPropValue<TableCell<T>>(c.cellHeaderClass, c)),
-    );
-
-    this.cellFooter$ = combineLatest([
-      this.cell$.pipe(filter((c) => !!c.footer)),
-      this._data$.asObservable(),
-    ]).pipe(
-      map(([cell, data]) =>
-        typeof cell.footer === 'function'
-          ? cell.footer(data, cell)
-          : cell.footer,
-      ),
-    );
+  public ngOnInit(): void {
+    if (this.table) {
+      this.table.addColumnDef(this.columnDef());
+    }
   }
 
   public ngOnDestroy(): void {
-    this.cellSub?.unsubscribe();
-    this.table?.removeColumnDef(this.columnDef);
+    if (this.table) {
+      this.table.removeColumnDef(this.columnDef());
+    }
   }
 
   public handleHeaderClick(cell: TableCell<T>): void {
