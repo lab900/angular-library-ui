@@ -1,8 +1,14 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { filter, take } from 'rxjs/operators';
-import { SubscriptionBasedDirective } from '../../directives/subscription-based.directive';
+import { map } from 'rxjs/operators';
 import { MarkdownModule } from 'ngx-markdown';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lab900-markdown-page',
@@ -12,20 +18,16 @@ import { MarkdownModule } from 'ngx-markdown';
   standalone: true,
   imports: [MarkdownModule],
 })
-export class MarkdownPageComponent extends SubscriptionBasedDirective {
-  @Input()
-  public filePath: string;
+export default class MarkdownPageComponent {
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  public readonly filePath = input<string | undefined>(undefined);
+  protected routeFilePath = toSignal(
+    this.activatedRoute.data.pipe(
+      map((data: { filePath?: string }) => data?.filePath),
+    ),
+  );
 
-  public constructor(private activatedRoute: ActivatedRoute) {
-    super();
-    this.addSubscription(
-      this.activatedRoute.data.pipe(
-        filter((data: { filePath: string }) => !!data?.filePath),
-        take(1),
-      ),
-      (data) => {
-        this.filePath = data.filePath;
-      },
-    );
-  }
+  protected readonly path = computed(
+    () => this.routeFilePath() ?? this.filePath(),
+  );
 }

@@ -1,31 +1,31 @@
-@if (item) {
+@if (item()) {
   <div class="nav-item nav-item--depth-{{ depth }}">
     @if (
-      !item?.childrenInOverlay ||
-      breakpointObserver.isMatched(allowOverlayMenuUntil)
+      !item()?.childrenInOverlay ||
+      breakpointObserver.isMatched(allowOverlayMenuUntil())
     ) {
       <div class="nav-item--without-overlay">
         <lab900-nav-item-button
-          [item]="item"
-          [depth]="depth"
-          [expanded]="expanded$ | async"
-          [disabled]="disabled$ | async"
-          [showLevelArrow]="showLevelArrows && !!item?.children?.length"
-          [navListMatchOptions]="item?.routeMatchOptions ?? navListMatchOptions"
+          [item]="item()"
+          [depth]="depth()"
+          [expanded]="expanded()"
+          [disabled]="disabled()"
+          [showLevelArrow]="showLevelArrows() && !!item()?.children?.length"
+          [routeMatchOptions]="item()?.routeMatchOptions ?? routeMatchOptions()"
           (click)="onClick($event)"
         />
         <!-- Children -->
-        @if (item?.children?.length) {
-          @if ((expanded$ | async) === true) {
+        @if (item()?.children?.length) {
+          @if (expanded()) {
             <div class="nav-item--without-overlay__children">
-              @for (child of item.children; track child) {
+              @for (child of item().children; track child.label) {
                 <lab900-nav-item
                   [item]="child"
-                  [depth]="indentLevels ? depth + 1 : 0"
-                  [indentLevels]="indentLevels"
-                  [allowOverlayMenuUntil]="allowOverlayMenuUntil"
-                  [showLevelArrows]="showLevelArrows"
-                  [navListMatchOptions]="navListMatchOptions"
+                  [depth]="indentLevels() ? depth() + 1 : 0"
+                  [indentLevels]="indentLevels()"
+                  [allowOverlayMenuUntil]="allowOverlayMenuUntil()"
+                  [showLevelArrows]="showLevelArrows()"
+                  [routeMatchOptions]="routeMatchOptions()"
                 />
               }
             </div>
@@ -34,25 +34,25 @@
       </div>
     }
     @if (
-      item.childrenInOverlay &&
-      !breakpointObserver.isMatched(allowOverlayMenuUntil)
+      item().childrenInOverlay &&
+      !breakpointObserver.isMatched(allowOverlayMenuUntil())
     ) {
       <div class="nav-item--with-overlay">
         <lab900-nav-item-button
-          [item]="item"
-          [depth]="depth"
-          [expanded]="expanded$ | async"
-          [disabled]="disabled$ | async"
-          [showLevelArrow]="showLevelArrows && !!item?.children?.length"
-          [navListMatchOptions]="navListMatchOptions"
+          [item]="item()"
+          [depth]="depth()"
+          [expanded]="expanded()"
+          [disabled]="disabled()"
+          [showLevelArrow]="showLevelArrows() && !!item()?.children?.length"
+          [routeMatchOptions]="routeMatchOptions()"
         />
         <div class="nav-item--with-overlay__overlay mat-elevation-z4">
-          @for (child of item.children; track child) {
+          @for (child of item().children; track child.label) {
             <lab900-nav-item
               [item]="child"
               [depth]="0"
-              [showLevelArrows]="showLevelArrows"
-              [navListMatchOptions]="navListMatchOptions"
+              [showLevelArrows]="showLevelArrows()"
+              [routeMatchOptions]="routeMatchOptions()"
             />
           }
         </div>

@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ShowcaseConfigModel } from '../../models/showcase-config.model';
 import { NavItemGroup } from '@lab900/ui';
-import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lab900-showcase-home',
@@ -14,19 +13,12 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./showcase-home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    TranslateModule,
-    RouterLink,
-    MatButtonModule,
-  ],
+  imports: [MatIconModule, TranslateModule, RouterLink, MatButtonModule],
 })
-export class ShowcaseHomeComponent {
-  public data$: Observable<{
+export default class ShowcaseHomeComponent {
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  protected readonly data = toSignal<{
     config: ShowcaseConfigModel;
     nav: NavItemGroup[];
-  }> = this.activatedRoute.data as any;
-
-  public constructor(private activatedRoute: ActivatedRoute) {}
+  }>(this.activatedRoute.data);
 }

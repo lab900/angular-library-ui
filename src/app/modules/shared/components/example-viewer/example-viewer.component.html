@@ -8,33 +8,26 @@
     "
   >
     <mat-card-title>
-      <h3>{{ exampleTitle | translate }}</h3>
+      <h3>{{ exampleTitle() | translate }}</h3>
     </mat-card-title>
     <button
       mat-icon-button
       (click)="toggleSourceView()"
       matTooltip="Toggle source"
-      [disabled]="extensions.length === 0"
+      [disabled]="extensions().length === 0"
     >
       <mat-icon>code</mat-icon>
     </button>
   </mat-card-header>
   <mat-card-content>
-    @if (showSource && exampleName) {
+    @if (showSource() && exampleName()) {
       <div class="example-source-wrapper">
         <mat-tab-group mat-stretch-tabs="false">
-          @for (ext of extensions; track ext) {
+          @for (ext of extensions(); track ext) {
             <mat-tab [label]="ext">
               <markdown
                 lineNumbers
-                [src]="
-                  'examples/' +
-                  (fileDir || exampleName) +
-                  '/' +
-                  exampleName +
-                  '.component.' +
-                  (ext | lowercase)
-                "
+                [src]="examplePath() + (ext | lowercase)"
                 [start]="0"
               />
             </mat-tab>
@@ -43,7 +36,7 @@
       </div>
     }
     <div style="padding: 30px" #exampleComponent>
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   </mat-card-content>
 </mat-card>

@@ -10,22 +10,22 @@ import { PageHeaderExampleComponent } from './examples/page-header-example/page-
 import { PageHeaderParamsExampleComponent } from './examples/page-header-params-example/page-header-params-example.component';
 import { MergerExampleComponent } from './examples/merger-example/merger-example.component';
 import { ButtonExampleComponent } from './examples/button-example/button-example.component';
-import { ShowcaseHomeComponent } from '../shared/components/showcase-home/showcase-home.component';
 import { showcaseUiConfig } from './showcase-ui.constants';
 import { showcaseUiNavItems } from './showcase-ui.nav-items';
-import { MarkdownPageComponent } from '../shared/components/markdown-page/markdown-page.component';
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
 import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
 
 export default [
   {
     path: '',
-    component: ShowcaseHomeComponent,
+    loadComponent: () =>
+      import('../shared/components/showcase-home/showcase-home.component'),
     data: { config: showcaseUiConfig, nav: showcaseUiNavItems },
   },
   {
     path: 'getting-started',
-    component: MarkdownPageComponent,
+    loadComponent: () =>
+      import('../shared/components/markdown-page/markdown-page.component'),
     data: { filePath: 'guides/getting-started.md' },
   },
   new ShowcaseRoute('sharing', 'Sharing', [

@@ -1,10 +1,11 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
-  Input,
-  ViewChild,
+  input,
+  signal,
+  viewChild,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TranslateModule } from '@ngx-translate/core';
@@ -37,37 +38,32 @@ export interface ExampleFile {
     MatTooltipModule,
   ],
 })
-export class ExampleViewerComponent implements AfterViewInit {
-  @Input()
-  public extensions = ['HTML', 'TS', 'SCSS'];
+export class ExampleViewerComponent {
+  public readonly extensions = input<string[]>(['HTML', 'TS', 'SCSS']);
+  public readonly fileDir = input<string | undefined>(undefined);
+  public readonly exampleTitle = input<string | undefined>(undefined);
 
-  @Input()
-  public fileDir?: string;
+  protected readonly exampleComponent =
+    viewChild<ElementRef>('exampleComponent');
+  protected readonly exampleName = computed(() =>
+    this.exampleComponent()?.nativeElement?.children?.[0]?.localName.replace(
+      'lab900-',
+      '',
+    ),
+  );
 
-  @Input()
-  public exampleTitle: string;
+  protected readonly examplePath = computed(
+    () =>
+      'examples/' +
+      (this.fileDir() || this.exampleName()) +
+      '/' +
+      this.exampleName() +
+      '.component.',
+  );
 
-  @Input()
-  public exampleName: string;
+  protected readonly showSource = signal(false);
 
-  @ViewChild('exampleComponent')
-  public exampleComponent: ElementRef;
-
-  public showSource = false;
-
-  public trackExampleFile(index: number, file: ExampleFile): string {
-    return file.extension;
-  }
-
-  public toggleSourceView(): void {
-    this.showSource = !this.showSource;
-  }
-
-  public ngAfterViewInit(): void {
-    this.exampleName =
-      this.exampleComponent?.nativeElement?.children?.[0]?.localName.replace(
-        'lab900-',
-        '',
-      );
+  protected toggleSourceView(): void {
+    this.showSource.set(!this.showSource());
   }
 }
