@@ -2,7 +2,7 @@
 @use '@angular/material' as mat;
 
 @mixin lab900-action-button-toggle($config-or-theme) {
-  $color-config: mat.get-color-config($config-or-theme);
+  $color-config: mat.m2-get-color-config($config-or-theme);
   $primary-palette: map.get($color-config, 'primary');
 
   mat-button-toggle-group {
@@ -21,8 +21,8 @@
 
     .mat-button-toggle-checked,
     .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
-      background-color: mat.get-color-from-palette($primary-palette, 500);
-      color: mat.get-contrast-color-from-palette($primary-palette, 100);
+      background-color: mat.m2-get-color-from-palette($primary-palette, 500);
+      color: mat.m2-get-contrast-color-from-palette($primary-palette, 100);
       font-weight: bold;
     }
   }

@@ -2,9 +2,9 @@
 @use '@angular/material' as mat;
 
 @mixin lab900-merger($config-or-theme) {
-  $color-config: mat.get-color-config($config-or-theme);
+  $color-config: mat.m2-get-color-config($config-or-theme);
   $primary-palette: map.get($color-config, 'primary');
-  $primary-color: mat.get-color-from-palette($primary-palette, 500);
+  $primary-color: mat.m2-get-color-from-palette($primary-palette, 500);
 
   .selected {
     border-left-color: $primary-color !important;
@@ -30,7 +30,7 @@
     button[disabled] {
       .mat-icon {
         cursor: not-allowed;
-        color: mat.get-color-from-palette($primary-palette, 100);
+        color: mat.m2-get-color-from-palette($primary-palette, 100);
 
         &.not-active {
           color: rgb(237, 237, 237);
