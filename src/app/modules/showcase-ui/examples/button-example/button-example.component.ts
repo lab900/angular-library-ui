@@ -36,10 +36,7 @@ import { Lab900ButtonModule, ToggleActionButton } from '@lab900/ui';
     <p>Fab-mini icon button</p>
     <lab900-button type="mini-fab" label="delete"></lab900-button>
     <p>Toggle action button</p>
-    <lab900-action-button
-      [data]="[]"
-      [action]="toggleActionButton"
-    ></lab900-action-button>
+    <lab900-action-button [action]="toggleActionButton"></lab900-action-button>
   `,
 })
 export class ButtonExampleComponent {
@@ -60,12 +57,14 @@ export class ButtonExampleComponent {
         action: () => {
           console.log('Button 2 is selected');
         },
+        disabled: true,
       },
       {
         label: 'Button 3',
         action: () => {
           console.log('Button 2 is selected');
         },
+        hide: true,
       },
     ],
   };

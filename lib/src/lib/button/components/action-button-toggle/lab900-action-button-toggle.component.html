@@ -7,12 +7,7 @@
       <ng-container *ngFor="let actionButton of action.subActions">
         <mat-button-toggle
           *ngIf="(getSubActionHidden(actionButton) | async) !== true"
-          (click)="
-            !getDisabled() &&
-              !getSubActionDisabled(actionButton) &&
-              actionButton.action &&
-              actionButton.action(data)
-          "
+          (click)="actionButton.action && actionButton.action(data)"
           [value]="actionButton"
           [disabled]="getSubActionDisabled(actionButton) | async"
         >
