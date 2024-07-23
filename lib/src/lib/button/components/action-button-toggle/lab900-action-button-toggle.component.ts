@@ -47,9 +47,8 @@ export class Lab900ActionButtonToggleComponent<T = any>
     return coerceObservable(readPropValue(action.disabled, this.data));
   }
 
-  public doAction(e: Event): void {
-    e.stopPropagation();
-    this.action?.action?.(this.data, e, this);
+  public getSubActionHidden(subAction: ActionButton<T>): Observable<boolean> {
+    return coerceObservable(readPropValue(subAction.hide, this.data));
   }
 
   public disable(): void {

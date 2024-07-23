@@ -40,4 +40,8 @@ export class Lab900ActionButtonMenuComponent {
   public getSuffixIcon(action: ActionButton): string {
     return readPropValue(action.suffixIcon, this.data);
   }
+
+  public getSubActionHidden(subAction: ActionButton): Observable<boolean> {
+    return coerceObservable(readPropValue(subAction.hide, this.data));
+  }
 }

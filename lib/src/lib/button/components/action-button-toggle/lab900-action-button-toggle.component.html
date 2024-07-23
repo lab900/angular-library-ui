@@ -4,22 +4,29 @@
       [value]="getSelected()"
       [disabled]="getDisabled() | async"
     >
-      <mat-button-toggle
-        *ngFor="let actionButton of action.subActions"
-        (click)="actionButton.action?.(data)"
-        [value]="actionButton"
-        [disabled]="getSubActionDisabled(actionButton) | async"
-      >
-        <mat-icon *ngIf="actionButton.prefixIcon">{{
-          actionButton.prefixIcon
-        }}</mat-icon>
-        <ng-container *ngIf="actionButton.label">
-          {{ actionButton.label | translate }}
-        </ng-container>
-        <mat-icon *ngIf="actionButton.suffixIcon">{{
-          actionButton.suffixIcon
-        }}</mat-icon>
-      </mat-button-toggle>
+      <ng-container *ngFor="let actionButton of action.subActions">
+        <mat-button-toggle
+          *ngIf="(getSubActionHidden(actionButton) | async) !== true"
+          (click)="
+            !getDisabled() &&
+              !getSubActionDisabled(actionButton) &&
+              actionButton.action &&
+              actionButton.action(data)
+          "
+          [value]="actionButton"
+          [disabled]="getSubActionDisabled(actionButton) | async"
+        >
+          <mat-icon *ngIf="actionButton.prefixIcon">{{
+            actionButton.prefixIcon
+          }}</mat-icon>
+          <ng-container *ngIf="actionButton.label">
+            {{ actionButton.label | translate }}
+          </ng-container>
+          <mat-icon *ngIf="actionButton.suffixIcon">{{
+            actionButton.suffixIcon
+          }}</mat-icon>
+        </mat-button-toggle>
+      </ng-container>
     </mat-button-toggle-group>
   </ng-container>
 </ng-container>
