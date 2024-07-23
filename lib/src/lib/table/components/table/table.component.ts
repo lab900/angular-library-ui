@@ -280,9 +280,8 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
     effect(
       () => {
-        if (this.selectableRows().enabled) {
+        if (this.selectableRows()?.enabled) {
           if (!untracked(this.selection)) {
-            console.log('here');
             this.selection.set(
               new SelectionModel(!this.selectableRows().singleSelect),
             );

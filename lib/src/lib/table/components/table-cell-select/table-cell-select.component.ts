@@ -13,14 +13,19 @@ import {
 } from '@angular/core';
 import { switchMap, tap } from 'rxjs';
 import { SelectableRows } from '../table/table.component';
-import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckbox } from '@angular/material/checkbox';
 import {
+  MatCell,
+  MatCellDef,
   MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
   MatTable,
-  MatTableModule,
 } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -29,7 +34,16 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './table-cell-select.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTableModule, MatCheckboxModule],
+  imports: [
+    MatCheckbox,
+    MatHeaderCell,
+    MatCell,
+    MatFooterCell,
+    MatColumnDef,
+    MatCellDef,
+    MatFooterCellDef,
+    MatHeaderCellDef,
+  ],
 })
 export class TableCellSelectComponent<T extends object = object>
   implements OnInit, OnDestroy
@@ -47,6 +61,7 @@ export class TableCellSelectComponent<T extends object = object>
   public readonly selection = input.required<SelectionModel<T>>();
   public readonly allSelected = toSignal(
     toObservable(this.selection).pipe(
+      filter((select) => !!select),
       switchMap((select) => select.changed),
       tap(console.log),
       map(
