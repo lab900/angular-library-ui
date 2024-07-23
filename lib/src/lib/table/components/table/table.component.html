@@ -1,8 +1,5 @@
 @if (visibleColumns()) {
-  <div
-    class="lab900-table {{ tableClass() }}"
-    [class.fixed-widths]="fixedWidths()"
-  >
+  <div class="lab900-table {{ tableClass() }}">
     <lab900-table-header
       [tableHeaderActions]="tableHeaderActions()"
       [toggleColumns]="toggleColumns()"
