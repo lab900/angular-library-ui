@@ -15,7 +15,7 @@
           <mat-icon>{{ getSuffixIcon(action) }}</mat-icon>
         }
       </button>
-    } @else if (!action?.hide) {
+    } @else if ((getSubActionHidden(action) | async) !== true) {
       <button
         mat-menu-item
         [matMenuTriggerFor]="innerMenu.actionMenu"

@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
+import {
+  Lab900ActionButtonComponent,
+  Lab900ButtonComponent,
+  ToggleActionButton,
+} from '@lab900/ui';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'lab900-button-example',
@@ -63,7 +68,7 @@ import { Lab900ActionButtonComponent, Lab900ButtonComponent } from '@lab900/ui';
   `,
 })
 export class ButtonExampleComponent {
-  public toggleActionButton = {
+  public toggleActionButton: ToggleActionButton = {
     label: 'EntityDetailSectionToggleToggleButton',
     type: 'toggle',
     subActions: [
@@ -80,6 +85,13 @@ export class ButtonExampleComponent {
         action: () => {
           console.log('Button 2 is selected');
         },
+      },
+      {
+        label: 'Button 3',
+        action: () => {
+          console.log('Button 2 is selected');
+        },
+        hide: () => of(true),
       },
     ],
   };
