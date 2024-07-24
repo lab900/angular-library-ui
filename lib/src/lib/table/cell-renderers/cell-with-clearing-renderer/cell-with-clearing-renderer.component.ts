@@ -55,10 +55,6 @@ export class CellWithClearingRendererComponent<
         `No handleValueChanged method provided for column ${this.columnConfig().key}`,
       );
     }
-    this.data.update((data) => {
-      data[this.columnConfig().key] = null;
-      return data;
-    });
     valueChanged(null, this.columnConfig(), this.data());
   }
 }

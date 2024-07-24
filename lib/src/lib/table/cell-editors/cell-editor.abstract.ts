@@ -10,7 +10,7 @@ import {
   model,
 } from '@angular/core';
 import { Lab900TableCellComponent } from '../components/table-cell/table-cell.component';
-import { isDifferent, updateObject } from '../../utils/different.utils';
+import { isDifferent } from '../../utils/different.utils';
 import { CellEditorBaseOptions } from './cell-editor.options';
 
 @Directive()
@@ -58,7 +58,7 @@ export abstract class CellEditorAbstract<
 
   protected getUnformattedValue(): V {
     const cell = this.columnConfig();
-    const data = this.data();
+    const data = structuredClone(this.data());
     if (cell.key.includes('.')) {
       const keys = cell.key.split('.');
       let value: unknown = data;
@@ -85,9 +85,6 @@ export abstract class CellEditorAbstract<
           `No handleValueChanged method provided for column ${this.columnConfig().key}`,
         );
       }
-      this.data.update((current) => {
-        return updateObject(this.columnConfig().key, updatedValue, current);
-      });
       this.handleValueChanged(updatedValue, this.columnConfig(), this.data());
     }
     if (close) {
