@@ -11,7 +11,7 @@ import {
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
-import { switchMap, tap } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { SelectableRows } from '../table/table.component';
 import { MatCheckbox } from '@angular/material/checkbox';
 import {
@@ -63,7 +63,6 @@ export class TableCellSelectComponent<T extends object = object>
     toObservable(this.selection).pipe(
       filter((select) => !!select),
       switchMap((select) => select.changed),
-      tap(console.log),
       map(
         (change) =>
           change?.source?.selected?.length === this.rowCheckboxes()?.length,
