@@ -9,18 +9,18 @@ import {
   output,
   ViewEncapsulation,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
 import { DefaultCellRendererComponent } from '../../cell-renderers/default-cell-renderer/default-cell-renderer.component';
 import { Lab900TableService } from '../../services/table.service';
+import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   selector: 'lab900-table-cell-inner',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './table-cell-inner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [NgComponentOutlet],
 })
 export class TableCellInnerComponent<T = any> {
   private readonly tableService = inject(Lab900TableService);
@@ -31,7 +31,6 @@ export class TableCellInnerComponent<T = any> {
   public readonly cell = input.required<TableCell<T>>();
   public readonly rowValue = input.required<T>();
   public readonly rowIndex = input.required<number>();
-
   public readonly valueChanged = output<CellValueChangeEvent<T>>();
 
   private previousClasses: string[] = [];

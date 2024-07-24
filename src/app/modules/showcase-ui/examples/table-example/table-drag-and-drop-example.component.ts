@@ -24,7 +24,9 @@ import { SelectionModel } from '@angular/cdk/collections';
       position: 'left',
       sticky: true,
       showSelectAllCheckbox: true,
-      hideSelectableRow: hideSelectableCheckboxForSarah
+      hideSelectableRow: hideSelectableCheckboxForSarah,
+      selectedItems: [mockData[0]],
+      compareFn: compareFn
     }"
     (selectionChanged)="selectionChanged($event)"
     [trackByTableFn]="trackByTableFn"
@@ -89,6 +91,8 @@ export class TableDragAndDropExampleComponent {
   ];
 
   public trackByTableFn = (index: number, item: any): any => item.id;
+  public compareFn = (a: any, b: any): boolean =>
+    a.id && b.id && a?.id === b?.id;
 
   public dropTable(event: CdkDragDrop<any[]>): void {
     /**

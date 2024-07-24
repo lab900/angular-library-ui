@@ -2902,24 +2902,7 @@ export class TableExampleComponent {
     },
   ];
 
-  public tableActions: ActionButton[] = [
-    {
-      label: 'edit',
-      type: 'icon',
-      tooltip: { value: 'View this' },
-      disabled: (d) => d?.id === 1,
-    },
-    {
-      label: (data) => (data.id === 1 ? 'delete_forever' : 'delete'),
-      containerClass: (data) => (data.id === 1 ? 'action-button--red' : ''),
-      type: 'icon',
-      action: () => confirm('Are you sure?'),
-    },
-  ];
-
   public mockData: any[] = mockData;
-
-  public selectedItems = [this.mockData[0]];
 
   public tableCells: TableCell[] = [
     {
@@ -3010,10 +2993,24 @@ export class TableExampleComponent {
   }
 
   public cellValueChanged(event: CellValueChangeEvent): void {
-    event.row[event.cell.key] = event.value;
-    setTimeout(() => {
-      this.mockData = [...this.mockData.map((d) => ({ ...d }))];
-    }, 200);
+    this.mockData = structuredClone(
+      this.mockData.map((d) => {
+        if (d.uuid === event.row.uuid) {
+          if (event.cell.key.includes('clientReferences')) {
+            return {
+              ...d,
+              clientReferences: {
+                ...d.clientReferences,
+                [event.cell.key.split('.')[1]]: event.value,
+              },
+            };
+          }
+          return { ...d, [event.cell.key]: event.value };
+        }
+        return d;
+      }),
+    );
+    console.log(event.row);
     console.log('CellValueChangeEvent', event);
   }
 

@@ -9,6 +9,7 @@ import {
   Input,
   model,
   output,
+  signal,
   TemplateRef,
   TrackByFunction,
   untracked,
@@ -64,6 +65,7 @@ export interface SelectableRows<T = any> {
   selectedItems?: T[];
   singleSelect?: boolean;
   hideSelectableRow?: (row: T) => boolean;
+  compareFn?: (o1: T, o2: T) => boolean;
 }
 
 @Component({
@@ -134,7 +136,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public readonly rowColor = input<propFunction<T> | string | undefined>(
     undefined,
   );
-  public readonly loading = input<boolean>(false);
+  public readonly loading = model<boolean>(false);
 
   /**
    * Show a set of actions at the top of the table
@@ -167,7 +169,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     undefined,
   );
 
-  public readonly selection = model<SelectionModel<T> | undefined>();
+  public readonly selection = signal<SelectionModel<T> | undefined>(undefined);
 
   /**
    * Show columns filter to hide/show columns
@@ -181,7 +183,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public readonly toggleAndMoveColumns = input<boolean>(false);
   public readonly filterIcon = input<string>('filter_alt');
   public readonly neverHideTable = input<boolean>(false);
-  public readonly disabled = input<boolean>(false);
+  public readonly disabled = model<boolean>(false);
 
   @Input()
   public set sort(value: Lab900Sort[] | null) {
@@ -255,7 +257,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     this.visibleColumns().some((c) => !!c?.footer),
   );
 
-  public readonly data = input<T[] | null>(null);
+  public readonly data = model<T[] | null | undefined>(undefined);
   public readonly publicData = computed(() => {
     const options = this.selectableRows();
     const data = this.data();
@@ -280,12 +282,15 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
     effect(
       () => {
-        if (this.selectableRows()?.enabled) {
-          if (!untracked(this.selection)) {
-            this.selection.set(
-              new SelectionModel(!this.selectableRows().singleSelect),
-            );
-          }
+        if (this.selectableRows()?.enabled && !untracked(this.selection)) {
+          this.selection.set(
+            new SelectionModel(
+              !this.selectableRows().singleSelect,
+              this.selectableRows().selectedItems,
+              true,
+              this.selectableRows().compareFn,
+            ),
+          );
         }
       },
       { allowSignalWrites: true },
@@ -319,7 +324,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public getRowClasses(row: T, index: number): string {
     const classes: string[] = [];
-    if (typeof this.onRowClick === 'function') {
+    if (typeof this.onRowClick() === 'function') {
       classes.push('lab900-row-clickable');
     }
     if (index % 2 === 0) {
