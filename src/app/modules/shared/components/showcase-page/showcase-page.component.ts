@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShowcaseRouteData } from '../../models/showcase-route.model';
 import { Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
-import { SubscriptionBasedDirective } from '../../directives/subscription-based.directive';
-import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MarkdownPageComponent } from '../markdown-page/markdown-page.component';
+import MarkdownPageComponent from '../markdown-page/markdown-page.component';
 import { ExampleViewerComponent } from '../example-viewer/example-viewer.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NgComponentOutlet } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lab900-showcase-page',
@@ -14,15 +15,12 @@ import { ExampleViewerComponent } from '../example-viewer/example-viewer.compone
   styleUrls: ['./showcase-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    CommonModule,
-    MatTabsModule,
-    MarkdownPageComponent,
-    ExampleViewerComponent,
-    Lab900PageHeaderComponent,
-  ],
+  imports: [MatTabsModule, MarkdownPageComponent, ExampleViewerComponent, Lab900PageHeaderComponent, NgComponentOutlet],
 })
-export class ShowcasePageComponent extends SubscriptionBasedDirective {
+export class ShowcasePageComponent {
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private readonly router: Router = inject(Router);
+
   private readonly guideNav: PageHeaderNavItem = {
     label: 'Guide',
     queryParams: { tab: 'guide' },
@@ -33,28 +31,22 @@ export class ShowcasePageComponent extends SubscriptionBasedDirective {
     queryParams: { tab: 'examples' },
   };
 
-  public currentTab?: 'guide' | 'examples';
-  public data?: ShowcaseRouteData;
-  public navItems: PageHeaderNavItem[] = [];
+  public queryParams = toSignal(this.activatedRoute.queryParams);
+  public currentTab = computed<'guide' | 'examples'>(() => this.queryParams()?.tab ?? 'examples');
+  public data = toSignal<ShowcaseRouteData>(this.activatedRoute.data as Observable<ShowcaseRouteData>);
+  public navItems = computed<PageHeaderNavItem[]>(() => {
+    if (this.data()?.docFile) {
+      return [this.guideNav, this.exampleNav];
+    }
+    return [this.exampleNav];
+  });
 
-  public constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-  ) {
-    super();
-    this.addSubscription(this.activatedRoute.queryParams, (queryParams) => {
-      this.data = this.activatedRoute.snapshot.data as ShowcaseRouteData;
-      if (queryParams?.tab) {
-        this.currentTab = queryParams?.tab;
-      } else {
-        this.router.navigate([], {
-          relativeTo: this.activatedRoute,
-          queryParams: { tab: this.data?.docFile ? 'guide' : 'examples' },
-        });
-      }
-      this.navItems = !this.data?.docFile
-        ? [this.exampleNav]
-        : [this.guideNav, this.exampleNav];
+  public constructor() {
+    effect(() => {
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: { tab: this.data()?.docFile ? 'guide' : 'examples' },
+      });
     });
   }
 }

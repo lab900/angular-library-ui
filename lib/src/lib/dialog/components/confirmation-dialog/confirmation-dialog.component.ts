@@ -15,18 +15,11 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './confirmation-dialog.component.html',
   styleUrls: ['./confirmation-dialog.component.scss'],
   standalone: true,
-  imports: [
-    MatDialogContent,
-    TranslateModule,
-    MatDialogActions,
-    MatButton,
-    MatDialogClose,
-  ],
+  imports: [MatDialogContent, TranslateModule, MatDialogActions, MatButton, MatDialogClose],
 })
 export class ConfirmationDialogComponent {
   private readonly data?: ConfirmationDialog = inject(MAT_DIALOG_DATA);
-  private readonly dialogRef: MatDialogRef<ConfirmationDialogComponent> =
-    inject(MatDialogRef);
+  private readonly dialogRef: MatDialogRef<ConfirmationDialogComponent> = inject(MatDialogRef);
 
   public readonly message = this.data?.message ?? 'Are you sure?';
   public readonly confirmButtonText = this.data?.okButtonText ?? 'Yes';

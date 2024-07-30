@@ -1,10 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  Lab900Sort,
-  Lab900TableComponent,
-  TableCell,
-  TableRowAction,
-} from '@lab900/ui';
+import { Lab900Sort, Lab900TableComponent, TableCell, TableRowAction } from '@lab900/ui';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -19,20 +14,21 @@ import { SelectionModel } from '@angular/cdk/collections';
     (tableRowOrderChange)="dropTable($event)"
     [stickyHeader]="true"
     [selectableRows]="{
-      enabled: false,
+      enabled: true,
       checkBoxColor: 'accent',
-      position: 'right',
+      position: 'left',
       sticky: true,
       showSelectAllCheckbox: true,
-      hideSelectableRow: hideSelectableCheckboxForSarah
+      hideSelectableRow: hideSelectableCheckboxForSarah,
+      selectedItems: [mockData[0]],
+      compareFn: compareFn,
     }"
     (selectionChanged)="selectionChanged($event)"
-    [trackByTableFn]="trackByTableFn"
-  />`,
+    [trackByTableFn]="trackByTableFn" />`,
 })
 export class TableDragAndDropExampleComponent {
   @ViewChild(Lab900TableComponent)
-  private table: Lab900TableComponent;
+  private table!: Lab900TableComponent;
 
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
 
@@ -89,13 +85,14 @@ export class TableDragAndDropExampleComponent {
   ];
 
   public trackByTableFn = (index: number, item: any): any => item.id;
+  public compareFn = (a: any, b: any): boolean => a.id && b.id && a?.id === b?.id;
 
   public dropTable(event: CdkDragDrop<any[]>): void {
     /**
      * You can do an api call here to save the new order
      */
     moveItemInArray(this.mockData, event.previousIndex, event.currentIndex);
-    this.table.table.renderRows();
+    this.table.table()?.renderRows();
   }
 
   public selectionChanged(selection: SelectionModel<any>): void {

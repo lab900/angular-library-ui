@@ -5,8 +5,7 @@
         mat-menu-item
         (throttledClick)="doAction($event, action)"
         [disabled]="getDisabled(action) | async"
-        lab900PreventDoubleClick
-      >
+        lab900PreventDoubleClick>
         @if (action.prefixIcon) {
           <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
         }
@@ -15,13 +14,12 @@
           <mat-icon>{{ getSuffixIcon(action) }}</mat-icon>
         }
       </button>
-    } @else if (!action?.hide) {
+    } @else if ((getSubActionHidden(action) | async) !== true) {
       <button
         mat-menu-item
         [matMenuTriggerFor]="innerMenu.actionMenu"
         [disabled]="getDisabled(action) | async"
-        lab900PreventDoubleClick
-      >
+        lab900PreventDoubleClick>
         @if (action.prefixIcon) {
           <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
         }

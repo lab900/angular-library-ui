@@ -82,7 +82,7 @@ export interface TableCell<
   /**
    * on click
    */
-  click?: (data: T, cell: TableCell, mouseEvent?: MouseEvent) => any;
+  click?: (data: T, cell: TableCell, mouseEvent?: MouseEvent) => unknown;
   /**
    * render a different cell template
    * @deprecated use cellRenderer instead

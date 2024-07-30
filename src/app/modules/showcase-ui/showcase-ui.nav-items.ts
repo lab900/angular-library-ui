@@ -26,14 +26,6 @@ export const showcaseUiNavItems: NavItemGroup[] = [
             route: 'nav-list',
           },
           {
-            label: 'Data List',
-            route: 'data-list',
-          },
-          {
-            label: 'Sharing',
-            route: 'sharing',
-          },
-          {
             label: 'Alerts',
             route: 'alerts',
           },

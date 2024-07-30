@@ -1,28 +1,19 @@
-@if (filtersGroups$ | async; as groups) {
+@if (filteredNavItemGroups(); as groups) {
   <div class="lab900-nav-list">
-    @for (group of groups; track group) {
+    @for (group of filteredNavItemGroups(); track group.label) {
       <div class="nav-list-group">
         @if (group.label || group.icon) {
           <div class="nav-list-group__wrapper">
-            @if (
-              group.icon &&
-              (group.icon?.position === 'left' || !group.icon?.position)
-            ) {
-              <lab900-icon
-                class="nav-list-group__icon-left"
-                [icon]="group.icon"
-              ></lab900-icon>
+            @if (group.icon && (group.icon?.position === 'left' || !group.icon?.position)) {
+              <lab900-icon class="nav-list-group__icon-left" [icon]="group.icon" />
             }
             @if (group.label) {
               <div class="nav-list-group__label">
                 {{ group.label | translate }}
               </div>
             }
-            @if (!showLevelArrows && group.icon?.position === 'right') {
-              <lab900-icon
-                class="nav-list-group__icon-right"
-                [icon]="group.icon"
-              ></lab900-icon>
+            @if (!showLevelArrows() && group.icon?.position === 'right') {
+              <lab900-icon class="nav-list-group__icon-right" [icon]="group.icon" />
             }
           </div>
         }
@@ -30,11 +21,10 @@
           @for (item of group.items; track item) {
             <lab900-nav-item
               [item]="item"
-              [indentLevels]="indentLevels"
-              [allowOverlayMenuUntil]="allowOverlayMenuUntil"
-              [showLevelArrows]="showLevelArrows"
-              [navListMatchOptions]="routeMatchOptions"
-            ></lab900-nav-item>
+              [indentLevels]="indentLevels()"
+              [allowOverlayMenuUntil]="allowOverlayMenuUntil()"
+              [showLevelArrows]="showLevelArrows()"
+              [routeMatchOptions]="routeMatchOptions()" />
           }
         </mat-nav-list>
       </div>

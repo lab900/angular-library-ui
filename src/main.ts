@@ -9,6 +9,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MergingTranslateLoader } from './app/utils/merging-translate-loader';
 import { MatNativeDateModule } from '@angular/material/core';
+import routes from './app/modules/showcase-ui/showcase-ui.routes';
 
 if (environment.production) {
   enableProdMode();
@@ -22,13 +23,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
     provideAnimations(),
-    provideRouter([
-      {
-        path: '',
-        loadChildren: () =>
-          import('./app/modules/showcase-ui/showcase-ui.routes'),
-      },
-    ]),
+    provideRouter(routes),
     importProvidersFrom(
       MatNativeDateModule,
       MarkdownModule.forRoot(),
@@ -39,7 +34,8 @@ bootstrapApplication(AppComponent, {
           deps: [HttpClient],
         },
         defaultLanguage: 'en',
-      }),
+        useDefaultLang: true,
+      })
     ),
   ],
-}).catch((err) => console.error(err));
+}).catch(err => console.error(err));

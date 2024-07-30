@@ -7,12 +7,7 @@ export function equalDates(date1: Date, date2: Date): boolean {
 }
 
 export function isObject(object: unknown): boolean {
-  return (
-    object != null &&
-    !Array.isArray(object) &&
-    !isDate(object) &&
-    typeof object === 'object'
-  );
+  return object != null && !Array.isArray(object) && !isDate(object) && typeof object === 'object';
 }
 
 export function equalObjects(object1: object, object2: object): boolean {
@@ -24,17 +19,14 @@ export function equalObjects(object1: object, object2: object): boolean {
   }
 
   for (const key of keys1) {
-    if (isDifferent(object1[key], object2[key])) {
+    if (isDifferent((object1 as any)[key], (object2 as any)[key])) {
       return false;
     }
   }
   return true;
 }
 
-export function equalArrays(
-  array1: Array<unknown>,
-  array2: Array<unknown>,
-): boolean {
+export function equalArrays(array1: unknown[], array2: unknown[]): boolean {
   if (array1.length !== array2.length) {
     return false;
   }
@@ -60,11 +52,7 @@ export function isDifferent<T = unknown>(newValue: T, oldValue: T): boolean {
   return newValue !== oldValue;
 }
 
-export function updateObject<T = object>(
-  keyName: string,
-  newVal: unknown,
-  obj: T,
-): T {
+export function updateObject<T = object>(keyName: string, newVal: unknown, obj: T): T {
   const results: T = {} as T;
   for (const key in obj) {
     if (key === keyName) {

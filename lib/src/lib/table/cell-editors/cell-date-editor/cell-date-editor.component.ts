@@ -1,22 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostListener,
-} from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { BehaviorSubject } from 'rxjs';
-import {
-  MatDatepickerInputEvent,
-  MatDatepickerModule,
-} from '@angular/material/datepicker';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellEditorBaseOptions } from '../cell-editor.options';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe, TranslateModule, MatButtonModule, MatDatepickerModule],
+  imports: [TranslateModule, MatButtonModule, MatDatepickerModule],
   selector: 'lab900-cell-date-editor',
   standalone: true,
   template: `
@@ -27,24 +19,18 @@ import { CellEditorBaseOptions } from '../cell-editor.options';
         class="lab900-cell-input lab900-cell-input--with-toggle"
         type="text"
         (focus)="input.select()"
-        [value]="cellValue$ | async"
+        [value]="cellValue()"
         (dateInput)="changeValue($event, 'input')"
         (dateChange)="changeValue($event, 'change')"
-        [placeholder]="(placeholder$ | async) ?? '' | translate"
+        [placeholder]="placeholder() | translate"
         (keydown.enter)="closeOrSave()"
-        (keydown.tab)="closeOrSave()"
-      />
-      <mat-datepicker-toggle
-        [tabIndex]="-1"
-        (click)="$event.stopImmediatePropagation()"
-        [for]="datePicker"
-      />
+        (keydown.tab)="closeOrSave()" />
+      <mat-datepicker-toggle [tabIndex]="-1" (click)="$event.stopImmediatePropagation()" [for]="datePicker" />
       <mat-datepicker
         #datePicker
         (opened)="openPicker()"
         (closed)="opened$.next(false); input.focus()"
-        [restoreFocus]="false"
-      ></mat-datepicker>
+        [restoreFocus]="false" />
     </div>
   `,
 })
@@ -52,10 +38,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
   public readonly updatedDate$ = new BehaviorSubject<any>(undefined);
   public readonly opened$ = new BehaviorSubject<boolean>(false);
 
-  public changeValue(
-    event: MatDatepickerInputEvent<any>,
-    type: 'input' | 'change',
-  ): void {
+  public changeValue(event: MatDatepickerInputEvent<any>, type: 'input' | 'change'): void {
     if (type === 'change' && this.opened$.value) {
       return;
     }

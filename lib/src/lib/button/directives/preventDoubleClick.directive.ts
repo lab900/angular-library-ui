@@ -1,11 +1,4 @@
-import {
-  Directive,
-  effect,
-  HostListener,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { Directive, effect, HostListener, input, output, signal } from '@angular/core';
 import { timer } from 'rxjs';
 import { filter, throttle } from 'rxjs/operators';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -18,9 +11,9 @@ export class PreventDoubleClickDirective {
   private readonly click = signal<Event | null>(null);
   private readonly throttledClick = toSignal(
     toObservable(this.click).pipe(
-      filter((click) => click != null),
-      throttle(() => timer(this.throttleTimeInMs())),
-    ),
+      filter(click => click != null),
+      throttle(() => timer(this.throttleTimeInMs()))
+    )
   );
 
   private isThrottled = false;

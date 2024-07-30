@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  ActionButton,
-  BreadCrumb,
-  Lab900PageHeaderComponent,
-  PageHeaderNavItem,
-} from '@lab900/ui';
+import { ActionButton, BreadCrumb, Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
 import { MatTabsModule } from '@angular/material/tabs';
 import { of } from 'rxjs';
 
@@ -18,8 +13,7 @@ import { of } from 'rxjs';
       [actions]="actions"
       [breadCrumbs]="breadCrumbs"
       [data]="{ tab: 'Examples' }"
-      [tabPanel]="tabNavPanel"
-    />
+      [tabPanel]="tabNavPanel" />
     <mat-tab-nav-panel #tabNavPanel />`,
 })
 export class PageHeaderExampleComponent {

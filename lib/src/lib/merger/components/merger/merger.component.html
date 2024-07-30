@@ -1,52 +1,42 @@
 <div class="lab900-merger">
-  @if (loading) {
+  @if (loading()) {
     <mat-progress-bar mode="indeterminate" />
   } @else {
     <div class="lab900-merger__row">
-      <div
-        [ngClass]="{ selected: selected === 'left' }"
-        class="lab900-merger__row__header"
-      >
+      <div [ngClass]="{ selected: selected === 'left' }" class="lab900-merger__row__header">
         <h2>{{ leftObject.title }}</h2>
         <mat-radio-button
           (change)="switchMaster()"
           [checked]="selected === 'left'"
-          [disabled]="fixed"
-          color="primary"
-        />
+          [disabled]="fixed()"
+          color="primary" />
       </div>
-      <div
-        [ngClass]="{ selected: selected === 'right' }"
-        class="lab900-merger__row__header"
-      >
+      <div [ngClass]="{ selected: selected === 'right' }" class="lab900-merger__row__header">
         <h2>{{ rightObject.title }}</h2>
         <mat-radio-button
           (change)="switchMaster()"
           [checked]="selected === 'right'"
-          [disabled]="fixed"
-          color="primary"
-        />
+          [disabled]="fixed()"
+          color="primary" />
       </div>
     </div>
-    @for (config of schema; track config.attribute; let i = $index) {
+    @for (config of schema(); track config.attribute; let i = $index) {
       <div class="lab900-merger__row">
         <lab900-merger-item
           [active]="selected === 'left'"
           [config]="config"
-          [data]="selected === 'left' ? result : leftObject.data"
-        />
+          [data]="selected === 'left' ? result : leftObject.data" />
         <div class="lab900-merger__row__icon">
           <button
             mat-icon-button
             [disableRipple]="true"
             (click)="toggleActive(config, i)"
-            [disabled]="config?.disabled"
-          >
+            [disabled]="config?.disabled">
             @if (compare(config)) {
               <mat-icon
                 [ngClass]="{
                   'not-active': !config.active,
-                  flip: selected !== 'right'
+                  flip: selected !== 'right',
                 }"
                 color="primary"
                 >trending_flat
@@ -56,19 +46,17 @@
               <mat-icon
                 [ngClass]="{
                   'not-active': !config.active,
-                  flip: selected !== 'right'
+                  flip: selected !== 'right',
                 }"
                 color="primary"
-                svgIcon="merge"
-              ></mat-icon>
+                svgIcon="merge" />
             }
           </button>
         </div>
         <lab900-merger-item
           [active]="selected === 'right'"
           [config]="config"
-          [data]="selected === 'right' ? result : rightObject.data"
-        />
+          [data]="selected === 'right' ? result : rightObject.data" />
       </div>
     }
   }

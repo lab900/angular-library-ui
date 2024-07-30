@@ -1,30 +1,32 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
+  computed,
+  inject,
+  input,
   OnDestroy,
   OnInit,
-  Optional,
-  Output,
-  QueryList,
-  SkipSelf,
-  ViewChild,
-  ViewChildren,
+  output,
+  viewChild,
+  viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { SelectableRows } from '../table/table.component';
-import { ThemePalette } from '@angular/material/core';
-import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import {
+  MatCell,
+  MatCellDef,
   MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
   MatTable,
-  MatTableModule,
 } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { map } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
+import { filter, map } from 'rxjs/operators';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: true,
@@ -32,83 +34,70 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './table-cell-select.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTableModule, MatCheckboxModule, AsyncPipe],
+  imports: [
+    MatCheckbox,
+    MatHeaderCell,
+    MatCell,
+    MatFooterCell,
+    MatColumnDef,
+    MatCellDef,
+    MatFooterCellDef,
+    MatHeaderCellDef,
+  ],
 })
-export class TableCellSelectComponent<T extends object = object>
-  implements OnInit, OnDestroy
-{
-  @ViewChildren('rowCheckbox')
-  public rowCheckboxes!: QueryList<MatCheckbox>;
+export class TableCellSelectComponent<T extends object = object> implements OnInit, OnDestroy {
+  private readonly table = inject(MatTable, { optional: true, skipSelf: true });
 
-  @ViewChild('selectAllCheckbox')
-  public selectAllCheckbox!: MatCheckbox;
+  public readonly rowCheckboxes = viewChildren<MatCheckbox>('rowCheckbox');
 
-  @ViewChild(MatColumnDef, { static: true })
-  private columnDef!: MatColumnDef;
+  public readonly selectAllCheckbox = viewChild<MatCheckbox>('selectAllCheckbox');
 
-  private readonly _options$ = new ReplaySubject<SelectableRows<T>>();
-  public color?: ThemePalette;
-  public sticky?: 'left' | 'right';
-  public showSelectAll?: boolean;
-  public disabled?: boolean;
+  private readonly columnDef = viewChild(MatColumnDef);
 
-  private _selection: SelectionModel<T>;
-  public allSelected$: Observable<boolean>;
+  public readonly showFooter = input<boolean>(false);
+  public readonly selection = input.required<SelectionModel<T>>();
+  public readonly allSelected = toSignal(
+    toObservable(this.selection).pipe(
+      filter(select => !!select),
+      switchMap(select => select.changed),
+      map(change => change?.source?.selected?.length === this.rowCheckboxes()?.length)
+    )
+  );
 
-  @Input({ required: true })
-  public set selection(value: SelectionModel<T>) {
-    if (value) {
-      this._selection = value;
-      this.allSelected$ = this._selection.changed.pipe(
-        map(
-          (change) =>
-            change?.source?.selected?.length === this.rowCheckboxes?.length,
-        ),
-      );
+  public readonly options = input.required<SelectableRows<T>>();
+  public readonly color = computed(() => this.options()?.checkBoxColor ?? 'primary');
+  public readonly sticky = computed(() => (this.options()?.sticky ? this.options().position : undefined));
+
+  public readonly showSelectAll = computed(() => this.options()?.showSelectAllCheckbox ?? false);
+  public readonly disabled = computed(() => this.options()?.disabled ?? false);
+
+  public readonly selectRow = output<T>();
+  public readonly selectAll = output<boolean>();
+
+  public ngOnInit(): void {
+    const columnDef = this.columnDef();
+    if (this.table && columnDef) {
+      this.table.addColumnDef(columnDef);
     }
   }
 
-  @Input({ required: true })
-  public set options(value: SelectableRows<T>) {
-    this._options$.next(value);
-    this.color = value?.checkBoxColor ?? 'primary';
-    this.sticky = value?.sticky ? value.position : undefined;
-    this.showSelectAll = value?.showSelectAllCheckbox ?? false;
-    this.disabled = value?.disabled ?? false;
-  }
-
-  @Input()
-  public showFooter?: boolean;
-
-  @Output()
-  public readonly selectRow = new EventEmitter<T>();
-
-  @Output()
-  private readonly selectAll = new EventEmitter<boolean>();
-
-  public constructor(@Optional() @SkipSelf() public table: MatTable<any>) {}
-
-  public ngOnInit(): void {
-    this.columnDef.name = 'select';
-    this.table?.addColumnDef(this.columnDef);
-  }
-
   public ngOnDestroy(): void {
-    this.table?.removeColumnDef(this.columnDef);
+    const columnDef = this.columnDef();
+    if (this.table && columnDef) {
+      this.table.removeColumnDef(columnDef);
+    }
   }
 
-  public handleSelectAllCheckbox({ checked }): void {
-    this.rowCheckboxes
-      .toArray()
-      .forEach((checkBox) => (checkBox.checked = checked));
+  public handleSelectAllCheckbox({ checked }: MatCheckboxChange): void {
+    this.rowCheckboxes().forEach(checkBox => (checkBox.checked = checked));
     this.selectAll.emit(checked);
   }
 
   public isChecked(value: T): boolean {
-    return this._selection?.isSelected(value);
+    return this.selection()?.isSelected(value);
   }
 
   public isDisabled(value: T): boolean {
-    return this.isChecked(value) ? false : this.disabled;
+    return this.isChecked(value) ? false : this.disabled();
   }
 }

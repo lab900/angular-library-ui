@@ -1,35 +1,29 @@
-<ng-container
-  matColumnDef
-  [sticky]="sticky === 'left'"
-  [stickyEnd]="sticky === 'right'"
->
+<ng-container matColumnDef="select" [sticky]="sticky() === 'left'" [stickyEnd]="sticky() === 'right'">
   <th mat-header-cell *matHeaderCellDef class="checkbox-cell">
-    @if (showSelectAll) {
+    @if (showSelectAll()) {
       <mat-checkbox
         #selectAllCheckbox
-        [color]="color"
-        [disabled]="disabled"
-        [checked]="allSelected$ | async"
+        [color]="color()"
+        [disabled]="disabled()"
+        [checked]="allSelected()"
         (change)="handleSelectAllCheckbox($event)"
         (click)="$event.stopImmediatePropagation()"
-        [disableRipple]="true"
-      ></mat-checkbox>
+        [disableRipple]="true" />
     }
   </th>
   <td mat-cell *matCellDef="let row" class="checkbox-cell">
     @if (!row?._hideSelectableRow) {
       <mat-checkbox
         #rowCheckbox
-        [color]="color"
+        [color]="color()"
         [checked]="isChecked(row)"
         [disabled]="isDisabled(row)"
         (change)="selectRow.emit(row)"
         (click)="$event.stopImmediatePropagation()"
-        [disableRipple]="true"
-      ></mat-checkbox>
+        [disableRipple]="true" />
     }
   </td>
-  @if (showFooter) {
+  @if (showFooter()) {
     <td mat-footer-cell *matFooterCellDef></td>
   }
 </ng-container>

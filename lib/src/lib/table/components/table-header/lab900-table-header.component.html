@@ -1,23 +1,20 @@
-@if (showTableHeader$ | async) {
+@if (showHeader()) {
   <div class="lab900-table-header">
-    @if (tableHeaderContent) {
-      <ng-container *ngTemplateOutlet="tableHeaderContent"></ng-container>
+    @if (tableHeaderContent()) {
+      <ng-container *ngTemplateOutlet="tableHeaderContent()" />
     }
-    @if (tableHeaderActions$ | async; as tableHeaderActions) {
-      @if (tableHeaderActions?.length) {
-        <div class="lab900-table-header__action">
-          @for (action of tableHeaderActions; track action) {
-            <lab900-action-button [action]="action" />
-          }
-        </div>
-      }
+    @if (tableHeaderActions().length) {
+      <div class="lab900-table-header__action">
+        @for (action of tableHeaderActions(); track action) {
+          <lab900-action-button [action]="action" />
+        }
+      </div>
     }
-    @if (showFilterMenu$ | async) {
+    @if (showFilterMenu()) {
       <lab900-table-filter-menu
         (filterChanged)="tableCellsFiltered.emit($event)"
-        [filterIcon]="filterIcon$ | async"
-        [toggleAndMoveColumns]="toggleAndMoveColumns$ | async"
-      />
+        [filterIcon]="filterIcon()"
+        [toggleAndMoveColumns]="toggleAndMoveColumns()" />
     }
   </div>
 }

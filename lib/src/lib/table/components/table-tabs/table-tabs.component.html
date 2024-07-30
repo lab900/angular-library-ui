@@ -1,11 +1,7 @@
-@if (tableTabs?.length) {
+@if (tableTabs().length) {
   <nav class="lab900-table-tabs">
-    @for (tab of tableTabs; track tab.id) {
-      <button
-        class="tab {{ tab.id }}"
-        [class.active]="activeTabId === tab?.id"
-        (click)="changeTable(tab)"
-      >
+    @for (tab of tableTabs(); track tab.id) {
+      <button class="tab {{ tab.id }}" [class.active]="activeTabId() === tab?.id" (click)="changeTable(tab)">
         <span class="label">{{ tab.label | translate }}</span>
       </button>
     }

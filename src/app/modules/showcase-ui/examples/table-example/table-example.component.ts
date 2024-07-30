@@ -2836,8 +2836,7 @@ const mockData = [
     [preFooterTitle]="'Quantity Total'"
     (cellValueChanged)="cellValueChanged($event)"
     [trackByTableFn]="trackByTableFn"
-    [onRowClick]="onRowClick"
-  >
+    [onRowClick]="onRowClick">
     <div *lab900TableTopContent>Custom top content</div>
     <div *lab900TableHeaderContent>Custom header</div>
 
@@ -2902,24 +2901,7 @@ export class TableExampleComponent {
     },
   ];
 
-  public tableActions: ActionButton[] = [
-    {
-      label: 'edit',
-      type: 'icon',
-      tooltip: { value: 'View this' },
-      disabled: (d) => d?.id === 1,
-    },
-    {
-      label: (data) => (data.id === 1 ? 'delete_forever' : 'delete'),
-      containerClass: (data) => (data.id === 1 ? 'action-button--red' : ''),
-      type: 'icon',
-      action: () => confirm('Are you sure?'),
-    },
-  ];
-
   public mockData: any[] = mockData;
-
-  public selectedItems = [this.mockData[0]];
 
   public tableCells: TableCell[] = [
     {
@@ -2931,52 +2913,52 @@ export class TableExampleComponent {
       label: 'clientReferences.reference1',
       sortable: true,
       cellEditor: CellInputEditorComponent,
-      cellEditorOptions: <CellInputEditorOptions>{
+      cellEditorOptions: {
         placeholder: 'reference1',
         valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
           row[cell.key] = value;
         },
-      },
+      } as CellInputEditorOptions,
     },
     {
       key: 'clientReferences.reference2',
       label: 'clientReferences.reference2',
       sortable: true,
       cellEditor: CellInputEditorComponent,
-      cellEditorOptions: <CellInputEditorOptions>{
+      cellEditorOptions: {
         placeholder: 'reference2',
 
         valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
           row[cell.key] = value;
         },
-      },
+      } as CellInputEditorOptions,
     },
     {
       key: 'clientReferences.reference3',
       label: 'clientReferences.reference3',
       sortable: true,
       cellEditor: CellInputEditorComponent,
-      cellEditorOptions: <CellInputEditorOptions>{
+      cellEditorOptions: {
         placeholder: 'reference3',
 
         valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
           row[cell.key] = value;
         },
-      },
+      } as CellInputEditorOptions,
     },
     {
       key: 'type',
       label: 'NORMAL SELECT',
-      cellClass: (data) => (data.required ? 'table-cell-required-field' : ''),
-      width: '100px',
-      cellEditor: CellSelectEditorComponent,
+      cellClass: data => (data.required ? 'table-cell-required-field' : ''),
+      width: '160px',
+      cellEditor: CellSelectEditorComponent as any,
       cellRenderer: CellWithClearingRendererComponent,
       cellFormatter: ({ type }) => type?.name ?? '',
-      cellEditorOptions: <CellSelectEditorOptions>{
+      cellEditorOptions: {
         panelWidth: '200px',
         placeholder: 'Select a type 2',
         compareWithFn: (a, b) => a?.id === b?.id,
-        optionLabelFn: (option) => option?.name ?? '?',
+        optionLabelFn: option => option?.name ?? '?',
         options: [
           { id: 1, name: 'Type 1' },
           { id: 2, name: 'Type 2' },
@@ -2984,19 +2966,15 @@ export class TableExampleComponent {
         valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
           row[cell.key] = value;
         },
-        disabled: (e) =>
-          (e as any).expeditionLogStatus === 'ACTIVATED' || false,
-      },
+        disabled: e => (e as any).expeditionLogStatus === 'ACTIVATED' || false,
+      } as CellSelectEditorOptions,
     },
   ];
   public trackByTableFn: TrackByFunction<any> = (index, item) => item.id;
 
   public sortChange(sort: Lab900Sort[]): void {
-    sort.forEach((s) => {
-      this.mockData.sort(
-        (a: any, b: any) =>
-          (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1),
-      );
+    sort.forEach(s => {
+      this.mockData.sort((a: any, b: any) => (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1));
       this.mockData = [...this.mockData];
     });
   }
@@ -3010,10 +2988,24 @@ export class TableExampleComponent {
   }
 
   public cellValueChanged(event: CellValueChangeEvent): void {
-    event.row[event.cell.key] = event.value;
-    setTimeout(() => {
-      this.mockData = [...this.mockData.map((d) => ({ ...d }))];
-    }, 200);
+    this.mockData = structuredClone(
+      this.mockData.map(d => {
+        if (d.uuid === event.row.uuid) {
+          if (event.cell.key.includes('clientReferences')) {
+            return {
+              ...d,
+              clientReferences: {
+                ...d.clientReferences,
+                [event.cell.key.split('.')[1]]: event.value,
+              },
+            };
+          }
+          return { ...d, [event.cell.key]: event.value };
+        }
+        return d;
+      })
+    );
+    console.log(event.row);
     console.log('CellValueChangeEvent', event);
   }
 

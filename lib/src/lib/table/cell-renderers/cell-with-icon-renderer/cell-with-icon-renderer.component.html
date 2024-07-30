@@ -1,20 +1,19 @@
-@if (rendererOptions$ | async; as options) {
+@if (renderOptions(); as options) {
   <div
     class="lab900-cell-value lab900-cell-value--with-icon"
-    [matTooltip]="tooltip$ | async"
-    [matTooltipPosition]="tooltipPosition$ | async"
-  >
+    [matTooltip]="tooltip()"
+    [matTooltipPosition]="tooltipPosition()">
     <ng-container>
       @if (!options.svgIcon) {
-        <mat-icon>{{ icon$ | async }}</mat-icon>
+        <mat-icon>{{ icon() }}</mat-icon>
       }
       @if (options.svgIcon) {
-        <mat-icon [svgIcon]="icon$ | async"></mat-icon>
+        <mat-icon [svgIcon]="icon()"></mat-icon>
       }
     </ng-container>
     @if (options.showCellValue) {
       <div class="lab900-cell-value">
-        {{ cellValue$ | async | translate }}
+        {{ cellValue() | translate }}
       </div>
     }
   </div>

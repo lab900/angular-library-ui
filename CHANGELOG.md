@@ -1,5 +1,15 @@
 # Changelog
 
+## 18.0.3
+
+- Upgrade to Angular 18
+- More components are using Signals
+
+### Breaking changes
+- Some Signal updates might break your application.
+- Lab900DataListComponent: removed - was not used anymore
+- Lab900SharingComponent: removed - was not used anymore
+
 ## 17.0.2
 
 - Fix required type in Lab900ButtonComponent

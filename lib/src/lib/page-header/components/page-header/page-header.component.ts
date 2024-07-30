@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { PageHeaderNavItem } from '../../models/page-header-nav.model';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { BreadCrumb } from '../../../bread-crumbs/models/bread-crumb.model';
@@ -58,14 +53,13 @@ export class Lab900PageHeaderComponent {
   public navStretch = false;
 
   private readonly _actions$ = new ReplaySubject<ActionButton[]>();
-  public readonly actions$: Observable<ActionButton[]> =
-    this._actions$.asObservable();
+  public readonly actions$: Observable<ActionButton[]> = this._actions$.asObservable();
   public readonly leftActions$ = this.actions$.pipe(
-    map(([...actions]) => actions?.filter((action) => action.align === 'left')),
+    map(([...actions]) => actions?.filter(action => action.align === 'left'))
   );
 
   public readonly rightActions$ = this.actions$.pipe(
-    map(([...actions]) => actions?.filter((action) => action.align !== 'left')),
+    map(([...actions]) => actions?.filter(action => action.align !== 'left'))
   );
 
   @Input()

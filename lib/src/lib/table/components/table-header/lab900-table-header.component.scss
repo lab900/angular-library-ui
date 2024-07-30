@@ -4,9 +4,5 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
-
-  > :not(:last-child),
-  > ::ng-deep:not(:last-child) {
-    margin-right: 8px !important;
-  }
+  gap: 8px;
 }

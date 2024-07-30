@@ -1,11 +1,4 @@
-import {
-  Directive,
-  EventEmitter,
-  HostListener,
-  inject,
-  Input,
-  Output,
-} from '@angular/core';
+import { Directive, EventEmitter, HostListener, inject, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component';
 import { take } from 'rxjs/operators';
@@ -44,7 +37,7 @@ export class ConfirmationDialogDirective {
       })
       .beforeClosed()
       .pipe(take(1))
-      .subscribe((confirmed) => {
+      .subscribe(confirmed => {
         if (confirmed) {
           this.confirmed.emit();
         } else {

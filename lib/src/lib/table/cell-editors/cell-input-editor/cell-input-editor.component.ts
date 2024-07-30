@@ -1,10 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { CellEditorAbstract } from '../cell-editor.abstract';
-import { AsyncPipe } from '@angular/common';
 import { CellInputEditorOptions } from './cell-input-editor.options';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -13,19 +8,18 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [AsyncPipe, TranslateModule],
+  imports: [TranslateModule],
   template: `
     <input
       #input
       class="lab900-cell-input"
-      [type]="(editOptions$ | async)?.type || 'text'"
+      [type]="editOptions()?.type || 'text'"
       (blur)="closeAndSave(input.value)"
       (focus)="input.select()"
       (keydown.enter)="closeAndSave(input.value)"
-      [value]="cellValue$ | async"
-      [max]="(editOptions$ | async)?.maxLength"
-      [placeholder]="(placeholder$ | async) ?? '' | translate"
-    />
+      [value]="cellValue()"
+      [max]="editOptions()?.maxLength"
+      [placeholder]="placeholder() | translate" />
   `,
 })
 export class CellInputEditorComponent extends CellEditorAbstract<CellInputEditorOptions> {
