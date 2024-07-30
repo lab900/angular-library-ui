@@ -55,9 +55,7 @@ export class TableCellInnerComponent<T = any> {
   });
 
   public readonly cellClasses = computed(() => {
-    return (
-      this.getCellClasses(this.cell(), this.rowValue())?.trim().split(' ') ?? []
-    ).filter((s) => !!s?.length);
+    return (this.getCellClasses(this.cell(), this.rowValue())?.trim().split(' ') ?? []).filter(s => !!s?.length);
   });
 
   public constructor() {
@@ -84,20 +82,14 @@ export class TableCellInnerComponent<T = any> {
     });
   }
 
-  public readonly handleValueChanged = (
-    value: any,
-    cell: TableCell<T>,
-    row: T,
-  ): void => {
+  public readonly handleValueChanged = (value: any, cell: TableCell<T>, row: T): void => {
     if (cell?.cellEditorOptions?.valueChanged) {
       cell.cellEditorOptions.valueChanged({ value, cell, row });
     }
     this.valueChanged.emit({ value, cell, row });
   };
 
-  private getCellClasses(cell: TableCell<T>, data: T): string {
-    return typeof cell.cellClass === 'function'
-      ? cell.cellClass(data, cell)
-      : cell.cellClass;
+  private getCellClasses(cell: TableCell<T>, data: T): string | undefined {
+    return typeof cell.cellClass === 'function' ? cell.cellClass(data, cell) : cell.cellClass;
   }
 }

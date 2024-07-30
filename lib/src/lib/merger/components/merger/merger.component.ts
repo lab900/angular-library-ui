@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, input, Input, model, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MergeObject } from '../../models/merge-object.model';
 import { MergeConfig, MergeConfigBase } from '../../models/merge-config.model';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
@@ -22,44 +16,29 @@ import { MatIconButton } from '@angular/material/button';
   templateUrl: './merger.component.html',
   styleUrls: ['./merger.component.scss'],
   standalone: true,
-  imports: [
-    MatProgressBar,
-    CommonModule,
-    MatRadioButton,
-    Lab900MergerItemComponent,
-    MatIcon,
-    MatIconButton,
-  ],
+  imports: [MatProgressBar, CommonModule, MatRadioButton, Lab900MergerItemComponent, MatIcon, MatIconButton],
 })
 export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   @Input()
-  public readonly leftObject: MergeObject<T>;
+  public readonly leftObject!: MergeObject<T>;
 
   @Input()
-  public readonly rightObject: MergeObject<T>;
+  public readonly rightObject!: MergeObject<T>;
 
-  @Input()
-  public schema: MergeConfig<T>[];
-
-  @Input()
-  public fixed = false;
-
-  @Input()
-  public loading: boolean;
+  public readonly schema = model.required<MergeConfig<T>[]>();
+  public readonly fixed = input<boolean>(false);
+  public readonly loading = model<boolean>(false);
 
   public selected: 'left' | 'right' = 'right';
 
-  public result: T;
+  public result?: T;
 
   public constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIconLiteral(
-      'merge',
-      sanitizer.bypassSecurityTrustHtml(MergeIcon),
-    );
+    iconRegistry.addSvgIconLiteral('merge', sanitizer.bypassSecurityTrustHtml(MergeIcon));
   }
 
   public ngOnInit(): void {
-    this.loading = !this.leftObject || !this.rightObject || !this.schema;
+    this.loading.set(!this.leftObject || !this.rightObject || !this.schema());
     this.result = { ...this.rightObject.data };
     this.setInitialValues(false);
   }
@@ -70,19 +49,19 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   }
 
   public setInitialValues(reset: boolean): void {
-    this.schema.forEach((s, index) => {
-      if (s.active) {
+    const schema = this.schema();
+    schema.forEach((s, index) => {
+      if (s.active && this.result) {
         if (reset && !s.disabled) {
-          this.schema[index].active = false;
-        } else {
-          const baseValue = this.getBase(s.active)[s.attribute];
+          schema[index].active = false;
+        } else if (s.attribute) {
+          const attr = s.attribute as keyof T;
+          const baseValue = this.getBase(s.active)[attr] as any;
+          const value = this.result[attr] as any;
           if (s.combine) {
-            this.result[s.attribute] = [
-              ...this.result[s.attribute],
-              ...baseValue,
-            ];
+            this.result[attr] = [...value, ...baseValue] as any;
           } else {
-            this.result[s.attribute] = baseValue;
+            this.result[attr] = baseValue;
           }
         }
       }
@@ -95,57 +74,55 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
     } else if (config?.nestedObject) {
       let different = false;
       for (let i = 0; i < config?.nestedObject.length && !different; i++) {
-        different = this.compareValues(
-          config.nestedObject[i].attribute,
-          config.attribute,
-        );
+        different = this.compareValues(config.nestedObject[i].attribute!, config.attribute);
       }
       return different;
-    } else {
+    } else if (config.attribute) {
       return this.compareValues(config.attribute);
     }
+    return false;
   }
 
   private compareValues(attribute: string, parentAttribute?: string): boolean {
     const leftValue = parentAttribute
-      ? this.leftObject.data[parentAttribute][attribute]
-      : this.leftObject.data[attribute];
+      ? (this.leftObject.data as any)[parentAttribute][attribute]
+      : (this.leftObject.data as any)[attribute];
     const rightValue = parentAttribute
-      ? this.rightObject.data[parentAttribute][attribute]
-      : this.rightObject.data[attribute];
+      ? (this.rightObject.data as any)[parentAttribute][attribute]
+      : (this.rightObject.data as any)[attribute];
 
     return isDifferent(leftValue, rightValue);
   }
 
   private getBase(active = false): T {
     if (active) {
-      return this.selected === 'right'
-        ? this.leftObject.data
-        : this.rightObject.data;
+      return this.selected === 'right' ? this.leftObject.data : this.rightObject.data;
     }
-    return this.selected === 'right'
-      ? this.rightObject.data
-      : this.leftObject.data;
+    return this.selected === 'right' ? this.rightObject.data : this.leftObject.data;
   }
 
   public toggleActive(config: MergeConfig<T>, index: number): void {
     const base: T = { ...this.getBase(!config.active) };
-    if (config?.nestedObject) {
+    if (config?.nestedObject && this.result) {
       config.nestedObject.forEach((c: MergeConfigBase) => {
-        const attribute = config?.attribute ?? c.attribute;
-        this.result[attribute] = base[attribute];
+        const attribute = (config?.attribute ?? c.attribute) as keyof T;
+        (this.result as any)[attribute] = base[attribute];
       });
-    } else {
-      this.result[config.attribute] = base[config.attribute];
+    } else if (config.attribute && this.result) {
+      (this.result as any)[config.attribute] = (base as any)[config.attribute];
     }
-    if (!config.active && config.combine) {
-      this.result[config.attribute] = [
-        ...(this.leftObject.data[config.attribute] as T[]),
-        ...(this.rightObject.data[config.attribute] as T[]),
+    if (!config.active && config.combine && config.attribute) {
+      const attribute = config?.attribute as keyof T;
+      (this.result as any)[attribute] = [
+        ...(this.leftObject.data[attribute] as T[]),
+        ...(this.rightObject.data[attribute] as T[]),
       ];
     }
 
-    this.schema[index] = { ...this.schema[index], active: !config.active };
+    this.schema.update(current => {
+      current[index] = { ...current[index], active: !config.active };
+      return current;
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

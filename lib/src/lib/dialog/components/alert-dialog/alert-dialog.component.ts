@@ -15,18 +15,11 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './alert-dialog.component.html',
   styleUrls: ['./alert-dialog.component.scss'],
   standalone: true,
-  imports: [
-    MatDialogActions,
-    MatButton,
-    TranslateModule,
-    MatDialogContent,
-    MatDialogClose,
-  ],
+  imports: [MatDialogActions, MatButton, TranslateModule, MatDialogContent, MatDialogClose],
 })
 export class AlertDialogComponent {
   private readonly data?: AlertDialog = inject(MAT_DIALOG_DATA);
-  private readonly dialogRef: MatDialogRef<AlertDialogComponent> =
-    inject(MatDialogRef);
+  private readonly dialogRef: MatDialogRef<AlertDialogComponent> = inject(MatDialogRef);
 
   public readonly message = this.data?.message ?? '';
   public readonly messageHTML = this.data?.messageHTML ?? '';

@@ -35,7 +35,7 @@ bootstrapApplication(AppComponent, {
         },
         defaultLanguage: 'en',
         useDefaultLang: true,
-      }),
+      })
     ),
   ],
-}).catch((err) => console.error(err));
+}).catch(err => console.error(err));

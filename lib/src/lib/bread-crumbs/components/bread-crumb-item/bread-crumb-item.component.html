@@ -1,15 +1,7 @@
-@if (route$ | async; as route) {
-  @if (route) {
-    <a
-      class="lab900-bread-crumb-item"
-      [routerLink]="route"
-      [queryParams]="queryParams$ | async"
-    >
-      {{ title$ | async | translate }}
-    </a>
-  } @else {
-    <span class="lab900-bread-crumb-item lab900-bread-crumb-item--static">{{
-      title$ | async | translate
-    }}</span>
-  }
+@if (route()) {
+  <a class="lab900-bread-crumb-item" [routerLink]="route()" [queryParams]="queryParams()">
+    {{ title() | translate }}
+  </a>
+} @else {
+  <span class="lab900-bread-crumb-item lab900-bread-crumb-item--static">{{ title() | translate }}</span>
 }

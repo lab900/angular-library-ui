@@ -6,17 +6,12 @@
       [toggleAndMoveColumns]="toggleAndMoveColumns()"
       [filterIcon]="filterIcon()"
       [tableHeaderContent]="tableHeaderContent()"
-      (tableCellsFiltered)="onTableCellsFiltered($event)"
-    />
+      (tableCellsFiltered)="onTableCellsFiltered($event)" />
     @if (tableTopContent()) {
       <ng-container *ngTemplateOutlet="tableTopContent()" />
     }
     @if (tabs().length) {
-      <lab900-table-tabs
-        [tableTabs]="tabs()"
-        [activeTabId]="tabId()"
-        (activeTabIdChange)="onActiveTabChange($event)"
-      />
+      <lab900-table-tabs [tableTabs]="tabs()" [activeTabId]="tabId()" (activeTabIdChange)="onActiveTabChange($event)" />
     }
     @if (loading()) {
       <mat-progress-bar mode="indeterminate" />
@@ -32,16 +27,14 @@
         [dataSource]="publicData()"
         (cdkDropListDropped)="tableRowOrderChange.emit($event)"
         [class.has-back-actions]="tableActionsBack()?.length"
-        [class.has-front-actions]="tableActionsFront()?.length"
-      >
+        [class.has-front-actions]="tableActionsFront()?.length">
         @if (selectableRows()?.enabled) {
           <lab900-table-cell-select
             [showFooter]="showCellFooters()"
             [options]="selectableRows()"
             [selection]="selection()"
             (selectAll)="handleSelectAll($event)"
-            (selectRow)="handleSelectRow($event)"
-          />
+            (selectRow)="handleSelectRow($event)" />
         }
         @for (column of visibleColumns(); track column.key) {
           <lab900-table-cell
@@ -50,16 +43,11 @@
             [maxColumnWidthFromTable]="maxColumnWidth()"
             (headerClick)="handleHeaderClick($event)"
             [data]="publicData()"
-            (valueChanged)="cellValueChanged.emit($event)"
-          />
+            (valueChanged)="cellValueChanged.emit($event)" />
         }
         <ng-container matColumnDef="actions-front">
           <th mat-header-cell *matHeaderCellDef></th>
-          <td
-            mat-cell
-            *matCellDef="let element; let index = index"
-            (click)="$event.stopPropagation()"
-          >
+          <td mat-cell *matCellDef="let element; let index = index" (click)="$event.stopPropagation()">
             @if (tableActionsFront()?.length) {
               <div class="table-row-actions-front">
                 @for (action of tableActionsFront(); track action.label) {
@@ -67,8 +55,7 @@
                     [data]="element"
                     [action]="action"
                     cdkDragHandle
-                    [cdkDragHandleDisabled]="!action?.draggable"
-                  />
+                    [cdkDragHandleDisabled]="!action?.draggable" />
                 }
               </div>
             }
@@ -79,11 +66,7 @@
         </ng-container>
         <ng-container matColumnDef="actions-back" stickyEnd>
           <th mat-header-cell *matHeaderCellDef></th>
-          <td
-            mat-cell
-            *matCellDef="let element; let index = index"
-            (click)="$event.stopPropagation()"
-          >
+          <td mat-cell *matCellDef="let element; let index = index" (click)="$event.stopPropagation()">
             @if (tableActionsBack()?.length) {
               <div class="table-row-actions-back">
                 @for (action of tableActionsBack(); track action.label) {
@@ -91,8 +74,7 @@
                     [data]="element"
                     [action]="action"
                     cdkDragHandle
-                    [cdkDragHandleDisabled]="!action?.draggable"
-                  />
+                    [cdkDragHandleDisabled]="!action?.draggable" />
                 }
               </div>
             }
@@ -103,10 +85,7 @@
         </ng-container>
         @if (displayedColumns()) {
           <!-- header row -->
-          <tr
-            mat-header-row
-            *matHeaderRowDef="displayedColumns(); sticky: stickyHeader"
-          ></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: stickyHeader"></tr>
           <!-- content rows -->
           <tr
             mat-row
@@ -116,28 +95,25 @@
             [style.background-color]="getRowColor(row)"
             (click)="handleRowClick($event, row, i)"
             cdkDrag
-            [cdkDragDisabled]="!draggableRows()"
-          ></tr>
+            [cdkDragDisabled]="!draggableRows()"></tr>
           @if (showCellFooters()) {
             @if (publicData()?.length) {
               <div>
                 <!-- pre footer row -->
-                @if (preFooterTitle()) {
+                @if (preFooterTitle(); as preFooterTitle) {
                   <ng-container matColumnDef="preFooterTitle">
                     <td
                       mat-footer-cell
                       *matFooterCellDef
                       [attr.colspan]="visibleColumns().length + 1"
-                      class="lab900-table__pre-footer-title-cell"
-                    >
-                      {{ preFooterTitle() | translate }}
+                      class="lab900-table__pre-footer-title-cell">
+                      {{ preFooterTitle | translate }}
                     </td>
                   </ng-container>
                   <tr
                     mat-footer-row
                     *matFooterRowDef="['preFooterTitle']"
-                    class="lab900-table__pre-footer-title-row"
-                  ></tr>
+                    class="lab900-table__pre-footer-title-row"></tr>
                 }
                 <!-- footer row -->
                 <tr mat-footer-row *matFooterRowDef="displayedColumns()"></tr>
@@ -152,7 +128,7 @@
       </table>
     </div>
     @if (publicData()) {
-      @if (!publicData().length && !disabled()) {
+      @if (!publicData()?.length && !disabled()) {
         <div class="lab900-table__empty">
           @if (emptyTableTemplate()) {
             <ng-container *ngTemplateOutlet="emptyTableTemplate()" />

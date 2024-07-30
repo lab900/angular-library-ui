@@ -1,16 +1,10 @@
 <div
   class="lab900-cell-value lab900-cell-value--with-icon"
   [matTooltip]="tooltipWithHtml()"
-  [matTooltipPosition]="tooltipPosition()"
->
+  [matTooltipPosition]="tooltipPosition()">
   <div class="lab900-cell-value" [innerHTML]="cellValue() | translate"></div>
   @if (disabled()) {
-    <button
-      style="margin-left: 6px"
-      mat-icon-button
-      (click)="handleClear($event)"
-      [tabIndex]="-1"
-    >
+    <button style="margin-left: 6px" mat-icon-button (click)="handleClear($event)" [tabIndex]="-1">
       <mat-icon>close</mat-icon>
     </button>
   }

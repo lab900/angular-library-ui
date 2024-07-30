@@ -13,11 +13,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
-import {
-  MatColumnDef,
-  MatTable,
-  MatTableModule,
-} from '@angular/material/table';
+import { MatColumnDef, MatTable, MatTableModule } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
 import { Lab900TableService } from '../../services/table.service';
 import { NgClass, NgComponentOutlet } from '@angular/common';
@@ -57,43 +53,37 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
 
   public readonly columnDef = viewChild(MatColumnDef);
 
-  public readonly tdElement =
-    viewChild<ElementRef<HTMLTableCellElement>>('.lab900-td');
+  public readonly tdElement = viewChild<ElementRef<HTMLTableCellElement>>('.lab900-td');
 
   public readonly cell = input.required<TableCell<T>>();
   public readonly data = input.required<T[]>();
   public readonly disableSort = input<boolean>(false);
-  public readonly maxColumnWidthFromTable = input<string | undefined>(
-    undefined,
-  );
+  public readonly maxColumnWidthFromTable = input<string | undefined>(undefined);
 
   public readonly columnMaxWidth = computed(() => {
-    return this.cell()?.cellMaxWidth ?? this.maxColumnWidthFromTable();
+    return this.cell().cellMaxWidth ?? this.maxColumnWidthFromTable();
   });
 
   public readonly columnWidth = computed(() => {
-    if (this.cell()?.width === '*') {
+    if (this.cell().width === '*') {
       return '100%';
     }
-    return this.cell()?.width;
+    return this.cell().width;
   });
 
-  public readonly sticky = computed(
-    () => !this.cell()?.hide && !!this.cell()?.sticky,
-  );
+  public readonly sticky = computed(() => !this.cell().hide && this.cell().sticky);
 
   public readonly cellFooter = computed(() => {
-    const footer = this.cell()?.footer;
-    return typeof footer === 'function'
-      ? footer(this.data(), this.cell())
-      : footer;
+    const footer = this.cell().footer;
+    return typeof footer === 'function' ? footer(this.data(), this.cell()) : footer;
   });
 
   public readonly cellHeaderClass = computed(() => {
-    return readPropValue<TableCell<T>>(
-      this.cell().cellHeaderClass,
-      this.cell(),
-    );
+    const cellHeaderClass = this.cell().cellHeaderClass;
+    if (cellHeaderClass) {
+      return readPropValue<TableCell<T>>(cellHeaderClass, this.cell());
+    }
+    return '';
   });
 
   public readonly headerClick = output<TableCell<T>>();
@@ -103,14 +93,16 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
 
   public ngOnInit(): void {
-    if (this.table) {
-      this.table.addColumnDef(this.columnDef());
+    const columnDef = this.columnDef();
+    if (this.table && columnDef) {
+      this.table.addColumnDef(columnDef);
     }
   }
 
   public ngOnDestroy(): void {
-    if (this.table) {
-      this.table.removeColumnDef(this.columnDef());
+    const columnDef = this.columnDef();
+    if (this.table && columnDef) {
+      this.table.removeColumnDef(columnDef);
     }
   }
 

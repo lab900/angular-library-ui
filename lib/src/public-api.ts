@@ -3,7 +3,6 @@
  */
 
 // common
-export * from './lib/common/models/paging.model';
 export * from './lib/utils/utils';
 export * from './lib/utils/different.utils';
 
@@ -22,17 +21,6 @@ export * from './lib/alert/models/alert';
 export * from './lib/nav-list/models/nav-item.model';
 export * from './lib/nav-list/components/nav-list/nav-list.component';
 export * from './lib/nav-list/components/icon/icon.component';
-
-// data list
-export * from './lib/data-list/models/data-list.model';
-export * from './lib/data-list/components/data-list/data-list.component';
-export * from './lib/data-list/components/data-list-item/data-list-item.component';
-export * from './lib/data-list/directives/data-list-empty.directive';
-export * from './lib/data-list/directives/data-list-item-info.directive';
-
-// sharing
-export * from './lib/sharing/components/sharing/sharing.component';
-export * from './lib/sharing/models/share-dialog-component.abstract';
 
 // page header
 export * from './lib/page-header/components/page-header/page-header.component';

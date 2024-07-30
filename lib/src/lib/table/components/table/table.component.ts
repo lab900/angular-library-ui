@@ -24,13 +24,7 @@ import { Lab900TableHeaderContentDirective } from '../../directives/table-header
 import { ActionButton } from '../../../button/models/action-button.model';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDragHandle,
-  CdkDragPlaceholder,
-  CdkDropList,
-} from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableTab } from '../../models/table-tabs.model';
@@ -95,21 +89,17 @@ export interface SelectableRows<T = any> {
   ],
 })
 export class Lab900TableComponent<T extends object = object, TabId = string> {
-  private readonly tableService: Lab900TableService<T, TabId> =
-    inject(Lab900TableService);
+  private readonly tableService = inject(Lab900TableService<T, TabId>);
 
   /**
    * This will respect the defined widths of the table cells
    * If any cell has a width defined, the table will have a fixed layout
    */
-  protected readonly _fixedWidths = input<boolean>(false, {
+  public readonly _fixedWidths = input<boolean>(false, {
     alias: 'fixedWidth',
   });
   protected readonly fixedWidths = computed(() => {
-    return (
-      this._fixedWidths() ||
-      this.tableService.visibleColumns().some((c) => !!c?.width)
-    );
+    return this._fixedWidths() || this.tableService.visibleColumns().some(c => !!c?.width);
   });
 
   public readonly table = viewChild(MatTable<T>);
@@ -130,12 +120,8 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   public readonly tableClass = input<string>('');
-  public readonly rowClass = input<propFunction<T> | string | undefined>(
-    undefined,
-  );
-  public readonly rowColor = input<propFunction<T> | string | undefined>(
-    undefined,
-  );
+  public readonly rowClass = input<propFunction<T> | string | undefined>(undefined);
+  public readonly rowColor = input<propFunction<T> | string | undefined>(undefined);
   public readonly loading = model<boolean>(false);
 
   /**
@@ -159,15 +145,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public readonly tableActionsBack = input<TableRowAction<T>[]>([]);
 
   public readonly draggableRows = computed(() => {
-    return (
-      this.tableActionsBack()?.some((a) => !!a?.draggable) ||
-      this.tableActionsFront()?.some((a) => !!a?.draggable)
-    );
+    return this.tableActionsBack()?.some(a => !!a?.draggable) || this.tableActionsFront()?.some(a => !!a?.draggable);
   });
 
-  public readonly selectableRows = input<SelectableRows<T> | undefined>(
-    undefined,
-  );
+  public readonly selectableRows = input<SelectableRows<T> | undefined>(undefined);
 
   public readonly selection = signal<SelectionModel<T> | undefined>(undefined);
 
@@ -186,7 +167,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public readonly disabled = model<boolean>(false);
 
   @Input()
-  public set sort(value: Lab900Sort[] | null) {
+  public set sort(value: Lab900Sort[] | undefined) {
     this.tableService.updateSorting(value);
   }
 
@@ -200,10 +181,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
    */
   public readonly maxColumnWidth = input<string | undefined>(undefined);
 
-  public readonly onRowClick =
-    input<(value: T, index: number, event: Event) => void | undefined>(
-      undefined,
-    );
+  public readonly onRowClick = input<((value: T, index: number, event: Event) => void) | undefined>(undefined);
 
   public readonly preFooterTitle = input<string | undefined>(undefined);
   public readonly stickyHeader = input<boolean>(false);
@@ -224,56 +202,43 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public readonly sortChange = output<Lab900Sort[]>();
 
   // content children
-  protected readonly emptyTableTemplate = contentChild(
-    Lab900TableEmptyDirective,
-    {
-      read: TemplateRef,
-    },
-  );
-  protected readonly disabledTableTemplate = contentChild(
-    Lab900TableDisabledDirective,
-    {
-      read: TemplateRef,
-    },
-  );
-  protected readonly tableHeaderContent = contentChild(
-    Lab900TableHeaderContentDirective,
-    {
-      read: TemplateRef,
-    },
-  );
-  protected readonly tableTopContent = contentChild(
-    Lab900TableTopContentDirective,
-    {
-      read: TemplateRef,
-    },
-  );
+  protected readonly emptyTableTemplate = contentChild(Lab900TableEmptyDirective, {
+    read: TemplateRef,
+  });
+  protected readonly disabledTableTemplate = contentChild(Lab900TableDisabledDirective, {
+    read: TemplateRef,
+  });
+  protected readonly tableHeaderContent = contentChild(Lab900TableHeaderContentDirective, {
+    read: TemplateRef,
+  });
+  protected readonly tableTopContent = contentChild(Lab900TableTopContentDirective, {
+    read: TemplateRef,
+  });
 
   public readonly visibleColumns = this.tableService.visibleColumns;
   public readonly displayedColumns = computed(() => this.getDisplayedColumns());
   public readonly tabId = this.tableService.tabId;
   public readonly tabs = this.tableService.tabs;
-  public readonly showCellFooters = computed(() =>
-    this.visibleColumns().some((c) => !!c?.footer),
-  );
+  public readonly showCellFooters = computed(() => this.visibleColumns().some(c => !!c?.footer));
 
   public readonly data = model<T[] | null | undefined>(undefined);
   public readonly publicData = computed(() => {
-    const options = this.selectableRows();
+    const hideSelectableRow = this.selectableRows()?.hideSelectableRow;
     const data = this.data();
-    return options?.hideSelectableRow
-      ? data?.map((v) => ({
-          ...v,
-          _hideSelectableRow: options.hideSelectableRow(v),
-        }))
-      : data;
+    if (hideSelectableRow) {
+      data?.map(v => ({
+        ...v,
+        _hideSelectableRow: hideSelectableRow(v),
+      }));
+    }
+    return data;
   });
 
   public constructor() {
     effect(() => {
       const table = untracked(this.table);
       if (table) {
-        table.removeFooterRowDef(null);
+        table.removeFooterRowDef(null as unknown as any);
         if (this.data()?.length && this.showCellFooters()) {
           table.renderRows();
         }
@@ -282,44 +247,49 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
     effect(
       () => {
-        if (this.selectableRows()?.enabled && !untracked(this.selection)) {
+        const selectableRows = this.selectableRows();
+        if (selectableRows?.enabled && !untracked(this.selection)) {
           this.selection.set(
             new SelectionModel(
-              !this.selectableRows().singleSelect,
-              this.selectableRows().selectedItems,
+              !selectableRows.singleSelect,
+              selectableRows.selectedItems,
               true,
-              this.selectableRows().compareFn,
-            ),
+              selectableRows.compareFn
+            )
           );
         }
       },
-      { allowSignalWrites: true },
+      { allowSignalWrites: true }
     );
   }
 
   public handleSelectAll(checked: boolean): void {
-    this.selection()?.clear();
-    const data = this.data();
-    if (checked) {
-      if (data?.length) {
-        this.selection()?.select(
-          ...data.filter((row) => !(row as any)._hideSelectableRow),
-        );
-        this.selectionChanged.emit(this.selection());
+    const selection = this.selection();
+    if (selection) {
+      selection.clear();
+      const data = this.data();
+      if (checked) {
+        if (data?.length) {
+          selection.select(...data.filter(row => !(row as any)?._hideSelectableRow));
+          this.selectionChanged.emit(selection);
+        }
+      } else {
+        this.selectionChanged.emit(selection);
       }
-    } else {
-      this.selectionChanged.emit(this.selection());
     }
   }
 
   public handleSelectRow(row: T): void {
-    this.selection()?.toggle(row);
-    this.selectionChanged.emit(this.selection());
-    this.rowSelectToggle.emit(row);
+    const selection = this.selection();
+    if (selection) {
+      selection.toggle(row);
+      this.selectionChanged.emit(selection);
+      this.rowSelectToggle.emit(row);
+    }
   }
 
   public isRowSelected(row: T): boolean {
-    return this.selection()?.isSelected(row);
+    return !!this.selection()?.isSelected(row);
   }
 
   public getRowClasses(row: T, index: number): string {
@@ -334,9 +304,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     }
     const rowClass = this.rowClass();
     if (rowClass) {
-      classes.push(
-        (typeof rowClass === 'function' ? rowClass(row) : rowClass) ?? '',
-      );
+      classes.push((typeof rowClass === 'function' ? rowClass(row) : rowClass) ?? '');
     }
     return classes.join(' ') || '';
   }
@@ -347,16 +315,15 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   public handleRowClick(event: Event, row: T, index: number): void {
-    if (typeof this.onRowClick() === 'function') {
-      this.onRowClick()(row, index, event);
+    const rowClick = this.onRowClick();
+    if (typeof rowClick === 'function') {
+      rowClick(row, index, event);
     }
   }
 
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort() && cell.sortable) {
-      this.tableService.updateColumnSorting(cell, this.multiSort(), (sort) =>
-        this.sortChange.emit(sort),
-      );
+      this.tableService.updateColumnSorting(cell, this.multiSort(), sort => this.sortChange.emit(sort ?? []));
     }
   }
 
@@ -371,7 +338,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   private getDisplayedColumns(): string[] {
-    const displayColumns = this.visibleColumns()?.map((c) => c.key);
+    const displayColumns = this.visibleColumns()?.map(c => c.key);
     if (this.tableActionsFront().length) {
       displayColumns.unshift('actions-front');
     }

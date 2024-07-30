@@ -37,18 +37,14 @@ export class AppComponent {
   protected readonly sideNavMode = toSignal(
     inject(BreakpointObserver)
       .observe('(max-width: 959px)')
-      .pipe(map(({ matches }) => (matches ? 'over' : 'side'))),
+      .pipe(map(({ matches }) => (matches ? 'over' : 'side')))
   );
-  protected readonly sideNavOpened = computed(
-    () => this.sideNavMode() === 'side',
-  );
+  protected readonly sideNavOpened = computed(() => this.sideNavMode() === 'side');
 
   public constructor() {
     inject(MatIconRegistry).addSvgIcon(
       'github',
-      inject(DomSanitizer).bypassSecurityTrustResourceUrl(
-        'assets/images/github-logo.svg',
-      ),
+      inject(DomSanitizer).bypassSecurityTrustResourceUrl('assets/images/github-logo.svg')
     );
   }
 }

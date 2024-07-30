@@ -1,22 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  ViewEncapsulation,
-} from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  Observable,
-  ReplaySubject,
-} from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AsyncPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { readPropValue } from '../../../utils/utils';
-import { map, shareReplay } from 'rxjs/operators';
 import { PageHeaderNavItem } from '../../models/page-header-nav.model';
 
 @Component({
@@ -26,52 +13,14 @@ import { PageHeaderNavItem } from '../../models/page-header-nav.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [
-    MatIconModule,
-    MatTabsModule,
-    RouterLinkActive,
-    TranslateModule,
-    RouterLink,
-    AsyncPipe,
-  ],
+  imports: [MatIconModule, MatTabsModule, RouterLinkActive, TranslateModule, RouterLink],
 })
 export class PageHeaderNavItemComponent {
-  private readonly _item$ = new ReplaySubject<PageHeaderNavItem>();
-  public readonly item$: Observable<PageHeaderNavItem> = this._item$
-    .asObservable()
-    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
+  public readonly item = input.required<PageHeaderNavItem>();
+  public readonly data = input<any>(undefined);
 
-  @Input({ required: true })
-  public set item(item: PageHeaderNavItem) {
-    this._item$.next(item);
-  }
-
-  private readonly _data$ = new BehaviorSubject<any>(undefined);
-  public readonly data$ = this._data$
-    .asObservable()
-    .pipe(shareReplay({ bufferSize: 1, refCount: true }));
-
-  @Input()
-  public set data(data: any) {
-    this._data$.next(data);
-  }
-
-  public readonly label$: Observable<string>;
-  public readonly route$: Observable<string | string[]>;
-  public readonly suffixIcon$: Observable<string>;
-  public readonly prefixIcon$: Observable<string>;
-
-  public constructor() {
-    const stream = combineLatest([this.item$, this.data$]).pipe(
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
-    this.label$ = stream.pipe(map(([a, d]) => readPropValue(a.label, d)));
-    this.route$ = stream.pipe(map(([a, d]) => readPropValue(a.route, d) ?? []));
-    this.suffixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.suffixIcon, d)),
-    );
-    this.prefixIcon$ = stream.pipe(
-      map(([a, d]) => readPropValue(a.prefixIcon, d)),
-    );
-  }
+  protected readonly label = computed(() => readPropValue(this.item().label, this.data()));
+  protected readonly route = computed(() => readPropValue(this.item().route, this.data()) ?? []);
+  protected readonly suffixIcon = computed(() => readPropValue(this.item().suffixIcon, this.data()));
+  protected readonly prefixIcon = computed(() => readPropValue(this.item().prefixIcon, this.data()));
 }

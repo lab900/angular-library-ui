@@ -12,25 +12,12 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [MatButtonModule, TranslateModule, Lab900MergerComponent],
   template: `
     <div class="merger-example-header">
-      <button
-        mat-flat-button
-        color="primary"
-        (click)="mergerComponent?.reset()"
-      >
+      <button mat-flat-button color="primary" (click)="mergerComponent?.reset()">
         {{ 'reset' | translate }}
       </button>
     </div>
-    <lab900-merger
-      [leftObject]="exampleData[0]"
-      [rightObject]="exampleData[1]"
-      [schema]="exampleSchema"
-    />
-    <button
-      style="margin-right: 1rem"
-      mat-raised-button
-      color="primary"
-      (click)="showResult()"
-    >
+    <lab900-merger [leftObject]="exampleData[0]" [rightObject]="exampleData[1]" [schema]="exampleSchema" />
+    <button style="margin-right: 1rem" mat-raised-button color="primary" (click)="showResult()">
       {{ 'log_result' | translate }}
     </button>
   `,
@@ -52,6 +39,6 @@ export class MergerExampleComponent {
   public mergerComponent?: Lab900MergerComponent<MergerDataExample>;
 
   public showResult(): void {
-    console.log(this.mergerComponent.result);
+    console.log(this.mergerComponent?.result);
   }
 }

@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { Lab900TableService } from '../../services/table.service';
 import { TableCell } from '../../models/table-cell.model';
 
@@ -34,12 +27,7 @@ export class ColumnHeaderSortingComponent {
   public readonly columnConfig = input.required<TableCell>();
   public readonly sortDirection = computed(() => {
     const sort = this.tableService.sort();
-    return (
-      sort?.find(
-        (s) =>
-          s.id === (this.columnConfig().sortKey ?? this.columnConfig().key),
-      )?.direction ?? ''
-    );
+    return sort?.find(s => s.id === (this.columnConfig().sortKey ?? this.columnConfig().key))?.direction ?? '';
   });
   public readonly svgIcon = computed(() => {
     const dir = this.sortDirection();

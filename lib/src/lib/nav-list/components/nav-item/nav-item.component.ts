@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  inject,
-  input,
-  model,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, model, ViewEncapsulation } from '@angular/core';
 import { IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
 import { filter } from 'rxjs/operators';
@@ -30,34 +22,25 @@ export class NavItemComponent {
   public readonly indentLevels = input<boolean>(true);
   public readonly showLevelArrows = input<boolean>(false);
   public readonly depth = input<number>(0);
-  public readonly allowOverlayMenuUntil = input<string | string[]>(
-    Breakpoints.XSmall,
-  );
-  public readonly routeMatchOptions = input<
-    IsActiveMatchOptions | { exact: boolean } | undefined
-  >(undefined);
+  public readonly allowOverlayMenuUntil = input<string | string[]>(Breakpoints.XSmall);
+  public readonly routeMatchOptions = input<IsActiveMatchOptions | { exact: boolean } | undefined>(undefined);
 
   public readonly disabled = model<boolean>(false);
   public readonly expanded = model<boolean>(false);
 
   public constructor() {
     effect(() => {
-      if (!(this.item().route || this.item().href || this.item().children)) {
+      const item = this.item();
+      if (!(item.route || item.href || item.children)) {
         this.disabled.set(true);
       } else {
-        this.router.events
-          .pipe(filter((e) => e instanceof NavigationEnd))
-          .subscribe((event: NavigationEnd) => {
-            this.item().navigationFinished?.(true);
-            const url = event.urlAfterRedirects;
-            if (url && this.item()?.children?.length) {
-              this.expanded.set(
-                this.item().children.some(
-                  (item: NavItem) => url.indexOf(`/${item.route}`) === 0,
-                ),
-              );
-            }
-          });
+        this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(event => {
+          item.navigationFinished?.(true);
+          const url = event.urlAfterRedirects;
+          if (url && item?.children?.length) {
+            this.expanded.set(item.children.some((item: NavItem) => url.indexOf(`/${item.route}`) === 0));
+          }
+        });
       }
     });
   }

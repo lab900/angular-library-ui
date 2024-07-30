@@ -1,11 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { Alert } from '../../models/alert';
-import { NgClass } from '@angular/common';
+import { LowerCasePipe } from '@angular/common';
 
 @Component({
   selector: 'lab900-alert',
@@ -13,25 +8,11 @@ import { NgClass } from '@angular/common';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [NgClass],
-  template: `<div
-    [ngClass]="{
-      'alert-info': type === Info,
-      'alert-warn': type === Warn,
-      'alert-error': type === Error,
-      'alert-success': type === Success
-    }"
-    class="alert"
-  >
+  imports: [LowerCasePipe],
+  template: `<div class="alert alert-{{ type() | lowercase }}">
     <ng-content></ng-content>
   </div> `,
 })
 export class AlertComponent {
-  @Input()
-  public type: Alert = Alert.Info;
-
-  public readonly Info = Alert.Info;
-  public readonly Warn = Alert.Warn;
-  public readonly Error = Alert.Error;
-  public readonly Success = Alert.Success;
+  public readonly type = input<Alert>(Alert.Info);
 }

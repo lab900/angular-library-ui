@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ViewEncapsulation } from '@angular/core';
 import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { CellWithAnchorRendererOptions } from './cell-with-anchor-renderer.options';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -21,18 +16,16 @@ import { TranslateModule } from '@ngx-translate/core';
       class="lab900-cell-value lab900-cell-value--with-anchor"
       [matTooltip]="tooltip()"
       [matTooltipPosition]="tooltipPosition()"
-      (click)="$event.stopImmediatePropagation()"
-    >
+      (click)="$event.stopImmediatePropagation()">
       <a [target]="renderOptions()?.target ?? '_self'" [href]="href">
         {{ cellValue() | translate }}
       </a>
     </div>
   }`,
 })
-export class CellWithAnchorRendererComponent<
-  T = any,
-> extends CellRendererAbstract<CellWithAnchorRendererOptions<T>, T> {
-  public readonly anchorHref = computed(() =>
-    this.renderOptions()?.url(this.data()),
-  );
+export class CellWithAnchorRendererComponent<T = any> extends CellRendererAbstract<
+  CellWithAnchorRendererOptions<T>,
+  T
+> {
+  public readonly anchorHref = computed(() => this.renderOptions()?.url(this.data()));
 }

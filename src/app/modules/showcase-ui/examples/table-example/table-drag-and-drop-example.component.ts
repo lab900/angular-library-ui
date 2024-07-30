@@ -1,10 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  Lab900Sort,
-  Lab900TableComponent,
-  TableCell,
-  TableRowAction,
-} from '@lab900/ui';
+import { Lab900Sort, Lab900TableComponent, TableCell, TableRowAction } from '@lab900/ui';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -26,15 +21,14 @@ import { SelectionModel } from '@angular/cdk/collections';
       showSelectAllCheckbox: true,
       hideSelectableRow: hideSelectableCheckboxForSarah,
       selectedItems: [mockData[0]],
-      compareFn: compareFn
+      compareFn: compareFn,
     }"
     (selectionChanged)="selectionChanged($event)"
-    [trackByTableFn]="trackByTableFn"
-  />`,
+    [trackByTableFn]="trackByTableFn" />`,
 })
 export class TableDragAndDropExampleComponent {
   @ViewChild(Lab900TableComponent)
-  private table: Lab900TableComponent;
+  private table!: Lab900TableComponent;
 
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
 
@@ -91,8 +85,7 @@ export class TableDragAndDropExampleComponent {
   ];
 
   public trackByTableFn = (index: number, item: any): any => item.id;
-  public compareFn = (a: any, b: any): boolean =>
-    a.id && b.id && a?.id === b?.id;
+  public compareFn = (a: any, b: any): boolean => a.id && b.id && a?.id === b?.id;
 
   public dropTable(event: CdkDragDrop<any[]>): void {
     /**

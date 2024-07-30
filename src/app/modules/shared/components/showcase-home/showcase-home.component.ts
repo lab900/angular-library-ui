@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lab900-showcase-home',
@@ -20,5 +21,10 @@ export default class ShowcaseHomeComponent {
   protected readonly data = toSignal<{
     config: ShowcaseConfigModel;
     nav: NavItemGroup[];
-  }>(this.activatedRoute.data);
+  }>(
+    this.activatedRoute.data as Observable<{
+      config: ShowcaseConfigModel;
+      nav: NavItemGroup[];
+    }>
+  );
 }

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Type } from '@angular/core';
-import { CustomComponent } from '../abstracts/custom-component.abstract';
+import { MergerItemComponent } from '../abstracts/custom-component.abstract';
 
 export interface MergeConfigBase {
   attribute?: string;
@@ -12,7 +12,7 @@ export interface MergeConfig<T> extends MergeConfigBase {
   rowClass?: string;
   nextLine?: boolean;
   active?: boolean;
-  component?: Type<CustomComponent<T>>;
+  component?: Type<MergerItemComponent<T>>;
   nestedObject?: MergeConfigBase[];
   combine?: boolean;
   disabled?: boolean;

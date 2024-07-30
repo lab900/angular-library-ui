@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { MarkdownModule } from 'ngx-markdown';
@@ -22,12 +16,8 @@ export default class MarkdownPageComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   public readonly filePath = input<string | undefined>(undefined);
   protected routeFilePath = toSignal(
-    this.activatedRoute.data.pipe(
-      map((data: { filePath?: string }) => data?.filePath),
-    ),
+    this.activatedRoute.data.pipe(map((data: { filePath?: string }) => data?.filePath))
   );
 
-  protected readonly path = computed(
-    () => this.routeFilePath() ?? this.filePath(),
-  );
+  protected readonly path = computed(() => this.routeFilePath() ?? this.filePath());
 }

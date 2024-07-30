@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellInputEditorOptions } from './cell-input-editor.options';
 import { TranslateModule } from '@ngx-translate/core';
@@ -23,8 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
       (keydown.enter)="closeAndSave(input.value)"
       [value]="cellValue()"
       [max]="editOptions()?.maxLength"
-      [placeholder]="placeholder() | translate"
-    />
+      [placeholder]="placeholder() | translate" />
   `,
 })
 export class CellInputEditorComponent extends CellEditorAbstract<CellInputEditorOptions> {

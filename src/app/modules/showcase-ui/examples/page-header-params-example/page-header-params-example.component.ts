@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  ActionButton,
-  Lab900PageHeaderComponent,
-  PageHeaderNavItem,
-} from '@lab900/ui';
+import { ActionButton, Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-page-header-params-example',
@@ -11,8 +7,7 @@ import {
     [pageTitle]="pageTitle"
     [navItems]="navItems"
     [actions]="actions"
-    [showActionsFixedOnMobile]="false"
-  />`,
+    [showActionsFixedOnMobile]="false" />`,
   standalone: true,
   imports: [Lab900PageHeaderComponent],
 })

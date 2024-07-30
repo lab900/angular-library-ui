@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { switchMap } from 'rxjs';
 import { SelectableRows } from '../table/table.component';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import {
   MatCell,
   MatCellDef,
@@ -45,15 +45,12 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
     MatHeaderCellDef,
   ],
 })
-export class TableCellSelectComponent<T extends object = object>
-  implements OnInit, OnDestroy
-{
+export class TableCellSelectComponent<T extends object = object> implements OnInit, OnDestroy {
   private readonly table = inject(MatTable, { optional: true, skipSelf: true });
 
   public readonly rowCheckboxes = viewChildren<MatCheckbox>('rowCheckbox');
 
-  public readonly selectAllCheckbox =
-    viewChild<MatCheckbox>('selectAllCheckbox');
+  public readonly selectAllCheckbox = viewChild<MatCheckbox>('selectAllCheckbox');
 
   private readonly columnDef = viewChild(MatColumnDef);
 
@@ -61,45 +58,38 @@ export class TableCellSelectComponent<T extends object = object>
   public readonly selection = input.required<SelectionModel<T>>();
   public readonly allSelected = toSignal(
     toObservable(this.selection).pipe(
-      filter((select) => !!select),
-      switchMap((select) => select.changed),
-      map(
-        (change) =>
-          change?.source?.selected?.length === this.rowCheckboxes()?.length,
-      ),
-    ),
+      filter(select => !!select),
+      switchMap(select => select.changed),
+      map(change => change?.source?.selected?.length === this.rowCheckboxes()?.length)
+    )
   );
 
   public readonly options = input.required<SelectableRows<T>>();
-  public readonly color = computed(
-    () => this.options()?.checkBoxColor ?? 'primary',
-  );
-  public readonly sticky = computed(() =>
-    this.options()?.sticky ? this.options().position : undefined,
-  );
+  public readonly color = computed(() => this.options()?.checkBoxColor ?? 'primary');
+  public readonly sticky = computed(() => (this.options()?.sticky ? this.options().position : undefined));
 
-  public readonly showSelectAll = computed(
-    () => this.options()?.showSelectAllCheckbox ?? false,
-  );
+  public readonly showSelectAll = computed(() => this.options()?.showSelectAllCheckbox ?? false);
   public readonly disabled = computed(() => this.options()?.disabled ?? false);
 
   public readonly selectRow = output<T>();
   public readonly selectAll = output<boolean>();
 
   public ngOnInit(): void {
-    if (this.table) {
-      this.table.addColumnDef(this.columnDef());
+    const columnDef = this.columnDef();
+    if (this.table && columnDef) {
+      this.table.addColumnDef(columnDef);
     }
   }
 
   public ngOnDestroy(): void {
-    if (this.table) {
-      this.table.removeColumnDef(this.columnDef());
+    const columnDef = this.columnDef();
+    if (this.table && columnDef) {
+      this.table.removeColumnDef(columnDef);
     }
   }
 
-  public handleSelectAllCheckbox({ checked }): void {
-    this.rowCheckboxes().forEach((checkBox) => (checkBox.checked = checked));
+  public handleSelectAllCheckbox({ checked }: MatCheckboxChange): void {
+    this.rowCheckboxes().forEach(checkBox => (checkBox.checked = checked));
     this.selectAll.emit(checked);
   }
 

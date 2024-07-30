@@ -15,39 +15,31 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   public readonly tabs = this._tabs.asReadonly();
 
   private readonly _tabId = signal<TabId | null>(null);
-  public readonly tabId = computed(
-    () => this._tabId() ?? this._tabs()?.[0]?.id,
-  );
+  public readonly tabId = computed(() => this._tabId() ?? this._tabs()?.[0]?.id);
 
-  public readonly sort = signal<Lab900Sort[] | null>(null);
+  public readonly sort = signal<Lab900Sort[] | undefined>(undefined);
 
   public readonly columns = computed(() => {
     let columns: TableCell<T>[] = this._columns();
     const tabs = this._tabs();
     const tabId = this.tabId();
     if (tabs?.length) {
-      const activeTab = tabId
-        ? tabs.find((tab) => tab.id === tabId)
-        : tabs?.[0];
+      const activeTab = tabId ? tabs.find(tab => tab.id === tabId) : tabs?.[0];
       if (activeTab?.tableCells) {
         columns = activeTab?.tableCells;
       }
     }
-    return columns
-      .filter((c) => !!c.key)
-      .sort(Lab900TableService.reorderColumnsFn);
+    return columns.filter(c => !!c.key).sort(Lab900TableService.reorderColumnsFn);
   });
 
-  public readonly visibleColumns = computed(() =>
-    this.columns().filter((c) => !c.hide),
-  );
+  public readonly visibleColumns = computed(() => this.columns().filter(c => !c.hide));
 
   public static reorderColumnsFn(a: TableCell, b: TableCell): number {
     return (a.columnOrder ?? 10000) - (b.columnOrder ?? 10000);
   }
 
   public updateColumns(columns: TableCell<T>[] | null): void {
-    this._columns.set(columns);
+    this._columns.set(columns ?? []);
   }
 
   public updateTabId(tabId: TabId | null): void {
@@ -59,22 +51,22 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   }
 
   public updateTabs(tabs: Lab900TableTab<TabId, T>[] | null): void {
-    this._tabs.set(tabs);
+    this._tabs.set(tabs ?? []);
   }
 
-  public updateSorting(sort: Lab900Sort[] | null): void {
+  public updateSorting(sort: Lab900Sort[] | undefined): void {
     this.sort.set(sort);
   }
 
   public updateColumnSorting(
     column: TableCell<T>,
     multiSort: boolean,
-    callback?: (sort: Lab900Sort[] | null) => void,
+    callback?: (sort: Lab900Sort[] | undefined) => void
   ): void {
     const sortKey = column.sortKey ?? column.key;
-    this.sort.update((sort) => {
+    this.sort.update((sort = []) => {
       if (multiSort) {
-        const currentIndex = sort.findIndex((s) => s.id === sortKey);
+        const currentIndex = sort.findIndex(s => s.id === sortKey);
         if (currentIndex >= 0) {
           const { direction } = sort[currentIndex];
           if (direction === 'desc') {
@@ -87,7 +79,7 @@ export class Lab900TableService<T extends object = object, TabId = string> {
         }
         return sort;
       } else {
-        const inCurrent = sort.find((s) => s.id === sortKey);
+        const inCurrent = sort.find(s => s.id === sortKey);
         return [
           {
             id: sortKey,
@@ -100,14 +92,10 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   }
 
   public startInlineEditing(cellKey: string): void {
-    if (this.inlineEditingCellkey() !== cellKey) {
-      this.inlineEditingCellkey.set(cellKey);
-    }
+    this.inlineEditingCellkey.set(cellKey);
   }
 
   public closeInlineEditing(): void {
-    if (this.inlineEditingCellkey()) {
-      this.inlineEditingCellkey.set(undefined);
-    }
+    this.inlineEditingCellkey.set(undefined);
   }
 }

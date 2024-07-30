@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ElementRef,
-  input,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, input, signal, viewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,24 +33,15 @@ export interface ExampleFile {
 export class ExampleViewerComponent {
   public readonly extensions = input<string[]>(['HTML', 'TS', 'SCSS']);
   public readonly fileDir = input<string | undefined>(undefined);
-  public readonly exampleTitle = input<string | undefined>(undefined);
+  public readonly exampleTitle = input<string>('Example');
 
-  protected readonly exampleComponent =
-    viewChild<ElementRef>('exampleComponent');
+  protected readonly exampleComponent = viewChild<ElementRef>('exampleComponent');
   protected readonly exampleName = computed(() =>
-    this.exampleComponent()?.nativeElement?.children?.[0]?.localName.replace(
-      'lab900-',
-      '',
-    ),
+    this.exampleComponent()?.nativeElement?.children?.[0]?.localName.replace('lab900-', '')
   );
 
   protected readonly examplePath = computed(
-    () =>
-      'examples/' +
-      (this.fileDir() || this.exampleName()) +
-      '/' +
-      this.exampleName() +
-      '.component.',
+    () => 'examples/' + (this.fileDir() || this.exampleName()) + '/' + this.exampleName() + '.component.'
   );
 
   protected readonly showSource = signal(false);

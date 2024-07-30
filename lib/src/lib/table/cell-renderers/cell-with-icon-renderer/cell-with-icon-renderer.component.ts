@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ViewEncapsulation } from '@angular/core';
 import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { MatIconModule } from '@angular/material/icon';
 import { CellWithIconRendererOptions } from './cell-with-icon-renderer.options';
@@ -26,10 +21,6 @@ import { TranslateModule } from '@ngx-translate/core';
     `,
   ],
 })
-export class CellWithIconRendererComponent<
-  T = any,
-> extends CellRendererAbstract<CellWithIconRendererOptions<T>, T> {
-  public readonly icon = computed(() =>
-    this.renderOptions()?.icon(this.data()),
-  );
+export class CellWithIconRendererComponent<T = any> extends CellRendererAbstract<CellWithIconRendererOptions<T>, T> {
+  public readonly icon = computed(() => this.renderOptions()?.icon(this.data()));
 }

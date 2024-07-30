@@ -20,16 +20,10 @@ import { Lab900ActionButtonComponent } from '../../../button/components/action-b
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    Lab900TableFilterMenuComponent,
-    NgTemplateOutlet,
-    Lab900ActionButtonComponent,
-  ],
+  imports: [Lab900TableFilterMenuComponent, NgTemplateOutlet, Lab900ActionButtonComponent],
 })
 export class Lab900TableHeaderComponent {
-  public readonly tableHeaderContent = input<TemplateRef<any> | undefined>(
-    undefined,
-  );
+  public readonly tableHeaderContent = input<TemplateRef<any> | undefined>(undefined);
   public readonly tableHeaderActions = input<ActionButton[]>([]);
   public readonly filterIcon = input<string>('filter_alt');
   public readonly toggleAndMoveColumns = input<boolean>(false);
@@ -37,14 +31,9 @@ export class Lab900TableHeaderComponent {
 
   public readonly tableCellsFiltered = output<TableCell[]>();
 
-  public readonly showFilterMenu = computed(
-    () => this.toggleColumns() || this.toggleAndMoveColumns(),
-  );
+  public readonly showFilterMenu = computed(() => this.toggleColumns() || this.toggleAndMoveColumns());
 
   public readonly showHeader = computed(
-    () =>
-      this.showFilterMenu() ||
-      this.tableHeaderActions().length > 0 ||
-      !!this.tableHeaderContent(),
+    () => this.showFilterMenu() || this.tableHeaderActions().length > 0 || !!this.tableHeaderContent()
   );
 }

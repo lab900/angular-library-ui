@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Lab900TableComponent, Lab900TableTab, TableCell } from '@lab900/ui';
 
 const mockDataA: any[] = [
@@ -68,19 +68,15 @@ const tableCellsAlt2: TableCell[] = [
   selector: 'lab900-table-tabs-example',
   standalone: true,
   imports: [Lab900TableComponent],
-  template: ` <lab900-table
+  template: `<lab900-table
     [loading]="true"
     [tableCells]="tableCells"
     [data]="activeData"
     [tableTabs]="tabs"
     (activeTabIdChange)="switchData($event)"
-    [trackByTableFn]="trackByTableFn"
-  />`,
+    [trackByTableFn]="trackByTableFn" />`,
 })
 export class TableTabsExampleComponent {
-  @ViewChild(Lab900TableComponent)
-  private table: Lab900TableComponent;
-
   public activeData: any[] = mockDataA;
 
   public tabs: Lab900TableTab<'a' | 'b' | 'c'>[] = [
@@ -89,7 +85,7 @@ export class TableTabsExampleComponent {
     { id: 'c', label: 'tab C', tableCells: tableCellsAlt2 },
   ];
 
-  public tableCells: TableCell[] = [
+  public tableCells: TableCell<any>[] = [
     {
       key: 'id',
       label: 'ID',
@@ -99,7 +95,7 @@ export class TableTabsExampleComponent {
     {
       key: 'name',
       label: 'Name',
-      cellClass: (data) => 'lcs-approval-status-cell ' + data.name,
+      cellClass: data => 'lcs-approval-status-cell ' + data?.name,
     },
   ];
 

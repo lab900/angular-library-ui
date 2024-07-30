@@ -1,22 +1,18 @@
 @if ((getHidden() | async) !== true) {
   @if (action?.subActions?.length) {
-    <mat-button-toggle-group
-      [value]="getSelected()"
-      [disabled]="getDisabled() | async"
-    >
+    <mat-button-toggle-group [value]="getSelected()" [disabled]="getDisabled() | async">
       @for (actionButton of action.subActions; track actionButton.label) {
         @if ((getSubActionHidden(actionButton) | async) !== true) {
           <mat-button-toggle
             lab900PreventDoubleClick
             (throttledClick)="actionButton.action?.(data)"
             [value]="actionButton"
-            [disabled]="getSubActionDisabled(actionButton) | async"
-          >
+            [disabled]="getSubActionDisabled(actionButton) | async">
             @if (actionButton.prefixIcon) {
               <mat-icon>{{ actionButton.prefixIcon }}</mat-icon>
             }
             @if (actionButton.label) {
-              {{ getLabel(actionButton) | async | translate }}
+              {{ (getLabel(actionButton) | async) ?? '' | translate }}
             }
             @if (actionButton.suffixIcon) {
               <mat-icon>{{ actionButton.suffixIcon }}</mat-icon>

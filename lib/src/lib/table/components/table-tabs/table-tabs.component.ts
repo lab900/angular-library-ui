@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  model,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, ViewEncapsulation } from '@angular/core';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 
 import { TranslateModule } from '@ngx-translate/core';

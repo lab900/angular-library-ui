@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  computed,
-  Directive,
-  ElementRef,
-  inject,
-  input,
-  NgZone,
-  OnDestroy,
-} from '@angular/core';
+import { AfterViewInit, computed, Directive, ElementRef, inject, input, NgZone, OnDestroy } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { Lab900TableService } from '../services/table.service';
 import { TableCell } from '../models/table-cell.model';
@@ -17,9 +8,7 @@ import { fromEvent, Subject, takeUntil } from 'rxjs';
   selector: 'td[lab900TableCellEvents]',
   standalone: true,
 })
-export class TableCellEventsDirective<T = any>
-  implements AfterViewInit, OnDestroy
-{
+export class TableCellEventsDirective<T = any> implements AfterViewInit, OnDestroy {
   private readonly matTable = inject(MatTable);
   private readonly tableService = inject(Lab900TableService);
   private readonly elm: ElementRef<HTMLTableCellElement> = inject(ElementRef);
@@ -51,9 +40,7 @@ export class TableCellEventsDirective<T = any>
     this.siblingCells = this.getAllSiblingCells();
     this.cellIdx = this.siblingCells.indexOf(this.elm.nativeElement);
     this.siblingRows = this.getAllSiblingRows();
-    this.rowIdx = this.siblingRows.indexOf(
-      this.elm.nativeElement.parentElement as HTMLTableRowElement,
-    );
+    this.rowIdx = this.siblingRows.indexOf(this.elm.nativeElement.parentElement as HTMLTableRowElement);
 
     /**
      * Listen to keydown, focus and click events on the cell
@@ -63,7 +50,7 @@ export class TableCellEventsDirective<T = any>
     this.ngZone.runOutsideAngular(() => {
       fromEvent(this.elm.nativeElement, 'keydown')
         .pipe(takeUntil(this.destroy$))
-        .subscribe((event) => {
+        .subscribe(event => {
           this.onKeydown(event as KeyboardEvent);
         });
 
@@ -75,7 +62,7 @@ export class TableCellEventsDirective<T = any>
 
       fromEvent(this.elm.nativeElement, 'click')
         .pipe(takeUntil(this.destroy$))
-        .subscribe((event) => {
+        .subscribe(event => {
           this.onClick(event as MouseEvent);
         });
     });
@@ -91,18 +78,14 @@ export class TableCellEventsDirective<T = any>
   }
 
   private onClick(event: MouseEvent): void {
-    if (
-      !event.shiftKey &&
-      (event.target as HTMLElement)?.classList?.contains('disable-td-event')
-    ) {
+    if (!event.shiftKey && (event.target as HTMLElement)?.classList?.contains('disable-td-event')) {
       return;
     }
-    if (this.cell().click) {
+    const clickFn = this.cell().click;
+    if (clickFn) {
       event.stopImmediatePropagation();
       event.preventDefault();
-      this.ngZone.run(() =>
-        this.cell().click(this.cellData(), this.cell(), event),
-      );
+      this.ngZone.run(() => clickFn(this.cellData(), this.cell(), event));
     } else if (this.editable()) {
       event.stopImmediatePropagation();
       event.preventDefault();
@@ -122,17 +105,12 @@ export class TableCellEventsDirective<T = any>
     switch (event.key) {
       case 'ArrowUp':
       case 'ArrowDown': {
-        if (
-          !event.shiftKey &&
-          (event.target as HTMLElement)?.classList?.contains('disable-td-event')
-        ) {
+        if (!event.shiftKey && (event.target as HTMLElement)?.classList?.contains('disable-td-event')) {
           return;
         }
         event.preventDefault();
         event.stopImmediatePropagation();
-        this.getNextEditableSiblingOnAnotherRow(
-          event.key === 'ArrowDown' ? 'after' : 'before',
-        );
+        this.getNextEditableSiblingOnAnotherRow(event.key === 'ArrowDown' ? 'after' : 'before');
         break;
       }
       case 'Tab':
@@ -140,10 +118,7 @@ export class TableCellEventsDirective<T = any>
       case 'ArrowLeft': {
         event.preventDefault();
         event.stopImmediatePropagation();
-        const position =
-          event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey)
-            ? 'before'
-            : 'after';
+        const position = event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey) ? 'before' : 'after';
         this.getNextEditableSibling(position);
         break;
       }
@@ -153,18 +128,14 @@ export class TableCellEventsDirective<T = any>
   }
 
   private editMode(): void {
-    this.tableService.startInlineEditing(
-      this.cell().key + '_' + this.rowIndex(),
-    );
+    this.tableService.startInlineEditing(this.cell().key + '_' + this.rowIndex());
   }
 
   private getNextEditableSibling(position: 'before' | 'after'): void {
-    const siblings = [...this.siblingCells];
+    const siblings = this.siblingCells ? [...this.siblingCells] : [];
     const cells =
-      position === 'before'
-        ? siblings.slice(0, this.cellIdx).reverse()
-        : siblings.slice(this.cellIdx + 1);
-    const matching = cells.filter((cell) => this.matchingCell(cell, false));
+      position === 'before' ? siblings.slice(0, this.cellIdx).reverse() : siblings.slice((this.cellIdx ?? 0) + 1);
+    const matching = cells.filter(cell => this.matchingCell(cell, false));
     if (matching?.[0]) {
       matching[0].focus();
     } else {
@@ -172,20 +143,15 @@ export class TableCellEventsDirective<T = any>
     }
   }
 
-  private getNextEditableSiblingOnAnotherRow(
-    position: 'before' | 'after',
-    sameColumn = true,
-  ): void {
-    const allRows = [...this.siblingRows];
+  private getNextEditableSiblingOnAnotherRow(position: 'before' | 'after', sameColumn = true): void {
+    const allRows = this.siblingRows ? [...this.siblingRows] : [];
     const rows =
-      position === 'before'
-        ? allRows.slice(0, this.rowIdx).reverse()
-        : allRows.slice(this.rowIdx + 1);
-    const matching = rows.map((row) => {
+      position === 'before' ? allRows.slice(0, this.rowIdx).reverse() : allRows.slice((this.rowIdx ?? 0) + 1);
+    const matching = rows.map(row => {
       const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
-      return (
-        !sameColumn && position === 'before' ? childNodes.reverse() : childNodes
-      ).find((cell) => this.matchingCell(cell, sameColumn));
+      return (!sameColumn && position === 'before' ? childNodes.reverse() : childNodes).find(cell =>
+        this.matchingCell(cell, sameColumn)
+      );
     });
     if (matching?.[0]) {
       matching[0].focus();
@@ -194,27 +160,19 @@ export class TableCellEventsDirective<T = any>
 
   private getAllSiblingCells(): HTMLTableCellElement[] {
     const elm: HTMLTableCellElement = this.elm.nativeElement;
-    return [
-      ...Array.from(elm.parentElement.children),
-    ] as HTMLTableCellElement[];
+    const cells = elm.parentElement?.children;
+    return cells ? ([...Array.from(cells)] as HTMLTableCellElement[]) : [];
   }
 
   private getAllSiblingRows(): HTMLTableRowElement[] {
     const elm: HTMLTableCellElement = this.elm.nativeElement;
-    return [
-      ...Array.from(elm.parentElement.parentElement.children),
-    ] as HTMLTableRowElement[];
+    const rows = elm.parentElement?.parentElement?.children;
+    return rows ? ([...Array.from(rows)] as HTMLTableRowElement[]) : [];
   }
 
-  private matchingCell(
-    cell: HTMLTableCellElement,
-    sameColumnKey: boolean,
-  ): boolean {
+  private matchingCell(cell: HTMLTableCellElement, sameColumnKey: boolean): boolean {
     return (
-      (!sameColumnKey ||
-        cell.classList?.contains(
-          'cdk-column-' + this.cell().key.replace('.', '-'),
-        )) &&
+      (!sameColumnKey || cell.classList?.contains('cdk-column-' + this.cell().key.replace('.', '-'))) &&
       cell.classList?.contains('editable')
     );
   }

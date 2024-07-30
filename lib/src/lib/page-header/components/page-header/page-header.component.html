@@ -1,7 +1,4 @@
-<header
-  class="lab900-page-header"
-  [class.fixed-mobile-action]="showActionsFixedOnMobile"
->
+<header class="lab900-page-header" [class.fixed-mobile-action]="showActionsFixedOnMobile">
   @if (pageTitle || breadCrumbs?.length || (actions$ | async)?.length) {
     <div class="lab900-page-header__main">
       @if (pageTitle || breadCrumbs?.length) {
@@ -20,10 +17,7 @@
             @if (leftActions$ | async; as leftActions) {
               <div class="lab900-page-header__actions--left">
                 @if (leftActions?.length > 0) {
-                  <mat-divider
-                    vertical="true"
-                    class="lab900-page-header__divider"
-                  />
+                  <mat-divider vertical="true" class="lab900-page-header__divider" />
                 }
                 @for (action of leftActions; track action) {
                   <lab900-action-button [action]="action" [data]="data" />
@@ -46,8 +40,7 @@
       mat-tab-nav-bar
       [tabPanel]="tabPanel"
       [fitInkBarToContent]="navFitInkBarToContent"
-      [mat-stretch-tabs]="navStretch"
-    >
+      [mat-stretch-tabs]="navStretch">
       @for (item of navItems; track item) {
         <lab900-page-header-nav-item [item]="item" [data]="data" />
       }

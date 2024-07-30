@@ -1,39 +1,24 @@
-@if (item$ | async; as item) {
-  <a
-    mat-tab-link
-    routerLinkActive="active"
-    [routerLink]="route$ | async"
-    [queryParams]="item?.queryParams"
-    #rla="routerLinkActive"
-    [active]="rla.isActive"
-    class="lab900-page-header__nav__item"
-  >
-    @if (prefixIcon$ | async; as prefixIcon) {
-      @if (item.svgIcon) {
-        <mat-icon
-          class="lab900-page-header__nav__item__prefix-icon"
-          [svgIcon]="prefixIcon"
-        ></mat-icon>
-      }
-      @if (!item.svgIcon) {
-        <mat-icon class="lab900-page-header__nav__item__prefix-icon">{{
-          prefixIcon
-        }}</mat-icon>
-      }
+<a
+  mat-tab-link
+  routerLinkActive="active"
+  [routerLink]="route()"
+  [queryParams]="item().queryParams"
+  #rla="routerLinkActive"
+  [active]="rla.isActive"
+  class="lab900-page-header__nav__item">
+  @if (prefixIcon(); as prefixIcon) {
+    @if (item().svgIcon) {
+      <mat-icon class="lab900-page-header__nav__item__prefix-icon" [svgIcon]="prefixIcon"></mat-icon>
+    } @else {
+      <mat-icon class="lab900-page-header__nav__item__prefix-icon">{{ prefixIcon }}</mat-icon>
     }
-    {{ label$ | async | translate }}
-    @if (suffixIcon$ | async; as suffixIcon) {
-      @if (item.svgIcon) {
-        <mat-icon
-          class="lab900-page-header__nav__item__suffix-icon"
-          [svgIcon]="suffixIcon"
-        ></mat-icon>
-      }
-      @if (!item.svgIcon) {
-        <mat-icon class="lab900-page-header__nav__item__suffix-icon">{{
-          suffixIcon
-        }}</mat-icon>
-      }
+  }
+  {{ label() | translate }}
+  @if (suffixIcon(); as suffixIcon) {
+    @if (item().svgIcon) {
+      <mat-icon class="lab900-page-header__nav__item__suffix-icon" [svgIcon]="suffixIcon"></mat-icon>
+    } @else {
+      <mat-icon class="lab900-page-header__nav__item__suffix-icon">{{ suffixIcon }}</mat-icon>
     }
-  </a>
-}
+  }
+</a>

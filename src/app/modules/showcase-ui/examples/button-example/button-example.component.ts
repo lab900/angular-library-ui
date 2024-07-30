@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  Lab900ActionButtonComponent,
-  Lab900ButtonComponent,
-  ToggleActionButton,
-} from '@lab900/ui';
+import { Lab900ActionButtonComponent, Lab900ButtonComponent, ToggleActionButton } from '@lab900/ui';
 import { of } from 'rxjs';
 
 @Component({
@@ -19,8 +15,7 @@ import { of } from 'rxjs';
       type="raised"
       label="hello world"
       suffixIcon="remove_red_eye"
-      throttleTimeInMs="1000"
-    />
+      throttleTimeInMs="1000" />
     <p>Raised button disabled</p>
     <lab900-button
       disabled="true"
@@ -28,16 +23,14 @@ import { of } from 'rxjs';
       color="primary"
       type="raised"
       label="hello world"
-      suffixIcon="remove_red_eye"
-    />
+      suffixIcon="remove_red_eye" />
     <p>Stroked button</p>
     <lab900-button
       (btnClick)="log('Stroked button')"
       color="primary"
       type="stroked"
       label="hello world"
-      prefixIcon="edit"
-    />
+      prefixIcon="edit" />
     <p>Stroked button disabled</p>
     <lab900-button
       (btnClick)="log('Stroked button disabled')"
@@ -45,24 +38,15 @@ import { of } from 'rxjs';
       color="primary"
       type="stroked"
       label="hello world"
-      prefixIcon="edit"
-    />
+      prefixIcon="edit" />
     <p>Raised button color= accent</p>
     <lab900-button color="accent" type="raised" label="hello world" />
     <p>Icon button</p>
     <lab900-button type="icon" label="delete" (btnClick)="log('Icon button')" />
     <p>Fab icon button</p>
-    <lab900-button
-      type="fab"
-      label="delete"
-      (btnClick)="log(' Fab Icon button')"
-    />
+    <lab900-button type="fab" label="delete" (btnClick)="log(' Fab Icon button')" />
     <p>Fab-mini icon button</p>
-    <lab900-button
-      type="mini-fab"
-      label="delete"
-      (btnClick)="log('Fab Mini Icon button')"
-    />
+    <lab900-button type="mini-fab" label="delete" (btnClick)="log('Fab Mini Icon button')" />
     <p>Toggle action button</p>
     <lab900-action-button [data]="[]" [action]="toggleActionButton" />
   `,

@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { ColumnHeaderRendererAbstract } from '../column-header-renderer-abstract.directive';
 import { ColumnHeaderSortingComponent } from '../column-header-sorting/column-header-sorting.component';
 import { ColumnHeaderWithIconRendererOptions } from './column-header-with-icon-renderer.options';

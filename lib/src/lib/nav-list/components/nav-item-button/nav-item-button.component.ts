@@ -1,21 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  model,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, model, ViewEncapsulation } from '@angular/core';
 import { NavItem } from '../../models/nav-item.model';
 import { NgTemplateOutlet } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatListModule } from '@angular/material/list';
-import {
-  IsActiveMatchOptions,
-  RouterLink,
-  RouterLinkActive,
-} from '@angular/router';
+import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'lab900-nav-item-button',
@@ -24,20 +13,11 @@ import {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    IconComponent,
-    TranslateModule,
-    MatListModule,
-    NgTemplateOutlet,
-    RouterLink,
-    RouterLinkActive,
-  ],
+  imports: [IconComponent, TranslateModule, MatListModule, NgTemplateOutlet, RouterLink, RouterLinkActive],
 })
 export class NavItemButtonComponent {
   public readonly item = input.required<NavItem>();
-  public readonly routeMatchOptions = input<
-    IsActiveMatchOptions | { exact: boolean } | undefined
-  >(undefined);
+  public readonly routeMatchOptions = input<IsActiveMatchOptions | { exact: boolean } | undefined>(undefined);
   public readonly disabled = model<boolean>(false);
   public readonly expanded = model<boolean>(false);
   public readonly showLevelArrow = input<boolean>(false);

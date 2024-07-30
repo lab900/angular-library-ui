@@ -10,8 +10,8 @@ import { TranslateLoader } from '@ngx-translate/core';
 export class MergingTranslateLoader implements TranslateLoader {
   public constructor(
     private http: HttpClient,
-    public prefix: string = '/assets/i18n/',
-    public suffix: string = '.json',
+    public prefix = '/assets/i18n/',
+    public suffix = '.json'
   ) {}
 
   /**
@@ -19,9 +19,9 @@ export class MergingTranslateLoader implements TranslateLoader {
    */
   public getTranslation(lang: string): Observable<object> {
     return this.http.get(`${this.prefix}${lang}${this.suffix}`).pipe(
-      map((translations) => ({
+      map(translations => ({
         ...translations,
-      })),
+      }))
     );
   }
 }

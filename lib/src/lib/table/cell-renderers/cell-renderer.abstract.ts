@@ -17,11 +17,7 @@ import { readPropValue } from '../../utils/utils';
 import { Lab900TableService } from '../services/table.service';
 
 @Directive()
-export abstract class CellRendererAbstract<
-    CellRenderOptions = any,
-    T = any,
-    V = any,
-  >
+export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V = any>
   implements AfterViewInit, OnDestroy
 {
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
@@ -31,18 +27,12 @@ export abstract class CellRendererAbstract<
   private observer?: ResizeObserver;
   private observerSub?: Subscription;
 
-  public readonly columnConfig =
-    input.required<TableCell<T, CellRenderOptions>>();
+  public readonly columnConfig = input.required<TableCell<T, CellRenderOptions>>();
   public readonly data = model.required<T>();
 
-  public readonly renderOptions = computed<CellRenderOptions | undefined>(
-    () => this.columnConfig().cellRenderOptions,
-  );
+  public readonly renderOptions = computed<CellRenderOptions | undefined>(() => this.columnConfig().cellRenderOptions);
 
-  public readonly handleValueChanged =
-    input<(value: V, cell: TableCell<T>, row: T) => void | undefined>(
-      undefined,
-    );
+  public readonly handleValueChanged = input<((value: V, cell: TableCell<T>, row: T) => void) | undefined>(undefined);
 
   public readonly cellInnerElm = viewChild('.lab900-cell-value', {
     read: ElementRef,
@@ -56,10 +46,7 @@ export abstract class CellRendererAbstract<
     const data = this.data();
     const cellValue = this.cellValue();
     const textOverflowing = this.textOverflowing();
-    if (
-      config.cellTooltip?.text &&
-      (!config.cellTooltip?.onlyOnOverflow || textOverflowing)
-    ) {
+    if (config.cellTooltip?.text && (!config.cellTooltip?.onlyOnOverflow || textOverflowing)) {
       return readPropValue(config.cellTooltip.text, data);
     } else if (textOverflowing) {
       return String(cellValue);
@@ -67,9 +54,7 @@ export abstract class CellRendererAbstract<
     return undefined;
   });
   public readonly tooltipPosition = computed(
-    () =>
-      this.columnConfig().cellTooltip?.tooltipOptions?.tooltipPosition ??
-      'below',
+    () => this.columnConfig().cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below'
   );
 
   public ngAfterViewInit(): void {
@@ -94,14 +79,10 @@ export abstract class CellRendererAbstract<
       !config.cellEditorOptions?.disablePlaceholderOutsideEditor &&
       !config.cellEditorOptions?.disabled?.(data)
     ) {
-      this.elm.nativeElement
-        .querySelector('.lab900-cell-value')
-        ?.classList.add('value-is-placeholder');
+      this.elm.nativeElement.querySelector('.lab900-cell-value')?.classList.add('value-is-placeholder');
       return config.cellEditorOptions?.placeholder;
     }
-    this.elm.nativeElement
-      .querySelector('.lab900-cell-value')
-      ?.classList.remove('value-is-placeholder');
+    this.elm.nativeElement.querySelector('.lab900-cell-value')?.classList.remove('value-is-placeholder');
     return value;
   }
 
@@ -126,10 +107,8 @@ export abstract class CellRendererAbstract<
   protected observeCellContentOverflow(): void {
     this.ngZone.runOutsideAngular(() => {
       this.observer?.unobserve(this.elm.nativeElement);
-      this.observer = new ResizeObserver((entries) => {
-        const innerScrollWidth =
-          this.elm.nativeElement.querySelector('.lab900-cell-value')
-            ?.scrollWidth ?? 0;
+      this.observer = new ResizeObserver(entries => {
+        const innerScrollWidth = this.elm.nativeElement.querySelector('.lab900-cell-value')?.scrollWidth ?? 0;
         const maxWidth = (entries[0].target as any).offsetWidth;
         this.textOverflowing.set(innerScrollWidth > maxWidth);
       });

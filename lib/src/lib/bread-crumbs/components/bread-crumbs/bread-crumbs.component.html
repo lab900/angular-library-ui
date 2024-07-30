@@ -1,11 +1,8 @@
-@if (breadCrumbs?.length) {
+@if (breadCrumbs()?.length) {
   <div class="bread-crumbs">
-    @for (breadCrumb of breadCrumbs; track breadCrumb; let last = $last) {
+    @for (breadCrumb of breadCrumbs(); track breadCrumb; let last = $last) {
       <div [class.active]="last">
-        <lab900-bread-crumb-item
-          [item]="breadCrumb"
-          [data]="data"
-        ></lab900-bread-crumb-item>
+        <lab900-bread-crumb-item [item]="breadCrumb" [data]="data()" />
         @if (!last) {
           <span class="divider">{{ breadCrumb.divider || '>' }}</span>
         }

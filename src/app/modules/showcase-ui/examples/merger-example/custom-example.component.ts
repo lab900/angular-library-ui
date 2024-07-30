@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { CustomComponentAbstract } from '@lab900/ui';
+import { Component, Input } from '@angular/core';
+import { MergerItemComponent } from '@lab900/ui';
+import { MergerDataExample } from './models/merger-data-example.model';
 
 @Component({
   selector: 'lab900-custom-component-example',
@@ -11,4 +12,7 @@ import { CustomComponentAbstract } from '@lab900/ui';
   }`,
   imports: [],
 })
-export class CustomExampleComponent extends CustomComponentAbstract<any> {}
+export class CustomExampleComponent implements MergerItemComponent<MergerDataExample> {
+  @Input()
+  public data?: MergerDataExample;
+}

@@ -2,19 +2,19 @@ import {
   AfterViewInit,
   Component,
   ComponentRef,
+  computed,
   HostBinding,
+  input,
   Input,
   OnChanges,
   SimpleChanges,
+  untracked,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { MergeConfig } from '../../models/merge-config.model';
 import { isObservable, Observable, of } from 'rxjs';
-import {
-  CustomComponent,
-  CustomComponentAbstract,
-} from '../../abstracts/custom-component.abstract';
+import { MergerItemComponent } from '../../abstracts/custom-component.abstract';
 import { TranslateModule } from '@ngx-translate/core';
 import { AsyncPipe } from '@angular/common';
 
@@ -25,62 +25,51 @@ import { AsyncPipe } from '@angular/common';
   standalone: true,
   imports: [TranslateModule, AsyncPipe],
 })
-export class Lab900MergerItemComponent<T>
-  implements CustomComponentAbstract<T>, AfterViewInit, OnChanges
-{
-  @Input()
-  public config: MergeConfig<T>;
+export class Lab900MergerItemComponent<T> implements AfterViewInit, OnChanges {
+  public readonly config = input.required<MergeConfig<T>>();
+  public readonly data = input.required<T>();
 
-  @Input()
-  public data: T;
+  protected readonly flexDirection = computed(() =>
+    this.config().nextLine || this.config().nestedObject ? 'column' : 'row'
+  );
 
   @Input()
   @HostBinding('class.selected')
-  public active: boolean;
+  public active!: boolean;
 
   @ViewChild('customComponentContainer', { read: ViewContainerRef })
-  private customComponentContainer: ViewContainerRef;
+  private customComponentContainer!: ViewContainerRef;
 
-  private customComponentRef: ComponentRef<CustomComponent<T>>;
-
-  public get flexDirection(): 'row' | 'column' {
-    if (this.config?.nextLine || this.config?.nestedObject) {
-      return 'column';
-    } else {
-      return 'row';
-    }
-  }
+  private customComponentRef?: ComponentRef<MergerItemComponent<T>>;
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.data && this.customComponentRef) {
-      this.customComponentRef.instance.data = this.data;
+      this.customComponentRef.setInput('data', this.data());
     }
   }
 
   public ngAfterViewInit(): void {
-    if (this.config?.component) {
-      this.createComponent();
-    }
+    this.createComponent();
   }
 
-  public display(
-    config: MergeConfig<T>,
-    parentAttribute?: string,
-  ): Observable<any> {
+  public display(config: MergeConfig<T>, parentAttribute?: string): Observable<any> {
     const value = parentAttribute
-      ? this.data[parentAttribute][config.attribute]
-      : this.data[config.attribute];
+      ? (this.data()?.[parentAttribute as keyof T] as any)?.[config.attribute as any]
+      : this.data()?.[config.attribute as keyof T];
     const formattedValue = config?.formatter ? config.formatter(value) : value;
     return isObservable(formattedValue) ? formattedValue : of(formattedValue);
   }
 
   private createComponent(): void {
-    this.customComponentRef = this.customComponentContainer.createComponent(
-      this.config.component,
-    );
-    setTimeout(() => {
-      this.customComponentRef.instance.data = this.data;
-      this.customComponentRef.location.nativeElement.style.width = '100%';
-    });
+    const component = this.config().component;
+    if (component) {
+      this.customComponentRef = this.customComponentContainer.createComponent(component);
+      setTimeout(() => {
+        if (this.customComponentRef) {
+          this.customComponentRef.setInput('data', untracked(this.data));
+          this.customComponentRef.location.nativeElement.style.width = '100%';
+        }
+      });
+    }
   }
 }

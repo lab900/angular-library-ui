@@ -1,15 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostListener,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { BehaviorSubject } from 'rxjs';
-import {
-  MatDatepickerInputEvent,
-  MatDatepickerModule,
-} from '@angular/material/datepicker';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellEditorBaseOptions } from '../cell-editor.options';
 
@@ -31,19 +24,13 @@ import { CellEditorBaseOptions } from '../cell-editor.options';
         (dateChange)="changeValue($event, 'change')"
         [placeholder]="placeholder() | translate"
         (keydown.enter)="closeOrSave()"
-        (keydown.tab)="closeOrSave()"
-      />
-      <mat-datepicker-toggle
-        [tabIndex]="-1"
-        (click)="$event.stopImmediatePropagation()"
-        [for]="datePicker"
-      />
+        (keydown.tab)="closeOrSave()" />
+      <mat-datepicker-toggle [tabIndex]="-1" (click)="$event.stopImmediatePropagation()" [for]="datePicker" />
       <mat-datepicker
         #datePicker
         (opened)="openPicker()"
         (closed)="opened$.next(false); input.focus()"
-        [restoreFocus]="false"
-      ></mat-datepicker>
+        [restoreFocus]="false" />
     </div>
   `,
 })
@@ -51,10 +38,7 @@ export class CellDateEditorComponent extends CellEditorAbstract<CellEditorBaseOp
   public readonly updatedDate$ = new BehaviorSubject<any>(undefined);
   public readonly opened$ = new BehaviorSubject<boolean>(false);
 
-  public changeValue(
-    event: MatDatepickerInputEvent<any>,
-    type: 'input' | 'change',
-  ): void {
+  public changeValue(event: MatDatepickerInputEvent<any>, type: 'input' | 'change'): void {
     if (type === 'change' && this.opened$.value) {
       return;
     }

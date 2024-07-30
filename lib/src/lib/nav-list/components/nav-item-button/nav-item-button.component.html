@@ -1,9 +1,7 @@
 @if (item(); as item) {
   <ng-template #navItemContent>
     <div class="nav-item-btn__inner" [style.padding-left.px]="depth() * 12">
-      @if (
-        item.icon && (item.icon?.position === 'left' || !item.icon?.position)
-      ) {
+      @if (item.icon && (item.icon?.position === 'left' || !item.icon?.position)) {
         <lab900-icon class="nav-item-btn__icon-left" [icon]="item.icon" />
       }
       <div class="nav-item-btn__label">
@@ -13,10 +11,7 @@
         <lab900-icon class="nav-item-btn__icon-right" [icon]="item.icon" />
       }
       @if (showLevelArrow()) {
-        <lab900-icon
-          class="nav-item-btn__icon-right"
-          [icon]="{ name: icon() }"
-        />
+        <lab900-icon class="nav-item-btn__icon-right" [icon]="{ name: icon() }" />
       }
     </div>
   </ng-template>
@@ -32,8 +27,7 @@
       [routerLinkActiveOptions]="routeMatchOptions() ?? { exact: false }"
       routerLinkActive="active"
       #rla="routerLinkActive"
-      [class.active]="rla.isActive"
-    >
+      [class.active]="rla.isActive">
       <ng-container *ngTemplateOutlet="navItemContent" />
     </a>
   }
@@ -45,8 +39,7 @@
       tabindex="-1"
       [disabled]="disabled()"
       [href]="item.href?.url"
-      [target]="item.href?.target"
-    >
+      [target]="item.href?.target">
       <ng-container *ngTemplateOutlet="navItemContent" />
     </a>
   }
@@ -57,8 +50,7 @@
       mat-list-item
       tabindex="-1"
       [disabled]="disabled()"
-      [class.expanded]="expanded()"
-    >
+      [class.expanded]="expanded()">
       <ng-container *ngTemplateOutlet="navItemContent" />
     </a>
   }

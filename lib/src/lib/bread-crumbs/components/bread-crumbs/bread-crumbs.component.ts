@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { BreadCrumb } from '../../models/bread-crumb.model';
 
 import { RouterLink } from '@angular/router';
@@ -20,9 +15,6 @@ import { BreadCrumbItemComponent } from '../bread-crumb-item/bread-crumb-item.co
   encapsulation: ViewEncapsulation.None,
 })
 export class BreadCrumbsComponent {
-  @Input({ required: true })
-  public breadCrumbs: BreadCrumb[];
-
-  @Input()
-  public data?: any;
+  public readonly breadCrumbs = input.required<BreadCrumb[]>();
+  public readonly data = input<any>(undefined);
 }

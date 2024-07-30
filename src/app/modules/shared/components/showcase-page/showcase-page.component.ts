@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShowcaseRouteData } from '../../models/showcase-route.model';
 import { Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
@@ -13,6 +7,7 @@ import MarkdownPageComponent from '../markdown-page/markdown-page.component';
 import { ExampleViewerComponent } from '../example-viewer/example-viewer.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgComponentOutlet } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lab900-showcase-page',
@@ -20,13 +15,7 @@ import { NgComponentOutlet } from '@angular/common';
   styleUrls: ['./showcase-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [
-    MatTabsModule,
-    MarkdownPageComponent,
-    ExampleViewerComponent,
-    Lab900PageHeaderComponent,
-    NgComponentOutlet,
-  ],
+  imports: [MatTabsModule, MarkdownPageComponent, ExampleViewerComponent, Lab900PageHeaderComponent, NgComponentOutlet],
 })
 export class ShowcasePageComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -43,10 +32,8 @@ export class ShowcasePageComponent {
   };
 
   public queryParams = toSignal(this.activatedRoute.queryParams);
-  public currentTab = computed<'guide' | 'examples'>(
-    () => this.queryParams()?.tab ?? 'examples',
-  );
-  public data = toSignal<ShowcaseRouteData>(this.activatedRoute.data);
+  public currentTab = computed<'guide' | 'examples'>(() => this.queryParams()?.tab ?? 'examples');
+  public data = toSignal<ShowcaseRouteData>(this.activatedRoute.data as Observable<ShowcaseRouteData>);
   public navItems = computed<PageHeaderNavItem[]>(() => {
     if (this.data()?.docFile) {
       return [this.guideNav, this.exampleNav];

@@ -6,18 +6,16 @@
     [class.sortable]="!disableSort() && cell().sortable"
     [ngClass]="cellHeaderClass()"
     matTooltipClass="lab900-table__mat-tooltip"
-    [matTooltipDisabled]="!cell()?.cellHeaderTooltip"
-    [matTooltip]="cell()?.cellHeaderTooltip | translate"
-    [matTooltipPosition]="cell()?.cellHeaderTooltipPosition || 'above'"
+    [matTooltipDisabled]="!cell().cellHeaderTooltip"
+    [matTooltip]="cell().cellHeaderTooltip ?? '' | translate"
+    [matTooltipPosition]="cell().cellHeaderTooltipPosition || 'above'"
     [style.width]="columnWidth()"
-    [style.max-width]="columnMaxWidth()"
-  >
+    [style.max-width]="columnMaxWidth()">
     <ng-container
       *ngComponentOutlet="
         cell().headerRenderer || defaultHeaderRenderer;
         inputs: { columnConfig: cell(), disableSort: disableSort() }
-      "
-    />
+      " />
   </th>
   <td
     mat-cell
@@ -28,19 +26,12 @@
     [cellData]="element"
     [rowIndex]="rowIndex"
     [cell]="cell()"
-    class="lab900-td"
-  >
+    class="lab900-td">
     <lab900-table-cell-inner
       [cell]="cell()"
       [rowValue]="element"
       [rowIndex]="rowIndex"
-      (valueChanged)="valueChanged.emit($event)"
-    />
+      (valueChanged)="valueChanged.emit($event)" />
   </td>
-  <td
-    mat-footer-cell
-    *matFooterCellDef
-    [innerHtml]="cellFooter()"
-    [ngClass]="cell().footerCellClass"
-  ></td>
+  <td mat-footer-cell *matFooterCellDef [innerHtml]="cellFooter()" [ngClass]="cell().footerCellClass"></td>
 </ng-container>

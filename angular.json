@@ -18,6 +18,10 @@
         "@schematics/angular:pipe": {
           "skipTests": true,
           "standalone": true
+        },
+        "@schematics/angular:application": {
+          "standalone": true,
+          "strict": true
         }
       },
       "root": "",
@@ -59,9 +63,7 @@
             ],
             "browser": "src/main.ts",
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "."
-              ]
+              "includePaths": ["."]
             }
           },
           "configurations": {
@@ -129,10 +131,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
-            ],
+            "styles": ["./node_modules/@angular/material/prebuilt-themes/indigo-pink.css", "src/styles.scss"],
             "scripts": []
           }
         },

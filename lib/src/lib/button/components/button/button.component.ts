@@ -1,20 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import {
-  MatButton,
-  MatFabButton,
-  MatIconButton,
-  MatMiniFabButton,
-} from '@angular/material/button';
+import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
@@ -52,7 +40,7 @@ export class Lab900ButtonComponent {
   public prefixIcon?: string;
 
   @Input()
-  public label: string;
+  public label!: string;
 
   @Input()
   public disabled?: boolean;

@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CellWithClearingRendererOptions } from './cell-with-clearing-renderer.options';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -33,16 +28,14 @@ import { CellRendererAbstract } from '../cell-renderer.abstract';
     `,
   ],
 })
-export class CellWithClearingRendererComponent<
-  T = any,
-> extends CellRendererAbstract<CellWithClearingRendererOptions, T> {
-  public readonly tooltipWithHtml = computed(() =>
-    this.tooltip()?.replace(/<[^>]*>/g, ''),
-  );
+export class CellWithClearingRendererComponent<T = any> extends CellRendererAbstract<
+  CellWithClearingRendererOptions,
+  T
+> {
+  public readonly tooltipWithHtml = computed(() => this.tooltip()?.replace(/<[^>]*>/g, ''));
   public readonly disabled = computed(() => {
     const value = this.cellFormatter(this.columnConfig(), this.data());
-    const disabled =
-      this.columnConfig()?.cellEditorOptions?.disabled?.(this.data) ?? false;
+    const disabled = this.columnConfig()?.cellEditorOptions?.disabled?.(this.data()) ?? false;
     return value || disabled;
   });
 
@@ -51,9 +44,7 @@ export class CellWithClearingRendererComponent<
     event.stopImmediatePropagation();
     const valueChanged = this.handleValueChanged();
     if (!valueChanged) {
-      throw Error(
-        `No handleValueChanged method provided for column ${this.columnConfig().key}`,
-      );
+      throw Error(`No handleValueChanged method provided for column ${this.columnConfig().key}`);
     }
     valueChanged(null, this.columnConfig(), this.data());
   }

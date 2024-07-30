@@ -1,13 +1,13 @@
 import { TooltipPosition } from '@angular/material/tooltip';
 import { propValue } from '../../utils/utils';
 
-export interface TableCellTooltip<T = any> {
+export interface TableCellTooltip<T = unknown> {
   /**
    * Text that is displayed in the tooltip, can be dependent on data
    */
   text?: propValue<T>;
   /**
-   * If true, tooltip will only show when it the content of the cell is cut off (by setting TableCell.cellMaxWidth
+   * If true, tooltip will only show when it is the content of the cell is cut off (by setting TableCell.cellMaxWidth
    * value)
    * @Default false
    */
