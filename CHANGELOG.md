@@ -1,5 +1,9 @@
 # Changelog
 
+## 18.0.4
+
+- fix issues with navigation table cells with some rows not having editable cells
+
 ## 18.0.3
 
 - Upgrade to Angular 18

@@ -1,19 +1,20 @@
-import { AfterViewInit, computed, Directive, ElementRef, inject, input, NgZone, OnDestroy } from '@angular/core';
+import { AfterViewInit, computed, DestroyRef, Directive, ElementRef, inject, input, NgZone } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { Lab900TableService } from '../services/table.service';
 import { TableCell } from '../models/table-cell.model';
-import { fromEvent, Subject, takeUntil } from 'rxjs';
+import { fromEvent } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
   selector: 'td[lab900TableCellEvents]',
   standalone: true,
 })
-export class TableCellEventsDirective<T = any> implements AfterViewInit, OnDestroy {
+export class TableCellEventsDirective<T = any> implements AfterViewInit {
   private readonly matTable = inject(MatTable);
   private readonly tableService = inject(Lab900TableService);
   private readonly elm: ElementRef<HTMLTableCellElement> = inject(ElementRef);
   private readonly ngZone = inject(NgZone);
-  private readonly destroy$ = new Subject<void>();
+  protected readonly destroyRef = inject(DestroyRef);
 
   public readonly cellData = input.required<T>();
   public readonly cell = input.required<TableCell<T>>();
@@ -49,28 +50,23 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit, OnDestr
      */
     this.ngZone.runOutsideAngular(() => {
       fromEvent(this.elm.nativeElement, 'keydown')
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(event => {
           this.onKeydown(event as KeyboardEvent);
         });
 
       fromEvent(this.elm.nativeElement, 'focus')
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.onFocus();
         });
 
       fromEvent(this.elm.nativeElement, 'click')
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(event => {
           this.onClick(event as MouseEvent);
         });
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   private getTableData(): T[] {
@@ -147,12 +143,14 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit, OnDestr
     const allRows = this.siblingRows ? [...this.siblingRows] : [];
     const rows =
       position === 'before' ? allRows.slice(0, this.rowIdx).reverse() : allRows.slice((this.rowIdx ?? 0) + 1);
-    const matching = rows.map(row => {
-      const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
-      return (!sameColumn && position === 'before' ? childNodes.reverse() : childNodes).find(cell =>
-        this.matchingCell(cell, sameColumn)
-      );
-    });
+    const matching = rows
+      .map(row => {
+        const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
+        return (!sameColumn && position === 'before' ? childNodes.reverse() : childNodes).find(cell =>
+          this.matchingCell(cell, sameColumn)
+        );
+      })
+      .filter(cell => !!cell);
     if (matching?.[0]) {
       matching[0].focus();
     }
