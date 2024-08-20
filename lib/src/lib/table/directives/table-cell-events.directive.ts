@@ -181,12 +181,16 @@ export class TableCellEventsDirective<T = any>
       position === 'before'
         ? allRows.slice(0, this.rowIdx).reverse()
         : allRows.slice(this.rowIdx + 1);
-    const matching = rows.map((row) => {
-      const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
-      return (
-        !sameColumn && position === 'before' ? childNodes.reverse() : childNodes
-      ).find((cell) => this.matchingCell(cell, sameColumn));
-    });
+    const matching = rows
+      .map((row) => {
+        const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
+        return (
+          !sameColumn && position === 'before'
+            ? childNodes.reverse()
+            : childNodes
+        ).find((cell) => this.matchingCell(cell, sameColumn));
+      })
+      .filter((cell) => !!cell);
     if (matching?.[0]) {
       matching[0].focus();
     }
