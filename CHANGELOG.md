@@ -14,6 +14,9 @@
 - Lab900DataListComponent: removed - was not used anymore
 - Lab900SharingComponent: removed - was not used anymore
 
+## 17.0.6
+- fix issues with navigation table cells with some rows not having editable cells
+
 ## 17.0.2
 
 - Fix required type in Lab900ButtonComponent
