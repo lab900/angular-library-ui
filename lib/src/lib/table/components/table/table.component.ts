@@ -224,9 +224,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public readonly data = model<T[] | null | undefined>(undefined);
   public readonly publicData = computed(() => {
     const hideSelectableRow = this.selectableRows()?.hideSelectableRow;
-    const data = this.data();
+    let data = this.data();
     if (hideSelectableRow) {
-      data?.map(v => ({
+      data = data?.map(v => ({
         ...v,
         _hideSelectableRow: hideSelectableRow(v),
       }));
