@@ -4,6 +4,7 @@ import {
   AfterViewInit,
   computed,
   Directive,
+  effect,
   ElementRef,
   inject,
   input,
@@ -29,9 +30,8 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
 
   public readonly columnConfig = input.required<TableCell<T, CellRenderOptions>>();
   public readonly data = model.required<T>();
-
+  public readonly disabled = computed(() => this.columnConfig()?.cellEditorOptions?.disabled?.(this.data()) ?? false);
   public readonly renderOptions = computed<CellRenderOptions | undefined>(() => this.columnConfig().cellRenderOptions);
-
   public readonly handleValueChanged = input<((value: V, cell: TableCell<T>, row: T) => void) | undefined>(undefined);
 
   public readonly cellInnerElm = viewChild('.lab900-cell-value', {
@@ -39,6 +39,17 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
   });
 
   public readonly cellValue = computed(() => this.getCellValue());
+  public readonly hasCellValue = computed(() => {
+    const value = this.cellValue();
+    if (typeof value === 'string') {
+      return value.trim().length > 0;
+    }
+    return value != null;
+  });
+
+  public readonly cellValueOrPlaceholder = computed(() => {
+    return this.showPlaceholder() ? this.columnConfig().cellEditorOptions?.placeholder : this.cellValue();
+  });
 
   private readonly textOverflowing = signal<boolean>(false);
   public readonly tooltip = computed(() => {
@@ -57,6 +68,29 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
     () => this.columnConfig().cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below'
   );
 
+  public readonly showPlaceholder = computed(() => {
+    const hasCellValue = this.hasCellValue();
+    const config = this.columnConfig();
+    const disableEditing = this.tableService.disableEditing() || this.disabled();
+
+    return (
+      !hasCellValue &&
+      config.cellEditorOptions?.placeholder &&
+      !disableEditing &&
+      !config.cellEditorOptions?.disablePlaceholderOutsideEditor
+    );
+  });
+
+  public constructor() {
+    effect(() => {
+      if (this.showPlaceholder()) {
+        this.elm.nativeElement.querySelector('.lab900-cell-value')?.classList.add('value-is-placeholder');
+      } else {
+        this.elm.nativeElement.querySelector('.lab900-cell-value')?.classList.remove('value-is-placeholder');
+      }
+    });
+  }
+
   public ngAfterViewInit(): void {
     this.observeCellContentOverflow();
   }
@@ -69,21 +103,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
   protected getCellValue(): V | string {
     const config = this.columnConfig();
     const data = this.data();
-    const disableEditing = this.tableService.disableEditing();
-
-    const value = this.cellFormatter(config, data);
-    if (
-      !value &&
-      config.cellEditorOptions?.placeholder &&
-      !disableEditing &&
-      !config.cellEditorOptions?.disablePlaceholderOutsideEditor &&
-      !config.cellEditorOptions?.disabled?.(data)
-    ) {
-      this.elm.nativeElement.querySelector('.lab900-cell-value')?.classList.add('value-is-placeholder');
-      return config.cellEditorOptions?.placeholder;
-    }
-    this.elm.nativeElement.querySelector('.lab900-cell-value')?.classList.remove('value-is-placeholder');
-    return value;
+    return this.cellFormatter(config, data);
   }
 
   protected cellFormatter(cell: TableCell<T>, data: T): any {

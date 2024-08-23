@@ -33,11 +33,7 @@ export class CellWithClearingRendererComponent<T = any> extends CellRendererAbst
   T
 > {
   public readonly tooltipWithHtml = computed(() => this.tooltip()?.replace(/<[^>]*>/g, ''));
-  public readonly disabled = computed(() => {
-    const value = this.cellFormatter(this.columnConfig(), this.data());
-    const disabled = this.columnConfig()?.cellEditorOptions?.disabled?.(this.data()) ?? false;
-    return value || disabled;
-  });
+  public readonly canClear = computed(() => this.hasCellValue() && !this.disabled());
 
   public handleClear(event: MouseEvent): void {
     event.preventDefault();

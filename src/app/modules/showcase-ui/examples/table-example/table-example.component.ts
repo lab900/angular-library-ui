@@ -2957,7 +2957,7 @@ export class TableExampleComponent {
       cellEditorOptions: {
         panelWidth: '200px',
         placeholder: 'Select a type 2',
-        compareWithFn: (a, b) => a?.id === b?.id,
+        compareWithFn: (a, b) => a?.id && b?.id && a?.id === b?.id,
         optionLabelFn: option => option?.name ?? '?',
         options: [
           { id: 1, name: 'Type 1' },
