@@ -1,5 +1,9 @@
 # Changelog
 
+## 18.0.9
+
+- fix: table cell value states
+
 ## 18.0.5
 
 - fix hideSelectableRow
