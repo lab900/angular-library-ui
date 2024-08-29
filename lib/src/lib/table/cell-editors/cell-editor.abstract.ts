@@ -3,7 +3,7 @@ import { AfterViewInit, computed, Directive, ElementRef, inject, input, Input, m
 import { Lab900TableCellComponent } from '../components/table-cell/table-cell.component';
 import { isDifferent } from '../../utils/different.utils';
 import { CellEditorBaseOptions } from './cell-editor.options';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 @Directive()
 export abstract class CellEditorAbstract<TCellEditorOptions extends CellEditorBaseOptions<T>, T = any, V = any>
