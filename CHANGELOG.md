@@ -1,5 +1,9 @@
 # Changelog
 
+## 18.0.7
+
+- fix: issues with structuredClone
+
 ## 18.0.6
 
 - fix: table cell value states

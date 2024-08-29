@@ -3,6 +3,7 @@ import { AfterViewInit, computed, Directive, ElementRef, inject, input, Input, m
 import { Lab900TableCellComponent } from '../components/table-cell/table-cell.component';
 import { isDifferent } from '../../utils/different.utils';
 import { CellEditorBaseOptions } from './cell-editor.options';
+import { cloneDeep } from 'lodash';
 
 @Directive()
 export abstract class CellEditorAbstract<TCellEditorOptions extends CellEditorBaseOptions<T>, T = any, V = any>
@@ -36,7 +37,9 @@ export abstract class CellEditorAbstract<TCellEditorOptions extends CellEditorBa
 
   protected getUnformattedValue(): V {
     const cell = this.columnConfig();
-    const data = structuredClone(this.data());
+    // we can't use structuredClone here because it doesn't work with functions
+    // for example Moment objects will throw an error
+    const data = cloneDeep(this.data());
     if (cell.key.includes('.')) {
       const keys = cell.key.split('.');
       let value: any = data;
