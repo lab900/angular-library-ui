@@ -1,5 +1,9 @@
 # Changelog
 
+## 18.0.9
+
+- fix: table tooltip translations
+
 ## 18.0.7/18.0.8
 
 - fix: issues with structuredClone

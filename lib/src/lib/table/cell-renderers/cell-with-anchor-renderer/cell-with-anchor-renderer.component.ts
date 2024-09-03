@@ -14,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
   template: `@if (anchorHref(); as href) {
     <div
       class="lab900-cell-value lab900-cell-value--with-anchor"
-      [matTooltip]="tooltip()"
+      [matTooltip]="tooltip() | translate"
       [matTooltipPosition]="tooltipPosition()"
       (click)="$event.stopImmediatePropagation()">
       <a [target]="renderOptions()?.target ?? '_self'" [href]="href">

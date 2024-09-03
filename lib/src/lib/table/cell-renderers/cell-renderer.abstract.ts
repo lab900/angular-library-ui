@@ -52,7 +52,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
   });
 
   private readonly textOverflowing = signal<boolean>(false);
-  public readonly tooltip = computed(() => {
+  public readonly tooltip = computed<string>(() => {
     const config = this.columnConfig();
     const data = this.data();
     const cellValue = this.cellValue();
@@ -62,7 +62,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
     } else if (textOverflowing) {
       return String(cellValue);
     }
-    return undefined;
+    return '';
   });
   public readonly tooltipPosition = computed(
     () => this.columnConfig().cellTooltip?.tooltipOptions?.tooltipPosition ?? 'below'

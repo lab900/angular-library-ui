@@ -9,7 +9,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   imports: [TranslateModule, MatTooltipModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<div class="lab900-cell-value" [matTooltip]="tooltip()" [matTooltipPosition]="tooltipPosition()">
+  template: `<div
+    class="lab900-cell-value"
+    [matTooltip]="tooltip() | translate"
+    [matTooltipPosition]="tooltipPosition()">
     {{ cellValueOrPlaceholder() | translate }}
   </div>`,
 })
