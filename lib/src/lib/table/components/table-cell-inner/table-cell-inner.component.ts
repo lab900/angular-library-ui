@@ -48,7 +48,7 @@ export class TableCellInnerComponent<T = any> {
     const dataUniqueId = cell.key + '_' + this.rowIndex();
 
     return (
-      this.tableService.inlineEditingCellkey() === dataUniqueId &&
+      this.tableService.inlineEditingCellKey() === dataUniqueId &&
       cell.cellEditor &&
       !cell.cellEditorOptions?.disabled?.(this.rowValue())
     );
