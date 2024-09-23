@@ -15,7 +15,7 @@
     "target": "ES2022",
     "lib": ["ES2022", "dom"],
     "paths": {
-      "@lab900/ui": ["dist/@lab900/ui"]
+      "@lab900/ui": ["lib/src/public-api.ts"],
     },
     "useDefineForClassFields": false
   },

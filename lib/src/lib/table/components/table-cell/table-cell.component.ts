@@ -86,7 +86,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
     return '';
   });
 
-  public readonly headerClick = output<TableCell<T>>();
+  private readonly headerClick = output<TableCell<T>>();
   public readonly valueChanged = output<CellValueChangeEvent<T>>();
 
   public readonly sort = this.tableService.sort;
