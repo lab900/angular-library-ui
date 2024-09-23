@@ -5,7 +5,7 @@ import { Lab900Sort } from '../models/table-sort.model';
 
 @Injectable()
 export class Lab900TableService<T extends object = object, TabId = string> {
-  public readonly inlineEditingCellkey = signal<string | undefined>(undefined);
+  public readonly inlineEditingCellKey = signal<string | undefined>(undefined);
 
   private readonly _columns = signal<TableCell<T>[]>([]);
 
@@ -39,7 +39,7 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   }
 
   public updateColumns(columns: TableCell<T>[] | null): void {
-    this._columns.set(columns ?? []);
+    this._columns.set([...(columns ?? [])]);
   }
 
   public updateTabId(tabId: TabId | null): void {
@@ -51,11 +51,11 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   }
 
   public updateTabs(tabs: Lab900TableTab<TabId, T>[] | null): void {
-    this._tabs.set(tabs ?? []);
+    this._tabs.set([...(tabs ?? [])]);
   }
 
   public updateSorting(sort: Lab900Sort[] | undefined): void {
-    this.sort.set(sort);
+    this.sort.set(sort ? [...sort] : undefined);
   }
 
   public updateColumnSorting(
@@ -77,7 +77,7 @@ export class Lab900TableService<T extends object = object, TabId = string> {
         } else {
           sort.push({ id: sortKey, direction: 'asc' });
         }
-        return sort;
+        return [...sort];
       } else {
         const inCurrent = sort.find(s => s.id === sortKey);
         return [
@@ -92,10 +92,10 @@ export class Lab900TableService<T extends object = object, TabId = string> {
   }
 
   public startInlineEditing(cellKey: string): void {
-    this.inlineEditingCellkey.set(cellKey);
+    this.inlineEditingCellKey.set(cellKey);
   }
 
   public closeInlineEditing(): void {
-    this.inlineEditingCellkey.set(undefined);
+    this.inlineEditingCellKey.set(undefined);
   }
 }

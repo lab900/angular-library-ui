@@ -3,16 +3,17 @@ import { CellRendererAbstract } from '../cell-renderer.abstract';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CheckboxCellRendererOptions } from './checkbox-cell-renderer.options';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-checkbox-cell-renderer',
   standalone: true,
-  imports: [MatCheckboxModule, MatTooltipModule],
+  imports: [MatCheckboxModule, MatTooltipModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <mat-checkbox
-      [matTooltip]="tooltip()"
+      [matTooltip]="tooltip() | translate"
       [matTooltipPosition]="tooltipPosition()"
       [checked]="cellValue()"
       [disabled]="disabled()"

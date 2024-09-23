@@ -1,7 +1,7 @@
 @if (renderOptions(); as options) {
   <div
     class="lab900-cell-value lab900-cell-value--with-icon"
-    [matTooltip]="tooltip()"
+    [matTooltip]="tooltip() | translate"
     [matTooltipPosition]="tooltipPosition()">
     <ng-container>
       @if (!options.svgIcon) {
