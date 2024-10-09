@@ -15,6 +15,7 @@
     "predeploy:showcase": "npm run build:forms:prod",
     "deploy:showcase": "ng deploy",
     "test": "ng test",
+    "test:silent": "ng test --silent",
     "lint": "ng lint",
     "prettier": "prettier --write .",
     "clean": "rm -rf node_modules/ && npm install"
