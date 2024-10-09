@@ -43,6 +43,7 @@
             [maxColumnWidthFromTable]="maxColumnWidth()"
             (headerClick)="handleHeaderClick($event)"
             [data]="publicData()"
+            [showFooterCell]="showCellFooters()"
             (valueChanged)="cellValueChanged.emit($event)" />
         }
         <ng-container matColumnDef="actions-front">
@@ -97,28 +98,27 @@
             cdkDrag
             [cdkDragDisabled]="!draggableRows()"></tr>
           @if (showCellFooters()) {
-            @if (publicData()?.length) {
-              <div>
-                <!-- pre footer row -->
-                @if (preFooterTitle(); as preFooterTitle) {
-                  <ng-container matColumnDef="preFooterTitle">
-                    <td
-                      mat-footer-cell
-                      *matFooterCellDef
-                      [attr.colspan]="visibleColumns().length + 1"
-                      class="lab900-table__pre-footer-title-cell">
-                      {{ preFooterTitle | translate }}
-                    </td>
-                  </ng-container>
-                  <tr
-                    mat-footer-row
-                    *matFooterRowDef="['preFooterTitle']"
-                    class="lab900-table__pre-footer-title-row"></tr>
-                }
-                <!-- footer row -->
-                <tr mat-footer-row *matFooterRowDef="displayedColumns()"></tr>
-              </div>
-            }
+            <div>
+              <!-- pre footer row -->
+              @if (preFooterTitle(); as preFooterTitle) {
+                <ng-container matColumnDef="preFooterTitle">
+                  <td
+                    mat-footer-cell
+                    *matFooterCellDef
+                    [attr.colspan]="visibleColumns().length + 1"
+                    class="lab900-table__pre-footer-title-cell">
+                    {{ preFooterTitle | translate }}
+                  </td>
+                </ng-container>
+                <tr
+                  [hidden]="!publicData()?.length"
+                  mat-footer-row
+                  *matFooterRowDef="['preFooterTitle']"
+                  class="lab900-table__pre-footer-title-row"></tr>
+              }
+              <!-- footer row -->
+              <tr [hidden]="!publicData()?.length" mat-footer-row *matFooterRowDef="displayedColumns()"></tr>
+            </div>
           }
           <!-- drag placeholder -->
           @if (draggableRows()) {

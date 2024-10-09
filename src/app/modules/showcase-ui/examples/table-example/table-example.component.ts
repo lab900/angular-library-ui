@@ -1,4 +1,4 @@
-import { Component, TrackByFunction } from '@angular/core';
+import { AfterViewInit, Component, signal, TrackByFunction } from '@angular/core';
 import {
   ActionButton,
   CellInputEditorComponent,
@@ -31,7 +31,7 @@ const mockData = [
     intermodal: null,
     fullFreight: null,
     nominatedQuantityBaseUnit: {
-      amount: null,
+      amount: '',
       unit: {
         uuid: '4abc4e87-252a-4be1-9d20-6ab0f196cdf7',
         symbol: 'MT AIR',
@@ -514,7 +514,7 @@ const mockData = [
     intermodal: null,
     fullFreight: null,
     nominatedQuantityBaseUnit: {
-      amount: null,
+      amount: undefined,
       unit: {
         uuid: '4abc4e87-252a-4be1-9d20-6ab0f196cdf7',
         symbol: 'MT AIR',
@@ -2822,10 +2822,10 @@ const mockData = [
     Lab900TableEmptyDirective,
   ],
   template: ` <lab900-table
-    [tableCells]="tableCells"
+    [tableCells]="tableCells()"
     [sort]="sort"
     (sortChange)="sortChange($event)"
-    [data]="mockData"
+    [data]="mockData()"
     [tableHeaderActions]="tableHeaderActions"
     [toggleAndMoveColumns]="true"
     filterIcon="settings"
@@ -2848,7 +2848,7 @@ const mockData = [
   </lab900-table>`,
   styleUrls: ['table-example.component.scss'],
 })
-export class TableExampleComponent {
+export class TableExampleComponent implements AfterViewInit {
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
 
   public tableHeaderActions: ActionButton[] = [
@@ -2901,12 +2901,32 @@ export class TableExampleComponent {
     },
   ];
 
-  public mockData: any[] = mockData;
+  public mockData = signal<any[]>(mockData);
 
-  public tableCells: TableCell[] = [
+  public tableCells = signal<TableCell[]>([
     {
       key: 'expeditionLogStatus',
       label: 'Status',
+      footer: () => 'test',
+    },
+    {
+      key: 'nominatedQuantityBaseUnit.amount',
+      label: 'nominatedQuantityBaseUnit',
+      sortable: true,
+      cellEditor: CellInputEditorComponent,
+      cellEditorOptions: {
+        placeholder: '0,00',
+        valueChanged: ({ value, cell, row }: CellValueChangeEvent) => {
+          row[cell.key] = value;
+        },
+      } as CellInputEditorOptions,
+      cellFormatter: data => {
+        const measurement = data?.nominatedQuantityBaseUnit;
+        if (typeof measurement?.amount !== 'number') {
+          return '';
+        }
+        return measurement.amount.toString();
+      },
     },
     {
       key: 'clientReferences.reference1',
@@ -2969,13 +2989,14 @@ export class TableExampleComponent {
         disabled: e => (e as any).expeditionLogStatus === 'ACTIVATED' || false,
       } as CellSelectEditorOptions,
     },
-  ];
+  ]);
   public trackByTableFn: TrackByFunction<any> = (index, item) => item.id;
 
   public sortChange(sort: Lab900Sort[]): void {
     sort.forEach(s => {
-      this.mockData.sort((a: any, b: any) => (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1));
-      this.mockData = [...this.mockData];
+      this.mockData.update(current => {
+        return [...current].sort((a: any, b: any) => (a[s.id] < b[s.id] ? -1 : 1) * (s.direction === 'asc' ? 1 : -1));
+      });
     });
   }
 
@@ -2988,8 +3009,8 @@ export class TableExampleComponent {
   }
 
   public cellValueChanged(event: CellValueChangeEvent): void {
-    this.mockData = structuredClone(
-      this.mockData.map(d => {
+    this.mockData.update(current => {
+      current.map(d => {
         if (d.uuid === event.row.uuid) {
           if (event.cell.key.includes('clientReferences')) {
             return {
@@ -3003,13 +3024,21 @@ export class TableExampleComponent {
           return { ...d, [event.cell.key]: event.value };
         }
         return d;
-      })
-    );
+      });
+      return [...current];
+    });
     console.log(event.row);
     console.log('CellValueChangeEvent', event);
   }
 
   public onRowClick(row: any): void {
     console.log('Row clicked', row);
+  }
+
+  public ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.tableCells.set([...this.tableCells()]);
+      this.mockData.set([]);
+    }, 1000);
   }
 }

@@ -33,5 +33,7 @@
       [rowIndex]="rowIndex"
       (valueChanged)="valueChanged.emit($event)" />
   </td>
-  <td mat-footer-cell *matFooterCellDef [innerHtml]="cellFooter()" [ngClass]="cell().footerCellClass"></td>
+  @if (showFooterCell()) {
+    <td mat-footer-cell *matFooterCellDef [innerHtml]="cellFooter()" [ngClass]="cell().footerCellClass"></td>
+  }
 </ng-container>

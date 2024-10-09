@@ -1,5 +1,8 @@
 # Changelog
 
+## 18.0.11
+- fix: console errors with footer column defs when data is emptied async
+
 ## 18.0.10
 - fix: sorting arrows in table not updating correctly
 

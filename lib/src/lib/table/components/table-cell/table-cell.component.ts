@@ -59,6 +59,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   public readonly data = input.required<T[]>();
   public readonly disableSort = input<boolean>(false);
   public readonly maxColumnWidthFromTable = input<string | undefined>(undefined);
+  public readonly showFooterCell = input<boolean>(false);
 
   public readonly columnMaxWidth = computed(() => {
     return this.cell().cellMaxWidth ?? this.maxColumnWidthFromTable();
@@ -86,7 +87,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
     return '';
   });
 
-  private readonly headerClick = output<TableCell<T>>();
+  public readonly headerClick = output<TableCell<T>>();
   public readonly valueChanged = output<CellValueChangeEvent<T>>();
 
   public readonly sort = this.tableService.sort;
