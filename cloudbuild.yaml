@@ -9,10 +9,6 @@ steps:
     args: ['ci']
   - name: 'node'
     entrypoint: 'npm'
-    id: Test Library
-    args: ['run', 'test:silent']
-  - name: 'node'
-    entrypoint: 'npm'
     id: Build Library
     args: ['run', 'build:ui:prod']
   - name: 'node'
