@@ -1,5 +1,8 @@
 # Changelog
 
+## 18.1.0
+- deferred table cells for better performance
+
 ## 18.0.12
 - fix: nav-item with children where throwing NG0953 errors
 
