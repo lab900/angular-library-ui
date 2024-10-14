@@ -1,11 +1,10 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, viewChild } from '@angular/core';
 import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
-import { showcaseUiNavItems } from './modules/showcase-ui/showcase-ui.nav-items';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import packageInfo from '../../package.json';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -13,6 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgOptimizedImage } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { showcaseUiNavItems } from './modules/showcase-ui/showcase-ui.nav-items';
 
 @Component({
   selector: 'lab900-root',
@@ -32,8 +32,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
   ],
 })
 export class AppComponent {
+  private readonly drawer = viewChild(MatDrawer);
   protected readonly gitUrl = packageInfo.repository;
-  protected readonly navItemsGroups: NavItemGroup[] = showcaseUiNavItems;
+  protected readonly navItemsGroups = computed<NavItemGroup[]>(() => {
+    const drawer = this.drawer();
+    if (drawer) {
+      return showcaseUiNavItems(drawer, this.sideNavMode() === 'over');
+    }
+    return [];
+  });
   protected readonly sideNavMode = toSignal(
     inject(BreakpointObserver)
       .observe('(max-width: 959px)')

@@ -27,7 +27,7 @@
   <div class="lab900-showcase__content">
     <mat-drawer-container class="example-container">
       <mat-drawer #drawer [mode]="sideNavMode()" [opened]="sideNavOpened()">
-        <lab900-nav-list [navItemGroups]="navItemsGroups" [showLevelArrows]="true" />
+        <lab900-nav-list [navItemGroups]="navItemsGroups()" [showLevelArrows]="true" />
       </mat-drawer>
       <mat-drawer-content>
         <main>

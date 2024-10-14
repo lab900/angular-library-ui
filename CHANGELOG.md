@@ -1,5 +1,8 @@
 # Changelog
 
+## 18.0.12
+- fix: nav-item with children where throwing NG0953 errors
+
 ## 18.0.11
 - fix: console errors with footer column defs when data is emptied async
 
