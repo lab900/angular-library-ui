@@ -60,6 +60,7 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   public readonly disableSort = input<boolean>(false);
   public readonly maxColumnWidthFromTable = input<string | undefined>(undefined);
   public readonly showFooterCell = input<boolean>(false);
+  public readonly deferred = input<boolean>(false);
 
   public readonly columnMaxWidth = computed(() => {
     return this.cell().cellMaxWidth ?? this.maxColumnWidthFromTable();

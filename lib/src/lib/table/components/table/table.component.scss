@@ -11,6 +11,10 @@
     }
   }
 
+  .lab900-deferred-cell-placeholder {
+    height: 52px;
+  }
+
   &.fixed-widths {
     .mat-mdc-table {
       table-layout: fixed;
@@ -22,20 +26,14 @@
           }
         }
       }
-
-      &.has-back-actions {
-        tr.mat-mdc-row {
-          > :nth-last-child(2) {
-            // width: 100%;
-          }
-        }
-      }
     }
   }
 
   .lab900-table-wrapper {
     overflow: auto;
+    position: relative;
     width: 100%;
+    z-index: 0;
   }
 
   th.mat-mdc-header-cell,

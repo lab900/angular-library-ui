@@ -11,27 +11,33 @@
     [matTooltipPosition]="cell().cellHeaderTooltipPosition || 'above'"
     [style.width]="columnWidth()"
     [style.max-width]="columnMaxWidth()">
-    <ng-container
-      *ngComponentOutlet="
-        cell().headerRenderer || defaultHeaderRenderer;
-        inputs: { columnConfig: cell(), disableSort: disableSort() }
-      " />
+    @defer (on viewport) {
+      <ng-container
+        *ngComponentOutlet="
+          cell().headerRenderer || defaultHeaderRenderer;
+          inputs: { columnConfig: cell(), disableSort: disableSort() }
+        " />
+    } @placeholder {
+      <div class="lab900-deferred-cell-placeholder"></div>
+    }
   </th>
   <td
     mat-cell
     *matCellDef="let element; let rowIndex = dataIndex"
     [style.width]="columnWidth()"
     [style.max-width]="columnMaxWidth()"
-    lab900TableCellEvents
-    [cellData]="element"
-    [rowIndex]="rowIndex"
-    [cell]="cell()"
     class="lab900-td">
-    <lab900-table-cell-inner
-      [cell]="cell()"
-      [rowValue]="element"
-      [rowIndex]="rowIndex"
-      (valueChanged)="valueChanged.emit($event)" />
+    @defer (on viewport) {
+      <lab900-table-cell-inner
+        [cell]="cell()"
+        lab900TableCellEvents
+        [cellData]="element"
+        [rowValue]="element"
+        [rowIndex]="rowIndex"
+        (valueChanged)="valueChanged.emit($event)" />
+    } @placeholder {
+      <div class="lab900-deferred-cell-placeholder"></div>
+    }
   </td>
   @if (showFooterCell()) {
     <td mat-footer-cell *matFooterCellDef [innerHtml]="cellFooter()" [ngClass]="cell().footerCellClass"></td>

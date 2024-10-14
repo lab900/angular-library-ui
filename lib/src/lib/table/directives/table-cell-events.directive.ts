@@ -6,7 +6,7 @@ import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
-  selector: 'td[lab900TableCellEvents]',
+  selector: '[lab900TableCellEvents]',
   standalone: true,
 })
 export class TableCellEventsDirective<T = any> implements AfterViewInit {
