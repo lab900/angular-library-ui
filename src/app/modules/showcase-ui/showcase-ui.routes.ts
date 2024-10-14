@@ -17,7 +17,7 @@ export default [
   {
     path: '',
     loadComponent: () => import('../shared/components/showcase-home/showcase-home.component'),
-    data: { config: showcaseUiConfig, nav: showcaseUiNavItems },
+    data: { config: showcaseUiConfig, nav: showcaseUiNavItems() },
   },
   {
     path: 'getting-started',

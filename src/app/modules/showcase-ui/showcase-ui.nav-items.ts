@@ -2,13 +2,13 @@ import { NavItemGroup } from '@lab900/ui';
 import { showcaseUiConfig } from './showcase-ui.constants';
 import { MatDrawer } from '@angular/material/sidenav';
 
-function navigationFinished(matDrawer: MatDrawer, shouldClose: boolean) {
-  if (shouldClose) {
+function navigationFinished(matDrawer?: MatDrawer, shouldClose?: boolean) {
+  if (matDrawer && shouldClose) {
     matDrawer.close();
   }
 }
 
-export const showcaseUiNavItems = (matDrawer: MatDrawer, shouldClose: boolean): NavItemGroup[] => [
+export const showcaseUiNavItems = (matDrawer?: MatDrawer, shouldClose?: boolean): NavItemGroup[] => [
   {
     label: showcaseUiConfig?.title,
     items: [
