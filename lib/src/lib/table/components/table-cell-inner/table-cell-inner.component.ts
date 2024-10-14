@@ -6,7 +6,6 @@ import {
   ElementRef,
   inject,
   input,
-  NgZone,
   output,
   ViewEncapsulation,
 } from '@angular/core';
@@ -26,7 +25,6 @@ import { NgComponentOutlet } from '@angular/common';
 export class TableCellInnerComponent<T = any> {
   private readonly tableService = inject(Lab900TableService);
   private readonly elRef = inject(ElementRef);
-  private readonly ngZone = inject(NgZone);
 
   public readonly defaultCellRenderer = DefaultCellRendererComponent;
 
@@ -62,27 +60,25 @@ export class TableCellInnerComponent<T = any> {
 
   public constructor() {
     effect(() => {
-      this.ngZone.runOutsideAngular(() => {
-        const parentElm = this.elRef?.nativeElement?.parentElement;
-        if (parentElm) {
-          if (this.isEditing()) {
-            parentElm.classList.add('edit-mode');
-          } else {
-            parentElm.classList.remove('edit-mode');
-          }
-          if (this.canEdit()) {
-            parentElm.classList.add('editable');
-          } else {
-            parentElm.classList.remove('editable');
-          }
-          parentElm.tabIndex = this.canEdit() ? 0 : -1;
-          if (this.cellClasses()) {
-            parentElm.classList.remove(...this.previousClasses);
-            parentElm.classList.add(...this.cellClasses());
-            this.previousClasses = this.cellClasses();
-          }
+      const parentElm = this.elRef?.nativeElement?.parentElement;
+      if (parentElm) {
+        if (this.isEditing()) {
+          parentElm.classList.add('edit-mode');
+        } else {
+          parentElm.classList.remove('edit-mode');
         }
-      });
+        if (this.canEdit()) {
+          parentElm.classList.add('editable');
+        } else {
+          parentElm.classList.remove('editable');
+        }
+        parentElm.tabIndex = this.canEdit() ? 0 : -1;
+        if (this.cellClasses()) {
+          parentElm.classList.remove(...this.previousClasses);
+          parentElm.classList.add(...this.cellClasses());
+          this.previousClasses = this.cellClasses();
+        }
+      }
     });
   }
 

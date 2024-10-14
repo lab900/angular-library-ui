@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, signal, TrackByFunction } from '@angular/core';
+import { Component, signal, TrackByFunction } from '@angular/core';
 import {
   ActionButton,
   CellInputEditorComponent,
@@ -2848,7 +2848,7 @@ const mockData = [
   </lab900-table>`,
   styleUrls: ['table-example.component.scss'],
 })
-export class TableExampleComponent implements AfterViewInit {
+export class TableExampleComponent {
   public sort: Lab900Sort[] = [{ id: 'id', direction: 'asc' }];
 
   public tableHeaderActions: ActionButton[] = [
@@ -3033,12 +3033,5 @@ export class TableExampleComponent implements AfterViewInit {
 
   public onRowClick(row: any): void {
     console.log('Row clicked', row);
-  }
-
-  public ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.tableCells.set([...this.tableCells()]);
-      this.mockData.set([]);
-    }, 1000);
   }
 }
