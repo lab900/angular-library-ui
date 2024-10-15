@@ -26,14 +26,14 @@ export class TableCellInnerComponent<T = any> {
   private readonly tableService = inject(Lab900TableService);
   private readonly elRef = inject(ElementRef);
 
-  public readonly defaultCellRenderer = DefaultCellRendererComponent;
-
   public readonly cell = input.required<TableCell<T>>();
   public readonly rowValue = input.required<T>();
   public readonly rowIndex = input.required<number>();
   public readonly valueChanged = output<CellValueChangeEvent<T>>();
 
   private previousClasses: string[] = [];
+
+  protected readonly cellTemplate = computed(() => this.cell().cellRenderer ?? DefaultCellRendererComponent);
 
   public readonly canEdit = computed(() => {
     return (

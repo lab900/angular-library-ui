@@ -65,6 +65,10 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
     return this.cell().cellMaxWidth ?? this.maxColumnWidthFromTable();
   });
 
+  public readonly columnHeaderTemplate = computed(() => {
+    return this.cell().headerRenderer ?? this.defaultHeaderRenderer;
+  });
+
   public readonly columnWidth = computed(() => {
     if (this.cell().width === '*') {
       return '100%';

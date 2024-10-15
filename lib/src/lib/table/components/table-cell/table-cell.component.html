@@ -11,12 +11,9 @@
     [matTooltipPosition]="cell().cellHeaderTooltipPosition || 'above'"
     [style.width]="columnWidth()"
     [style.max-width]="columnMaxWidth()">
-    @defer (on viewport) {
+    @defer (on viewport; prefetch on idle) {
       <ng-container
-        *ngComponentOutlet="
-          cell().headerRenderer || defaultHeaderRenderer;
-          inputs: { columnConfig: cell(), disableSort: disableSort() }
-        " />
+        *ngComponentOutlet="columnHeaderTemplate(); inputs: { columnConfig: cell(), disableSort: disableSort() }" />
     } @placeholder {
       <div class="lab900-deferred-cell-placeholder"></div>
     }
@@ -27,7 +24,7 @@
     [style.width]="columnWidth()"
     [style.max-width]="columnMaxWidth()"
     class="lab900-td">
-    @defer (on viewport) {
+    @defer (on viewport; prefetch on idle) {
       <lab900-table-cell-inner
         [cell]="cell()"
         lab900TableCellEvents
