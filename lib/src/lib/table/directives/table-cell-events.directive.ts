@@ -6,13 +6,14 @@ import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Directive({
-  selector: 'td[lab900TableCellEvents]',
+  selector: '[lab900TableCellEvents]',
   standalone: true,
 })
 export class TableCellEventsDirective<T = any> implements AfterViewInit {
   private readonly matTable = inject(MatTable);
   private readonly tableService = inject(Lab900TableService);
-  private readonly elm: ElementRef<HTMLTableCellElement> = inject(ElementRef);
+  private readonly innerElm: ElementRef<HTMLElement> = inject(ElementRef);
+  private cellElement!: HTMLTableCellElement;
   private readonly ngZone = inject(NgZone);
   protected readonly destroyRef = inject(DestroyRef);
 
@@ -37,11 +38,16 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
     if (!this.matTable || !this.matTable.dataSource) {
       throw new Error('MatTable [dataSource] is required');
     }
+    this.cellElement = this.innerElm.nativeElement.parentElement as HTMLTableCellElement;
+
+    if (!this.cellElement || this.cellElement.tagName !== 'TD') {
+      throw new Error('No parent td element found for TableCellEventsDirective');
+    }
 
     this.siblingCells = this.getAllSiblingCells();
-    this.cellIdx = this.siblingCells.indexOf(this.elm.nativeElement);
+    this.cellIdx = this.siblingCells.indexOf(this.cellElement);
     this.siblingRows = this.getAllSiblingRows();
-    this.rowIdx = this.siblingRows.indexOf(this.elm.nativeElement.parentElement as HTMLTableRowElement);
+    this.rowIdx = this.siblingRows.indexOf(this.cellElement.parentElement as HTMLTableRowElement);
 
     /**
      * Listen to keydown, focus and click events on the cell
@@ -49,19 +55,19 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
      * Wrap the event handlers in `ngZone.run` to trigger change detection
      */
     this.ngZone.runOutsideAngular(() => {
-      fromEvent(this.elm.nativeElement, 'keydown')
+      fromEvent(this.cellElement, 'keydown')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(event => {
           this.onKeydown(event as KeyboardEvent);
         });
 
-      fromEvent(this.elm.nativeElement, 'focus')
+      fromEvent(this.cellElement, 'focus')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.onFocus();
         });
 
-      fromEvent(this.elm.nativeElement, 'click')
+      fromEvent(this.cellElement, 'click')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(event => {
           this.onClick(event as MouseEvent);
@@ -157,13 +163,13 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
   }
 
   private getAllSiblingCells(): HTMLTableCellElement[] {
-    const elm: HTMLTableCellElement = this.elm.nativeElement;
+    const elm: HTMLTableCellElement = this.cellElement;
     const cells = elm.parentElement?.children;
     return cells ? ([...Array.from(cells)] as HTMLTableCellElement[]) : [];
   }
 
   private getAllSiblingRows(): HTMLTableRowElement[] {
-    const elm: HTMLTableCellElement = this.elm.nativeElement;
+    const elm: HTMLTableCellElement = this.cellElement;
     const rows = elm.parentElement?.parentElement?.children;
     return rows ? ([...Array.from(rows)] as HTMLTableRowElement[]) : [];
   }

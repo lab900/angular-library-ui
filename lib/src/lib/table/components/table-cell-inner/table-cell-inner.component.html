@@ -14,7 +14,7 @@
   } @else {
     <ng-container
       *ngComponentOutlet="
-        cell().cellRenderer || defaultCellRenderer;
+        cellTemplate();
         inputs: {
           data: rowValue(),
           columnConfig: cell(),
