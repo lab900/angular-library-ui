@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.1.1
+## 18.1.2
 - deferred table cells for better performance
 
 ## 18.0.12
