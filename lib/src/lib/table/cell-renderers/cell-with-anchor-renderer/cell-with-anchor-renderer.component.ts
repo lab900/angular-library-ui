@@ -17,9 +17,16 @@ import { TranslateModule } from '@ngx-translate/core';
       [matTooltip]="tooltip() | translate"
       [matTooltipPosition]="tooltipPosition()"
       (click)="$event.stopImmediatePropagation()">
-      <a [target]="renderOptions()?.target ?? '_self'" [href]="href">
+      @if (textBeforeUrl() !== '') {
+        {{ textBeforeUrl() | translate }}
+      }
+      @if (anchorHref()) {
+        <a [target]="renderOptions()?.target ?? '_self'" [href]="anchorHref()">
+          {{ cellValue() | translate }}
+        </a>
+      } @else {
         {{ cellValue() | translate }}
-      </a>
+      }
     </div>
   }`,
 })
@@ -28,4 +35,5 @@ export class CellWithAnchorRendererComponent<T = any> extends CellRendererAbstra
   T
 > {
   public readonly anchorHref = computed(() => this.renderOptions()?.url(this.data()));
+  public readonly textBeforeUrl = computed(() => this.renderOptions()?.textBeforeUrl?.(this.data()) ?? '');
 }
