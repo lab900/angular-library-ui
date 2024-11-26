@@ -83,7 +83,7 @@ export class Lab900ActionButtonComponent<T = any> implements ActionButtonCompone
     this.prefixIcon$ = stream.pipe(map(([a, d]) => readPropValue(a.prefixIcon, d)));
     this.suffixIcon$ = stream.pipe(map(([a, d]) => readPropValue(a.suffixIcon, d)));
     this.containerClass$ = stream.pipe(map(([a, d]) => readPropValue(a.containerClass, d)));
-    this.buttonId$ = stream.pipe(map(([a, d]) => readPropValue(a.id, d)));
+    this.buttonId$ = stream.pipe(map(([a, d]) => readPropValue(a.buttonId, d)));
   }
 
   public doAction(e: Event): void {
