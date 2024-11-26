@@ -53,6 +53,8 @@ export class Lab900ButtonComponent {
 
   @Input()
   public containerClass?: string;
+  @Input()
+  public id?: string;
 
   @Output()
   public btnClick = new EventEmitter<any>();

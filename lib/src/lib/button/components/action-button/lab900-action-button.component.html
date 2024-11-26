@@ -13,7 +13,8 @@
           [suffixIcon]="suffixIcon$ | async"
           [matTooltipPosition]="tooltipPosition$ | async"
           [svgIcon]="action?.svgIcon"
-          [containerClass]="containerClass$ | async" />
+          [containerClass]="containerClass$ | async"
+          [id]="id$ | async" />
       } @else {
         <lab900-button
           (click)="$event.stopPropagation()"
@@ -27,7 +28,8 @@
           [suffixIcon]="suffixIcon$ | async"
           [matTooltipPosition]="tooltipPosition$ | async"
           [svgIcon]="action?.svgIcon"
-          [containerClass]="containerClass$ | async" />
+          [containerClass]="containerClass$ | async"
+          [id]="id$ | async" />
         <lab900-action-button-menu #sub [actions]="action.subActions" [data]="data$ | async" />
       }
     } @else {
