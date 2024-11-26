@@ -1,5 +1,8 @@
 # Changelog
 
+## 18.1.3
+- adding id's to buttons for testing purposes
+
 ## 18.1.2
 - deferred table cells for better performance
 
