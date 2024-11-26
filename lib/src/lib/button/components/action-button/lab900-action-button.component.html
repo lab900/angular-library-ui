@@ -14,7 +14,7 @@
           [matTooltipPosition]="tooltipPosition$ | async"
           [svgIcon]="action?.svgIcon"
           [containerClass]="containerClass$ | async"
-          [id]="id$ | async" />
+          [id]="buttonId$ | async" />
       } @else {
         <lab900-button
           (click)="$event.stopPropagation()"
@@ -29,7 +29,7 @@
           [matTooltipPosition]="tooltipPosition$ | async"
           [svgIcon]="action?.svgIcon"
           [containerClass]="containerClass$ | async"
-          [id]="id$ | async" />
+          [id]="buttonId$ | async" />
         <lab900-action-button-menu #sub [actions]="action.subActions" [data]="data$ | async" />
       }
     } @else {
