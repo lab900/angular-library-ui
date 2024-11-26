@@ -26,6 +26,7 @@ export interface ActionButton<T = any> {
   prefixIcon?: propValue<T>;
   svgIcon?: boolean;
   containerClass?: propValue<T>;
+  buttonId?: propValue<T>;
   align?: 'left' | 'right';
 }
 

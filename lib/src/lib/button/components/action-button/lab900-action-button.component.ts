@@ -62,6 +62,7 @@ export class Lab900ActionButtonComponent<T = any> implements ActionButtonCompone
   public readonly suffixIcon$: Observable<string | undefined>;
   public readonly prefixIcon$: Observable<string | undefined>;
   public readonly containerClass$: Observable<string | undefined>;
+  public readonly buttonId$: Observable<string | undefined>;
 
   public constructor() {
     const stream = combineLatest([this.action$, this.data$]).pipe(shareReplay({ bufferSize: 1, refCount: true }));
@@ -82,6 +83,7 @@ export class Lab900ActionButtonComponent<T = any> implements ActionButtonCompone
     this.prefixIcon$ = stream.pipe(map(([a, d]) => readPropValue(a.prefixIcon, d)));
     this.suffixIcon$ = stream.pipe(map(([a, d]) => readPropValue(a.suffixIcon, d)));
     this.containerClass$ = stream.pipe(map(([a, d]) => readPropValue(a.containerClass, d)));
+    this.buttonId$ = stream.pipe(map(([a, d]) => readPropValue(a.buttonId, d)));
   }
 
   public doAction(e: Event): void {
