@@ -15,6 +15,7 @@ import { of } from 'rxjs';
       type="raised"
       label="hello world"
       suffixIcon="remove_red_eye"
+      buttonId="Raised-button"
       throttleTimeInMs="1000" />
     <p>Raised button disabled</p>
     <lab900-button
@@ -23,6 +24,7 @@ import { of } from 'rxjs';
       color="primary"
       type="raised"
       label="hello world"
+      buttonId="Raised-button-disabled"
       suffixIcon="remove_red_eye" />
     <p>Stroked button</p>
     <lab900-button
@@ -30,6 +32,7 @@ import { of } from 'rxjs';
       color="primary"
       type="stroked"
       label="hello world"
+      buttonId="Stroked-button"
       prefixIcon="edit" />
     <p>Stroked button disabled</p>
     <lab900-button
@@ -38,6 +41,7 @@ import { of } from 'rxjs';
       color="primary"
       type="stroked"
       label="hello world"
+      buttonId="Stroked-button-disabled"
       prefixIcon="edit" />
     <p>Raised button color= accent</p>
     <lab900-button color="accent" type="raised" label="hello world" />
@@ -62,6 +66,7 @@ export class ButtonExampleComponent {
         action: () => {
           console.log('Button 1 is selected');
         },
+        buttonId: 'btn-1',
       },
       {
         label: 'Button 2',
@@ -69,6 +74,7 @@ export class ButtonExampleComponent {
         action: () => {
           console.log('Button 2 is selected');
         },
+        buttonId: 'btn-2',
       },
       {
         label: 'Button 3',
@@ -76,6 +82,7 @@ export class ButtonExampleComponent {
           console.log('Button 2 is selected');
         },
         hide: () => of(true),
+        buttonId: 'btn-3',
       },
     ],
   };
