@@ -5,6 +5,8 @@
         mat-menu-item
         (throttledClick)="doAction($event, action)"
         [disabled]="getDisabled(action) | async"
+        [matTooltip]="action?.tooltip?.value | translate"
+        [matTooltipPosition]="action?.tooltip?.position ?? 'left'"
         lab900PreventDoubleClick>
         @if (action.prefixIcon) {
           <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>
@@ -19,6 +21,8 @@
         mat-menu-item
         [matMenuTriggerFor]="innerMenu.actionMenu"
         [disabled]="getDisabled(action) | async"
+        [matTooltip]="action?.tooltip?.value | translate"
+        [matTooltipPosition]="action?.tooltip?.position ?? 'left'"
         lab900PreventDoubleClick>
         @if (action.prefixIcon) {
           <mat-icon>{{ getPrefixIcon(action) }}</mat-icon>

@@ -1,4 +1,6 @@
 # Changelog
+## 18.1.5
+- add tooltips to action menu items (sub-actions)
 
 ## 18.1.4
 - adjusting id's to buttons for testing purposes
