@@ -2874,6 +2874,9 @@ export class TableExampleComponent {
           label: 'Word',
           type: 'stroked',
           action: () => console.log('Word'),
+          tooltip: {
+            value: 'Exporteer naar een Word document',
+          },
         },
         {
           label: 'PDF',

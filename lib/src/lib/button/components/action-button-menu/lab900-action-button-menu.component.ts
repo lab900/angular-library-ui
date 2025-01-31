@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { MatTooltip } from '@angular/material/tooltip';
 import { ActionButton } from '../../models/action-button.model';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { coerceObservable, readPropValue } from '../../../utils/utils';
@@ -13,7 +14,16 @@ import { map } from 'rxjs/operators';
   selector: 'lab900-action-button-menu',
   templateUrl: './lab900-action-button-menu.component.html',
   standalone: true,
-  imports: [MatMenu, MatIcon, MatMenuItem, MatMenuTrigger, AsyncPipe, TranslateModule, PreventDoubleClickDirective],
+  imports: [
+    MatMenu,
+    MatIcon,
+    MatMenuItem,
+    MatMenuTrigger,
+    AsyncPipe,
+    TranslateModule,
+    PreventDoubleClickDirective,
+    MatTooltip,
+  ],
 })
 export class Lab900ActionButtonMenuComponent {
   @ViewChild('actionMenu', { static: true })
