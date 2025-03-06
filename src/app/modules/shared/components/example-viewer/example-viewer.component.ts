@@ -18,7 +18,6 @@ export interface ExampleFile {
   selector: 'lab900-example-viewer',
   templateUrl: './example-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MatCardModule,
     TranslateModule,

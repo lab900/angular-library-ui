@@ -10,7 +10,6 @@ import { CellEditorBaseOptions } from '../cell-editor.options';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslateModule, MatButtonModule, MatDatepickerModule],
   selector: 'lab900-cell-date-editor',
-  standalone: true,
   template: `
     <div style="min-width: 110px">
       <input

@@ -5,7 +5,6 @@ import { of } from 'rxjs';
 @Component({
   selector: 'lab900-button-example',
   styles: ['p {margin: 10px 0}'],
-  standalone: true,
   imports: [Lab900ButtonComponent, Lab900ActionButtonComponent],
   template: `
     <p>Raised button</p>

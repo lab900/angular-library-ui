@@ -1,23 +1,25 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
+@use "sass:map";
 @use '@angular/material' as mat;
 @use '../dist/@lab900/ui/theming' as theme;
-@import 'src/styles/green.palette';
-@import 'src/styles/grey.palette';
+@use 'src/styles/green.palette' as greenPalette;
+@use 'src/styles/grey.palette' as greyPalette;
 
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 @include mat.typography-hierarchy(mat.m2-define-typography-config());
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$angular-libraries-primary: mat.m2-define-palette($mat-lab900green);
-$angular-libraries-accent: mat.m2-define-palette($mat-lab900grey);
+$angular-libraries-primary: mat.m2-define-palette(greenPalette.$mat-lab900green);
+$angular-libraries-accent: mat.m2-define-palette(greyPalette.$mat-lab900grey);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
@@ -45,19 +47,19 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-  color: $palette-lab900-text;
+  color: greenPalette.$palette-lab900-text;
 }
 
 p {
   a {
-    color: $palette-lab900green-500;
+    color: greenPalette.$palette-lab900green-500;
   }
 }
 
 .mat-drawer-content {
-  background: rgba($palette-lab900green-100, 0.1);
+  background: rgba(greenPalette.$palette-lab900green-100, 0.1);
   height: calc(100vh - 64px) !important;
-  color: $palette-lab900-text;
+  color: greenPalette.$palette-lab900-text;
 
   @media screen and (max-width: 599px) {
     height: calc(100vh - 56px) !important;
@@ -69,12 +71,12 @@ p {
 }
 
 .mat-drawer-side {
-  border-right: solid 2px $palette-lab900green-100;
-  color: $palette-lab900-text;
+  border-right: solid 2px greenPalette.$palette-lab900green-100;
+  color: greenPalette.$palette-lab900-text;
 }
 
 .mat-mdc-list-base .mat-mdc-list-item {
-  color: $palette-lab900-text;
+  color: greenPalette.$palette-lab900-text;
 }
 
 .mat-mdc-card.lab900-card {
@@ -85,7 +87,7 @@ p {
 
   .mat-mdc-card-header {
     padding: 8px;
-    background: $palette-lab900green-100;
+    background: greenPalette.$palette-lab900green-100;
 
     .mat-mdc-card-title {
       margin: 0;

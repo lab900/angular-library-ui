@@ -7,7 +7,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-with-icon-renderer',
-  standalone: true,
   imports: [MatIconModule, MatTooltipModule, TranslateModule],
   templateUrl: './cell-with-icon-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

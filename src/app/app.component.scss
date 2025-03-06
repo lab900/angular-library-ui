@@ -1,4 +1,4 @@
-@import 'src/styles/green.palette';
+@use 'src/styles/green.palette' as palette;
 
 .lab900-showcase {
   &__header {
@@ -20,7 +20,7 @@
     }
 
     .menu-button {
-      background: $palette-lab900green-50;
+      background: palette.$palette-lab900green-50;
       height: 64px;
       width: 64px;
       display: flex;
@@ -42,7 +42,7 @@
       display: flex;
       align-items: center;
       text-decoration: none;
-      color: $palette-lab900-text;
+      color: palette.$palette-lab900-text;
 
       img {
         height: 35px;

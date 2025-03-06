@@ -17,7 +17,6 @@ const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   styleUrls: ['./nav-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [IconComponent, TranslateModule, MatListModule, NavItemComponent],
 })
 export class Lab900NavListComponent {

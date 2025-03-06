@@ -14,7 +14,6 @@ import { Observable } from 'rxjs';
   templateUrl: './showcase-page.component.html',
   styleUrls: ['./showcase-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [MatTabsModule, MarkdownPageComponent, ExampleViewerComponent, Lab900PageHeaderComponent, NgComponentOutlet],
 })
 export class ShowcasePageComponent {

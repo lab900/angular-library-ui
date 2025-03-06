@@ -13,7 +13,6 @@ import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick
   styleUrls: ['./button.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     NgTemplateOutlet,
     NgClass,

@@ -1,7 +1,7 @@
-@import 'src/styles/green.palette';
+@use 'src/styles/green.palette' as palette;
 
 .showcase-home__header {
-  background: $palette-lab900green-100;
+  background: palette.$palette-lab900green-100;
   text-align: center;
 
   img {
@@ -34,7 +34,7 @@
     top: 20px;
     right: 20px;
     font-size: 12px;
-    background: $palette-lab900green-200;
+    background: palette.$palette-lab900green-200;
     padding: 5px 10px 3px;
     display: block;
     border-radius: 10px;

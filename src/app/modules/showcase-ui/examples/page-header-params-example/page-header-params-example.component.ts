@@ -8,7 +8,6 @@ import { ActionButton, Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab
     [navItems]="navItems"
     [actions]="actions"
     [showActionsFixedOnMobile]="false" />`,
-  standalone: true,
   imports: [Lab900PageHeaderComponent],
 })
 export class PageHeaderParamsExampleComponent {

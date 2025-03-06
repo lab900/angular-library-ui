@@ -1,4 +1,7 @@
 # Changelog
+## 19.0.0
+- upgrade to Angular v19.2.1
+
 ## 18.1.5
 - add tooltips to action menu items (sub-actions)
 

@@ -8,7 +8,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-merger-example',
-  standalone: true,
   imports: [MatButtonModule, TranslateModule, Lab900MergerComponent],
   template: `
     <div class="merger-example-header">

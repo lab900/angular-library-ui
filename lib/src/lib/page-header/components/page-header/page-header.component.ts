@@ -18,7 +18,6 @@ import { Lab900ActionButtonComponent } from '../../../button/components/action-b
   styleUrls: ['./page-header.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MatTabsModule,
     PageHeaderNavItemComponent,

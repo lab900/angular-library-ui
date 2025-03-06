@@ -29,7 +29,6 @@ import { filter, map } from 'rxjs/operators';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  standalone: true,
   selector: 'lab900-table-cell-select',
   templateUrl: './table-cell-select.component.html',
   encapsulation: ViewEncapsulation.None,

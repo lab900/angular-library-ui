@@ -13,7 +13,6 @@ import { switchMap } from 'rxjs';
   styleUrls: ['./nav-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [NavItemButtonComponent],
 })
 export class NavItemComponent {

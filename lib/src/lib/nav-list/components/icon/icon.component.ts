@@ -14,7 +14,6 @@ import { MatIconModule } from '@angular/material/icon';
       <mat-icon [svgIcon]="icon().svgName" />
     }`,
   imports: [MatIconModule],
-  standalone: true,
 })
 export class IconComponent {
   public readonly icon = input.required<Icon>();

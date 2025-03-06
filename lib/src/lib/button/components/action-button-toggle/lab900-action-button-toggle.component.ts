@@ -12,7 +12,6 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
-  standalone: true,
   imports: [MatButtonToggleGroup, MatButtonToggle, MatIcon, TranslateModule, AsyncPipe, PreventDoubleClickDirective],
 })
 export class Lab900ActionButtonToggleComponent<T = any> implements ActionButtonComponent<T> {

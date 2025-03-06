@@ -9,13 +9,14 @@ describe('Lab900TableCellComponent', () => {
   let fixture: ComponentFixture<Lab900TableCellComponent>;
   let table: MatTable<any>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [...TABLE_TESTING_PROVIDERS, MockProvider(MatTable)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Lab900TableCellComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     table = TestBed.inject(MatTable);
   });
 

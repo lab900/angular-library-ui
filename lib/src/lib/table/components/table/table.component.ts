@@ -69,7 +69,6 @@ export interface SelectableRows<T = any> {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [Lab900TableService],
-  standalone: true,
   imports: [
     Lab900TableHeaderComponent,
     NgTemplateOutlet,

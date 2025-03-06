@@ -7,7 +7,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-with-anchor',
-  standalone: true,
   imports: [MatTooltipModule, MatCheckboxModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

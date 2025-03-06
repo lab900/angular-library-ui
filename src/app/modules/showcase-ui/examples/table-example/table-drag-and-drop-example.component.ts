@@ -5,7 +5,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'lab900-table-example',
-  standalone: true,
   imports: [Lab900TableComponent],
   template: `<lab900-table
     [tableCells]="tableCells"

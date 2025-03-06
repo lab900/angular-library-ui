@@ -22,7 +22,6 @@ import { AsyncPipe } from '@angular/common';
   selector: 'lab900-merger-item',
   templateUrl: './merger-item.component.html',
   styleUrls: ['./merger-item.component.scss'],
-  standalone: true,
   imports: [TranslateModule, AsyncPipe],
 })
 export class Lab900MergerItemComponent<T> implements AfterViewInit, OnChanges {
