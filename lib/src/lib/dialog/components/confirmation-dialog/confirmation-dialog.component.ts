@@ -7,14 +7,14 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { ConfirmationDialog } from '../../models/confirmationDialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
   styleUrls: ['../../../../assets/theme/dialog.scss'],
-  imports: [MatDialogContent, TranslateModule, MatDialogActions, MatButton, MatDialogClose],
+  imports: [MatDialogContent, TranslatePipe, MatDialogActions, MatButton, MatDialogClose],
 })
 export class ConfirmationDialogComponent {
   private readonly data?: ConfirmationDialog = inject(MAT_DIALOG_DATA);

@@ -4,7 +4,7 @@ import { Lab900ButtonType } from '../../models/button.model';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 
 @Component({
@@ -20,7 +20,7 @@ import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick
     MatIconButton,
     MatIcon,
     MatFabButton,
-    TranslateModule,
+    TranslatePipe,
     MatMiniFabButton,
     PreventDoubleClickDirective,
   ],

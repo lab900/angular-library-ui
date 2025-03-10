@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, effect, viewChild, ViewEncapsulation } from '@angular/core';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatOption, MatSelect } from '@angular/material/select';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellSelectEditorOptions } from './cell-select-editor.options';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-select-editor',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [MatSelectModule, TranslateModule],
+  imports: [TranslatePipe, MatSelect, MatOption],
   template: `
     @if (editOptions()) {
       <mat-select

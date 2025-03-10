@@ -6,16 +6,16 @@ import { DomSanitizer } from '@angular/platform-browser';
 import MergeIcon from '../../../../assets/icons/merge';
 import { isDifferent } from '../../../utils/different.utils';
 import { MatProgressBar } from '@angular/material/progress-bar';
-import { CommonModule } from '@angular/common';
 import { MatRadioButton } from '@angular/material/radio';
 import { Lab900MergerItemComponent } from '../merger-item/merger-item.component';
 import { MatIconButton } from '@angular/material/button';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'lab900-merger',
   templateUrl: './merger.component.html',
   styleUrls: ['./merger.component.scss'],
-  imports: [MatProgressBar, CommonModule, MatRadioButton, Lab900MergerItemComponent, MatIcon, MatIconButton],
+  imports: [MatProgressBar, MatRadioButton, Lab900MergerItemComponent, MatIcon, MatIconButton, NgClass],
 })
 export class Lab900MergerComponent<T> implements OnInit, OnChanges {
   @Input()

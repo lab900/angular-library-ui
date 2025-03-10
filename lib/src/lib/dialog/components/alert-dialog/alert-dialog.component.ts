@@ -8,13 +8,13 @@ import {
 } from '@angular/material/dialog';
 import { AlertDialog } from '../../models/alertDialog';
 import { MatButton } from '@angular/material/button';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-alert-dialog',
   templateUrl: './alert-dialog.component.html',
   styleUrls: ['../../../../assets/theme/dialog.scss'],
-  imports: [MatDialogActions, MatButton, TranslateModule, MatDialogContent, MatDialogClose],
+  imports: [MatDialogActions, MatButton, TranslatePipe, MatDialogContent, MatDialogClose],
 })
 export class AlertDialogComponent {
   private readonly data?: AlertDialog = inject(MAT_DIALOG_DATA);

@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, ViewEncapsulation } from '@angular/core';
 import { CellRendererAbstract } from '../cell-renderer.abstract';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { CellWithIconRendererOptions } from './cell-with-icon-renderer.options';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
+import { MatTooltip } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-with-icon-renderer',
-  imports: [MatIconModule, MatTooltipModule, TranslateModule],
+  imports: [MatIcon, MatTooltip, TranslatePipe],
   templateUrl: './cell-with-icon-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

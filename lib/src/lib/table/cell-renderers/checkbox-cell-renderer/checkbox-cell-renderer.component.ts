@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, ViewEncapsulation } from '@angular/core';
 import { CellRendererAbstract } from '../cell-renderer.abstract';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { CheckboxCellRendererOptions } from './checkbox-cell-renderer.options';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lab900-checkbox-cell-renderer',
-  imports: [MatCheckboxModule, MatTooltipModule, TranslateModule],
+  imports: [TranslatePipe, MatCheckbox, MatTooltip],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `

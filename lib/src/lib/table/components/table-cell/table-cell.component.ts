@@ -13,27 +13,42 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CellValueChangeEvent, TableCell } from '../../models/table-cell.model';
-import { MatColumnDef, MatTable, MatTableModule } from '@angular/material/table';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatTable,
+} from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
 import { Lab900TableService } from '../../services/table.service';
 import { NgClass, NgComponentOutlet } from '@angular/common';
 import { DefaultColumnHeaderRendererComponent } from '../../column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { TableCellInnerComponent } from '../table-cell-inner/table-cell-inner.component';
 import { TableCellEventsDirective } from '../../directives/table-cell-events.directive';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
   templateUrl: './table-cell.component.html',
   imports: [
-    MatTableModule,
     NgClass,
-    MatTooltipModule,
-    TranslateModule,
+    TranslatePipe,
     NgComponentOutlet,
     TableCellInnerComponent,
     TableCellEventsDirective,
+    MatTooltip,
+    MatHeaderCell,
+    MatColumnDef,
+    MatCell,
+    MatCellDef,
+    MatFooterCell,
+    MatHeaderCellDef,
+    MatFooterCellDef,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

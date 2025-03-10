@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import { NavItem, NavItemGroup } from '../../models/nav-item.model';
 import { IsActiveMatchOptions } from '@angular/router';
 import { IconComponent } from '../icon/icon.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatListModule } from '@angular/material/list';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NavItemComponent } from '../nav-item/nav-item.component';
 import { Breakpoints } from '@angular/cdk/layout';
+import { MatNavList } from '@angular/material/list';
 
 const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   return typeof i?.hide === 'function' ? i.hide() : (i?.hide ?? false);
@@ -17,7 +17,7 @@ const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   styleUrls: ['./nav-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IconComponent, TranslateModule, MatListModule, NavItemComponent],
+  imports: [IconComponent, TranslatePipe, NavItemComponent, MatNavList],
 })
 export class Lab900NavListComponent {
   public readonly navItemGroups = input.required<NavItemGroup[]>();

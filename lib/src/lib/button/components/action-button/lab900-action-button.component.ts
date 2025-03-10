@@ -11,7 +11,7 @@ import { Lab900ButtonComponent } from '../button/button.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Lab900ActionButtonMenuComponent } from '../action-button-menu/lab900-action-button-menu.component';
 import { Lab900ActionButtonToggleComponent } from '../action-button-toggle/lab900-action-button-toggle.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button',
@@ -23,7 +23,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatMenuTrigger,
     Lab900ActionButtonMenuComponent,
     Lab900ActionButtonToggleComponent,
-    TranslateModule,
+    TranslatePipe,
   ],
 })
 export class Lab900ActionButtonComponent<T = any> implements ActionButtonComponent<T> {

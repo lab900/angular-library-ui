@@ -1,19 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Lab900TableCellComponent, TableCell } from '@lab900/ui';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatTable } from '@angular/material/table';
 import { TABLE_TESTING_PROVIDERS } from '../../../testing/testing.providers';
 import { MockProvider } from 'ng-mocks';
+import { Lab900TableCellComponent } from './table-cell.component';
+import { TableCell } from '../../models/table-cell.model';
 
 describe('Lab900TableCellComponent', () => {
   let component: Lab900TableCellComponent;
   let fixture: ComponentFixture<Lab900TableCellComponent>;
   let table: MatTable<any>;
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [Lab900TableCellComponent],
       providers: [...TABLE_TESTING_PROVIDERS, MockProvider(MatTable)],
     }).compileComponents();
+  }));
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(Lab900TableCellComponent);
     component = fixture.componentInstance;
     table = TestBed.inject(MatTable);

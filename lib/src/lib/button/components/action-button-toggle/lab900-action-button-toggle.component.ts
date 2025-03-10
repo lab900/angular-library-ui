@@ -4,15 +4,15 @@ import { coerceObservable, readPropValue } from '../../../utils/utils';
 import { Observable } from 'rxjs';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatIcon } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
 import { AsyncPipe } from '@angular/common';
 import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 import { map } from 'rxjs/operators';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
-  imports: [MatButtonToggleGroup, MatButtonToggle, MatIcon, TranslateModule, AsyncPipe, PreventDoubleClickDirective],
+  imports: [MatButtonToggleGroup, MatButtonToggle, MatIcon, TranslatePipe, AsyncPipe, PreventDoubleClickDirective],
 })
 export class Lab900ActionButtonToggleComponent<T = any> implements ActionButtonComponent<T> {
   private _disabled = false;

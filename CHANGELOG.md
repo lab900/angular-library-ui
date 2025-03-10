@@ -1,5 +1,12 @@
 # Changelog
 
+## 19.0.0
+
+- Angular 19 update
+- All module imports have been removed
+- Some smaller improvements
+- No breaking changes
+
 ## 18.1.5
 
 - add tooltips to action menu items (sub-actions)

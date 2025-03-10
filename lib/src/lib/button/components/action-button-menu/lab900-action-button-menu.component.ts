@@ -6,9 +6,9 @@ import { coerceObservable, readPropValue } from '../../../utils/utils';
 import { Observable } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
 import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 import { map } from 'rxjs/operators';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button-menu',
@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
     MatMenuItem,
     MatMenuTrigger,
     AsyncPipe,
-    TranslateModule,
+    TranslatePipe,
     PreventDoubleClickDirective,
     MatTooltip,
   ],

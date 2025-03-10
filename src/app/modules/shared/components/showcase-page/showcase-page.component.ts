@@ -2,19 +2,25 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@a
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShowcaseRouteData } from '../../models/showcase-route.model';
 import { Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
-import { MatTabsModule } from '@angular/material/tabs';
 import MarkdownPageComponent from '../markdown-page/markdown-page.component';
 import { ExampleViewerComponent } from '../example-viewer/example-viewer.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgComponentOutlet } from '@angular/common';
 import { Observable } from 'rxjs';
+import { MatTabNavPanel } from '@angular/material/tabs';
 
 @Component({
   selector: 'lab900-showcase-page',
   templateUrl: './showcase-page.component.html',
   styleUrls: ['./showcase-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTabsModule, MarkdownPageComponent, ExampleViewerComponent, Lab900PageHeaderComponent, NgComponentOutlet],
+  imports: [
+    MarkdownPageComponent,
+    ExampleViewerComponent,
+    Lab900PageHeaderComponent,
+    NgComponentOutlet,
+    MatTabNavPanel,
+  ],
 })
 export class ShowcasePageComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
