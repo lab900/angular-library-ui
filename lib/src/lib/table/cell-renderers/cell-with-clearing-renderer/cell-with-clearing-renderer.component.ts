@@ -8,7 +8,6 @@ import { CellRendererAbstract } from '../cell-renderer.abstract';
 
 @Component({
   selector: 'lab900-cell-with-clearing-renderer',
-  standalone: true,
   imports: [MatIconModule, MatTooltipModule, TranslateModule, MatButtonModule],
   templateUrl: './cell-with-clearing-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

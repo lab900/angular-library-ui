@@ -16,7 +16,6 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'lab900-action-button',
   templateUrl: './lab900-action-button.component.html',
-  standalone: true,
   imports: [
     AsyncPipe,
     Lab900ButtonComponent,

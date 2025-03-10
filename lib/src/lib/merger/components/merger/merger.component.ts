@@ -15,7 +15,6 @@ import { MatIconButton } from '@angular/material/button';
   selector: 'lab900-merger',
   templateUrl: './merger.component.html',
   styleUrls: ['./merger.component.scss'],
-  standalone: true,
   imports: [MatProgressBar, CommonModule, MatRadioButton, Lab900MergerItemComponent, MatIcon, MatIconButton],
 })
 export class Lab900MergerComponent<T> implements OnInit, OnChanges {

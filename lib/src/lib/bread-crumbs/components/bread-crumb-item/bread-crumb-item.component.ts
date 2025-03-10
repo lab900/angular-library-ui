@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'lab900-bread-crumb-item',
-  standalone: true,
   templateUrl: './bread-crumb-item.component.html',
   styleUrls: ['./bread-crumb-item.component.scss'],
   imports: [TranslateModule, RouterLink],

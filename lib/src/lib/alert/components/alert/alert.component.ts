@@ -5,7 +5,6 @@ import { LowerCasePipe } from '@angular/common';
 @Component({
   selector: 'lab900-alert',
   styleUrls: ['./alert.component.scss'],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [LowerCasePipe],

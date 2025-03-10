@@ -13,8 +13,7 @@ import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'lab900-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
-  styleUrls: ['./confirmation-dialog.component.scss'],
-  standalone: true,
+  styleUrls: ['../../../../assets/theme/dialog.scss'],
   imports: [MatDialogContent, TranslateModule, MatDialogActions, MatButton, MatDialogClose],
 })
 export class ConfirmationDialogComponent {

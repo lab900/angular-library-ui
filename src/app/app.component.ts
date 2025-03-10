@@ -18,7 +18,6 @@ import { showcaseUiNavItems } from './modules/showcase-ui/showcase-ui.nav-items'
   selector: 'lab900-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
   imports: [
     MatToolbarModule,
     MatIconModule,

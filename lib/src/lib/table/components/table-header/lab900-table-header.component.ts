@@ -19,7 +19,6 @@ import { Lab900ActionButtonComponent } from '../../../button/components/action-b
   styleUrls: ['./lab900-table-header.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [Lab900TableFilterMenuComponent, NgTemplateOutlet, Lab900ActionButtonComponent],
 })
 export class Lab900TableHeaderComponent {

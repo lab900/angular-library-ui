@@ -1,7 +1,8 @@
-@import 'responsiveness';
+@use 'responsiveness' as *;
+@use 'sass:map';
 
 mat-dialog-content {
   min-width: 300px;
-  margin: -1 * map-get($gutter, 'material') -1 * map-get($gutter, 'material') 0;
-  padding: map-get($gutter, 'material');
+  margin: -1 * map.get($gutter, 'material') -1 * map.get($gutter, 'material') 0;
+  padding: map.get($gutter, 'material');
 }

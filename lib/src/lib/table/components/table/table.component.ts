@@ -69,7 +69,6 @@ export interface SelectableRows<T = any> {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [Lab900TableService],
-  standalone: true,
   imports: [
     Lab900TableHeaderComponent,
     NgTemplateOutlet,
@@ -245,22 +244,14 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
       }
     });
 
-    effect(
-      () => {
-        const selectableRows = this.selectableRows();
-        if (selectableRows?.enabled && !untracked(this.selection)) {
-          this.selection.set(
-            new SelectionModel(
-              !selectableRows.singleSelect,
-              selectableRows.selectedItems,
-              true,
-              selectableRows.compareFn
-            )
-          );
-        }
-      },
-      { allowSignalWrites: true }
-    );
+    effect(() => {
+      const selectableRows = this.selectableRows();
+      if (selectableRows?.enabled && !untracked(this.selection)) {
+        this.selection.set(
+          new SelectionModel(!selectableRows.singleSelect, selectableRows.selectedItems, true, selectableRows.compareFn)
+        );
+      }
+    });
   }
 
   public handleSelectAll(checked: boolean): void {

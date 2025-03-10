@@ -13,8 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'lab900-alert-dialog',
   templateUrl: './alert-dialog.component.html',
-  styleUrls: ['./alert-dialog.component.scss'],
-  standalone: true,
+  styleUrls: ['../../../../assets/theme/dialog.scss'],
   imports: [MatDialogActions, MatButton, TranslateModule, MatDialogContent, MatDialogClose],
 })
 export class AlertDialogComponent {

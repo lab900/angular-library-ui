@@ -15,7 +15,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
-import { AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -24,13 +23,11 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./table-filter-menu.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MatMenuModule,
     MatCheckboxModule,
     TranslateModule,
     MatIconModule,
-    AsyncPipe,
     CdkDropList,
     CdkDrag,
     CdkDragPlaceholder,

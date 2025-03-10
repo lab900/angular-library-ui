@@ -13,7 +13,6 @@ import { Observable } from 'rxjs';
   templateUrl: './showcase-home.component.html',
   styleUrls: ['./showcase-home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [MatIconModule, TranslateModule, RouterLink, MatButtonModule],
 })
 export default class ShowcaseHomeComponent {

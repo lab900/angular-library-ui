@@ -12,7 +12,6 @@ import { PageHeaderNavItem } from '../../models/page-header-nav.model';
   styleUrls: ['./page-header-nav-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [MatIconModule, MatTabsModule, RouterLinkActive, TranslateModule, RouterLink],
 })
 export class PageHeaderNavItemComponent {

@@ -12,7 +12,6 @@ import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/rou
   templateUrl: './nav-item-button.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [IconComponent, TranslateModule, MatListModule, NgTemplateOutlet, RouterLink, RouterLinkActive],
 })
 export class NavItemButtonComponent {

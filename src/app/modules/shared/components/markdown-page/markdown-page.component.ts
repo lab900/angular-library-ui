@@ -9,7 +9,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './markdown-page.component.html',
   styleUrls: ['./markdown-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [MarkdownModule],
 })
 export default class MarkdownPageComponent {

@@ -13,7 +13,6 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'lab900-action-button-menu',
   templateUrl: './lab900-action-button-menu.component.html',
-  standalone: true,
   imports: [
     MatMenu,
     MatIcon,

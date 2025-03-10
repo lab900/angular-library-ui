@@ -5,7 +5,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-default-column-header-renderer',
-  standalone: true,
   imports: [ColumnHeaderSortingComponent, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

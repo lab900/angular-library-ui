@@ -7,7 +7,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-checkbox-cell-renderer',
-  standalone: true,
   imports: [MatCheckboxModule, MatTooltipModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

@@ -9,7 +9,6 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./table-tabs.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [TranslateModule],
 })
 export class Lab900TableTabsComponent<T = string> {
