@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.0.0
+## 19.0.1
 
 - Angular 19 update
 - All module imports have been removed
