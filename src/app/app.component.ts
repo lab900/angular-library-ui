@@ -1,5 +1,5 @@
 import { Component, computed, inject, viewChild } from '@angular/core';
-import { NavItemGroup } from '@lab900/ui';
+import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -13,7 +13,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { showcaseUiNavItems } from './modules/showcase-ui/showcase-ui.nav-items';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconAnchor, MatIconButton } from '@angular/material/button';
-import { Lab900NavListComponent } from '../../lib/src/lib/nav-list/components/nav-list/nav-list.component';
 
 @Component({
   selector: 'lab900-root',

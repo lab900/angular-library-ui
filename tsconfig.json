@@ -14,7 +14,10 @@
     "importHelpers": true,
     "target": "ES2022",
     "lib": ["ES2022", "dom"],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "paths": {
+      "@lab900/ui": ["lib/src/public-api.ts"]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
