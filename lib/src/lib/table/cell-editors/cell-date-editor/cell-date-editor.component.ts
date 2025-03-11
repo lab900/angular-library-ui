@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatButtonModule } from '@angular/material/button';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerInputEvent,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellEditorBaseOptions } from '../cell-editor.options';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TranslateModule, MatButtonModule, MatDatepickerModule],
+  imports: [TranslatePipe, MatDatepickerInput, MatDatepickerToggle, MatDatepicker],
   selector: 'lab900-cell-date-editor',
-  standalone: true,
   template: `
     <div style="min-width: 110px">
       <input

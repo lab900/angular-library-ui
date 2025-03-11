@@ -3,13 +3,12 @@ import { mergerDataExample } from './config/merger-data-example';
 import { Lab900MergerComponent, MergeConfig, MergeObject } from '@lab900/ui';
 import { mergerSchemaExample } from './config/merger-schema-example';
 import { MergerDataExample } from './models/merger-data-example.model';
-import { MatButtonModule } from '@angular/material/button';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-merger-example',
-  standalone: true,
-  imports: [MatButtonModule, TranslateModule, Lab900MergerComponent],
+  imports: [TranslatePipe, Lab900MergerComponent, MatButton],
   template: `
     <div class="merger-example-header">
       <button mat-flat-button color="primary" (click)="mergerComponent?.reset()">

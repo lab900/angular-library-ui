@@ -5,7 +5,6 @@ import { of } from 'rxjs';
 
 @Component({
   selector: 'lab900-page-header-example',
-  standalone: true,
   imports: [Lab900PageHeaderComponent, MatTabsModule],
   template: ` <lab900-page-header
       [pageTitle]="pageTitle"

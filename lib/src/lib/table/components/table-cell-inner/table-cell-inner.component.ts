@@ -16,7 +16,6 @@ import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   selector: 'lab900-table-cell-inner',
-  standalone: true,
   templateUrl: './table-cell-inner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

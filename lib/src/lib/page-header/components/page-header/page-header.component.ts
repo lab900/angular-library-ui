@@ -2,15 +2,15 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 import { PageHeaderNavItem } from '../../models/page-header-nav.model';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { BreadCrumb } from '../../../bread-crumbs/models/bread-crumb.model';
-import { MatTabNavPanel, MatTabsModule } from '@angular/material/tabs';
+import { MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PageHeaderNavItemComponent } from '../page-header-nav-item/page-header-nav-item.component';
 import { AsyncPipe } from '@angular/common';
-import { MatListModule } from '@angular/material/list';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BreadCrumbsComponent } from '../../../bread-crumbs/components/bread-crumbs/bread-crumbs.component';
 import { Lab900ActionButtonComponent } from '../../../button/components/action-button/lab900-action-button.component';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'lab900-page-header',
@@ -18,15 +18,14 @@ import { Lab900ActionButtonComponent } from '../../../button/components/action-b
   styleUrls: ['./page-header.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
-    MatTabsModule,
     PageHeaderNavItemComponent,
     AsyncPipe,
-    MatListModule,
     BreadCrumbsComponent,
-    TranslateModule,
+    TranslatePipe,
     Lab900ActionButtonComponent,
+    MatDivider,
+    MatTabNav,
   ],
 })
 export class Lab900PageHeaderComponent {

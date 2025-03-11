@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { CellEditorAbstract } from '../cell-editor.abstract';
 import { CellInputEditorOptions } from './cell-input-editor.options';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-cell-edit-input-renderer',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   template: `
     <input
       #input

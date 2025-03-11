@@ -1,15 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, ViewEncapsulation } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { CellWithClearingRendererOptions } from './cell-with-clearing-renderer.options';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatIconButton } from '@angular/material/button';
 import { CellRendererAbstract } from '../cell-renderer.abstract';
 
 @Component({
   selector: 'lab900-cell-with-clearing-renderer',
-  standalone: true,
-  imports: [MatIconModule, MatTooltipModule, TranslateModule, MatButtonModule],
+  imports: [MatIcon, MatTooltip, TranslatePipe, MatIconButton],
   templateUrl: './cell-with-clearing-renderer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

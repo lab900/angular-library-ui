@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { CellRendererAbstract } from '../cell-renderer.abstract';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lab900-default-cell-renderer',
-  standalone: true,
-  imports: [TranslateModule, MatTooltipModule],
+  imports: [TranslatePipe, MatTooltip],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `<div

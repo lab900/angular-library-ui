@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, signal, viewChild } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MarkdownModule } from 'ngx-markdown';
+import { TranslatePipe } from '@ngx-translate/core';
 import { LowerCasePipe } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MarkdownComponent } from 'ngx-markdown';
 
 export interface ExampleFile {
   extension: string;
@@ -18,16 +18,19 @@ export interface ExampleFile {
   selector: 'lab900-example-viewer',
   templateUrl: './example-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
-    MatCardModule,
-    TranslateModule,
-    MatButtonModule,
-    MatTabsModule,
-    MarkdownModule,
+    MatCardTitle,
+    TranslatePipe,
     LowerCasePipe,
-    MatIconModule,
-    MatTooltipModule,
+    MatCard,
+    MatCardHeader,
+    MatTooltip,
+    MatIconButton,
+    MatIcon,
+    MatCardContent,
+    MatTabGroup,
+    MatTab,
+    MarkdownComponent,
   ],
 })
 export class ExampleViewerComponent {

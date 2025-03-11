@@ -4,7 +4,6 @@ import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-nav-list-example',
-  standalone: true,
   imports: [Lab900NavListComponent],
   template:
     '<lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true" [routeMatchOptions]="matchOptions"/>',

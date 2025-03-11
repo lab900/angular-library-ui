@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { ColumnHeaderRendererAbstract } from '../column-header-renderer-abstract.directive';
 import { ColumnHeaderSortingComponent } from '../column-header-sorting/column-header-sorting.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-default-column-header-renderer',
-  standalone: true,
-  imports: [ColumnHeaderSortingComponent, TranslateModule],
+  imports: [ColumnHeaderSortingComponent, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `<div class="lab900-column-header">

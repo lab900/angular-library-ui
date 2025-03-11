@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { Icon } from '../../models/nav-item.model';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'lab900-icon',
@@ -13,8 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
     @if (icon()?.svgName) {
       <mat-icon [svgIcon]="icon().svgName" />
     }`,
-  imports: [MatIconModule],
-  standalone: true,
+  imports: [MatIcon],
 })
 export class IconComponent {
   public readonly icon = input.required<Icon>();

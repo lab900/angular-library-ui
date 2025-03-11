@@ -2814,7 +2814,6 @@ const mockData = [
 
 @Component({
   selector: 'lab900-table-example',
-  standalone: true,
   imports: [
     Lab900TableComponent,
     Lab900TableTopContentDirective,

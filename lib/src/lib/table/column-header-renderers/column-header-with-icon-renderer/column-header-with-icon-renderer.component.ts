@@ -2,13 +2,12 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { ColumnHeaderRendererAbstract } from '../column-header-renderer-abstract.directive';
 import { ColumnHeaderSortingComponent } from '../column-header-sorting/column-header-sorting.component';
 import { ColumnHeaderWithIconRendererOptions } from './column-header-with-icon-renderer.options';
-import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'lab900-default-column-header-renderer',
-  standalone: true,
-  imports: [ColumnHeaderSortingComponent, MatIconModule, TranslateModule],
+  imports: [ColumnHeaderSortingComponent, TranslatePipe, MatIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `

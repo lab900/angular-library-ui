@@ -2,19 +2,18 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ShowcaseConfigModel } from '../../models/showcase-config.model';
 import { NavItemGroup } from '@lab900/ui';
-import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatButtonModule } from '@angular/material/button';
+import { TranslatePipe } from '@ngx-translate/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-showcase-home',
   templateUrl: './showcase-home.component.html',
   styleUrls: ['./showcase-home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [MatIconModule, TranslateModule, RouterLink, MatButtonModule],
+  imports: [TranslatePipe, RouterLink, MatIcon, MatButton],
 })
 export default class ShowcaseHomeComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);

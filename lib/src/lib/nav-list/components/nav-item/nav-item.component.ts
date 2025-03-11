@@ -13,7 +13,6 @@ import { switchMap } from 'rxjs';
   styleUrls: ['./nav-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [NavItemButtonComponent],
 })
 export class NavItemComponent {
@@ -48,16 +47,13 @@ export class NavItemComponent {
     });
 
     // This effect is used to determine if the item with children should be expanded or not based on the current url
-    effect(
-      () => {
-        const item = this.item();
-        const url = this.urlAfterEvent();
-        if (item.children && url) {
-          this.expanded.set(item.children?.some((item: NavItem) => url.indexOf(`/${item.route}`) === 0));
-        }
-      },
-      { allowSignalWrites: true }
-    );
+    effect(() => {
+      const item = this.item();
+      const url = this.urlAfterEvent();
+      if (item.children && url) {
+        this.expanded.set(item.children?.some((item: NavItem) => url.indexOf(`/${item.route}`) === 0));
+      }
+    });
   }
 
   public onClick(event: MouseEvent): void {

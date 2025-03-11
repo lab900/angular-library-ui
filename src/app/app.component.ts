@@ -1,34 +1,37 @@
 import { Component, computed, inject, viewChild } from '@angular/core';
 import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import packageInfo from '../../package.json';
-import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatDrawerContainer, MatDrawerContent } from '@angular/material/sidenav';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgOptimizedImage } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { showcaseUiNavItems } from './modules/showcase-ui/showcase-ui.nav-items';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconAnchor, MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'lab900-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
   imports: [
-    MatToolbarModule,
-    MatIconModule,
     RouterLink,
     NgOptimizedImage,
-    TranslateModule,
-    MatButtonModule,
-    MatSidenavModule,
+    TranslatePipe,
     RouterOutlet,
     Lab900NavListComponent,
+    MatToolbar,
+    MatIcon,
+    MatIconButton,
+    MatIconAnchor,
+    MatDrawerContainer,
+    MatDrawer,
+    Lab900NavListComponent,
+    MatDrawerContent,
   ],
 })
 export class AppComponent {

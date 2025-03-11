@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { readPropValue } from '../../../utils/utils';
 import { PageHeaderNavItem } from '../../models/page-header-nav.model';
+import { MatTabLink } from '@angular/material/tabs';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'lab900-page-header-nav-item',
@@ -12,8 +12,7 @@ import { PageHeaderNavItem } from '../../models/page-header-nav.model';
   styleUrls: ['./page-header-nav-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [MatIconModule, MatTabsModule, RouterLinkActive, TranslateModule, RouterLink],
+  imports: [RouterLinkActive, TranslatePipe, RouterLink, MatTabLink, MatIcon],
 })
 export class PageHeaderNavItemComponent {
   public readonly item = input.required<PageHeaderNavItem>();

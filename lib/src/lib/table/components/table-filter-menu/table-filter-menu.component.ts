@@ -11,12 +11,12 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Lab900TableService } from '../../services/table.service';
 import { readPropValue } from '../../../utils/utils';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatIconModule } from '@angular/material/icon';
-import { AsyncPipe } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
+import { TranslatePipe } from '@ngx-translate/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { CdkScrollable } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'lab900-table-filter-menu',
@@ -24,19 +24,19 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./table-filter-menu.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
-    MatMenuModule,
-    MatCheckboxModule,
-    TranslateModule,
-    MatIconModule,
-    AsyncPipe,
+    TranslatePipe,
     CdkDropList,
     CdkDrag,
     CdkDragPlaceholder,
     CdkDragPreview,
     CdkDragHandle,
-    MatButtonModule,
+    MatIcon,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatCheckbox,
+    CdkScrollable,
   ],
 })
 export class Lab900TableFilterMenuComponent {

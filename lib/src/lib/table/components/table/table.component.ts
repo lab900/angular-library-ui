@@ -23,7 +23,22 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
-import { MatTable, MatTableModule } from '@angular/material/table';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatFooterCell,
+  MatFooterCellDef,
+  MatFooterRow,
+  MatFooterRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900Sort } from '../../models/table-sort.model';
@@ -32,12 +47,11 @@ import { Lab900TableService } from '../../services/table.service';
 import { Lab900TableHeaderComponent } from '../table-header/lab900-table-header.component';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { A11yModule } from '@angular/cdk/a11y';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Lab900ActionButtonComponent } from '../../../button/components/action-button/lab900-action-button.component';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 type propFunction<T, R = string> = (data: T) => R;
 
@@ -69,23 +83,34 @@ export interface SelectableRows<T = any> {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [Lab900TableService],
-  standalone: true,
   imports: [
     Lab900TableHeaderComponent,
     NgTemplateOutlet,
     Lab900TableTabsComponent,
-    MatProgressBarModule,
     NgClass,
-    MatTableModule,
     CdkDropList,
     TableCellSelectComponent,
     Lab900TableCellComponent,
     CdkDragHandle,
     CdkDrag,
-    TranslateModule,
+    TranslatePipe,
     CdkDragPlaceholder,
-    A11yModule,
     Lab900ActionButtonComponent,
+    MatProgressBar,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatFooterCell,
+    MatFooterCellDef,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatHeaderRow,
+    MatRow,
+    MatRowDef,
+    MatHeaderRowDef,
+    MatFooterRow,
+    MatFooterRowDef,
   ],
 })
 export class Lab900TableComponent<T extends object = object, TabId = string> {
@@ -245,22 +270,14 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
       }
     });
 
-    effect(
-      () => {
-        const selectableRows = this.selectableRows();
-        if (selectableRows?.enabled && !untracked(this.selection)) {
-          this.selection.set(
-            new SelectionModel(
-              !selectableRows.singleSelect,
-              selectableRows.selectedItems,
-              true,
-              selectableRows.compareFn
-            )
-          );
-        }
-      },
-      { allowSignalWrites: true }
-    );
+    effect(() => {
+      const selectableRows = this.selectableRows();
+      if (selectableRows?.enabled && !untracked(this.selection)) {
+        this.selection.set(
+          new SelectionModel(!selectableRows.singleSelect, selectableRows.selectedItems, true, selectableRows.compareFn)
+        );
+      }
+    });
   }
 
   public handleSelectAll(checked: boolean): void {

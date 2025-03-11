@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, input, model, ViewEncapsu
 import { NavItem } from '../../models/nav-item.model';
 import { NgTemplateOutlet } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatListModule } from '@angular/material/list';
+import { TranslatePipe } from '@ngx-translate/core';
 import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/router';
+import { MatListItem } from '@angular/material/list';
 
 @Component({
   selector: 'lab900-nav-item-button',
@@ -12,8 +12,7 @@ import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/rou
   templateUrl: './nav-item-button.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [IconComponent, TranslateModule, MatListModule, NgTemplateOutlet, RouterLink, RouterLinkActive],
+  imports: [IconComponent, TranslatePipe, NgTemplateOutlet, RouterLink, RouterLinkActive, MatListItem],
 })
 export class NavItemButtonComponent {
   public readonly item = input.required<NavItem>();

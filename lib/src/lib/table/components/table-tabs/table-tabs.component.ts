@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, model, ViewEncapsulation } from '@angular/core';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-table-tabs',
@@ -9,8 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./table-tabs.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
 })
 export class Lab900TableTabsComponent<T = string> {
   public readonly tableTabs = input.required<Lab900TableTab<T>[]>();

@@ -15,15 +15,14 @@ import {
 import { MergeConfig } from '../../models/merge-config.model';
 import { isObservable, Observable, of } from 'rxjs';
 import { MergerItemComponent } from '../../abstracts/custom-component.abstract';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'lab900-merger-item',
   templateUrl: './merger-item.component.html',
   styleUrls: ['./merger-item.component.scss'],
-  standalone: true,
-  imports: [TranslateModule, AsyncPipe],
+  imports: [TranslatePipe, AsyncPipe],
 })
 export class Lab900MergerItemComponent<T> implements AfterViewInit, OnChanges {
   public readonly config = input.required<MergeConfig<T>>();

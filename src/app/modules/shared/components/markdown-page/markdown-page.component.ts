@@ -1,16 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { MarkdownModule } from 'ngx-markdown';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   selector: 'lab900-markdown-page',
   templateUrl: './markdown-page.component.html',
   styleUrls: ['./markdown-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [MarkdownModule],
+  imports: [MarkdownComponent],
 })
 export default class MarkdownPageComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);

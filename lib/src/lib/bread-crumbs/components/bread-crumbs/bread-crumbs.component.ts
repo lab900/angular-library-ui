@@ -1,16 +1,12 @@
 import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
 import { BreadCrumb } from '../../models/bread-crumb.model';
-
-import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 import { BreadCrumbItemComponent } from '../bread-crumb-item/bread-crumb-item.component';
 
 @Component({
   selector: 'lab900-bread-crumbs',
   templateUrl: './bread-crumbs.component.html',
   styleUrls: ['./bread-crumbs.component.scss'],
-  standalone: true,
-  imports: [RouterLink, TranslateModule, BreadCrumbItemComponent],
+  imports: [BreadCrumbItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
