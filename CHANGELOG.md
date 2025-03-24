@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.0.2
+## 19.0.3
 
 - Fixed issues with table footers not showing up
 

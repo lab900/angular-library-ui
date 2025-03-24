@@ -282,8 +282,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
       const table = this.table();
       if (table) {
         table.removeFooterRowDef(null as unknown as any);
-        if (untracked(this.data)?.length && this.showCellFooters()) {
-          console.log('here');
+        if (this.showCellFooters()) {
           table.renderRows();
         }
       }
