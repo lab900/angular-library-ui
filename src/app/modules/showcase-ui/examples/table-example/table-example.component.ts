@@ -1,4 +1,4 @@
-import { Component, effect, signal, TrackByFunction, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, signal, TrackByFunction, untracked } from '@angular/core';
 import {
   ActionButton,
   CellInputEditorComponent,
@@ -18,6 +18,7 @@ import { tableExampleData } from './table-example.data';
 
 @Component({
   selector: 'lab900-table-example',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Lab900TableComponent,
     Lab900TableTopContentDirective,
