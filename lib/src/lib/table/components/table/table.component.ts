@@ -124,26 +124,30 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     alias: 'fixedWidth',
   });
   protected readonly fixedWidths = computed(() => {
-    return this._fixedWidths() || this.tableService.visibleColumns().some(c => !!c?.width);
+    return this._fixedWidths() || this.visibleColumns().some(c => !!c?.width);
   });
 
   public readonly table = viewChild(MatTable<T>);
 
-  @Input()
-  public set tableCells(columns: TableCell<T>[]) {
-    this.tableService.updateColumns(columns);
-  }
+  public readonly tableCells = model.required<TableCell<T>[]>();
+  public readonly columns = computed(() => {
+    let columns: TableCell<T>[] = this.tableCells();
+    const tabs = this.tableTabs();
+    const tabId = this.tabId();
+    if (tabs?.length) {
+      const activeTab = tabId ? tabs.find(tab => tab.id === tabId) : tabs?.[0];
+      if (activeTab?.tableCells) {
+        columns = activeTab?.tableCells;
+      }
+    }
+    return columns.filter(c => !!c.key).sort(Lab900TableService.reorderColumnsFn);
+  });
 
-  @Input()
-  public set tableTabs(tabs: Lab900TableTab<TabId, T>[]) {
-    this.tableService.updateTabs(tabs);
-  }
+  public readonly visibleColumns = computed(() => [...this.columns()].filter(c => !c.hide));
+  public readonly showCellFooters = computed(() => this.visibleColumns().some(c => Object.hasOwn(c, 'footer')));
 
-  @Input()
-  public set activeTabId(tabId: TabId) {
-    this.tableService.updateTabId(tabId);
-  }
-
+  public readonly tableTabs = input<Lab900TableTab<TabId, T>[] | undefined>(undefined);
+  public readonly activeTabId = model<TabId | undefined>(undefined);
   public readonly tableClass = input<string>('');
   public readonly rowClass = input<propFunction<T> | string | undefined>(undefined);
   public readonly rowColor = input<propFunction<T> | string | undefined>(undefined);
@@ -218,9 +222,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   // outputs
-  public readonly activeTabIdChange = output<TabId>();
   public readonly selectionChanged = output<SelectionModel<T>>();
   public readonly rowSelectToggle = output<T>();
+  /**
+   * @deprecated use tableCellsChange instead
+   */
   public readonly tableCellsFiltered = output<TableCell<T>[]>();
   public readonly tableRowOrderChange = output<CdkDragDrop<T[]>>();
   public readonly cellValueChanged = output<CellValueChangeEvent<T>>();
@@ -240,11 +246,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     read: TemplateRef,
   });
 
-  public readonly visibleColumns = this.tableService.visibleColumns;
   public readonly displayedColumns = computed(() => this.getDisplayedColumns());
   public readonly tabId = this.tableService.tabId;
   public readonly tabs = this.tableService.tabs;
-  public readonly showCellFooters = computed(() => this.visibleColumns().some(c => !!c?.footer));
 
   public readonly data = model<T[] | null | undefined>(undefined);
   public readonly publicData = computed(() => {
@@ -261,10 +265,25 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public constructor() {
     effect(() => {
-      const table = untracked(this.table);
+      const tableTabs = this.tableTabs();
+      if (tableTabs) {
+        this.tableService.updateTabs(tableTabs);
+      }
+    });
+
+    effect(() => {
+      const activeTabId = this.activeTabId();
+      if (activeTabId) {
+        this.tableService.updateTabId(activeTabId);
+      }
+    });
+
+    effect(() => {
+      const table = this.table();
       if (table) {
         table.removeFooterRowDef(null as unknown as any);
-        if (this.data()?.length && this.showCellFooters()) {
+        if (untracked(this.data)?.length && this.showCellFooters()) {
+          console.log('here');
           table.renderRows();
         }
       }
@@ -345,13 +364,12 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   public onTableCellsFiltered(tableCells: TableCell[]): void {
-    this.tableCells = tableCells;
+    this.tableCells.set(tableCells);
     this.tableCellsFiltered.emit(tableCells);
   }
 
   public onActiveTabChange(id: TabId): void {
-    this.activeTabId = id;
-    this.activeTabIdChange.emit(id);
+    this.activeTabId.set(id);
   }
 
   private getDisplayedColumns(): string[] {

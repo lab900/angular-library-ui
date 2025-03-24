@@ -9,7 +9,6 @@ import {
   CdkDropList,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { Lab900TableService } from '../../services/table.service';
 import { readPropValue } from '../../../utils/utils';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatIcon } from '@angular/material/icon';
@@ -17,6 +16,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { CdkScrollable } from '@angular/cdk/overlay';
+import { Lab900TableComponent } from '../table/table.component';
 
 @Component({
   selector: 'lab900-table-filter-menu',
@@ -40,12 +40,12 @@ import { CdkScrollable } from '@angular/cdk/overlay';
   ],
 })
 export class Lab900TableFilterMenuComponent {
-  private readonly tableService = inject(Lab900TableService);
+  private readonly table = inject(Lab900TableComponent);
   /**
    * Filterable table cells. If the cell is always visible, it will not be shown in the filter menu.
    */
   protected readonly filterableTableCells = computed(() =>
-    this.tableService.columns().filter((cell: TableCell) => !cell.alwaysVisible)
+    this.table.columns().filter((cell: TableCell) => !cell.alwaysVisible)
   );
   protected readonly visibleCells = computed(() => this.filterableTableCells().filter((cell: TableCell) => !cell.hide));
   protected readonly hiddenCells = computed(() => this.filterableTableCells().filter((cell: TableCell) => !!cell.hide));

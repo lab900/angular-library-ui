@@ -1,5 +1,10 @@
 # Changelog
 
+## 19.0.2
+
+- Fixed issues with table footers not showing up
+
+
 ## 19.0.1
 
 - Angular 19 update

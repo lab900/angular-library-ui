@@ -7,8 +7,6 @@ import { Lab900Sort } from '../models/table-sort.model';
 export class Lab900TableService<T extends object = object, TabId = string> {
   public readonly inlineEditingCellKey = signal<string | undefined>(undefined);
 
-  private readonly _columns = signal<TableCell<T>[]>([]);
-
   public readonly disableEditing = signal<boolean>(false);
 
   private readonly _tabs = signal<Lab900TableTab<TabId, T>[]>([]);
@@ -19,27 +17,8 @@ export class Lab900TableService<T extends object = object, TabId = string> {
 
   public readonly sort = signal<Lab900Sort[] | undefined>(undefined);
 
-  public readonly columns = computed(() => {
-    let columns: TableCell<T>[] = this._columns();
-    const tabs = this._tabs();
-    const tabId = this.tabId();
-    if (tabs?.length) {
-      const activeTab = tabId ? tabs.find(tab => tab.id === tabId) : tabs?.[0];
-      if (activeTab?.tableCells) {
-        columns = activeTab?.tableCells;
-      }
-    }
-    return columns.filter(c => !!c.key).sort(Lab900TableService.reorderColumnsFn);
-  });
-
-  public readonly visibleColumns = computed(() => this.columns().filter(c => !c.hide));
-
   public static reorderColumnsFn(a: TableCell, b: TableCell): number {
     return (a.columnOrder ?? 10000) - (b.columnOrder ?? 10000);
-  }
-
-  public updateColumns(columns: TableCell<T>[] | null): void {
-    this._columns.set([...(columns ?? [])]);
   }
 
   public updateTabId(tabId: TabId | null): void {
