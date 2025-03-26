@@ -135,7 +135,7 @@
             "name": "Lab900",
             "email": "info@lab900.com",
             "silent": false,
-            "dir": "dist/angular-library-ui"
+            "dir": "dist/angular-library-ui/browser"
           }
         },
         "lint": {
