@@ -20,7 +20,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Lab900ActionButtonToggleComponent<T = unknown> extends Lab900ActionDirective<T> {
+export class Lab900ActionButtonToggleComponent<T = undefined> extends Lab900ActionDirective<T> {
   protected readonly selected = linkedSignal(() => {
     const subActions = this.action().subActions;
     if (subActions) {

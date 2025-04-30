@@ -19,7 +19,7 @@ import { Lab900ActionButtonMenuItemComponent } from '../action-button-menu-item/
     </mat-menu>
   `,
 })
-export class Lab900ActionButtonMenuComponent<T = unknown> {
+export class Lab900ActionButtonMenuComponent<T = undefined> {
   public readonly actionMenu = viewChild(MatMenu);
   public readonly actions = input.required<ActionButton<T>[]>();
   public readonly data = input<T | undefined>(undefined);

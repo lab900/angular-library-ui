@@ -23,22 +23,22 @@ import { Lab900ActionDirective } from '../lab900-action.directive';
     TranslatePipe,
   ],
 })
-export class Lab900ActionButtonComponent<T = unknown> extends Lab900ActionDirective<T> {
+export class Lab900ActionButtonComponent<T = undefined> extends Lab900ActionDirective<T> {
   protected readonly defaultTooltipPosition = 'above';
 
   protected readonly buttonType = computed(() => {
-    return computeReactiveOption<T | undefined, 'toggle' | Lab900ButtonType>(this.action().type, this.data);
+    return computeReactiveOption<T, 'toggle' | Lab900ButtonType>(this.action().type, this.data);
   });
 
   protected readonly themeColor = computed(() => {
-    return computeReactiveOption<T | undefined, ThemePalette>(this.action().color, this.data);
+    return computeReactiveOption<T, ThemePalette>(this.action().color, this.data);
   });
 
   protected readonly containerClass = computed(() => {
-    return computeReactiveStringOption<T | undefined>(this.action().containerClass, this.data);
+    return computeReactiveStringOption<T>(this.action().containerClass, this.data);
   });
 
   protected readonly buttonId = computed(() => {
-    return computeReactiveStringOption<T | undefined>(this.action().buttonId, this.data);
+    return computeReactiveStringOption<T>(this.action().buttonId, this.data);
   });
 }

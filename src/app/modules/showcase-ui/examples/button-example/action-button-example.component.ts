@@ -58,19 +58,19 @@ export class ActionButtonExampleComponent {
       {
         label: this.downloadLabel,
         keepMenuOpen: true,
-        action: ({ ref }) => {
+        action: ({ actionRef }) => {
           this.downloading.set(true);
           setTimeout(() => {
-            ref.close();
-            console.log('Mock downloaded ended', ref);
+            actionRef.close();
+            console.log('Mock downloaded ended', actionRef);
             this.downloading.set(false);
           }, 5000);
         },
       },
       {
         label: 'Click and close',
-        action: ({ ref }) => {
-          console.log('Click and close', ref.data());
+        action: ({ actionRef }) => {
+          console.log('Click and close', actionRef.data());
         },
       },
     ],

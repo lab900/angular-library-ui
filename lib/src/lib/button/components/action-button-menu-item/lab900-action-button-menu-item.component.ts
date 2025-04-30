@@ -21,7 +21,7 @@ import { MatIcon } from '@angular/material/icon';
     forwardRef(() => Lab900ActionButtonMenuComponent),
   ],
 })
-export class Lab900ActionButtonMenuItemComponent<T = unknown> extends Lab900ActionDirective<T> {
+export class Lab900ActionButtonMenuItemComponent<T = undefined> extends Lab900ActionDirective<T> {
   public readonly menuDisabled = input<boolean>(false);
   protected readonly menuItemDisabled = computed(() => this.menuDisabled() || this.disabled());
   public readonly closeMenu = output<void>();

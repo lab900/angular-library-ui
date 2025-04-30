@@ -70,7 +70,7 @@ export function computeReactiveNumberOption<PAYLOAD>(
 
 export function computeReactiveStrictStringOption<PAYLOAD>(
   option: ReactiveStringOption<PAYLOAD> | undefined,
-  value: Signal<any>
+  value: Signal<PAYLOAD>
 ): string {
   return computeReactiveStringOption(option, value) ?? '';
 }
