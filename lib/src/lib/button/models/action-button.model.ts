@@ -4,14 +4,14 @@ import { TooltipPosition } from '@angular/material/tooltip';
 import { ReactiveBooleanOption, ReactiveOption, ReactiveStringOption } from '../../utils/utils';
 import { AbstractActionComponent } from '../components/abstract-action-component';
 
-export interface ActionButtonEvent<T = any> {
+export interface ActionButtonEvent<T = unknown> {
   event: Event;
   ref: AbstractActionComponent<T>;
 }
 
-export interface ActionButton<T = any> {
+export interface ActionButton<T = unknown> {
   label: ReactiveStringOption<T>;
-  action?: (event: ActionButtonEvent<T>) => any;
+  action?: (event: ActionButtonEvent<T>) => void;
   type?: ReactiveOption<T, 'toggle' | Lab900ButtonType>;
   color?: ReactiveOption<T, ThemePalette>;
   disabled?: ReactiveBooleanOption<T>;

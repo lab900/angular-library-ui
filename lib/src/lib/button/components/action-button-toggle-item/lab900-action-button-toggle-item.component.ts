@@ -12,7 +12,7 @@ import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe, PreventDoubleClickDirective, MatButtonToggle, MatIcon],
 })
-export class Lab900ActionButtonToggleItemComponent<T = any> extends AbstractActionComponent<T> {
+export class Lab900ActionButtonToggleItemComponent<T = unknown> extends AbstractActionComponent<T> {
   public readonly toggleGroupDisabled = input<boolean>(false);
   protected readonly toggleDisabled = computed(() => this.toggleGroupDisabled() || this.disabled());
 }

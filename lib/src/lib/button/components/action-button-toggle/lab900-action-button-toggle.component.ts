@@ -10,7 +10,7 @@ import { computeReactiveBooleanOption } from '../../../utils/utils';
   imports: [MatButtonToggleGroup, Lab900ActionButtonToggleItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Lab900ActionButtonToggleComponent<T = any> extends AbstractActionComponent<T> {
+export class Lab900ActionButtonToggleComponent<T = unknown> extends AbstractActionComponent<T> {
   protected readonly selected = linkedSignal(() => {
     const subActions = this.action().subActions;
     if (subActions) {

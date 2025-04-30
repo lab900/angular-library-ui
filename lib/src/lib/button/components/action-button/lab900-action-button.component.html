@@ -1,11 +1,12 @@
 @if (!hidden()) {
-  @if (buttonType() !== 'toggle') {
+  @let type = buttonType();
+  @if (type !== 'toggle') {
     @let subActions = action()?.subActions;
     @if (subActions && subActions?.length) {
       <lab900-button
         #menuTrigger="matMenuTrigger"
         (click)="$event.stopPropagation()"
-        [type]="$any(buttonType())"
+        [type]="type"
         [matMenuTriggerFor]="sub.actionMenu()!"
         [label]="label()"
         [matTooltip]="action()?.tooltip?.value | translate"
@@ -23,7 +24,7 @@
         (closeMenu)="menuTrigger?.closeMenu()" />
     } @else {
       <lab900-button
-        [type]="$any(buttonType())"
+        [type]="type"
         [color]="themeColor()"
         [disabled]="disabled()"
         (btnClick)="doAction($event)"

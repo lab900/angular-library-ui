@@ -9,6 +9,7 @@ import { Lab900ActionButtonMenuComponent } from '../action-button-menu/lab900-ac
 import { Lab900ActionButtonToggleComponent } from '../action-button-toggle/lab900-action-button-toggle.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AbstractActionComponent } from '../abstract-action-component';
+import { BindingType } from '@angular/compiler';
 
 @Component({
   selector: 'lab900-action-button',
@@ -23,7 +24,7 @@ import { AbstractActionComponent } from '../abstract-action-component';
     TranslatePipe,
   ],
 })
-export class Lab900ActionButtonComponent<T = any> extends AbstractActionComponent<T> {
+export class Lab900ActionButtonComponent<T = unknown> extends AbstractActionComponent<T> {
   protected readonly defaultTooltipPosition = 'above';
 
   protected readonly buttonType = computed(() => {
@@ -41,4 +42,5 @@ export class Lab900ActionButtonComponent<T = any> extends AbstractActionComponen
   protected readonly buttonId = computed(() => {
     return computeReactiveStringOption<T | undefined>(this.action().buttonId, this.data);
   });
+  protected readonly BindingType = BindingType;
 }
