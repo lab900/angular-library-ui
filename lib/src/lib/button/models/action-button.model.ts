@@ -1,35 +1,25 @@
 import { Lab900ButtonType } from './button.model';
 import { ThemePalette } from '@angular/material/core';
 import { TooltipPosition } from '@angular/material/tooltip';
-import { propValue } from '../../utils/utils';
-import { Observable } from 'rxjs';
-
-export interface ActionButtonComponent<T = any> {
-  action: ActionButton<T>;
-  data?: T;
-
-  disable(): void;
-  enable(): void;
-}
+import { ReactiveBooleanOption, ReactiveOption, ReactiveStringOption } from '../../utils/utils';
+import { AbstractActionComponent } from '../components/abstract-action-component';
 
 export interface ActionButton<T = any> {
-  label: propValue<T>;
-  action?: (data?: T, e?: Event, comp?: ActionButtonComponent<T>) => any;
-  type?: propValue<T, 'toggle' | Lab900ButtonType>;
-  color?: propValue<T, ThemePalette>;
-  disabled?: propValue<T, boolean | Observable<boolean>>;
-  selected?: propValue<T, boolean | Observable<boolean>>;
-  hide?: propValue<T, boolean | Observable<boolean>>;
+  label: ReactiveStringOption<T>;
+  action?: (data: T | undefined, e: Event, component: AbstractActionComponent<T>) => any;
+  type?: ReactiveOption<T, 'toggle' | Lab900ButtonType>;
+  color?: ReactiveOption<T, ThemePalette>;
+  disabled?: ReactiveBooleanOption<T>;
+  selected?: ReactiveBooleanOption<T>;
+  hide?: ReactiveBooleanOption<T>;
   subActions?: ActionButton<T>[];
   tooltip?: { value: string; position?: TooltipPosition };
-  suffixIcon?: propValue<T>;
-  prefixIcon?: propValue<T>;
+  suffixIcon?: ReactiveStringOption<T>;
+  prefixIcon?: ReactiveStringOption<T>;
   svgIcon?: boolean;
-  containerClass?: propValue<T>;
-  buttonId?: propValue<T>;
+  containerClass?: ReactiveStringOption<T>;
+  buttonId?: ReactiveStringOption<T>;
   align?: 'left' | 'right';
-}
-
-export interface ToggleActionButton<T = any> extends ActionButton<T> {
-  selected?: propValue<T, boolean>;
+  hideSelectionIndicator?: ReactiveBooleanOption<T>;
+  keepMenuOpen?: ReactiveBooleanOption<T>;
 }

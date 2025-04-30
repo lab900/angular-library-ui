@@ -12,6 +12,7 @@ import { showcaseUiConfig } from './showcase-ui.constants';
 import { showcaseUiNavItems } from './showcase-ui.nav-items';
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
 import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
+import { ActionButtonExampleComponent } from './examples/button-example/action-button-example.component';
 
 export default [
   {
@@ -24,7 +25,10 @@ export default [
     loadComponent: () => import('../shared/components/markdown-page/markdown-page.component'),
     data: { filePath: 'guides/getting-started.md' },
   },
-  new ShowcaseRoute('buttons', 'Buttons', [new ShowcaseExample(ButtonExampleComponent, 'Buttons')]),
+  new ShowcaseRoute('buttons', 'Buttons', [
+    new ShowcaseExample(ButtonExampleComponent, 'Buttons'),
+    new ShowcaseExample(ActionButtonExampleComponent, 'Action buttons'),
+  ]),
   new ShowcaseRoute('alerts', 'Alerts', [new ShowcaseExample(AlertsExampleComponent, 'Alerts')]),
   new ShowcaseRoute('nav-list', 'Nav list', [new ShowcaseExample(NavListExampleComponent, 'Nav list')]),
   new ShowcaseRoute('table', 'Table', [

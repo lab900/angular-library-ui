@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
@@ -26,39 +26,21 @@ import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick
   ],
 })
 export class Lab900ButtonComponent {
-  @Input()
-  public type?: Lab900ButtonType;
+  public readonly type = input<Lab900ButtonType | undefined>(undefined);
+  public readonly color = input<ThemePalette>('primary');
+  public readonly suffixIcon = input<string | undefined>();
+  public readonly prefixIcon = input<string | undefined>();
+  public readonly label = input.required<string>();
+  public readonly disabled = input<boolean>(false);
+  public readonly svgIcon = input<boolean>(false);
+  public readonly buttonType = input<'button' | 'reset' | 'submit'>('button');
+  public readonly containerClass = input<string | undefined>();
+  public readonly buttonId = input<string | undefined>();
+  public readonly throttleTimeInMs = input<number>(500);
 
-  @Input()
-  public color: ThemePalette = 'primary';
+  public readonly btnClick = output<any>();
 
-  @Input()
-  public suffixIcon?: string;
-
-  @Input()
-  public prefixIcon?: string;
-
-  @Input()
-  public label!: string;
-
-  @Input()
-  public disabled?: boolean;
-
-  @Input()
-  public svgIcon = false;
-
-  @Input()
-  public buttonType?: 'button' | 'reset' | 'submit' = 'button';
-
-  @Input()
-  public containerClass?: string;
-  @Input()
-  public buttonId?: string;
-
-  @Output()
-  public btnClick = new EventEmitter<any>();
-
-  public get classList(): { suffixIcon: boolean; prefixIcon: boolean } {
-    return { suffixIcon: !!this.suffixIcon, prefixIcon: !!this.prefixIcon };
-  }
+  public classList = computed(() => {
+    return { suffixIcon: !!this.suffixIcon(), prefixIcon: !!this.prefixIcon() };
+  });
 }
