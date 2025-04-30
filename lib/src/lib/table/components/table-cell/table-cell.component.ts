@@ -6,6 +6,7 @@ import {
   HostBinding,
   inject,
   input,
+  isSignal,
   OnDestroy,
   OnInit,
   output,
@@ -31,6 +32,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { TableCellInnerComponent } from '../table-cell-inner/table-cell-inner.component';
 import { TableCellEventsDirective } from '../../directives/table-cell-events.directive';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'lab900-table-cell[cell]',
@@ -49,6 +51,7 @@ import { MatTooltip } from '@angular/material/tooltip';
     MatFooterCell,
     MatHeaderCellDef,
     MatFooterCellDef,
+    MatProgressSpinner,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -88,8 +91,21 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   public readonly sticky = computed(() => !this.cell().hide && this.cell().sticky);
 
   public readonly cellFooter = computed(() => {
-    const footer = this.cell().footer;
-    return typeof footer === 'function' ? footer(this.data(), this.cell()) : footer;
+    let footer = this.cell().footer;
+    let footerValue;
+    if (!isSignal(footer) && typeof footer === 'function') {
+      footer = footer(this.data(), this.cell());
+    }
+    if (isSignal(footer)) {
+      footerValue = footer();
+    } else if (typeof footer === 'string') {
+      footerValue = footer;
+    }
+    return footerValue;
+  });
+
+  public readonly cellFooterLoading = computed(() => {
+    return this.cell().footerLoading?.() ?? false;
   });
 
   public readonly cellHeaderClass = computed(() => {

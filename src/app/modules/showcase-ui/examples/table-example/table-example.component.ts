@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, signal, TrackByFunction, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, TrackByFunction } from '@angular/core';
 import {
   ActionButton,
   CellInputEditorComponent,
@@ -112,23 +112,22 @@ export class TableExampleComponent {
 
   public tableCells = signal<TableCell[]>([]);
 
+  public total = signal<string>('');
+  public totalLoading = signal<boolean>(true);
+
   public constructor() {
-    effect(() => {
-      const data = untracked(this.mockData);
-      setTimeout(() => {
-        this.mockData.update(() => {
-          data[0].totals = 1000;
-          return [...data];
-        });
-      }, 1000);
-    });
+    setTimeout(() => {
+      this.total.set(String(Math.random() * 1000));
+      this.totalLoading.set(false);
+    }, 3000);
 
     setTimeout(() => {
       this.tableCells.set([
         {
           key: 'expeditionLogStatus',
           label: 'Status',
-          footer: data => (data?.[0] as any)?.totals,
+          footer: this.total,
+          footerLoading: this.totalLoading,
         },
         {
           key: 'nominatedQuantityBaseUnit.amount',
