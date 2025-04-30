@@ -25,7 +25,7 @@ export class Lab900ActionButtonToggleComponent<T = undefined> extends Lab900Acti
     const subActions = this.action().subActions;
     if (subActions) {
       for (const action of subActions) {
-        const selected = computeReactiveBooleanOption<T | undefined>(action.selected, this.data);
+        const selected = computeReactiveBooleanOption<T>(action.selected, this.data);
         if (selected) {
           return action;
         }
@@ -35,6 +35,6 @@ export class Lab900ActionButtonToggleComponent<T = undefined> extends Lab900Acti
   });
 
   protected readonly hideSingleSelectionIndicator = computed(() => {
-    return computeReactiveBooleanOption<T | undefined>(this.action().hideSelectionIndicator, this.data);
+    return computeReactiveBooleanOption<T>(this.action().hideSelectionIndicator, this.data);
   });
 }

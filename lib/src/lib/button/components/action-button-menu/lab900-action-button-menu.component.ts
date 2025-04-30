@@ -22,7 +22,7 @@ import { Lab900ActionButtonMenuItemComponent } from '../action-button-menu-item/
 export class Lab900ActionButtonMenuComponent<T = undefined> {
   public readonly actionMenu = viewChild(MatMenu);
   public readonly actions = input.required<ActionButton<T>[]>();
-  public readonly data = input<T | undefined>(undefined);
+  public readonly data = input<T>();
   public readonly disabled = input<boolean>(false);
   public readonly closeMenu = output<void>();
 }
