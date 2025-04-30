@@ -2,11 +2,11 @@ import { Lab900ButtonType } from './button.model';
 import { ThemePalette } from '@angular/material/core';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { ReactiveBooleanOption, ReactiveOption, ReactiveStringOption } from '../../utils/utils';
-import { AbstractActionComponent } from '../components/abstract-action-component';
+import { Lab900ActionDirective } from '../components/lab900-action.directive';
 
 export interface ActionButtonEvent<T = unknown> {
   event: Event;
-  ref: AbstractActionComponent<T>;
+  ref: Lab900ActionDirective<T>;
 }
 
 export interface ActionButton<T = unknown> {

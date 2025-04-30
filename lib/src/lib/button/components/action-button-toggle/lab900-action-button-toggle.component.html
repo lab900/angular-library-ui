@@ -6,7 +6,26 @@
       [disabled]="disabled()"
       [hideSingleSelectionIndicator]="hideSingleSelectionIndicator()">
       @for (actionButton of subActions; track actionButton.label) {
-        <lab900-action-button-toggle-item [action]="actionButton" [data]="data()" [toggleGroupDisabled]="disabled()" />
+        @if (!hidden()) {
+          <!-- this can't be in a different component as the styling of the group would break (material issue) -->
+          <mat-button-toggle
+            lab900Action
+            #subAction="lab900Action"
+            lab900PreventDoubleClick
+            [action]="actionButton"
+            [data]="data()"
+            (throttledClick)="subAction.doAction($event)"
+            [value]="subAction.action()"
+            [disabled]="disabled() || subAction.disabled()">
+            @if (subAction.prefixIcon(); as icon) {
+              <mat-icon>{{ icon }}</mat-icon>
+            }
+            <span>{{ subAction.label() | translate }}</span>
+            @if (subAction.suffixIcon(); as icon) {
+              <mat-icon>{{ icon }}</mat-icon>
+            }
+          </mat-button-toggle>
+        }
       }
     </mat-button-toggle-group>
   }

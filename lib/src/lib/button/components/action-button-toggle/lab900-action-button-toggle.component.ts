@@ -1,16 +1,26 @@
-import { ChangeDetectionStrategy, Component, computed, linkedSignal } from '@angular/core';
-import { MatButtonToggleGroup } from '@angular/material/button-toggle';
-import { Lab900ActionButtonToggleItemComponent } from '../action-button-toggle-item/lab900-action-button-toggle-item.component';
-import { AbstractActionComponent } from '../abstract-action-component';
+import { ChangeDetectionStrategy, Component, computed, linkedSignal, ViewEncapsulation } from '@angular/core';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { Lab900ActionDirective } from '../lab900-action.directive';
 import { computeReactiveBooleanOption } from '../../../utils/utils';
+import { MatIcon } from '@angular/material/icon';
+import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
-  imports: [MatButtonToggleGroup, Lab900ActionButtonToggleItemComponent],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatIcon,
+    PreventDoubleClickDirective,
+    TranslatePipe,
+    Lab900ActionDirective,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Lab900ActionButtonToggleComponent<T = unknown> extends AbstractActionComponent<T> {
+export class Lab900ActionButtonToggleComponent<T = unknown> extends Lab900ActionDirective<T> {
   protected readonly selected = linkedSignal(() => {
     const subActions = this.action().subActions;
     if (subActions) {

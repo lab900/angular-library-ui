@@ -7,8 +7,11 @@ import {
 import { TooltipPosition } from '@angular/material/tooltip';
 import { ActionButton } from '../models/action-button.model';
 
-@Directive()
-export abstract class AbstractActionComponent<T> {
+@Directive({
+  selector: '[lab900Action]',
+  exportAs: 'lab900Action',
+})
+export class Lab900ActionDirective<T> {
   public readonly action = input.required<ActionButton<T>>();
   public readonly data = input<T | undefined>(undefined);
   protected readonly defaultTooltipPosition: TooltipPosition = 'left';
