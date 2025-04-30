@@ -15,10 +15,10 @@ import { ActionButton, Lab900ActionButtonComponent } from '@lab900/ui';
   `,
 })
 export class ActionButtonExampleComponent {
-  public readonly downloading = signal(false);
-  public readonly downloadLabel = computed(() => (this.downloading() ? 'Downloading...' : 'Download'));
+  private readonly downloading = signal(false);
+  private readonly downloadLabel = computed(() => (this.downloading() ? 'Downloading...' : 'Download'));
 
-  public toggleActionButton: ActionButton = {
+  protected readonly toggleActionButton: ActionButton<void> = {
     label: 'EntityDetailSectionToggleToggleButton',
     type: 'toggle',
     hideSelectionIndicator: true,
@@ -50,7 +50,7 @@ export class ActionButtonExampleComponent {
     ],
   };
 
-  public actionWithSubActions: ActionButton = {
+  protected readonly actionWithSubActions: ActionButton<void> = {
     label: 'Action with sub menu',
     type: 'flat',
     disabled: this.downloading,
@@ -58,19 +58,19 @@ export class ActionButtonExampleComponent {
       {
         label: this.downloadLabel,
         keepMenuOpen: true,
-        action: (_d, _e, component) => {
+        action: ({ ref }) => {
           this.downloading.set(true);
           setTimeout(() => {
-            component.close();
-            console.log('Mock downloaded ended', component);
+            ref.close();
+            console.log('Mock downloaded ended', ref);
             this.downloading.set(false);
           }, 5000);
         },
       },
       {
         label: 'Click and close',
-        action: (_d, _e, component) => {
-          console.log('Click and close', component);
+        action: ({ ref }) => {
+          console.log('Click and close', ref.data());
         },
       },
     ],

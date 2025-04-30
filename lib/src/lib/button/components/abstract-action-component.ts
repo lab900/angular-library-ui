@@ -37,11 +37,11 @@ export abstract class AbstractActionComponent<T> {
     return computeReactiveStringOption<T | undefined>(this.action().prefixIcon, this.data);
   });
 
-  public doAction(e: Event): void {
+  public doAction(event: Event): void {
     if (this.action()?.keepMenuOpen) {
-      e.stopPropagation();
+      event.stopPropagation();
     }
-    this.action()?.action?.(this.data(), e, this);
+    this.action()?.action?.({ event, ref: this });
   }
 
   public close(): void {
