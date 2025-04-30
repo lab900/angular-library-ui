@@ -24,5 +24,5 @@ export class Lab900ActionButtonMenuComponent<T = unknown> {
   public readonly actions = input.required<ActionButton<T>[]>();
   public readonly data = input<T | undefined>(undefined);
   public readonly disabled = input<boolean>(false);
-  protected readonly closeMenu = output<void>();
+  public readonly closeMenu = output<void>();
 }

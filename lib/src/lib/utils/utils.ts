@@ -23,50 +23,47 @@ export type ReactiveNumberOption<PAYLOAD> = ReactiveOption<PAYLOAD, number>;
 
 export function computeReactiveBooleanOption<PAYLOAD>(
   option: ReactiveBooleanOption<PAYLOAD> | undefined,
-  value: Signal<any>
+  value: Signal<PAYLOAD>
 ): boolean {
   let response = false;
-  let optionCopy = option;
-  if (!isSignal(optionCopy) && typeof optionCopy === 'function') {
-    optionCopy = optionCopy(value());
+  if (!isSignal(option) && typeof option === 'function') {
+    option = option(value());
   }
-  if (isSignal(optionCopy)) {
-    response = optionCopy();
-  } else if (typeof optionCopy === 'boolean') {
-    response = optionCopy;
+  if (isSignal(option)) {
+    response = option();
+  } else if (typeof option === 'boolean') {
+    response = option;
   }
   return response;
 }
 
 export function computeReactiveStringOption<PAYLOAD>(
   option: ReactiveStringOption<PAYLOAD> | undefined,
-  value: Signal<any>
+  value: Signal<PAYLOAD>
 ): string | undefined {
   let response: string | undefined = undefined;
-  let optionCopy = option;
-  if (!isSignal(optionCopy) && typeof optionCopy === 'function') {
-    optionCopy = optionCopy(value());
+  if (!isSignal(option) && typeof option === 'function') {
+    option = option(value());
   }
-  if (isSignal(optionCopy)) {
-    response = optionCopy();
-  } else if (typeof optionCopy === 'string') {
-    response = optionCopy;
+  if (isSignal(option)) {
+    response = option();
+  } else if (typeof option === 'string') {
+    response = option;
   }
   return response;
 }
 export function computeReactiveNumberOption<PAYLOAD>(
   option: ReactiveNumberOption<PAYLOAD> | undefined,
-  value: Signal<any>
+  value: Signal<PAYLOAD>
 ): number | undefined {
   let response: number | undefined = undefined;
-  let optionCopy = option;
-  if (!isSignal(optionCopy) && typeof optionCopy === 'function') {
-    optionCopy = optionCopy(value());
+  if (!isSignal(option) && typeof option === 'function') {
+    option = option(value());
   }
-  if (isSignal(optionCopy)) {
-    response = optionCopy();
-  } else if (typeof optionCopy === 'number') {
-    response = optionCopy;
+  if (isSignal(option)) {
+    response = option();
+  } else if (typeof option === 'number') {
+    response = option;
   }
   return response;
 }
@@ -80,17 +77,16 @@ export function computeReactiveStrictStringOption<PAYLOAD>(
 
 export function computeReactiveOption<PAYLOAD, T>(
   option: ReactiveOption<PAYLOAD, T> | undefined,
-  value: Signal<any>
+  value: Signal<PAYLOAD>
 ): T | undefined {
   let response: T | undefined;
-  let optionCopy = option;
-  if (!isSignal(optionCopy) && typeof optionCopy === 'function') {
-    optionCopy = (optionCopy as (data: any) => T)(value());
+  if (!isSignal(option) && typeof option === 'function') {
+    option = (option as (data: any) => T)(value());
   }
-  if (isSignal(optionCopy)) {
-    response = optionCopy();
+  if (isSignal(option)) {
+    response = option();
   } else {
-    response = optionCopy as T;
+    response = option as T;
   }
   return response;
 }

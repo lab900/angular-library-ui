@@ -38,7 +38,7 @@ export class Lab900ButtonComponent {
   public readonly buttonId = input<string | undefined>();
   public readonly throttleTimeInMs = input<number>(500);
 
-  protected readonly btnClick = output<Event>();
+  public readonly btnClick = output<Event>();
 
   protected readonly classList = computed(() => {
     return { suffixIcon: !!this.suffixIcon(), prefixIcon: !!this.prefixIcon() };
