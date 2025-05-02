@@ -1,66 +1,40 @@
-import { Component, Input } from '@angular/core';
-import { ActionButton, ActionButtonComponent } from '../../models/action-button.model';
-import { coerceObservable, readPropValue } from '../../../utils/utils';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, linkedSignal, ViewEncapsulation } from '@angular/core';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { Lab900ActionDirective } from '../lab900-action.directive';
+import { computeReactiveBooleanOption } from '../../../utils/utils';
 import { MatIcon } from '@angular/material/icon';
-import { AsyncPipe } from '@angular/common';
 import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
-import { map } from 'rxjs/operators';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
-  imports: [MatButtonToggleGroup, MatButtonToggle, MatIcon, TranslatePipe, AsyncPipe, PreventDoubleClickDirective],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatIcon,
+    PreventDoubleClickDirective,
+    TranslatePipe,
+    Lab900ActionDirective,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Lab900ActionButtonToggleComponent<T = any> implements ActionButtonComponent<T> {
-  private _disabled = false;
-
-  @Input({ required: true })
-  public action!: ActionButton<T>;
-
-  @Input()
-  public data?: T;
-
-  public getSelected(): ActionButton<T> | null {
-    if (this.action.subActions) {
-      for (const action of this.action.subActions) {
-        if ((typeof action.selected === 'function' && action.selected(this.data)) || action.selected === true) {
+export class Lab900ActionButtonToggleComponent<T = undefined> extends Lab900ActionDirective<T> {
+  protected readonly selected = linkedSignal(() => {
+    const subActions = this.action().subActions;
+    if (subActions) {
+      for (const action of subActions) {
+        const selected = computeReactiveBooleanOption<T>(action.selected, this.data);
+        if (selected) {
           return action;
         }
       }
     }
     return null;
-  }
+  });
 
-  public getHidden(): Observable<boolean> {
-    return coerceObservable(readPropValue(this.action.hide, this.data)).pipe(map(hidden => !!hidden));
-  }
-
-  public getDisabled(): Observable<boolean> {
-    return coerceObservable(this._disabled || readPropValue(this.action.disabled, this.data)).pipe(
-      map(disabled => !!disabled)
-    );
-  }
-
-  public getSubActionDisabled(action: ActionButton): Observable<boolean> {
-    return coerceObservable(readPropValue(action.disabled, this.data)).pipe(map(disabled => !!disabled));
-  }
-
-  public getSubActionHidden(subAction: ActionButton<T>): Observable<boolean> {
-    return coerceObservable(readPropValue(subAction.hide, this.data)).pipe(map(hidden => !!hidden));
-  }
-
-  public getLabel(action: ActionButton): Observable<string> {
-    return coerceObservable(readPropValue(action.label, this.data));
-  }
-
-  public disable(): void {
-    this._disabled = true;
-  }
-
-  public enable(): void {
-    this._disabled = false;
-  }
+  protected readonly hideSingleSelectionIndicator = computed(() => {
+    return computeReactiveBooleanOption<T>(this.action().hideSelectionIndicator, this.data);
+  });
 }

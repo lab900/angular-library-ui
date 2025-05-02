@@ -1,127 +1,134 @@
-@switch (type) {
+@switch (type()) {
   @case ('raised') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass"
+      [class]="containerClass()"
       mat-raised-button
-      [color]="color || 'primary'"
-      [disabled]="disabled"
-      [ngClass]="classList"
-      [attr.type]="buttonType"
-      [id]="buttonId"
+      [color]="color() ?? 'primary'"
+      [disabled]="disabled()"
+      [ngClass]="classList()"
+      [attr.type]="buttonType()"
+      [id]="buttonId()"
+      [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      <ng-container *ngTemplateOutlet="innerButton"></ng-container>
+      <ng-container *ngTemplateOutlet="innerButton" />
     </button>
   }
   @case ('stroked') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass"
+      [class]="containerClass()"
       mat-stroked-button
-      [color]="color || 'primary'"
-      [disabled]="disabled"
-      [ngClass]="classList"
-      [attr.type]="buttonType"
-      [id]="buttonId"
+      [color]="color() ?? 'primary'"
+      [disabled]="disabled()"
+      [ngClass]="classList()"
+      [attr.type]="buttonType()"
+      [id]="buttonId()"
+      [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      <ng-container *ngTemplateOutlet="innerButton"></ng-container>
+      <ng-container *ngTemplateOutlet="innerButton" />
     </button>
   }
   @case ('flat') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass"
+      [class]="containerClass()"
       mat-flat-button
-      [color]="color || 'primary'"
-      [disabled]="disabled"
-      [ngClass]="classList"
-      [attr.type]="buttonType"
-      [id]="buttonId"
+      [color]="color() ?? 'primary'"
+      [disabled]="disabled()"
+      [ngClass]="classList()"
+      [attr.type]="buttonType()"
+      [id]="buttonId()"
+      [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      <ng-container *ngTemplateOutlet="innerButton"></ng-container>
+      <ng-container *ngTemplateOutlet="innerButton" />
     </button>
   }
   @case ('icon') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass"
+      [class]="containerClass()"
       mat-icon-button
-      [color]="color || 'primary'"
-      [disabled]="disabled"
-      [attr.type]="buttonType"
-      [id]="buttonId"
+      [color]="color() ?? 'primary'"
+      [disabled]="disabled()"
+      [attr.type]="buttonType()"
+      [id]="buttonId()"
+      [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      @if (svgIcon) {
-        <mat-icon [svgIcon]="label"></mat-icon>
+      @if (svgIcon()) {
+        <mat-icon [svgIcon]="label()"></mat-icon>
       } @else {
-        <mat-icon>{{ label }}</mat-icon>
+        <mat-icon>{{ label() }}</mat-icon>
       }
     </button>
   }
   @case ('fab') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass"
+      [class]="containerClass()"
       mat-fab
-      [color]="color || 'primary'"
-      [disabled]="disabled"
-      [attr.type]="buttonType"
-      [id]="buttonId"
+      [color]="color() ?? 'primary'"
+      [disabled]="disabled()"
+      [attr.type]="buttonType()"
+      [id]="buttonId()"
+      [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      @if (svgIcon) {
-        <mat-icon [svgIcon]="label"></mat-icon>
+      @if (svgIcon()) {
+        <mat-icon [svgIcon]="label()"></mat-icon>
       } @else {
-        <mat-icon>{{ label }}</mat-icon>
+        <mat-icon>{{ label() }}</mat-icon>
       }
     </button>
   }
   @case ('mini-fab') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass"
+      [class]="containerClass()"
       mat-mini-fab
-      [color]="color || 'primary'"
-      [disabled]="disabled"
-      [attr.type]="buttonType"
-      [id]="buttonId"
+      [color]="color() ?? 'primary'"
+      [disabled]="disabled()"
+      [attr.type]="buttonType()"
+      [id]="buttonId()"
+      [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      @if (svgIcon) {
-        <mat-icon [svgIcon]="label"></mat-icon>
+      @if (svgIcon()) {
+        <mat-icon [svgIcon]="label()" />
       } @else {
-        <mat-icon>{{ label }}</mat-icon>
+        <mat-icon>{{ label() }}</mat-icon>
       }
     </button>
   }
   @default {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass"
+      [class]="containerClass()"
       mat-button
-      [color]="color || 'primary'"
-      [disabled]="disabled"
-      [ngClass]="classList"
-      [attr.type]="buttonType"
-      [id]="buttonId"
+      [color]="color() ?? 'primary'"
+      [disabled]="disabled()"
+      [ngClass]="classList()"
+      [attr.type]="buttonType()"
+      [id]="buttonId()"
+      [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      <ng-container *ngTemplateOutlet="innerButton"></ng-container>
+      <ng-container *ngTemplateOutlet="innerButton" />
     </button>
   }
 }
 
 <ng-template #innerButton>
-  @if (prefixIcon) {
-    @if (svgIcon) {
-      <mat-icon [svgIcon]="prefixIcon"></mat-icon>
+  @if (prefixIcon(); as icon) {
+    @if (svgIcon()) {
+      <mat-icon [svgIcon]="icon" />
     } @else {
-      <mat-icon>{{ prefixIcon }}</mat-icon>
+      <mat-icon>{{ icon }}</mat-icon>
     }
   }
-  {{ label | translate }}
-  @if (suffixIcon) {
-    @if (svgIcon) {
-      <mat-icon [svgIcon]="suffixIcon"></mat-icon>
+  {{ label() | translate }}
+  @if (suffixIcon(); as icon) {
+    @if (svgIcon()) {
+      <mat-icon [svgIcon]="icon" />
     } @else {
-      <mat-icon>{{ suffixIcon }}</mat-icon>
+      <mat-icon>{{ icon }}</mat-icon>
     }
   }
 </ng-template>

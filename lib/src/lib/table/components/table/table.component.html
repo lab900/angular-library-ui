@@ -7,8 +7,8 @@
       [filterIcon]="filterIcon()"
       [tableHeaderContent]="tableHeaderContent()"
       (tableCellsFiltered)="onTableCellsFiltered($event)" />
-    @if (tableTopContent()) {
-      <ng-container *ngTemplateOutlet="tableTopContent()" />
+    @if (tableTopContent(); as tableTopContent) {
+      <ng-container *ngTemplateOutlet="tableTopContent" />
     }
     @if (tabs().length) {
       <lab900-table-tabs [tableTabs]="tabs()" [activeTabId]="tabId()" (activeTabIdChange)="onActiveTabChange($event)" />
@@ -132,8 +132,8 @@
       @if (publicData()) {
         @if (!publicData()?.length && !disabled()) {
           <div class="lab900-table__empty">
-            @if (emptyTableTemplate()) {
-              <ng-container *ngTemplateOutlet="emptyTableTemplate()" />
+            @if (emptyTableTemplate(); as emptyTableTemplate) {
+              <ng-container *ngTemplateOutlet="emptyTableTemplate" />
             } @else {
               <h3>{{ 'GENERAL.NO_RESULTS.TITLE' | translate }}</h3>
               <p>{{ 'GENERAL.NO_RESULTS.DESC' | translate }}</p>
@@ -141,8 +141,8 @@
           </div>
         } @else if (disabled()) {
           <div>
-            @if (disabledTableTemplate()) {
-              <ng-container *ngTemplateOutlet="disabledTableTemplate()" />
+            @if (disabledTableTemplate(); as disabledTableTemplate) {
+              <ng-container *ngTemplateOutlet="disabledTableTemplate" />
             } @else {
               <h3>{{ 'GENERAL.DISABLED.TITLE' | translate }}</h3>
               <p>{{ 'GENERAL.DISABLED.DESC' | translate }}</p>

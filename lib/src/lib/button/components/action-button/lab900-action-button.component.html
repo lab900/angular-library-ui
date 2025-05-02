@@ -1,39 +1,43 @@
-@if (action$ | async; as action) {
-  @if ((hidden$ | async) !== true) {
-    @if ((buttonType$ | async) !== 'toggle') {
-      @if (!action?.subActions?.length) {
-        <lab900-button
-          [type]="$any(buttonType$ | async)"
-          [color]="color$ | async"
-          [disabled]="disabled$ | async"
-          (btnClick)="doAction($event)"
-          [label]="label$ | async"
-          [matTooltip]="action?.tooltip?.value | translate"
-          [prefixIcon]="prefixIcon$ | async"
-          [suffixIcon]="suffixIcon$ | async"
-          [matTooltipPosition]="tooltipPosition$ | async"
-          [svgIcon]="action?.svgIcon"
-          [containerClass]="containerClass$ | async"
-          [id]="buttonId$ | async" />
-      } @else {
-        <lab900-button
-          (click)="$event.stopPropagation()"
-          [type]="$any(buttonType$ | async)"
-          [color]="color$ | async"
-          [disabled]="disabled$ | async"
-          [matMenuTriggerFor]="sub.actionMenu"
-          [label]="label$ | async"
-          [matTooltip]="action?.tooltip?.value | translate"
-          [prefixIcon]="prefixIcon$ | async"
-          [suffixIcon]="suffixIcon$ | async"
-          [matTooltipPosition]="tooltipPosition$ | async"
-          [svgIcon]="action?.svgIcon"
-          [containerClass]="containerClass$ | async"
-          [id]="buttonId$ | async" />
-        <lab900-action-button-menu #sub [actions]="action.subActions" [data]="data$ | async" />
-      }
+@if (!hidden()) {
+  @let type = buttonType();
+  @if (type !== 'toggle') {
+    @let subActions = action()?.subActions;
+    @if (subActions && subActions?.length) {
+      <lab900-button
+        #menuTrigger="matMenuTrigger"
+        (click)="$event.stopPropagation()"
+        [type]="type"
+        [matMenuTriggerFor]="sub.actionMenu()!"
+        [label]="label()"
+        [matTooltip]="action()?.tooltip?.value | translate"
+        [prefixIcon]="prefixIcon()"
+        [suffixIcon]="suffixIcon()"
+        [matTooltipPosition]="tooltipPosition()"
+        [svgIcon]="!!action()?.svgIcon"
+        [containerClass]="containerClass()"
+        [id]="buttonId()" />
+      <lab900-action-button-menu
+        #sub
+        [actions]="subActions"
+        [data]="data()"
+        [disabled]="disabled()"
+        (closeMenu)="menuTrigger?.closeMenu()" />
     } @else {
-      <lab900-action-button-toggle [action]="action" [data]="data$ | async" />
+      <lab900-button
+        [type]="type"
+        [color]="themeColor()"
+        [disabled]="disabled()"
+        (btnClick)="doAction($event)"
+        [label]="label()"
+        [matTooltip]="action()?.tooltip?.value | translate"
+        [prefixIcon]="prefixIcon()"
+        [suffixIcon]="suffixIcon()"
+        [matTooltipPosition]="tooltipPosition()"
+        [svgIcon]="!!action()?.svgIcon"
+        [containerClass]="containerClass()"
+        [id]="buttonId()" />
     }
+  } @else {
+    <lab900-action-button-toggle [action]="action()" [data]="data()" />
   }
 }

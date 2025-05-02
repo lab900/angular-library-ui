@@ -156,12 +156,12 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   /**
    * Show a set of actions at the top of the table
    */
-  public readonly tableHeaderActions = input<ActionButton<T>[]>([]);
+  public readonly tableHeaderActions = input<ActionButton[]>([]);
 
   /**
    * Show a set of actions at the bottom of the table
    */
-  public readonly tableFooterActions = input<ActionButton<T>[]>([]);
+  public readonly tableFooterActions = input<ActionButton[]>([]);
 
   /**
    * Show a set of actions at the start of each row

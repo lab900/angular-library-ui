@@ -37,6 +37,12 @@
     }
   </td>
   @if (showFooterCell()) {
-    <td mat-footer-cell *matFooterCellDef [innerHtml]="cellFooter()" [ngClass]="cell().footerCellClass"></td>
+    <td mat-footer-cell *matFooterCellDef [ngClass]="cell().footerCellClass">
+      @if (cellFooterLoading()) {
+        <mat-spinner diameter="20" [style.margin]="'0 auto'" />
+      } @else {
+        <div class="lab900-footer-cell-content" [innerHTML]="cellFooter()"></div>
+      }
+    </td>
   }
 </ng-container>

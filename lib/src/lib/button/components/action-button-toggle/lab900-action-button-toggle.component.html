@@ -1,21 +1,28 @@
-@if ((getHidden() | async) !== true) {
-  @if (action?.subActions?.length) {
-    <mat-button-toggle-group [value]="getSelected()" [disabled]="getDisabled() | async">
-      @for (actionButton of action.subActions; track actionButton.label) {
-        @if ((getSubActionHidden(actionButton) | async) !== true) {
+@if (!hidden()) {
+  @let subActions = action()?.subActions;
+  @if (subActions && subActions?.length) {
+    <mat-button-toggle-group
+      [value]="selected()"
+      [disabled]="disabled()"
+      [hideSingleSelectionIndicator]="hideSingleSelectionIndicator()">
+      @for (actionButton of subActions; track actionButton.label) {
+        @if (!hidden()) {
+          <!-- this can't be in a different component as the styling of the group would break (material issue) -->
           <mat-button-toggle
+            lab900Action
+            #subAction="lab900Action"
             lab900PreventDoubleClick
-            (throttledClick)="actionButton.action?.(data)"
-            [value]="actionButton"
-            [disabled]="getSubActionDisabled(actionButton) | async">
-            @if (actionButton.prefixIcon) {
-              <mat-icon>{{ actionButton.prefixIcon }}</mat-icon>
+            [action]="actionButton"
+            [data]="data()"
+            (throttledClick)="subAction.doAction($event)"
+            [value]="subAction.action()"
+            [disabled]="disabled() || subAction.disabled()">
+            @if (subAction.prefixIcon(); as icon) {
+              <mat-icon>{{ icon }}</mat-icon>
             }
-            @if (actionButton.label) {
-              {{ (getLabel(actionButton) | async) ?? '' | translate }}
-            }
-            @if (actionButton.suffixIcon) {
-              <mat-icon>{{ actionButton.suffixIcon }}</mat-icon>
+            <span>{{ subAction.label() | translate }}</span>
+            @if (subAction.suffixIcon(); as icon) {
+              <mat-icon>{{ icon }}</mat-icon>
             }
           </mat-button-toggle>
         }

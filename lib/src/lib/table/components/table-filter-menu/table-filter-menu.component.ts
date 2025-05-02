@@ -53,7 +53,7 @@ export class Lab900TableFilterMenuComponent {
   public filterIcon = input<string>('filter_alt');
   public toggleAndMoveColumns = input<boolean>(false);
 
-  protected readonly filterChanged = output<TableCell[]>();
+  public readonly filterChanged = output<TableCell[]>();
 
   public getCellLabel(cell: TableCell): string {
     return readPropValue(cell.label, cell);

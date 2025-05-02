@@ -42,6 +42,7 @@ export * from './lib/button/components/action-button-toggle/lab900-action-button
 export * from './lib/button/models/action-button.model';
 export * from './lib/button/models/button.model';
 export * from './lib/button/directives/preventDoubleClick.directive';
+export * from './lib/button/components/lab900-action.directive';
 
 // bread crumbs
 export * from './lib/bread-crumbs/components/bread-crumbs/bread-crumbs.component';

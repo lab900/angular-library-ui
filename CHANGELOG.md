@@ -1,5 +1,28 @@
 # Changelog
 
+## 19.1.0
+
+### Action Menu/Button/Toggle Improvements
+
+- All action types now have **reactive options**.
+- Action menus will close on click by default, unless explicitly set to stay open using the new `keepMenuOpen` option.
+- The selection indicator in the `Lab900ActionButtonToggleComponent` can now be disabled using the new `hideSelectionIndicator` option.
+
+#### Breaking Changes
+
+- **Reactive options no longer support observables.** They now use **signals**, so you'll need to provide a signal or a function that returns a signal.
+- The **action callback** now receives a single argument: `ActionButtonEvent`, which contains both the original event and a reference to the component.
+
+### Table footer improvements
+
+- Footer cells can now handle signals, making async data possible without workarounds
+- Footer cells can display a loading spinner while async data is loading
+- Roadmap: would be nice to also have footer renderers.
+
+#### Breaking Changes
+- All deprecated `TableCell` properties have been removed as the logic behind them was already removed.
+
+
 ## 19.0.3
 
 - Fixed issues with table footers not showing up

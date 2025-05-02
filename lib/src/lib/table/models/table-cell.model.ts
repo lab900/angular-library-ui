@@ -1,7 +1,7 @@
 import { propValue } from '../../utils/utils';
 import { TableCellTooltip } from './table-cell-tooltip.model';
 import { TooltipPosition } from '@angular/material/tooltip';
-import { Type } from '@angular/core';
+import { Signal, Type } from '@angular/core';
 import { CellRendererAbstract } from '../cell-renderers/cell-renderer.abstract';
 import { ColumnHeaderRendererAbstract } from '../column-header-renderers/column-header-renderer-abstract.directive';
 import { CellEditorAbstract } from '../cell-editors/cell-editor.abstract';
@@ -35,16 +35,6 @@ export interface TableCell<
    * Custom cell header class
    */
   cellHeaderClass?: propValue<TableCell<T>>;
-  /**
-   * Cell header icon
-   * @Deprecated use cellRenderer: ColumnHeaderWithIconRendererComponent instead
-   */
-  cellHeaderIcon?: propValue<TableCell<T>>;
-  /**
-   * Cell header svgicon
-   * @Deprecated use cellRenderer: ColumnHeaderWithIconRendererComponent instead
-   */
-  cellHeaderSvgIcon?: propValue<TableCell<T>>;
   /**
    * Custom formatter to display data inside the cell
    */
@@ -83,11 +73,6 @@ export interface TableCell<
    * on click
    */
   click?: (data: T, cell: TableCell, mouseEvent?: MouseEvent) => unknown;
-  /**
-   * render a different cell template
-   * @deprecated use cellRenderer instead
-   */
-  customCellContent?: boolean;
 
   /**
    * Specify a custom cell renderer component to display the cell content in a different way
@@ -102,11 +87,6 @@ export interface TableCell<
   cellEditor?: Type<CellEditorAbstract<CellEditorOptions, T>>;
   cellEditorOptions?: CellEditorOptions;
 
-  /**
-   * render a different column header template
-   * @deprecated use headerRenderer instead
-   */
-  customHeaderCell?: boolean;
   /**
    * Specify a custom header renderer component to display the column header content in a different way
    */
@@ -137,17 +117,7 @@ export interface TableCell<
   /**
    * Cell footer to be displayed
    */
-  footer?: ((data: T[], cell: TableCell) => string) | string;
+  footer?: ((data: T[], cell: TableCell) => string | Signal<string>) | string | Signal<string>;
+  footerLoading?: Signal<boolean>;
   footerCellClass?: string;
-
-  /**
-   * Cell prefixed icon, use cellFormatter to remove text if you want to only use the icon
-   * @Deprecated use cellRenderer: CellWithIconRendererComponent  instead
-   */
-  icon?: (data: T, cell: TableCell) => string;
-  /**
-   * Cell prefixed SVG icon
-   * @Deprecated use cellRenderer: CellWithIconRendererComponent  instead
-   */
-  svgIcon?: (data: T, cell: TableCell) => string;
 }

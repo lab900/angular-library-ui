@@ -1,0 +1,42 @@
+@if (!hidden()) {
+  @let subActions = action()?.subActions;
+  @if (subActions && subActions?.length) {
+    <button
+      #menuTrigger="matMenuTrigger"
+      mat-menu-item
+      [matMenuTriggerFor]="innerMenu.actionMenu()!"
+      [disabled]="menuItemDisabled()"
+      [matTooltip]="action()?.tooltip?.value | translate"
+      [matTooltipPosition]="tooltipPosition()"
+      lab900PreventDoubleClick>
+      @if (prefixIcon(); as icon) {
+        <mat-icon>{{ icon }}</mat-icon>
+      }
+      <span>{{ label() | translate }}</span>
+      @if (suffixIcon(); as icon) {
+        <mat-icon>{{ icon }}</mat-icon>
+      }
+    </button>
+    <lab900-action-button-menu
+      #innerMenu
+      [actions]="subActions"
+      [disabled]="disabled()"
+      (closeMenu)="menuTrigger.closeMenu()" />
+  } @else {
+    <button
+      mat-menu-item
+      (throttledClick)="doAction($event)"
+      [disabled]="menuItemDisabled()"
+      [matTooltip]="action()?.tooltip?.value | translate"
+      [matTooltipPosition]="tooltipPosition()"
+      lab900PreventDoubleClick>
+      @if (prefixIcon(); as icon) {
+        <mat-icon>{{ icon }}</mat-icon>
+      }
+      <span>{{ label() | translate }}</span>
+      @if (suffixIcon(); as icon) {
+        <mat-icon>{{ icon }}</mat-icon>
+      }
+    </button>
+  }
+}
