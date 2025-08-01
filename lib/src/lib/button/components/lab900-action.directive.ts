@@ -1,6 +1,7 @@
 import { computed, Directive, input } from '@angular/core';
 import {
   computeReactiveBooleanOption,
+  computeReactiveOption,
   computeReactiveStrictStringOption,
   computeReactiveStringOption,
 } from '../../utils/utils';
@@ -47,6 +48,10 @@ export class Lab900ActionDirective<T = undefined> {
 
   public readonly prefixIcon = computed(() => {
     return computeReactiveStringOption<T>(this.action().prefixIcon, this.data);
+  });
+
+  protected readonly subActions = computed(() => {
+    return computeReactiveOption<T, ActionButton<T>[]>(this.action().subActions, this.data);
   });
 
   public doAction(event: Event): void {

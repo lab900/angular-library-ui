@@ -18,7 +18,7 @@ export interface ActionButton<T = undefined> {
   disabled?: ReactiveBooleanOption<T>;
   selected?: ReactiveBooleanOption<T>;
   hide?: ReactiveBooleanOption<T>;
-  subActions?: ActionButton<T>[];
+  subActions?: ReactiveOption<T, ActionButton<T>[]>;
   tooltip?: { value: string; position?: TooltipPosition };
   suffixIcon?: ReactiveStringOption<T>;
   prefixIcon?: ReactiveStringOption<T>;
