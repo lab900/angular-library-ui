@@ -7,6 +7,10 @@ Meaning the number of sub-actions can change dynamically based on the row-data o
   different number of files to download). This can be breaking if you were dynamically adding sub-actions to the 
   array after initialization.
 
+## 19.1.5
+- this version is deprecated, and the version tag was removed, since it contains some breaking changes in comparison to 
+  19.1.4
+
 ## 19.1.0
 
 ### Action Menu/Button/Toggle Improvements
