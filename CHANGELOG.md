@@ -1,9 +1,11 @@
 # Changelog
 
-## 19.1.5
+## 19.2.0
+#### Breaking Changes
 - ActionButton's sub-actions now support reactive options.
 Meaning the number of sub-actions can change dynamically based on the row-data of a table. (e.g. every row having a 
-  different number of files to download)
+  different number of files to download). This can be breaking if you were dynamically adding sub-actions to the 
+  array after initialization.
 
 ## 19.1.0
 
