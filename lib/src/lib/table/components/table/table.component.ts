@@ -373,10 +373,10 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   private getDisplayedColumns(): string[] {
     const displayColumns = this.visibleColumns()?.map(c => c.key);
-    if (this.tableActionsFront().length) {
+    if (this.tableActionsFront()?.length) {
       displayColumns.unshift('actions-front');
     }
-    if (this.tableActionsBack().length) {
+    if (this.tableActionsBack()?.length) {
       displayColumns.push('actions-back');
     }
     if (this.selectableRows()?.enabled) {
