@@ -1,6 +1,6 @@
 @if (!hidden()) {
-  @let subActions = action()?.subActions;
-  @if (subActions && subActions?.length) {
+  @let _subActions = subActions();
+  @if (_subActions && _subActions?.length) {
     <button
       #menuTrigger="matMenuTrigger"
       mat-menu-item
@@ -19,7 +19,7 @@
     </button>
     <lab900-action-button-menu
       #innerMenu
-      [actions]="subActions"
+      [actions]="_subActions"
       [disabled]="disabled()"
       (closeMenu)="menuTrigger.closeMenu()" />
   } @else {

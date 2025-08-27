@@ -1,8 +1,8 @@
 @if (!hidden()) {
   @let type = buttonType();
   @if (type !== 'toggle') {
-    @let subActions = action()?.subActions;
-    @if (subActions && subActions?.length) {
+    @let _subActions = subActions();
+    @if (_subActions && _subActions?.length) {
       <lab900-button
         #menuTrigger="matMenuTrigger"
         (click)="$event.stopPropagation()"
@@ -18,7 +18,7 @@
         [id]="buttonId()" />
       <lab900-action-button-menu
         #sub
-        [actions]="subActions"
+        [actions]="_subActions"
         [data]="data()"
         [disabled]="disabled()"
         (closeMenu)="menuTrigger?.closeMenu()" />

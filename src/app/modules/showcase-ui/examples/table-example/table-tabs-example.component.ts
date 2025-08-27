@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Lab900TableComponent, Lab900TableTab, TableCell } from '@lab900/ui';
+import { Lab900TableComponent, Lab900TableTab, TableCell, TableRowAction } from '@lab900/ui';
 
 const mockDataA: any[] = [
   {
@@ -73,7 +73,8 @@ const tableCellsAlt2: TableCell[] = [
     [data]="activeData"
     [tableTabs]="tabs"
     (activeTabIdChange)="switchData($event)"
-    [trackByTableFn]="trackByTableFn" />`,
+    [trackByTableFn]="trackByTableFn"
+    [tableActionsBack]="tableActionsBack" />`,
 })
 export class TableTabsExampleComponent {
   public activeData: any[] = mockDataA;
@@ -96,6 +97,18 @@ export class TableTabsExampleComponent {
       label: 'Name',
       cellClass: data => 'lcs-approval-status-cell ' + data?.name,
     },
+  ];
+
+  protected tableActionsBack: TableRowAction[] = [
+    {
+      type: 'icon',
+      label: 'picture_as_pdf',
+      subActions: data =>
+        Array.from({ length: data?.id || 0 }, (_, i) => ({
+          label: `Download file ${i + 1}`,
+          action: ({ data }) => console.log(`Download file ${i + 1} clicked for row with ID: ${data.id}`),
+        })),
+    } as TableRowAction,
   ];
 
   public trackByTableFn = (index: number, item: any): any => item.id;

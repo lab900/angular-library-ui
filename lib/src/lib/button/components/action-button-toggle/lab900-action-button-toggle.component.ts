@@ -22,7 +22,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class Lab900ActionButtonToggleComponent<T = undefined> extends Lab900ActionDirective<T> {
   protected readonly selected = linkedSignal(() => {
-    const subActions = this.action().subActions;
+    const subActions = this.subActions();
     if (subActions) {
       for (const action of subActions) {
         const selected = computeReactiveBooleanOption<T>(action.selected, this.data);
