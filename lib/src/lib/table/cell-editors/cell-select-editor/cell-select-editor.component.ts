@@ -65,6 +65,7 @@ export class CellSelectEditorComponent extends CellEditorAbstract<CellSelectEdit
       this.closeAndSave(this.matSelect()?.value, false);
       // fixes the arrow keys navigation after close
       this.elm.nativeElement.parentElement?.parentElement?.parentElement?.focus();
+      this.close();
     }
   }
 }

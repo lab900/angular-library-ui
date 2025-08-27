@@ -11,18 +11,25 @@ Meaning the number of sub-actions can change dynamically based on the row-data o
 - this version is deprecated, and the version tag was removed, since it contains some breaking changes in comparison to 
   19.1.4
 
+## 19.1.4
+
+- Fix: table cell select not resetting to view after editing
+
 ## 19.1.0
 
 ### Action Menu/Button/Toggle Improvements
 
 - All action types now have **reactive options**.
 - Action menus will close on click by default, unless explicitly set to stay open using the new `keepMenuOpen` option.
-- The selection indicator in the `Lab900ActionButtonToggleComponent` can now be disabled using the new `hideSelectionIndicator` option.
+- The selection indicator in the `Lab900ActionButtonToggleComponent` can now be disabled using the
+  new `hideSelectionIndicator` option.
 
 #### Breaking Changes
 
-- **Reactive options no longer support observables.** They now use **signals**, so you'll need to provide a signal or a function that returns a signal.
-- The **action callback** now receives a single argument: `ActionButtonEvent`, which contains both the original event and a reference to the component.
+- **Reactive options no longer support observables.** They now use **signals**, so you'll need to provide a signal or a
+  function that returns a signal.
+- The **action callback** now receives a single argument: `ActionButtonEvent`, which contains both the original event
+  and a reference to the component.
 
 ### Table footer improvements
 
@@ -31,13 +38,12 @@ Meaning the number of sub-actions can change dynamically based on the row-data o
 - Roadmap: would be nice to also have footer renderers.
 
 #### Breaking Changes
-- All deprecated `TableCell` properties have been removed as the logic behind them was already removed.
 
+- All deprecated `TableCell` properties have been removed as the logic behind them was already removed.
 
 ## 19.0.3
 
 - Fixed issues with table footers not showing up
-
 
 ## 19.0.1
 
@@ -126,8 +132,11 @@ Upgrade to Angular 17
 #### The last modules have been removed:
 
 - `Lab900MergerModule` is removed. Import the standalone component `Lab900MergerComponent` instead.
-- `DialogModule` is removed. Import any of the standalone components `ConfirmationDialogComponent`, `AlertDialogComponent` instead.
-- `Lab900ButtonModule` is removed. Import any of the standalone componenst `Lab900ButtonComponent`, `Lab900ActionButtonToggleComponent`, `Lab900ActionButtonMenuComponent`, `Lab900ActionButtonComponent` instead.
+- `DialogModule` is removed. Import any of the standalone
+  components `ConfirmationDialogComponent`, `AlertDialogComponent` instead.
+- `Lab900ButtonModule` is removed. Import any of the standalone
+  componenst `Lab900ButtonComponent`, `Lab900ActionButtonToggleComponent`, `Lab900ActionButtonMenuComponent`, `Lab900ActionButtonComponent`
+  instead.
 - `Lab900DataListModule` is removed. Import the standalone component `Lab900DataListComponent` instead.
 
 ## older version
