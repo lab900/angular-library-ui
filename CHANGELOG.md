@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.2.2
+### Filter header only toggle columns
+- Fixed an issue where the header filter toggle would not properly show the state of the cells that are hidden/shown.
+
 ## 19.2.1
 ### Show header filter fixes
 - Fixed an issue where the header filter would not show up when `visibleCells` and `hiddenCells` contains items and add new param `showHeaderFilter` to explicitly show/hide the header filter.
