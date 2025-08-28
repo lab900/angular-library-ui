@@ -192,6 +192,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
    */
   public readonly toggleAndMoveColumns = input<boolean>(false);
   public readonly filterIcon = input<string>('filter_alt');
+  public readonly showFilterHeader = input<boolean>(false);
   public readonly neverHideTable = input<boolean>(false);
   public readonly disabled = model<boolean>(false);
 

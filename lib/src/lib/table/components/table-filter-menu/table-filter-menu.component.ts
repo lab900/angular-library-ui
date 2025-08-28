@@ -51,6 +51,7 @@ export class Lab900TableFilterMenuComponent {
   protected readonly hiddenCells = computed(() => this.filterableTableCells().filter((cell: TableCell) => !!cell.hide));
 
   public filterIcon = input<string>('filter_alt');
+  public showFilterHeader = input<boolean>(false);
   public toggleAndMoveColumns = input<boolean>(false);
 
   public readonly filterChanged = output<TableCell[]>();
