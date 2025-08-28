@@ -25,6 +25,7 @@ export class Lab900TableHeaderComponent {
   public readonly tableHeaderContent = input<TemplateRef<any> | undefined>(undefined);
   public readonly tableHeaderActions = input<ActionButton[]>([]);
   public readonly filterIcon = input<string>('filter_alt');
+  public readonly showFilterHeader = input<boolean>(true);
   public readonly toggleAndMoveColumns = input<boolean>(false);
   public readonly toggleColumns = input<boolean>(true);
 

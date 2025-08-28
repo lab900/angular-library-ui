@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.2.1
+### Show header filter fixes
+- Fixed an issue where the header filter would not show up when `visibleCells` and `hiddenCells` contains items and add new param `showHeaderFilter` to explicitly show/hide the header filter.
+
 ## 19.2.0
 #### Breaking Changes
 - ActionButton's sub-actions now support reactive options.

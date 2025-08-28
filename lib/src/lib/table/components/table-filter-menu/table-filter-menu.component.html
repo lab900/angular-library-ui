@@ -17,7 +17,7 @@
       } @else {
         <!-- ACTIVE COLUMNS -->
         @if (visibleCells()) {
-          @if (visibleCells?.length > 0) {
+          @if (showFilterHeader() && visibleCells()?.length > 0) {
             <div
               (click)="$event.stopPropagation(); $event.preventDefault()"
               class="lab900-table-filter-menu__option lab900-table-filter-menu__option--bold lab900-table-filter-menu__title">
@@ -55,7 +55,7 @@
         }
         <!-- INACTIVE COLUMNS -->
         @if (hiddenCells()) {
-          @if (hiddenCells?.length > 0) {
+          @if (showFilterHeader() && hiddenCells()?.length > 0) {
             <div
               (click)="$event.stopPropagation(); $event.preventDefault()"
               class="lab900-table-filter-menu__option lab900-table-filter-menu__option--bold lab900-table-filter-menu__title lab900-table-filter-menu__title--middle">
