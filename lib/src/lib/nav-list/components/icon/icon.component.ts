@@ -10,8 +10,8 @@ import { MatIcon } from '@angular/material/icon';
   template: ` @if (icon()?.name) {
       <mat-icon>{{ icon().name }}</mat-icon>
     }
-    @if (icon()?.svgName) {
-      <mat-icon [svgIcon]="icon().svgName" />
+    @if (icon()?.svgName; as svgName) {
+      <mat-icon [svgIcon]="svgName" />
     }`,
   imports: [MatIcon],
 })

@@ -6,6 +6,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { NavItemComponent } from '../nav-item/nav-item.component';
 import { Breakpoints } from '@angular/cdk/layout';
 import { MatNavList } from '@angular/material/list';
+import { uniqueId } from 'lodash';
 
 const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   return typeof i?.hide === 'function' ? i.hide() : (i?.hide ?? false);
@@ -26,13 +27,13 @@ export class Lab900NavListComponent {
   public readonly allowOverlayMenuUntil = input<string | string[]>(Breakpoints.XSmall);
   public readonly routeMatchOptions = input<IsActiveMatchOptions | { exact: boolean } | undefined>(undefined);
 
-  public readonly filteredNavItemGroups = computed(() => {
+  public readonly filteredNavItemGroups = computed<NavItemGroup[]>(() => {
     const groups = this.navItemGroups();
     return groups
       .filter(g => !hide(g))
       .map(g => {
         g.items = this.filterNavItems(g.items);
-        return g;
+        return { ...g, uniqueId: uniqueId() };
       })
       .filter(g => !!g.items?.length);
   });
@@ -44,7 +45,7 @@ export class Lab900NavListComponent {
         if (i?.children?.length) {
           i.children = this.filterNavItems(i.children);
         }
-        return i;
+        return { ...i, uniqueId: uniqueId() };
       })
       .filter(i => !!i?.children?.length || i?.route || i?.href);
   }

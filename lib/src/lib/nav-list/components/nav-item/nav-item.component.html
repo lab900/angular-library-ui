@@ -1,5 +1,5 @@
 @if (item()) {
-  <div class="nav-item nav-item--depth-{{ depth }}">
+  <div class="nav-item nav-item--depth-{{ depth() }}">
     @if (!item()?.childrenInOverlay || breakpointObserver.isMatched(allowOverlayMenuUntil())) {
       <div class="nav-item--without-overlay">
         <lab900-nav-item-button
@@ -14,7 +14,7 @@
         @if (item()?.children?.length) {
           @if (expanded()) {
             <div class="nav-item--without-overlay__children">
-              @for (child of item().children; track child.label) {
+              @for (child of item().children; track child.uniqueId) {
                 <lab900-nav-item
                   [item]="child"
                   [depth]="indentLevels() ? depth() + 1 : 0"

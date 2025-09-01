@@ -1,6 +1,6 @@
 @if (filteredNavItemGroups(); as groups) {
   <div class="lab900-nav-list">
-    @for (group of filteredNavItemGroups(); track group.label) {
+    @for (group of filteredNavItemGroups(); track group.uniqueId) {
       <div class="nav-list-group">
         @if (group.label || group.icon) {
           <div class="nav-list-group__wrapper">
@@ -12,13 +12,13 @@
                 {{ group.label | translate }}
               </div>
             }
-            @if (!showLevelArrows() && group.icon?.position === 'right') {
+            @if (!showLevelArrows() && group.icon && group.icon?.position === 'right') {
               <lab900-icon class="nav-list-group__icon-right" [icon]="group.icon" />
             }
           </div>
         }
         <mat-nav-list>
-          @for (item of group.items; track item) {
+          @for (item of group.items; track item.uniqueId) {
             <lab900-nav-item
               [item]="item"
               [indentLevels]="indentLevels()"

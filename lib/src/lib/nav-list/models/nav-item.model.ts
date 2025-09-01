@@ -11,6 +11,10 @@ export interface NavItem {
   hide?: (() => boolean) | boolean;
   navigationFinished?: (navigationResult: boolean | null) => void;
   routeMatchOptions?: IsActiveMatchOptions | { exact: boolean };
+  /**
+   * Will be automatically generated
+   */
+  uniqueId?: string;
 }
 
 export interface NavItemGroup {
@@ -18,6 +22,10 @@ export interface NavItemGroup {
   items: NavItem[];
   icon?: Icon;
   hide?: (() => boolean) | boolean;
+  /**
+   * Will be automatically generated
+   */
+  uniqueId?: string;
 }
 
 export interface Icon {
