@@ -2,12 +2,13 @@
   @let _subActions = subActions();
   @if (_subActions && _subActions?.length) {
     <button
-      #menuTrigger="matMenuTrigger"
+      #trigger="matMenuTrigger"
       mat-menu-item
-      [matMenuTriggerFor]="innerMenu.actionMenu()!"
+      [matMenuTriggerFor]="sub"
       [disabled]="menuItemDisabled()"
       [matTooltip]="action()?.tooltip?.value | translate"
       [matTooltipPosition]="tooltipPosition()"
+      (mouseenter)="trigger.openMenu()"
       lab900PreventDoubleClick>
       @if (prefixIcon(); as icon) {
         <mat-icon>{{ icon }}</mat-icon>
@@ -17,11 +18,14 @@
         <mat-icon>{{ icon }}</mat-icon>
       }
     </button>
-    <lab900-action-button-menu
-      #innerMenu
-      [actions]="_subActions"
-      [disabled]="disabled()"
-      (closeMenu)="menuTrigger.closeMenu()" />
+    <mat-menu #sub="matMenu">
+      @for (action of _subActions; track action.label) {
+        <!-- please keep this mat-menu-item wrapper, it's fake but angular mat menu needs it in the same component -->
+        <button mat-menu-item [disabled]="disabled()" style="padding: 0">
+          <lab900-action-button-menu-item [action]="action" [data]="data()" [menuDisabled]="disabled()" />
+        </button>
+      }
+    </mat-menu>
   } @else {
     <button
       mat-menu-item

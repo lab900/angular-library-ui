@@ -4,11 +4,11 @@ import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
 import { computeReactiveOption, computeReactiveStringOption } from '../../../utils/utils';
 import { Lab900ButtonComponent } from '../button/button.component';
-import { MatMenuTrigger } from '@angular/material/menu';
-import { Lab900ActionButtonMenuComponent } from '../action-button-menu/lab900-action-button-menu.component';
+import { MatMenuModule } from '@angular/material/menu';
 import { Lab900ActionButtonToggleComponent } from '../action-button-toggle/lab900-action-button-toggle.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Lab900ActionDirective } from '../lab900-action.directive';
+import { Lab900ActionButtonMenuItemComponent } from '../action-button-menu-item/lab900-action-button-menu-item.component';
 
 @Component({
   selector: 'lab900-action-button',
@@ -17,10 +17,10 @@ import { Lab900ActionDirective } from '../lab900-action.directive';
   imports: [
     Lab900ButtonComponent,
     MatTooltip,
-    MatMenuTrigger,
-    Lab900ActionButtonMenuComponent,
     Lab900ActionButtonToggleComponent,
     TranslatePipe,
+    Lab900ActionButtonMenuItemComponent,
+    MatMenuModule,
   ],
 })
 export class Lab900ActionButtonComponent<T = undefined> extends Lab900ActionDirective<T> {

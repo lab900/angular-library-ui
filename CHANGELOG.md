@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.2.3
+- Fix: hover issue for action buttons with multi-level sub menus 
+- Fix: re-render warnings because of wrong trackers on navigation for loops.
+
 ## 19.2.2
 ### Filter header only toggle columns
 - Fixed an issue where the header filter toggle would not properly show the state of the cells that are hidden/shown.
