@@ -1,5 +1,8 @@
 # Changelog
 
+## 19.2.4
+- Chore: update vulnerable package, still one left (angular-cli-ghpages, waiting on an update)
+
 ## 19.2.3
 - Fix: hover issue for action buttons with multi-level sub menus 
 - Fix: re-render warnings because of wrong trackers on navigation for loops.
