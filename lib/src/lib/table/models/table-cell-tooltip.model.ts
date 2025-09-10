@@ -1,4 +1,3 @@
-import { TooltipPosition } from '@angular/material/tooltip';
 import { propValue } from '../../utils/utils';
 
 export interface TableCellTooltip<T = unknown> {
@@ -16,10 +15,10 @@ export interface TableCellTooltip<T = unknown> {
    * Currently ony supports positioning option of matTooltip
    */
   tooltipOptions?: {
-    tooltipPosition: TooltipPosition;
+    tooltipPosition: 'left' | 'right' | 'above' | 'below' | 'before' | 'after';
   };
 }
 
 export interface TooltipOptions {
-  tooltipPosition?: TooltipPosition;
+  tooltipPosition?: 'left' | 'right' | 'above' | 'below' | 'before' | 'after';
 }

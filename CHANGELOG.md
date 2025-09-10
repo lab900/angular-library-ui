@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.2.5
+- Fix: import issue from hashed packages
+
+
 ## 19.2.4
 - Chore: update vulnerable package, still one left (angular-cli-ghpages, waiting on an update)
 

@@ -1,6 +1,5 @@
 import { Lab900ButtonType } from './button.model';
 import { ThemePalette } from '@angular/material/core';
-import { TooltipPosition } from '@angular/material/tooltip';
 import { ReactiveBooleanOption, ReactiveOption, ReactiveStringOption } from '../../utils/utils';
 import { Lab900ActionDirective } from '../components/lab900-action.directive';
 
@@ -19,7 +18,7 @@ export interface ActionButton<T = undefined> {
   selected?: ReactiveBooleanOption<T>;
   hide?: ReactiveBooleanOption<T>;
   subActions?: ReactiveOption<T, ActionButton<T>[]>;
-  tooltip?: { value: string; position?: TooltipPosition };
+  tooltip?: { value: string; position?: 'left' | 'right' | 'above' | 'below' | 'before' | 'after' };
   suffixIcon?: ReactiveStringOption<T>;
   prefixIcon?: ReactiveStringOption<T>;
   svgIcon?: boolean;
