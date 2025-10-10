@@ -15,4 +15,11 @@ import { MatIcon } from '@angular/material/icon';
 export class Lab900ActionButtonMenuItemComponent<T = undefined> extends Lab900ActionDirective<T> {
   public readonly menuDisabled = input<boolean>(false);
   protected readonly menuItemDisabled = computed(() => this.menuDisabled() || this.disabled());
+
+  protected readonly tooltipValue = computed(() => {
+    const tooltip = this.action().tooltip;
+    if (!tooltip?.value) return '';
+
+    return typeof tooltip.value === 'function' ? tooltip.value(this.data()) : String(tooltip.value);
+  });
 }

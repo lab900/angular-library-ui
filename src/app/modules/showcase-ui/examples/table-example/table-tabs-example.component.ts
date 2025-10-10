@@ -103,6 +103,9 @@ export class TableTabsExampleComponent {
     {
       type: 'icon',
       label: 'picture_as_pdf',
+      tooltip: {
+        value: data => (data.id === 1 ? 'One tooltip' : 'Another tooltip'),
+      },
       subActions: data =>
         Array.from({ length: data?.id || 0 }, (_, i) => ({
           label: `Download file ${i + 1}`,

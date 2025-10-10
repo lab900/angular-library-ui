@@ -6,7 +6,7 @@
       mat-menu-item
       [matMenuTriggerFor]="sub"
       [disabled]="menuItemDisabled()"
-      [matTooltip]="action()?.tooltip?.value | translate"
+      [matTooltip]="tooltipValue() | translate"
       [matTooltipPosition]="tooltipPosition()"
       (mouseenter)="trigger.openMenu()"
       lab900PreventDoubleClick>
@@ -31,7 +31,7 @@
       mat-menu-item
       (throttledClick)="doAction($event)"
       [disabled]="menuItemDisabled()"
-      [matTooltip]="action()?.tooltip?.value | translate"
+      [matTooltip]="tooltipValue() | translate"
       [matTooltipPosition]="tooltipPosition()"
       lab900PreventDoubleClick>
       @if (prefixIcon(); as icon) {

@@ -41,4 +41,11 @@ export class Lab900ActionButtonComponent<T = undefined> extends Lab900ActionDire
   protected readonly buttonId = computed(() => {
     return computeReactiveStringOption<T>(this.action().buttonId, this.data);
   });
+
+  protected readonly tooltipValue = computed(() => {
+    const tooltip = this.action().tooltip;
+    if (!tooltip?.value) return '';
+
+    return typeof tooltip.value === 'function' ? tooltip.value(this.data()) : String(tooltip.value);
+  });
 }
