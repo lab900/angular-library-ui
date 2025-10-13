@@ -19,7 +19,7 @@ export interface ActionButton<T = undefined> {
   hide?: ReactiveBooleanOption<T>;
   subActions?: ReactiveOption<T, ActionButton<T>[]>;
   tooltip?: {
-    value: string | ((data: T) => string);
+    value: ReactiveStringOption<T>;
     position?: 'left' | 'right' | 'above' | 'below' | 'before' | 'after';
   };
   suffixIcon?: ReactiveStringOption<T>;
