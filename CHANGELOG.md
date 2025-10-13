@@ -1,5 +1,8 @@
 # Changelog
 
+## 19.2.6
+- Feat: add support dynamic tooltip on action button
+
 ## 19.2.5
 - Fix: import issue from hashed packages
 
