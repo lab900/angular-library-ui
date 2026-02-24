@@ -1,7 +1,7 @@
 # Changelog
 
 ## 19.2.7
-- Fix: table with input "multiSort=false" will now be able to toggle between 'asc', 'desc', and 'no sorting', instead of just asc and desc.
+- Fix: table with input "multiSort=false" will now be able to toggle between 'asc', 'desc', and 'no sorting', instead of just 'asc' and 'desc'.
 
 ## 19.2.6
 - Feat: add support dynamic tooltip on action button
