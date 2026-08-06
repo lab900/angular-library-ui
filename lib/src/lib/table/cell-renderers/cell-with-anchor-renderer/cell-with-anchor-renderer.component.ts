@@ -10,16 +10,18 @@ import { TranslatePipe } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `@if (anchorHref(); as href) {
-    <div
-      class="lab900-cell-value lab900-cell-value--with-anchor"
-      [matTooltip]="tooltip() | translate"
-      [matTooltipPosition]="tooltipPosition()"
-      (click)="$event.stopImmediatePropagation()">
-      <a [target]="renderOptions()?.target ?? '_self'" [href]="href">
-        {{ cellValue() | translate }}
-      </a>
-    </div>
-  }`,
+      <div
+        class="lab900-cell-value lab900-cell-value--with-anchor"
+        [matTooltip]="tooltip() | translate"
+        [matTooltipPosition]="tooltipPosition()"
+        (click)="$event.stopImmediatePropagation()">
+        <a [target]="renderOptions()?.target ?? '_self'" [href]="href">
+          {{ cellValue() | translate }}
+        </a>
+      </div>
+    } @else {
+      {{ cellValue() | translate }}
+    }`,
 })
 export class CellWithAnchorRendererComponent<T = any> extends CellRendererAbstract<
   CellWithAnchorRendererOptions<T>,
