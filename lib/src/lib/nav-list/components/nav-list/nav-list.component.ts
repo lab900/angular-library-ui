@@ -6,11 +6,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { NavItemComponent } from '../nav-item/nav-item.component';
 import { Breakpoints } from '@angular/cdk/layout';
 import { MatNavList } from '@angular/material/list';
-import { uniqueId } from 'lodash';
 
 const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
   return typeof i?.hide === 'function' ? i.hide() : (i?.hide ?? false);
 };
+
+let uniqueIdCounter = 0;
+const uniqueId = (): string => `${++uniqueIdCounter}`;
 
 @Component({
   selector: 'lab900-nav-list',

@@ -366,6 +366,25 @@ none
   `provideMarkdown()` and `MarkdownComponent`.
   Verify: `ng build` OK. `marked` is now in the `main` bundle and no longer in the
   `scripts` bundle, which dropped to 28.36 kB.
+- **Removed the `lodash` barrel import** from
+  `lib/src/lib/nav-list/components/nav-list/nav-list.component.ts`. It caused the build
+  warning `Module 'lodash' used by ... is not ESM`. The `lodash` package is CommonJS, so
+  importing the barrel pulls the whole CommonJS module into the bundle.
+  `uniqueId` was the only symbol used. It is replaced by a local module counter:
+
+  ```ts
+  let uniqueIdCounter = 0;
+  const uniqueId = (): string => `${++uniqueIdCounter}`;
+  ```
+
+  This keeps the same behaviour as `lodash.uniqueId()`: an incrementing string id. The id is
+  used only for `@for ... track` in the nav-list and nav-item templates.
+  `lodash/cloneDeep` in `lib/src/lib/table/cell-editors/cell-editor.abstract.ts` **stays**.
+  It is a deep import, it is already listed in `allowedCommonJsDependencies` in
+  `angular.json`, and it gives no warning. `structuredClone` cannot replace it, because the
+  cloned cell data can hold functions and Moment objects.
+  Verify: `ng build ui` OK, `ng build` OK and warning-free, `npm run lint` clean,
+  `npm test` 6 tests passing.
 
 ## Fixes after the upgrade
 
@@ -477,8 +496,6 @@ Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
 - `tsc -p tsconfig.spec.json` reports TS18003 (no inputs). Its `include` lists only
   `src/**/*.spec.ts`, but the only spec file is `lib/src/lib/table/components/table-cell/table-cell.component.spec.ts`.
   Pre-existing config drift, not caused by the upgrade.
-- Build warning: `Module 'lodash' used by lib/src/lib/nav-list/.../nav-list.component.ts is not ESM`.
-  Pre-existing.
 - `npm test` prints a `ts-jest` warning: the `isolatedModules` option is deprecated and
   should move to `tsconfig.spec.json`. It comes from the `jest-preset-angular` preset, not
   from this project's config.
