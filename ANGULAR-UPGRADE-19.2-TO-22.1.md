@@ -4,6 +4,24 @@ Date: 2026-08-11
 Level: Advanced (l=3) — Angular Material enabled
 Branch: chore/angular-22
 
+## Final state
+
+Angular 22.1.1, TypeScript 6.0.3, Node 24.15.0. All checks pass.
+`strictTemplates` is enabled everywhere: no tsconfig overrides the v22 default.
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Type check, app | `tsc -p tsconfig.app.json --noEmit` | pass |
+| Type check, library | `tsc -p lib/tsconfig.lib.json --noEmit` | pass |
+| Build, library | `npm run build:ui` | pass |
+| Build, library, production | `npm run build:ui:prod` | pass |
+| Build, application | `npm run build` | pass |
+| Tests | `npm test` | pass — 1 suite, 6 tests |
+| Lint | `npm run lint` | pass — 0 errors |
+
+The three hops are recorded under "Changes made". The work that closed the remaining open
+items afterwards is under "Fixes after the upgrade".
+
 ## Hop plan
 
 | Hop | From | To | Angular release |
@@ -173,7 +191,8 @@ none
       then a second migration set `strictTemplates: false`, which made the config invalid.
       Resolved by removing the `extendedDiagnostics` blocks. See Changes made.
 - [x] **22.0.0-safe-navigation-returns-undefined** — migration wrapped 4 files in
-      `$safeNavigationMigration()` to keep the old `null` result.
+      `$safeNavigationMigration()` to keep the old `null` result. The wrappers were removed
+      afterwards; the project now accepts `undefined`. See "Fixes after the upgrade".
 - [x] **22.0.0-resource-stream-synchronous-resolution** — N/A, no `resource`/`rxResource`.
 - [x] **22.0.0-remove-in-expressions** — N/A, no `in` variables.
 - [x] **22.0.0-animation-callback-event-signature-change** — N/A, no animation callbacks.
@@ -188,7 +207,8 @@ none
 - [x] **22.0.0-compile-time-duplicate-selectors** — no errors; both builds clean.
 - [x] **22.0.0-component-onpush-default** — migration added
       `changeDetection: ChangeDetectionStrategy.Eager` to 13 components that had no explicit
-      strategy, keeping the pre-v22 default. See Follow-ups.
+      strategy, keeping the pre-v22 default. Afterwards 4 of them moved to the new `OnPush`
+      default and 9 kept `Eager` on purpose. See "Fixes after the upgrade".
 - [x] **22.0.0-remove-check-no-changes** — N/A, not used.
 - [x] **22.0.0-leave-animations-scope-change** — N/A, no animation triggers in this project.
 - [x] **22.0.0-params-inheritance-strategy-default** — no code change. See Follow-ups.
@@ -202,7 +222,9 @@ none
 - [x] **22.0.0-full-template-type-check-removed** — removed `fullTemplateTypeCheck: true` from
       `tsconfig.json`.
 - [x] **22.0.0-strict-templates-default** — the migration set `strictTemplates: false` in the
-      three project tsconfigs, keeping the old behaviour. See Follow-ups.
+      three project tsconfigs, keeping the old behaviour. All three opt-outs were removed
+      afterwards, so the application, the library and the specs all run with the v22 default
+      `true`. See "Fixes after the upgrade".
 - [x] **22.0.0-webpack-builders-deprecated** — the app already uses `@angular/build`.
       `@angular-devkit/build-angular` is still pulled in as a peer of `@angular-builders/jest`.
       See Follow-ups.
@@ -325,8 +347,8 @@ none
 - **Lint.** `npm run lint` reported 18 errors. The 3 `prettier/prettier` errors were fixed
   with `prettier --write` on `lib/src/lib/table/cell-editors/cell-editor.abstract.ts` and
   `lib/src/lib/utils/utils.ts`. They appeared because the regenerated lock moved `prettier`
-  from 3.6.2 to 3.9.6 inside the existing `^3.3.3` range. The other 15 errors are left
-  open on purpose, see Follow-ups.
+  from 3.6.2 to 3.9.6 inside the existing `^3.3.3` range. The other 15 errors were left
+  open at this point and are resolved in "Fixes after the upgrade".
 - **Library peer ranges** in `lib/package.json`: `@angular/common`, `@angular/core` and
   `@angular/material` moved from `>=19.0.0` to `>=22.0.0`, keeping the `>=` operator.
   `@ngx-translate/core` stayed at `>=16.0.0`, because its major did not move.
@@ -345,29 +367,97 @@ none
   Verify: `ng build` OK. `marked` is now in the `main` bundle and no longer in the
   `scripts` bundle, which dropped to 28.36 kB.
 
+## Fixes after the upgrade
+
+These commits close the open items that the hops left behind. After them, type check,
+both builds, tests **and lint** are all green.
+
+### `fix linting` (8e54554) — lint is green
+
+The 15 remaining lint errors are resolved. `npm run lint` now exits 0.
+
+- `@angular-eslint/prefer-on-push-component-change-detection` (13 errors). The 13
+  components split in two groups:
+  - **4 moved to the new `OnPush` default**, by deleting the `Eager` line the migration
+    added: `alert-dialog.component.ts`, `confirmation-dialog.component.ts`,
+    `merger-item.component.ts` and `merger-example.component.ts`. Three of these are
+    library components, so the published library now ships only one `Eager` component.
+  - **9 kept `Eager`** with an `// eslint-disable-next-line` above it:
+    `merger.component.ts` in the library, plus `app.component.ts` and 7 showcase example
+    components. `merger.component.ts` carries the reason in the code:
+    `changing to OnPush breaks the reset behavior, requires a proper refactor`.
+- `@angular-eslint/prefer-inject` (2 errors). `merger.component.ts` moved from constructor
+  parameter injection to `inject()`: `MatIconRegistry` and `DomSanitizer` are now readonly
+  instance fields declared above the constructor, which also satisfies the project's
+  `@typescript-eslint/member-ordering` rule. The `@Input() leftObject` and
+  `@Input() rightObject` fields lost their `readonly` modifier in the same change.
+- `lib/package.json`: the `"licens"` key is corrected to `"license"`, so the published
+  package now declares its licence properly.
+
+### `fix strictTemplates` (607ce98) — strict templates on for the application
+
+This commit deleted the migration's opt-out from `tsconfig.app.json`, so the application
+started compiling with the v22 default `strictTemplates: true`. At this point
+`lib/tsconfig.lib.json` and `tsconfig.spec.json` still opted out; they were done next, see
+"strictTemplates for the library and the specs" below.
+
+The resulting template type errors were fixed in 17 source files, not suppressed. 14 of
+them are library files, because the application compiles the library from source. Two
+patterns carried most of the work:
+
+- **Dropping `?.` where the value cannot be nullish.** Signal inputs that are `required`
+  were read with optional chaining, which strict templates now flags. Examples:
+  `icon()?.name` -> `icon().name` in `icon.component.ts`, and `item()?.children?.length`
+  -> `item().children?.length` in `nav-item.component.html`.
+- **Widening input types to match what is really passed.** In
+  `table-cell-select.component.ts`, `selection` and `options` became
+  `input.required<... | undefined>()`, `sticky` now uses `this.options()?.position`, and
+  `isChecked` returns `!!this.selection()?.isSelected(value)` so the return type is a real
+  `boolean`.
+
+### `fix safeNavigationMigration wrappers` (b62c2f2) — shim removed
+
+All `$safeNavigationMigration()` wrappers are gone, so `?.` returns `undefined` as v22
+intends. Each call site was adjusted for the new type instead of being wrapped:
+
+- `merger.component.html`: `[disabled]="!!config?.disabled"`.
+- `cell-input-editor.component.ts`: `[max]="editOptions()?.maxLength"`.
+- `showcase-page.component.html`: the three wrapped bindings are plain `?.` expressions
+  again, and `[exampleTitle]` now uses `example.title ?? ''`.
+
+### `fix marked package` (5fa3ac9)
+
+Documented under "After the last hop" above.
+
+### strictTemplates for the library and the specs
+
+The last two opt-outs are gone: `strictTemplates: false` was removed from
+`lib/tsconfig.lib.json` and from `tsconfig.spec.json`. **No tsconfig in the workspace
+overrides `strictTemplates` any more, so every project now compiles with the v22 default
+`true`.** This matters most for the library, which is the published artifact.
+
+No template fixes were needed. The application build already type-checked the library
+sources under strict templates, because `tsconfig.json` maps `@lab900/ui` to
+`./lib/src/public-api.ts` and the app compiles from source, not from `dist`. The 14
+library templates touched by `fix strictTemplates` (607ce98) were fixed for that reason.
+Enabling the option in `lib/tsconfig.lib.json` extends the same checking to the published
+build path, which `ng build ui` and `ng build ui --configuration production` use.
+
+Verified that the setting is really in effect, rather than silently ignored next to
+`skipTemplateCodegen`: reintroducing `icon()?.name` in `icon.component.ts` made the library
+build report `NG8107` (`the '?.' operator can be replaced with the '.' operator`). That
+diagnostic only runs when `strictTemplates` is enabled. The probe was reverted.
+
+Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
+`ng build ui` OK, `ng build ui --configuration production` OK, `ng build` OK,
+`npm test` 6/6, `npm run lint` 0 errors. No `NG8xxx` warnings in either library build.
+
 ## Follow-ups
 
-- **Open decision: 15 lint errors remain, `npm run lint` is red.** They come from
-  `angular-eslint@22`, whose `tsRecommended` config newly enables two rules. Nothing was
-  disabled and no component was silently refactored, because both options change runtime
-  behaviour or public API:
-  - `@angular-eslint/prefer-on-push-component-change-detection` — 13 errors, one per
-    component that the v22 migration marked
-    `changeDetection: ChangeDetectionStrategy.Eager`. The migration added `Eager` to keep
-    the pre-v22 default. Note that removing `Eager` does not silence the rule; the rule
-    demands an explicit `OnPush`. Moving this library to `OnPush` is a real behaviour
-    change and needs a deliberate decision.
-  - `@angular-eslint/prefer-inject` — 2 errors in
-    `lib/src/lib/merger/components/merger/merger.component.ts:45`, pre-existing constructor
-    parameter injection. `ng generate @angular/core:inject` can refactor it.
-- **Enable `strictTemplates`.** The v22 migration set `strictTemplates: false` in
-  `tsconfig.app.json`, `tsconfig.spec.json` and `lib/tsconfig.lib.json` to preserve the old
-  behaviour. v22 defaults it to `true`. Turning it on will surface new template errors and
-  should be a separate task. If it is enabled, the `nullishCoalescingNotNullable` and
-  `optionalChainNotNullable` suppressions that were removed may be needed again.
-- **Remove the `$safeNavigationMigration()` wrappers.** The migration added them in 4 files
-  so `?.` keeps returning `null` instead of `undefined`. They are a temporary shim. Dropping
-  them means accepting `undefined`, which may need input types to widen.
+- **9 components still use `ChangeDetectionStrategy.Eager`** behind an
+  `// eslint-disable-next-line`. Eight are the showcase app and its examples, which are low
+  risk. The one that matters is `lib/src/lib/merger/components/merger/merger.component.ts`:
+  its own comment says `OnPush` breaks the reset behaviour and a proper refactor is needed.
 - **Router `paramsInheritanceStrategy` now defaults to `"always"`.** The showcase app reads
   route data through `ActivatedRoute` in `showcase-page`, `markdown-page` and
   `showcase-home`, and has nested routes. Child routes now inherit params, data and resolved
@@ -392,6 +482,9 @@ none
 - `npm test` prints a `ts-jest` warning: the `isolatedModules` option is deprecated and
   should move to `tsconfig.spec.json`. It comes from the `jest-preset-angular` preset, not
   from this project's config.
+- `ng serve` now gives a `PORT` environment variable priority over `--port`. `npm start`
+  passes `--port 4900`, so on a machine or CI runner that exports `PORT`, the dev server
+  silently binds elsewhere.
 - `@angular/animations` and `@angular/platform-browser-dynamic` are deprecated in v22.
   `@angular/animations` is still a declared dependency, and `main.ts` uses
   `provideAnimations()` from `@angular/platform-browser/animations`.
@@ -402,5 +495,5 @@ none
   itself already builds with `@angular/build`.
 - Optional CLI migrations were **not** run: `use-application-builder`,
   `migrate-karma-to-vitest` and `router-current-navigation`.
-- `lib/package.json` has a typo in its key: `"licens"` instead of `"license"`.
-  Pre-existing, left untouched.
+- ~~`lib/package.json` has a typo in its key: `"licens"` instead of `"license"`.~~
+  Fixed in `fix linting` (8e54554).
