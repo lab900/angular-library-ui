@@ -6,9 +6,11 @@ import { CellEditorBaseOptions } from './cell-editor.options';
 import cloneDeep from 'lodash/cloneDeep';
 
 @Directive()
-export abstract class CellEditorAbstract<TCellEditorOptions extends CellEditorBaseOptions<T>, T = any, V = any>
-  implements AfterViewInit
-{
+export abstract class CellEditorAbstract<
+  TCellEditorOptions extends CellEditorBaseOptions<T>,
+  T = any,
+  V = any,
+> implements AfterViewInit {
   private readonly tableCell: Lab900TableCellComponent = inject(Lab900TableCellComponent);
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
 

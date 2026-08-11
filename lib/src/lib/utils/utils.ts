@@ -13,9 +13,7 @@ export function coerceObservable<T = unknown>(value: T | Observable<T>): Observa
 }
 
 export type ReactiveOption<PAYLOAD, RETURN_TYPE> =
-  | RETURN_TYPE
-  | ((data: PAYLOAD) => RETURN_TYPE | Signal<RETURN_TYPE>)
-  | Signal<RETURN_TYPE>;
+  RETURN_TYPE | ((data: PAYLOAD) => RETURN_TYPE | Signal<RETURN_TYPE>) | Signal<RETURN_TYPE>;
 
 export type ReactiveBooleanOption<PAYLOAD> = ReactiveOption<PAYLOAD, boolean>;
 export type ReactiveStringOption<PAYLOAD> = ReactiveOption<PAYLOAD, string>;

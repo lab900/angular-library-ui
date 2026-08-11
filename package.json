@@ -1,6 +1,6 @@
 {
   "name": "angular-library-ui",
-  "version": "19.2.8",
+  "version": "22.0.0",
   "repository": "https://github.com/lab900/angular-library-ui",
   "homepage": "https://github.com/lab900/angular-library-ui",
   "author": "Lab900 <info@lab900.com> (https://lab900.com)",
@@ -58,6 +58,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "jest-preset-angular": "^17.0.0",
     "ng-mocks": "^14.17.0",
     "ng-packagr": "^22.1.1",

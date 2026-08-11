@@ -311,8 +311,58 @@ none
 - Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
   `ng build ui` OK, `ng build` OK.
 
+### After the last hop
+
+- **Tests.** `npm test` failed twice before passing:
+  1. `Unrecognized CLI Parameters: ["polyfills", "inlineStyleLanguage"]`. The
+     `@angular-builders/jest@22` builder schema dropped both options and added `zoneless`
+     (default `true`). `angular.json` `test.options` is now
+     `{"tsConfig": "tsconfig.spec.json", "zoneless": false}`. `zoneless: false` is required,
+     because this project still uses zone.js.
+  2. `Test environment jest-environment-jsdom cannot be found`. `jest-preset-angular@17`
+     no longer pulls it in. Added `jest-environment-jsdom@^30.4.1` to devDependencies.
+  Result: 1 suite, 6 tests, all passing.
+- **Lint.** `npm run lint` reported 18 errors. The 3 `prettier/prettier` errors were fixed
+  with `prettier --write` on `lib/src/lib/table/cell-editors/cell-editor.abstract.ts` and
+  `lib/src/lib/utils/utils.ts`. They appeared because the regenerated lock moved `prettier`
+  from 3.6.2 to 3.9.6 inside the existing `^3.3.3` range. The other 15 errors are left
+  open on purpose, see Follow-ups.
+- **Library peer ranges** in `lib/package.json`: `@angular/common`, `@angular/core` and
+  `@angular/material` moved from `>=19.0.0` to `>=22.0.0`, keeping the `>=` operator.
+  `@ngx-translate/core` stayed at `>=16.0.0`, because its major did not move.
+- **Version fields.** Both `package.json` and `lib/package.json` were at `19.2.8`, which
+  matches the Angular major installed before the upgrade. Both are now `22.0.0`.
+- Final rebuild after those edits: `ng build ui` OK, `ng build` OK. The built
+  `dist/@lab900/ui/package.json` carries version `22.0.0` and the new peer ranges.
+
 ## Follow-ups
 
+- **Open decision: 15 lint errors remain, `npm run lint` is red.** They come from
+  `angular-eslint@22`, whose `tsRecommended` config newly enables two rules. Nothing was
+  disabled and no component was silently refactored, because both options change runtime
+  behaviour or public API:
+  - `@angular-eslint/prefer-on-push-component-change-detection` — 13 errors, one per
+    component that the v22 migration marked
+    `changeDetection: ChangeDetectionStrategy.Eager`. The migration added `Eager` to keep
+    the pre-v22 default. Note that removing `Eager` does not silence the rule; the rule
+    demands an explicit `OnPush`. Moving this library to `OnPush` is a real behaviour
+    change and needs a deliberate decision.
+  - `@angular-eslint/prefer-inject` — 2 errors in
+    `lib/src/lib/merger/components/merger/merger.component.ts:45`, pre-existing constructor
+    parameter injection. `ng generate @angular/core:inject` can refactor it.
+- **Enable `strictTemplates`.** The v22 migration set `strictTemplates: false` in
+  `tsconfig.app.json`, `tsconfig.spec.json` and `lib/tsconfig.lib.json` to preserve the old
+  behaviour. v22 defaults it to `true`. Turning it on will surface new template errors and
+  should be a separate task. If it is enabled, the `nullishCoalescingNotNullable` and
+  `optionalChainNotNullable` suppressions that were removed may be needed again.
+- **Remove the `$safeNavigationMigration()` wrappers.** The migration added them in 4 files
+  so `?.` keeps returning `null` instead of `undefined`. They are a temporary shim. Dropping
+  them means accepting `undefined`, which may need input types to widen.
+- **Router `paramsInheritanceStrategy` now defaults to `"always"`.** The showcase app reads
+  route data through `ActivatedRoute` in `showcase-page`, `markdown-page` and
+  `showcase-home`, and has nested routes. Child routes now inherit params, data and resolved
+  values from every parent. Set `paramsInheritanceStrategy: "emptyOnly"` in `provideRouter`
+  to restore the old behaviour. Worth a functional check.
 - **Visual check needed after v21**: CDK overlays now render in the browser's native top
   layer. This library uses `MatDialog` and sets `z-index` in several SCSS files
   (`table.component.scss`, `table-tabs.component.scss`, `nav-item.component.scss`,
@@ -332,3 +382,18 @@ none
 - `marked` is loaded as a global script in `angular.json`, but no source file uses
   `window.marked`. The entry looks vestigial and could probably be dropped. Left in place
   to keep the upgrade behaviour-neutral.
+- `npm test` prints a `ts-jest` warning: the `isolatedModules` option is deprecated and
+  should move to `tsconfig.spec.json`. It comes from the `jest-preset-angular` preset, not
+  from this project's config.
+- `@angular/animations` and `@angular/platform-browser-dynamic` are deprecated in v22.
+  `@angular/animations` is still a declared dependency, and `main.ts` uses
+  `provideAnimations()` from `@angular/platform-browser/animations`.
+  `@angular/platform-browser-dynamic` is not imported by this project, but
+  `@angular-builders/jest` still declares it as a peer, so it cannot be dropped yet.
+- `@angular-devkit/build-angular` (webpack, deprecated in v22) is still installed. It is a
+  peer of `@angular-builders/jest`, not a direct choice of this project. The application
+  itself already builds with `@angular/build`.
+- Optional CLI migrations were **not** run: `use-application-builder`,
+  `migrate-karma-to-vitest` and `router-current-navigation`.
+- `lib/package.json` has a typo in its key: `"licens"` instead of `"license"`.
+  Pre-existing, left untouched.

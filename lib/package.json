@@ -1,12 +1,12 @@
 {
   "name": "@lab900/ui",
-  "version": "19.2.8",
+  "version": "22.0.0",
   "author": "Lab900 <info@lab900.com> (https://lab900.com)",
   "licens": "MIT",
   "peerDependencies": {
-    "@angular/common": ">=19.0.0",
-    "@angular/core": ">=19.0.0",
-    "@angular/material": ">=19.0.0",
+    "@angular/common": ">=22.0.0",
+    "@angular/core": ">=22.0.0",
+    "@angular/material": ">=22.0.0",
     "@ngx-translate/core": ">=16.0.0"
   },
   "repository": {
