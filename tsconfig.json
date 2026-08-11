@@ -10,13 +10,18 @@
     "strict": true,
     "experimentalDecorators": true,
     "module": "ES2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "lib": ["ES2022", "dom"],
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
     "useDefineForClassFields": false,
     "paths": {
-      "@lab900/ui": ["lib/src/public-api.ts"]
+      "@lab900/ui": [
+        "lib/src/public-api.ts"
+      ]
     }
   },
   "angularCompilerOptions": {

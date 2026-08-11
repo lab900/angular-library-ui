@@ -106,34 +106,34 @@ none
 
 ### Hop 1 — 19.2 -> 20.3
 
-- [ ] **20.0.0_ng_update** — `ng update @angular/core@20 @angular/cli@20`
-- [ ] **update @angular/material** — `ng update @angular/material@20`
-- [ ] **20.0.0_rename_afterRender_to_afterEveryRender** — Rename the `afterRender` lifecycle hook to `afterEveryRender`
-- [ ] **20.0.0_replace_TestBed_flushEffects_with_tick** — Replace uses of `TestBed.flushEffects()` with `TestBed.tick()`.
-- [ ] **20.0.0_update_provideCheckNoChangesConfig** — Rename `provideExperimentalCheckNoChangesForDebug` to `provideCheckNoChangesConfig`.
-- [ ] **20.0.0_refactor_ng_reflect_attributes_usage** — Avoid reliance on `ng-reflect-*` attributes.
-- [ ] **20.0.0_adjust_RedirectFn_return_type_handling** — `RedirectFn` can also return `Observable`/`Promise`.
-- [ ] **20.0.0_rename_resource_request_to_param** — Rename the `request` property in resources to `params`.
-- [ ] **20.0.0_rename_rxResource_loader_to_stream** — Rename `request`/`loader` in RxResource to `params`/`stream`.
-- [ ] **20.0.0_replace_ResourceStatus_by_corresponding_strings** — `ResourceStatus` is no longer an enum.
-- [ ] **20.0.0_rename_provideExperimentalZonelessChangeDetection** — Rename to `provideZonelessChangeDetection`.
-- [ ] **20.0.0_update_template_expressions_using_in_property** — `in` in templates is now the JS operator.
-- [ ] **20.0.0_update_router_method_array_parameters_to_readonly** — Router command arrays are `readonly T[]`.
-- [ ] **20.0.0_update_animation_tests_for_guaranteed_flushing** — Animations flush with change detection.
-- [ ] **20.0.0_handle_uncaught_listener_errors_in_tests** — Uncaught listener errors are rethrown in tests.
-- [ ] **20.0.0_update_route_guards_array_types** — `any` removed from Route guard arrays.
-- [ ] **20.0.0_update_nodejs_version** — Node.js >= 20.11.1 (current 24.15.0, OK).
-- [ ] **20.0.0_replace_TestBed_get_with_TestBed_inject** — Replace `TestBed.get()` with `TestBed.inject()`.
-- [ ] **20.0.0_remove_InjectFlags_usage** — Remove `InjectFlags` enum and its usage.
-- [ ] **20.0.0_update_injector_get_calls_to_use_ProviderToken** — `injector.get()` needs `ProviderToken<T>`.
-- [ ] **20.0.0_update_typescript_version** — TypeScript >= 5.8.
-- [ ] **20.0.0_set_moduleResolution_to_bundler** — Set `moduleResolution: 'bundler'`.
-- [ ] **20.0.0_review_AsyncPipe_error_handling_in_tests** — AsyncPipe errors go to `ErrorHandler`.
-- [ ] **20.0.0_refactor_PendingTasks_run_usage** — Use `PendingTasks.add` if the return value matters.
-- [ ] **20.0.0_update_template_expressions_using_void_property** — `void` in templates is now the JS operator.
-- [ ] **20.0.0_review_date_pipe_formatter_Y_usage** — `DatePipe` `Y` without `w` is suspicious.
-- [ ] **20.0.0_template_parentheses_respected** — Parentheses are always respected: `(foo?.bar).baz` throws.
-- [ ] **20.0.0_router_generate_error_redirectTo_and_canMatch_incompatible_together** — `redirectTo` + `canMatch` errors.
+- [x] **20.0.0_ng_update** — done, Angular 20.3.27 installed.
+- [x] **update @angular/material** — done, Material/CDK 20.2.14.
+- [x] **20.0.0_rename_afterRender_to_afterEveryRender** — N/A, `afterRender` not used.
+- [x] **20.0.0_replace_TestBed_flushEffects_with_tick** — N/A, not used.
+- [x] **20.0.0_update_provideCheckNoChangesConfig** — N/A, not used.
+- [x] **20.0.0_refactor_ng_reflect_attributes_usage** — N/A, no `ng-reflect-*` usage.
+- [x] **20.0.0_adjust_RedirectFn_return_type_handling** — N/A, `RedirectFn` not used.
+- [x] **20.0.0_rename_resource_request_to_param** — N/A, no `resource()` usage.
+- [x] **20.0.0_rename_rxResource_loader_to_stream** — N/A, no `rxResource` usage.
+- [x] **20.0.0_replace_ResourceStatus_by_corresponding_strings** — N/A, not used.
+- [x] **20.0.0_rename_provideExperimentalZonelessChangeDetection** — N/A, not used.
+- [x] **20.0.0_update_template_expressions_using_in_property** — N/A, no `in` property in templates.
+- [x] **20.0.0_update_router_method_array_parameters_to_readonly** — N/A, no `createUrlTree`/`navigate` command arrays.
+- [x] **20.0.0_update_animation_tests_for_guaranteed_flushing** — N/A, only 1 spec file, no animation assertions.
+- [x] **20.0.0_handle_uncaught_listener_errors_in_tests** — no change needed, tests pass.
+- [x] **20.0.0_update_route_guards_array_types** — N/A, no route guards.
+- [x] **20.0.0_update_nodejs_version** — Node 24.15.0, OK.
+- [x] **20.0.0_replace_TestBed_get_with_TestBed_inject** — migration ran, no changes needed.
+- [x] **20.0.0_remove_InjectFlags_usage** — migration ran, no changes needed.
+- [x] **20.0.0_update_injector_get_calls_to_use_ProviderToken** — N/A, not used.
+- [x] **20.0.0_update_typescript_version** — TypeScript 5.9.3 installed by `ng update`.
+- [x] **20.0.0_set_moduleResolution_to_bundler** — applied by migration to `tsconfig.json`.
+- [x] **20.0.0_review_AsyncPipe_error_handling_in_tests** — N/A, no AsyncPipe assertions in the single spec.
+- [x] **20.0.0_refactor_PendingTasks_run_usage** — N/A, `PendingTasks` not used.
+- [x] **20.0.0_update_template_expressions_using_void_property** — N/A, no `void` in templates.
+- [x] **20.0.0_review_date_pipe_formatter_Y_usage** — N/A, no `date:` pipe format strings.
+- [x] **20.0.0_template_parentheses_respected** — N/A, no parenthesised safe navigation.
+- [x] **20.0.0_router_generate_error_redirectTo_and_canMatch_incompatible_together** — N/A, no `canMatch` routes.
 
 ### Hop 2 — 20.3 -> 21.2
 
@@ -202,4 +202,41 @@ none
 
 ## Changes made
 
+### Hop 1 — 19.2 -> 20.3 (Angular 20.3.27)
+
+- `ng update` moved Angular, Material/CDK, `@angular/build`, `@angular/cli`,
+  `@angular-builders/jest@20`, `angular-eslint@20.7.0`, `ng-packagr@20.3.2`,
+  `ngx-markdown@20.1.0`, `ng-mocks@14.17.0`. TypeScript went to 5.9.3,
+  `@angular-devkit/build-angular` to 20.3.33 (auto peer), eslint/typescript-eslint bumped
+  by the angular-eslint migration.
+- `@angular/platform-browser-dynamic` had to be pinned explicitly at `20.3.27` in the
+  `ng update` call. Without it `ng update` resolved `20.0.7` and aborted on incompatible
+  peers. The package is not imported by this project, but `@angular-builders/jest`
+  declares it as a peer, so it stays.
+- `jest-preset-angular` was deliberately **not** bumped to 17.0.0. `@angular-builders/jest@20`
+  pins `jest-preset-angular@14.6.0` as a direct dependency, and 14.6.1 supports
+  `@angular/core >=15 <21`. Version 17 requires `jest ^30`, which this hop does not need.
+- `marked` added as an explicit dependency at `^16.4.2`. `ngx-markdown@20` declares `marked`
+  as a peer instead of a dependency, and `angular.json` loads it as a global script.
+  `marked@15` failed the type check (`Type 'MarkedOptions' is not generic`).
+- `angular.json`: global script path `node_modules/marked/marked.min.js` ->
+  `node_modules/marked/lib/marked.umd.js`. `marked@16` no longer ships a root
+  `marked.min.js`.
+- `tsconfig.json`: `moduleResolution` set to `bundler` by the CLI migration.
+- `angular.json`: the CLI migration added `type`/`typeSeparator` schematic defaults.
+- Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
+  `ng build ui` OK, `ng build` OK.
+
 ## Follow-ups
+
+- The Angular application build (`ng build`) aborts with SIGABRT inside the command
+  sandbox. Outside the sandbox it succeeds. This is a sandbox restriction, not an upgrade
+  problem. Application builds in this run were done with the sandbox off.
+- `tsc -p tsconfig.spec.json` reports TS18003 (no inputs). Its `include` lists only
+  `src/**/*.spec.ts`, but the only spec file is `lib/src/lib/table/components/table-cell/table-cell.component.spec.ts`.
+  Pre-existing config drift, not caused by the upgrade.
+- Build warning: `Module 'lodash' used by lib/src/lib/nav-list/.../nav-list.component.ts is not ESM`.
+  Pre-existing.
+- `marked` is loaded as a global script in `angular.json`, but no source file uses
+  `window.marked`. The entry looks vestigial and could probably be dropped. Left in place
+  to keep the upgrade behaviour-neutral.
