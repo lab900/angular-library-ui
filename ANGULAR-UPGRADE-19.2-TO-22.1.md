@@ -8,6 +8,7 @@ Branch: chore/angular-22
 
 Angular 22.1.1, TypeScript 6.0.3, Node 24.15.0. All checks pass.
 `strictTemplates` is enabled everywhere: no tsconfig overrides the v22 default.
+The deprecated `@angular/animations` package is not installed any more.
 
 | Check | Command | Result |
 | --- | --- | --- |
@@ -452,6 +453,48 @@ Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
 `ng build ui` OK, `ng build ui --configuration production` OK, `ng build` OK,
 `npm test` 6/6, `npm run lint` 0 errors. No `NG8xxx` warnings in either library build.
 
+### deprecated packages — `@angular/animations` dropped
+
+`@angular/animations` is deprecated in v22: it was deprecated in 20.2 with intent to remove
+in v23, and `animate.enter` / `animate.leave` replace it. The package is no longer installed.
+
+- `package.json`: `@angular/animations` removed from `dependencies`.
+- `src/main.ts`: `provideAnimations()` and its import are gone from the bootstrap providers.
+- `lib/src/lib/testing/testing.providers.ts`: `provideNoopAnimations()` and its import are
+  gone. `TESTING_PROVIDERS` is now `[provideTranslateService()]`. Angular v22 keeps
+  animations off in `TestBed` unless the test sets `animationsEnabled: true`, so the noop
+  provider had nothing left to switch off.
+
+Why this is safe:
+
+- The project declares no animation triggers and binds no synthetic `[@trigger]` properties.
+  The check `22.0.0-leave-animations-scope-change` already recorded this.
+- `@angular/material` and `@angular/cdk` 22.1.1 no longer declare `@angular/animations` as a
+  peer. Material animates with CSS.
+- `@angular/platform-browser` 22.1.1 declares `@angular/animations` as an **optional** peer,
+  so the install stays clean without it.
+
+`@angular/platform-browser-dynamic` moved from `dependencies` to `devDependencies`. It is
+deprecated as well, but it cannot go yet: `@angular-builders/jest@22.0.1` declares it as a
+required peer. No source file imports it, so it is not a runtime dependency of the
+application or of the published library. `devDependencies` states that.
+
+`@angular-devkit/build-angular` (webpack, deprecated in v22) also stays. npm installs it
+automatically as a peer of `@angular-builders/jest@22.0.1`; this project does not declare it.
+The builder imports neither package — both are peer declarations only. To remove both
+deprecated packages, `@angular-builders/jest` must go, and `ng test` must run `jest` directly
+on `jest-preset-angular@17`. That preset peers only `@angular/core`, `@angular/compiler-cli`,
+`@angular/platform-browser`, `jest`, `jsdom` and `typescript`. This change was **not** made.
+
+`npm install` regenerated `package-lock.json`. The lock also picked up the workspace version,
+which still said `19.2.8` while `package.json` said `22.0.0`.
+
+Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
+`ng build ui` OK, `ng build ui --configuration production` OK, `ng build` OK,
+`npm test` 6/6, `npm run lint` 0 errors. `node_modules/@angular/animations` is gone.
+Smoke test on `ng serve`: the showcase app loads with no console errors, the nav list
+expands its children, and the table column menu opens.
+
 ## Follow-ups
 
 - **9 components still use `ChangeDetectionStrategy.Eager`** behind an
@@ -485,14 +528,14 @@ Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
 - `ng serve` now gives a `PORT` environment variable priority over `--port`. `npm start`
   passes `--port 4900`, so on a machine or CI runner that exports `PORT`, the dev server
   silently binds elsewhere.
-- `@angular/animations` and `@angular/platform-browser-dynamic` are deprecated in v22.
-  `@angular/animations` is still a declared dependency, and `main.ts` uses
-  `provideAnimations()` from `@angular/platform-browser/animations`.
-  `@angular/platform-browser-dynamic` is not imported by this project, but
-  `@angular-builders/jest` still declares it as a peer, so it cannot be dropped yet.
-- `@angular-devkit/build-angular` (webpack, deprecated in v22) is still installed. It is a
-  peer of `@angular-builders/jest`, not a direct choice of this project. The application
-  itself already builds with `@angular/build`.
+- ~~`@angular/animations` is still a declared dependency, and `main.ts` uses
+  `provideAnimations()` from `@angular/platform-browser/animations`.~~ Fixed under
+  "deprecated packages — `@angular/animations` dropped".
+- **Two deprecated packages stay installed**: `@angular/platform-browser-dynamic` and
+  `@angular-devkit/build-angular` (webpack). Both are peers of `@angular-builders/jest@22.0.1`
+  and neither is imported by this project or by the builder itself. The application already
+  builds with `@angular/build`. They can only go with `@angular-builders/jest`; see the same
+  section for the route to that.
 - Optional CLI migrations were **not** run: `use-application-builder`,
   `migrate-karma-to-vitest` and `router-current-navigation`.
 - ~~`lib/package.json` has a typo in its key: `"licens"` instead of `"license"`.~~
