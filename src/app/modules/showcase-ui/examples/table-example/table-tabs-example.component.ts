@@ -67,6 +67,7 @@ const tableCellsAlt2: TableCell[] = [
 @Component({
   selector: 'lab900-table-tabs-example',
   imports: [Lab900TableComponent],
+  // eslint-disable-next-line
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `<lab900-table
     [loading]="true"

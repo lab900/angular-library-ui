@@ -6,6 +6,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 @Component({
   selector: 'lab900-table-example',
   imports: [Lab900TableComponent],
+  // eslint-disable-next-line
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `<lab900-table
     [tableCells]="tableCells"

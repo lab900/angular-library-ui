@@ -9,6 +9,7 @@ import { MergerDataExample } from './models/merger-data-example.model';
       <p>{{ data.text }}</p>
     </div>
   }`,
+  // eslint-disable-next-line
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [],
 })

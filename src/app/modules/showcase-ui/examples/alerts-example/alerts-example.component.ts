@@ -4,6 +4,7 @@ import { Alert, AlertComponent } from '@lab900/ui';
 @Component({
   selector: 'lab900-alerts-example',
   imports: [AlertComponent],
+  // eslint-disable-next-line
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <lab900-alert [type]="Error">This is an error!</lab900-alert>

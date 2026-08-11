@@ -7,6 +7,7 @@ import {
   OnInit,
   SimpleChanges,
   ChangeDetectionStrategy,
+  inject,
 } from '@angular/core';
 import { MergeObject } from '../../models/merge-object.model';
 import { MergeConfig, MergeConfigBase } from '../../models/merge-config.model';
@@ -24,15 +25,20 @@ import { NgClass } from '@angular/common';
   selector: 'lab900-merger',
   templateUrl: './merger.component.html',
   styleUrls: ['./merger.component.scss'],
+  // changing to OnPush breaks the reset behavior, requires a proper refactor
+  // eslint-disable-next-line
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatProgressBar, MatRadioButton, Lab900MergerItemComponent, MatIcon, MatIconButton, NgClass],
 })
 export class Lab900MergerComponent<T> implements OnInit, OnChanges {
-  @Input()
-  public readonly leftObject!: MergeObject<T>;
+  private readonly iconRegistry = inject(MatIconRegistry);
+  private readonly sanitizer = inject(DomSanitizer);
 
   @Input()
-  public readonly rightObject!: MergeObject<T>;
+  public leftObject!: MergeObject<T>;
+
+  @Input()
+  public rightObject!: MergeObject<T>;
 
   public readonly schema = model.required<MergeConfig<T>[]>();
   public readonly fixed = input<boolean>(false);
@@ -42,8 +48,8 @@ export class Lab900MergerComponent<T> implements OnInit, OnChanges {
 
   public result?: T;
 
-  public constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIconLiteral('merge', sanitizer.bypassSecurityTrustHtml(MergeIcon));
+  public constructor() {
+    this.iconRegistry.addSvgIconLiteral('merge', this.sanitizer.bypassSecurityTrustHtml(MergeIcon));
   }
 
   public ngOnInit(): void {

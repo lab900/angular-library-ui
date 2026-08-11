@@ -5,6 +5,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 @Component({
   selector: 'lab900-page-header-example',
   imports: [Lab900PageHeaderComponent, MatTabsModule],
+  // eslint-disable-next-line
   changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <lab900-page-header
       [pageTitle]="pageTitle"

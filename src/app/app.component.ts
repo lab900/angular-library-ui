@@ -18,6 +18,7 @@ import { MatIconAnchor, MatIconButton } from '@angular/material/button';
   selector: 'lab900-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  // eslint-disable-next-line
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
