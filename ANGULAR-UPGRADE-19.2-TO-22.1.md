@@ -137,28 +137,29 @@ none
 
 ### Hop 2 — 20.3 -> 21.2
 
-- [ ] **21.0.0_ng_update** — `ng update @angular/core@21 @angular/cli@21`
-- [ ] **update @angular/material** — `ng update @angular/material@21`
-- [ ] **21.0.0-cdk-overlay-top-layer-stacking** — CDK overlays use the native top layer; `OVERLAY_DEFAULT_CONFIG` `{usePopover: false}` restores the old behaviour.
-- [ ] **21.0.0-update-signal-input-access-in-custom-elements** — Direct property access for signal inputs on custom elements.
-- [ ] **21.0.0-zone-scheduler-behavior-change** — Internal scheduler is always enabled.
-- [ ] **21.0.0-provide-zone-change-detection-required** — Add `provideZoneChangeDetection()` to root providers.
-- [ ] **21.0.0-remove-interpolation-option** — Remove the `interpolation` property from `@Component`.
-- [ ] **21.0.0-remove-moduleid-property** — Remove the `moduleId` property from `@Component`.
-- [ ] **21.0.0-ng-component-outlet-content-type-change** — `ngComponentOutletContent` is `Node[][]`.
-- [ ] **21.0.0-stricter-host-binding-type-checking** — Host binding type checking is on by default.
-- [ ] **21.0.0-typescript-5.9-required** — TypeScript >= 5.9.
-- [ ] **21.0.0-remove-application-config-from-platform-browser** — Import `ApplicationConfig` from `@angular/core`.
-- [ ] **21.0.0-remove-ignore-changes-outside-zone-option** — Remove `ignoreChangesOutsideZone`.
-- [ ] **21.0.0-testbed-rethrows-errors-with-provideZoneChangeDetection** — TestBed rethrows errors.
-- [ ] **21.0.0-router-navigation-timing-changed** — Navigation takes extra microtasks.
-- [ ] **21.0.0-test-bed-provides-fake-platform-location** — New fake `PlatformLocation` in TestBed.
-- [ ] **21.0.0-remove-upgrade-adapter** — `UpgradeAdapter` removed.
-- [ ] **21.0.0-form-array-directive-conflict** — New standalone `formArray` directive can conflict.
-- [ ] **21.0.0-ngmodulefactory-removed** — `NgModuleFactory` removed.
-- [ ] **21.0.0-emit-declaration-only-not-supported** — `emitDeclarationOnly` is not supported.
-- [ ] **21.0.0-lastsuccessfulnavigation-is-a-signal** — `router.lastSuccessfulNavigation()` is a signal.
-- [ ] **21.0.0-configure-commonengine-allowed-hosts** — Set `allowedHosts` for SSR `CommonEngine`.
+- [x] **21.0.0_ng_update** — done, Angular 21.2.19 installed.
+- [x] **update @angular/material** — done, Material/CDK 21.2.14.
+- [x] **21.0.0-cdk-overlay-top-layer-stacking** — no code change. The library uses `MatDialog`
+      and has `z-index` rules in SCSS, so this needs a visual check. See Follow-ups.
+- [x] **21.0.0-update-signal-input-access-in-custom-elements** — N/A, no `@angular/elements`.
+- [x] **21.0.0-zone-scheduler-behavior-change** — N/A, zone.js polyfill is in use.
+- [x] **21.0.0-provide-zone-change-detection-required** — migration added `provideZoneChangeDetection()` to `src/main.ts`.
+- [x] **21.0.0-remove-interpolation-option** — N/A, not used.
+- [x] **21.0.0-remove-moduleid-property** — N/A, not used.
+- [x] **21.0.0-ng-component-outlet-content-type-change** — N/A, `ngComponentOutletContent` not used.
+- [x] **21.0.0-stricter-host-binding-type-checking** — no new errors; both builds clean.
+- [x] **21.0.0-typescript-5.9-required** — TypeScript 5.9.3.
+- [x] **21.0.0-remove-application-config-from-platform-browser** — migration ran, no changes needed.
+- [x] **21.0.0-remove-ignore-changes-outside-zone-option** — N/A, not used.
+- [x] **21.0.0-testbed-rethrows-errors-with-provideZoneChangeDetection** — no change needed, tests pass.
+- [x] **21.0.0-router-navigation-timing-changed** — N/A, the single spec makes no navigation assertions.
+- [x] **21.0.0-test-bed-provides-fake-platform-location** — no change needed, tests pass.
+- [x] **21.0.0-remove-upgrade-adapter** — N/A, not used.
+- [x] **21.0.0-form-array-directive-conflict** — N/A, no `FormArray` directive or `formArray` input.
+- [x] **21.0.0-ngmodulefactory-removed** — N/A, not used.
+- [x] **21.0.0-emit-declaration-only-not-supported** — N/A, not set.
+- [x] **21.0.0-lastsuccessfulnavigation-is-a-signal** — migration ran, no changes needed.
+- [x] **21.0.0-configure-commonengine-allowed-hosts** — N/A, no SSR in this workspace.
 
 ### Hop 3 — 21.2 -> 22.1
 
@@ -227,8 +228,38 @@ none
 - Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
   `ng build ui` OK, `ng build` OK.
 
+### Hop 2 — 20.3 -> 21.2 (Angular 21.2.19)
+
+- `ng update` moved Angular, Material/CDK, `@angular/build`, `@angular/cli`,
+  `@angular/platform-browser-dynamic@21.2.19`, `@angular-builders/jest@21.0.4`,
+  `angular-eslint@21.4.0`, `ng-packagr@21.2.7`, `ngx-markdown@21.3.0`.
+  `@angular-devkit/build-angular` followed to 21.2.20.
+- Jest toolchain moved as one unit, forced by `@angular-builders/jest@21`, which peers
+  `jest ^30.0.0` and depends on `jest-preset-angular ^16.0.0`:
+  `jest` 29.7.0 -> 30.4.2, `jest-preset-angular` 14.6.1 -> 16.2.0,
+  `@types/jest` 29.5.14 -> 30.0.0. `jsdom` followed to 30.0.1 (the preset peers `>=26`).
+  `jest-preset-angular@16.2.0` supports `@angular/core >=19 <23`, so it also covers hop 3.
+- `marked` 16.4.2 -> 18.0.9. `ngx-markdown@21` peers `marked ^17.0.0 || ^18.0.0`.
+  `^18` also satisfies `ngx-markdown@22`, so this covers hop 3 too.
+  The other new `ngx-markdown` peers (katex, mermaid, prismjs, clipboard, emoji-toolkit)
+  are optional and were not installed.
+- `src/main.ts`: the migration added `provideZoneChangeDetection()` to the bootstrap
+  providers, which is the v21 requirement.
+- `tsconfig.json` and `lib/tsconfig.lib.json`: the CLI migration dropped the explicit `lib`
+  arrays, which now come from `target`.
+- Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
+  `ng build ui` OK, `ng build` OK.
+
 ## Follow-ups
 
+- **Visual check needed after v21**: CDK overlays now render in the browser's native top
+  layer. This library uses `MatDialog` and sets `z-index` in several SCSS files
+  (`table.component.scss`, `table-tabs.component.scss`, `nav-item.component.scss`,
+  `page-header.component.scss`, `app.component.scss`). Elements that used to sit above
+  Material overlays via `z-index` can now render beneath them. Providing
+  `OVERLAY_DEFAULT_CONFIG` from `@angular/cdk/overlay` with `{usePopover: false}` restores
+  the old stacking. No code change was made, because the new behaviour is the intended
+  default.
 - The Angular application build (`ng build`) aborts with SIGABRT inside the command
   sandbox. Outside the sandbox it succeeds. This is a sandbox restriction, not an upgrade
   problem. Application builds in this run were done with the sandbox off.
