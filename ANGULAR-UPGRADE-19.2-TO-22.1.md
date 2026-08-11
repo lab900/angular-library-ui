@@ -334,6 +334,16 @@ none
   matches the Angular major installed before the upgrade. Both are now `22.0.0`.
 - Final rebuild after those edits: `ng build ui` OK, `ng build` OK. The built
   `dist/@lab900/ui/package.json` carries version `22.0.0` and the new peer ranges.
+- **Removed the `marked` global script** from `angular.json` `scripts`
+  (`node_modules/marked/lib/marked.umd.js`). It was a leftover from old `ngx-markdown`
+  versions, which needed a global `marked`. `ngx-markdown@22` imports `marked` as an ES
+  module (`import { Renderer, marked } from 'marked'`), so the bundler resolves it from
+  `node_modules`. No source file uses `window.marked`.
+  The `marked` package itself **stays** in `dependencies`: it is a required (non-optional)
+  peer of `ngx-markdown@22` (`^17.0.0 || ^18.0.0`), and the showcase app uses
+  `provideMarkdown()` and `MarkdownComponent`.
+  Verify: `ng build` OK. `marked` is now in the `main` bundle and no longer in the
+  `scripts` bundle, which dropped to 28.36 kB.
 
 ## Follow-ups
 
@@ -379,9 +389,6 @@ none
   Pre-existing config drift, not caused by the upgrade.
 - Build warning: `Module 'lodash' used by lib/src/lib/nav-list/.../nav-list.component.ts is not ESM`.
   Pre-existing.
-- `marked` is loaded as a global script in `angular.json`, but no source file uses
-  `window.marked`. The entry looks vestigial and could probably be dropped. Left in place
-  to keep the upgrade behaviour-neutral.
 - `npm test` prints a `ts-jest` warning: the `isolatedModules` option is deprecated and
   should move to `tsconfig.spec.json`. It comes from the `jest-preset-angular` preset, not
   from this project's config.
