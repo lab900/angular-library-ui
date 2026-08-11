@@ -4,10 +4,10 @@
   [style.flex-direction]="flexDirection()"
   [style.align-items]="config().nextLine ? '' : 'center'"
   [style.justify-content]="config().nextLine ? '' : 'space-between'">
-  @if (!config()?.component) {
-    @for (subConfig of config()?.nestedObject; track subConfig.attribute) {
+  @if (!config().component) {
+    @for (subConfig of config().nestedObject; track subConfig.attribute) {
       <div class="lab900-merger-item__sub">
-        <p>{{ subConfig.label | translate }}</p>
+        <p>{{ subConfig.label ?? '' | translate }}</p>
         <span>{{ display(subConfig, config().attribute) | async | translate }}</span>
       </div>
     } @empty {

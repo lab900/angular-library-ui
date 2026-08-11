@@ -1,7 +1,7 @@
 @if (item(); as item) {
   <ng-template #navItemContent>
     <div class="nav-item-btn__inner" [style.padding-left.px]="depth() * 12">
-      @if (item.icon && (item.icon?.position === 'left' || !item.icon?.position)) {
+      @if (item.icon && (item.icon.position === 'left' || !item.icon.position)) {
         <lab900-icon class="nav-item-btn__icon-left" [icon]="item.icon" />
       }
       <div class="nav-item-btn__label">
@@ -38,8 +38,8 @@
       mat-list-item
       tabindex="-1"
       [disabled]="disabled()"
-      [href]="$safeNavigationMigration(item.href?.url)"
-      [target]="$safeNavigationMigration(item.href?.target)">
+      [href]="item.href.url"
+      [target]="item.href.target">
       <ng-container *ngTemplateOutlet="navItemContent" />
     </a>
   }

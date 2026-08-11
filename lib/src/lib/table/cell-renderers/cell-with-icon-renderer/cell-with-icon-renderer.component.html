@@ -7,8 +7,8 @@
       @if (!options.svgIcon) {
         <mat-icon>{{ icon() }}</mat-icon>
       }
-      @if (options.svgIcon) {
-        <mat-icon [svgIcon]="icon()"></mat-icon>
+      @if (options.svgIcon && icon(); as icon) {
+        <mat-icon [svgIcon]="icon"></mat-icon>
       }
     </ng-container>
     @if (options.showCellValue) {

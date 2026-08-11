@@ -4,7 +4,7 @@ import { MergerDataExample } from './models/merger-data-example.model';
 
 @Component({
   selector: 'lab900-custom-component-example',
-  template: ` @if (data) {
+  template: `@if (data) {
     <div>
       <p>{{ data.text }}</p>
     </div>

@@ -1,4 +1,4 @@
-@if (breadCrumbs()?.length) {
+@if (breadCrumbs().length) {
   <div class="bread-crumbs">
     @for (breadCrumb of breadCrumbs(); track breadCrumb; let last = $last) {
       <div [class.active]="last">

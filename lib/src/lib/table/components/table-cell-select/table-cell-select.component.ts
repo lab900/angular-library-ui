@@ -54,7 +54,7 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
   private readonly columnDef = viewChild(MatColumnDef);
 
   public readonly showFooter = input<boolean>(false);
-  public readonly selection = input.required<SelectionModel<T>>();
+  public readonly selection = input.required<SelectionModel<T> | undefined>();
   public readonly allSelected = toSignal(
     toObservable(this.selection).pipe(
       filter(select => !!select),
@@ -63,9 +63,9 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
     )
   );
 
-  public readonly options = input.required<SelectableRows<T>>();
+  public readonly options = input.required<SelectableRows<T> | undefined>();
   public readonly color = computed(() => this.options()?.checkBoxColor ?? 'primary');
-  public readonly sticky = computed(() => (this.options()?.sticky ? this.options().position : undefined));
+  public readonly sticky = computed(() => (this.options()?.sticky ? this.options()?.position : undefined));
 
   public readonly showSelectAll = computed(() => this.options()?.showSelectAllCheckbox ?? false);
   public readonly disabled = computed(() => this.options()?.disabled ?? false);
@@ -93,7 +93,7 @@ export class TableCellSelectComponent<T extends object = object> implements OnIn
   }
 
   public isChecked(value: T): boolean {
-    return this.selection()?.isSelected(value);
+    return !!this.selection()?.isSelected(value);
   }
 
   public isDisabled(value: T): boolean {
