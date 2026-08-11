@@ -31,7 +31,7 @@
             mat-icon-button
             [disableRipple]="true"
             (click)="toggleActive(config, i)"
-            [disabled]="config?.disabled">
+            [disabled]="$safeNavigationMigration(config?.disabled)">
             @if (compare(config)) {
               <mat-icon
                 [ngClass]="{

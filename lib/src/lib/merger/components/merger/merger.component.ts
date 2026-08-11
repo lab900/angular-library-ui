@@ -1,4 +1,13 @@
-import { Component, input, Input, model, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  input,
+  Input,
+  model,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MergeObject } from '../../models/merge-object.model';
 import { MergeConfig, MergeConfigBase } from '../../models/merge-config.model';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
@@ -15,6 +24,7 @@ import { NgClass } from '@angular/common';
   selector: 'lab900-merger',
   templateUrl: './merger.component.html',
   styleUrls: ['./merger.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatProgressBar, MatRadioButton, Lab900MergerItemComponent, MatIcon, MatIconButton, NgClass],
 })
 export class Lab900MergerComponent<T> implements OnInit, OnChanges {

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-nav-list-example',
   imports: [Lab900NavListComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template:
     '<lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true" [routeMatchOptions]="matchOptions"/>',
 })

@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -15,11 +14,10 @@
     "target": "ES2022",
     "useDefineForClassFields": false,
     "paths": {
-      "@lab900/ui": ["lib/src/public-api.ts"]
+      "@lab900/ui": ["./lib/src/public-api.ts"]
     }
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   }
 }

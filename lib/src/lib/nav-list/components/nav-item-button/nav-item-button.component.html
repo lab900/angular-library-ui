@@ -38,8 +38,8 @@
       mat-list-item
       tabindex="-1"
       [disabled]="disabled()"
-      [href]="item.href?.url"
-      [target]="item.href?.target">
+      [href]="$safeNavigationMigration(item.href?.url)"
+      [target]="$safeNavigationMigration(item.href?.target)">
       <ng-container *ngTemplateOutlet="navItemContent" />
     </a>
   }

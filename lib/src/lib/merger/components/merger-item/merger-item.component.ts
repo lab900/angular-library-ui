@@ -11,6 +11,7 @@ import {
   untracked,
   ViewChild,
   ViewContainerRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MergeConfig } from '../../models/merge-config.model';
 import { isObservable, Observable, of } from 'rxjs';
@@ -22,6 +23,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'lab900-merger-item',
   templateUrl: './merger-item.component.html',
   styleUrls: ['./merger-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, AsyncPipe],
 })
 export class Lab900MergerItemComponent<T> implements AfterViewInit, OnChanges {

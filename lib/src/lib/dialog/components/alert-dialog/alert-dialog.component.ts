@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -14,6 +14,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'lab900-alert-dialog',
   templateUrl: './alert-dialog.component.html',
   styleUrls: ['../../../../assets/theme/dialog.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatDialogActions, MatButton, TranslatePipe, MatDialogContent, MatDialogClose],
 })
 export class AlertDialogComponent {

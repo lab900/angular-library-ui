@@ -5,6 +5,9 @@
     "types": ["jest", "node"]
   },
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"],
+  "angularCompilerOptions": {
+    "strictTemplates": false
+  },
   "paths": {
     "@lab900/ui": ["dist/@lab900/ui"]
   }

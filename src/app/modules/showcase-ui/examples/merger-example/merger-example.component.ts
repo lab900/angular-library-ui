@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { mergerDataExample } from './config/merger-data-example';
 import { Lab900MergerComponent, MergeConfig, MergeObject } from '@lab900/ui';
 import { mergerSchemaExample } from './config/merger-schema-example';
@@ -20,6 +20,7 @@ import { MatButton } from '@angular/material/button';
       {{ 'log_result' | translate }}
     </button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [
     `
       .merger-example-header {

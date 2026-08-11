@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Lab900TableComponent, Lab900TableTab, TableCell, TableRowAction } from '@lab900/ui';
 
 const mockDataA: any[] = [
@@ -67,6 +67,7 @@ const tableCellsAlt2: TableCell[] = [
 @Component({
   selector: 'lab900-table-tabs-example',
   imports: [Lab900TableComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<lab900-table
     [loading]="true"
     [tableCells]="tableCells"

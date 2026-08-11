@@ -17,7 +17,7 @@ import { TranslatePipe } from '@ngx-translate/core';
       (focus)="input.select()"
       (keydown.enter)="closeAndSave(input.value)"
       [value]="cellValue()"
-      [max]="editOptions()?.maxLength"
+      [max]="$safeNavigationMigration(editOptions()?.maxLength)"
       [placeholder]="placeholder() | translate" />
   `,
 })

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MergerItemComponent } from '@lab900/ui';
 import { MergerDataExample } from './models/merger-data-example.model';
 
@@ -9,6 +9,7 @@ import { MergerDataExample } from './models/merger-data-example.model';
       <p>{{ data.text }}</p>
     </div>
   }`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [],
 })
 export class CustomExampleComponent implements MergerItemComponent<MergerDataExample> {

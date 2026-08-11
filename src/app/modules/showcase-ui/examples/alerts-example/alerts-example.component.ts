@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Alert, AlertComponent } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-alerts-example',
   imports: [AlertComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <lab900-alert [type]="Error">This is an error!</lab900-alert>
     <br />
