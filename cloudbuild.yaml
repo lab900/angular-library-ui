@@ -1,17 +1,13 @@
 steps:
-  - name: 'node:22'
-    entrypoint: 'npm'
-    id: Install CLI
-    args: ['install', '-g', '@angular/cli']
-  - name: 'node:22'
+  - name: 'node:24'
     entrypoint: 'npm'
     id: Install Dependencies
     args: ['ci']
-  - name: 'node:22'
+  - name: 'node:24'
     entrypoint: 'npm'
     id: Build Library
     args: ['run', 'build:ui:prod']
-  - name: 'node:22'
+  - name: 'node:24'
     id: Publish to NPM
     secretEnv: ['NPM_TOKEN']
     entrypoint: bash
