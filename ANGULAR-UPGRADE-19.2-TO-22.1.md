@@ -642,6 +642,62 @@ This migration **cannot** close the `@angular-devkit/build-angular` follow-up. I
 that package from `package.json`, and this project never declared it there. npm installs it as a
 peer of `@angular-builders/jest@22.0.1`.
 
+### inline overlays broke the table select cell editor (2026-08-12)
+
+**Symptom.** In the table, a cell with `CellSelectEditorComponent` never closed its panel. The
+user picked an option, the value was saved, but the panel opened again at once. A click on the
+backdrop had the same result. This is the concrete regression behind the "visual check needed
+after v21" follow-up below.
+
+**Cause.** Since CDK v21/v22 a connected overlay renders **inline**, in the browser's native top
+layer, inside the element that opened it. The DOM is now:
+
+```
+td.lab900-td > lab900-table-cell-inner > … > mat-select > div.cdk-overlay-popover[popover]
+  > div.cdk-overlay-pane > div.mat-mdc-select-panel > mat-option
+```
+
+Before v21 the panel lived in `.cdk-overlay-container` on the `body`, so a click on an option
+never reached the cell. Now the click bubbles up to the `td`, where
+`TableCellEventsDirective.onClick` calls `editMode()` again. That sets
+`inlineEditingCellKey` back to the cell, Angular re-creates the editor component, and the
+`effect` in `CellSelectEditorComponent` opens the panel on the new `MatSelect`. The loop repeats
+on every attempt to close.
+
+The existing guard did not catch it. `[class.disable-td-event]="matSelect.panelOpen"` sits on
+the `mat-select` element, but the guard only read `event.target.classList`, and the target is the
+`mat-option`. Two things also happen before the click gets to the `td`:
+
+- zone.js drains the microtask queue after each listener, so `openedChange` already emitted
+  `false` and the editor already closed itself.
+- Therefore the whole overlay is detached by then. The `mat-option` is no longer a child of the
+  cell, and its ancestor chain stops at `div.mat-mdc-select-panel`.
+
+**Fix.** `TableCellEventsDirective` now uses one guard, `isDisabledCellEvent()`, for both `click`
+and `ArrowUp`/`ArrowDown`. It ignores an event when the target sits inside
+`.disable-td-event` or `.cdk-overlay-pane` (`closest()`, so the full ancestor chain counts), or
+when the target is not a part of the cell anymore. The second test covers the detached overlay.
+This keeps the pre-v21 behaviour for every inline overlay in a cell, not only for the select.
+
+No `OVERLAY_DEFAULT_CONFIG` provider was added. A library must not force `usePopover: false` on
+the applications that consume it.
+
+### `Lab900TableTabsComponent` generics blocked every rebuild (2026-08-12)
+
+**Symptom.** `ng serve` built once and then served a stale bundle. Every rebuild failed with
+`TS2322: Type 'Lab900TableTab<TabId, T>[]' is not assignable to type
+'Lab900TableTab<TabId, object>[]'` on `[tableTabs]` in `table.component.html`. A clean build
+passed, which is why the error stayed unnoticed: only the incremental template type-check
+reported it.
+
+**Cause.** `Lab900TableTab<TabId, T>` takes the tab id **and** the row type.
+`Lab900TableTabsComponent<T = string>` used its single parameter for the tab id and left the row
+type at its `object` default, so `tableCells` and its `cellClass` callback became
+contravariant against the row type that `Lab900TableComponent` passes in.
+
+**Fix.** `Lab900TableTabsComponent<TabId = string, T extends object = object>`. Both parameters
+have a default and the component is not in `public-api.ts`, so this is not a breaking change.
+
 ## Impact on the published library
 
 What a consumer of `@lab900/ui` sees after this branch:
@@ -681,7 +737,10 @@ What a consumer of `@lab900/ui` sees after this branch:
   Material overlays via `z-index` can now render beneath them. Providing
   `OVERLAY_DEFAULT_CONFIG` from `@angular/cdk/overlay` with `{usePopover: false}` restores
   the old stacking. No code change was made, because the new behaviour is the intended
-  default.
+  default. One functional regression from this change is found and fixed; see "inline overlays
+  broke the table select cell editor". The `z-index` stacking itself is still unchecked, and
+  every other overlay inside a table cell (`mat-datepicker` in `CellDateEditorComponent`,
+  `mat-menu` in a cell action) deserves the same click-through check.
 - The Angular application build (`ng build`) aborts with SIGABRT inside the command
   sandbox. Outside the sandbox it succeeds. This is a sandbox restriction, not an upgrade
   problem. Application builds in this run were done with the sandbox off.

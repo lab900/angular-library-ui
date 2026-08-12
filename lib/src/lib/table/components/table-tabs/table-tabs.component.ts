@@ -11,11 +11,11 @@ import { TranslatePipe } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslatePipe],
 })
-export class Lab900TableTabsComponent<T = string> {
-  public readonly tableTabs = input.required<Lab900TableTab<T>[]>();
-  public readonly activeTabId = model.required<T>();
+export class Lab900TableTabsComponent<TabId = string, T extends object = object> {
+  public readonly tableTabs = input.required<Lab900TableTab<TabId, T>[]>();
+  public readonly activeTabId = model.required<TabId>();
 
-  public changeTable(table: Lab900TableTab<T>): void {
+  public changeTable(table: Lab900TableTab<TabId, T>): void {
     this.activeTabId.set(table.id);
   }
 }
