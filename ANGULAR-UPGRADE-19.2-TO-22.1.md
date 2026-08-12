@@ -514,6 +514,36 @@ Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
 Smoke test on `ng serve`: the showcase app loads with no console errors, the nav list
 expands its children, and the table column menu opens.
 
+### optional migration `use-application-builder` — run, no changes (2026-08-12)
+
+`ng update @angular/cli --name use-application-builder` was run to confirm that the workspace
+is already on the new build system. Output: `Migration completed (No changes made).`
+`git status` stayed clean afterwards, so the migration touched no file.
+
+That result is the expected one. The migration converts an application project only when its
+`build` target uses `@angular-devkit/build-angular:browser` or `:browser-esbuild`; it skips a
+project that already uses the `application` builder. This workspace was already converted in
+full:
+
+- `build` uses `@angular/build:application`, `serve` uses `@angular/build:dev-server`,
+  `extract-i18n` uses `@angular/build:extract-i18n` and the library `build` uses
+  `@angular/build:ng-packagr`. The migration renames builder ids to the `@angular/build`
+  package only when it still finds a webpack builder, and there is none.
+- The build options already use the new names: `browser` instead of `main`, `polyfills` as an
+  array, `outputPath` as an object (`{"base": "dist/angular-library-ui"}`). None of the options
+  the migration deletes is present (`vendorChunk`, `commonChunk`, `buildOptimizer`,
+  `resourcesOutputPath`, `ngswConfigPath`).
+- `tsconfig.json` already has `esModuleInterop: true` and `moduleResolution: "bundler"`, and it
+  has neither `downlevelIteration` nor `allowSyntheticDefaultImports`.
+- There are no SSR targets and no `build:ssr`, `dev:ssr`, `serve:ssr` or `prerender` scripts, so
+  the SSR half of the migration had nothing to do.
+- `@angular/build` is already `^22.1.3` in `devDependencies`, which is the exact version the
+  migration writes.
+
+This migration **cannot** close the `@angular-devkit/build-angular` follow-up. It only removes
+that package from `package.json`, and this project never declared it there. npm installs it as a
+peer of `@angular-builders/jest@22.0.1`.
+
 ## Follow-ups
 
 - **9 components still use `ChangeDetectionStrategy.Eager`** behind an
@@ -536,6 +566,8 @@ expands its children, and the table column menu opens.
 - The Angular application build (`ng build`) aborts with SIGABRT inside the command
   sandbox. Outside the sandbox it succeeds. This is a sandbox restriction, not an upgrade
   problem. Application builds in this run were done with the sandbox off.
+  `ng update` needs the sandbox off as well: inside it the command hangs with no output,
+  because it cannot reach the npm registry.
 - `tsc -p tsconfig.spec.json` reports TS18003 (no inputs). Its `include` lists only
   `src/**/*.spec.ts`, but the only spec file is `lib/src/lib/table/components/table-cell/table-cell.component.spec.ts`.
   Pre-existing config drift, not caused by the upgrade.
@@ -553,7 +585,10 @@ expands its children, and the table column menu opens.
   and neither is imported by this project or by the builder itself. The application already
   builds with `@angular/build`. They can only go with `@angular-builders/jest`; see the same
   section for the route to that.
-- Optional CLI migrations were **not** run: `use-application-builder`,
-  `migrate-karma-to-vitest` and `router-current-navigation`.
+- **Optional CLI migrations.** `use-application-builder` was run on 2026-08-12 and made no
+  changes; see "optional migration `use-application-builder`" above. `migrate-karma-to-vitest`
+  stays N/A, because this project uses Jest, not Karma. `router-current-navigation` is in none
+  of the installed v22 migration collections (`@angular/cli`, `@angular/core`, `@angular/cdk`),
+  so there is nothing to run.
 - ~~`lib/package.json` has a typo in its key: `"licens"` instead of `"license"`.~~
   Fixed in `fix linting` (8e54554).
