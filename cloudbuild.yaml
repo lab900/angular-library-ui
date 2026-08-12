@@ -7,16 +7,28 @@ steps:
     entrypoint: 'npm'
     id: Build Library
     args: ['run', 'build:ui:prod']
+  # Staged publishing: the build only submits the package for review.
+  # A maintainer must then approve it with 2FA, in the CLI or on npmjs.com:
+  #   npm stage list @lab900/ui
+  #   npm stage view <stage-id>
+  #   npm stage download <stage-id>   # optional: inspect the tarball
+  #   npm stage approve <stage-id>    # publishes the version
+  #   npm stage reject <stage-id>     # discards the version
   - name: 'node:24'
-    id: Publish to NPM
+    id: Stage Publish to NPM
     secretEnv: ['NPM_TOKEN']
     entrypoint: bash
     args:
       - -c
       - |
+        set -e
+        # npm stage needs npm 11.15.0 or later; the node:24 image ships an older npm.
+        npm install -g npm@latest
         npm config set -- '//registry.npmjs.org/:_authToken' "$$NPM_TOKEN"
         cd dist/@lab900/ui
-        npm publish --ignore-scripts
+        npm stage publish --ignore-scripts
+        # Print the stage id, so the maintainer can approve the version.
+        npm stage list @lab900/ui || true
 availableSecrets:
   secretManager:
     - versionName: projects/18279890124/secrets/npm-access-key/versions/latest
