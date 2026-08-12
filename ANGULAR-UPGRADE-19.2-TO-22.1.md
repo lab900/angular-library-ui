@@ -1,6 +1,6 @@
 # Angular upgrade 19.2 -> 22.1
 
-Date: 2026-08-11
+Date: 2026-08-11 -> 2026-08-12
 Level: Advanced (l=3) — Angular Material enabled
 Branch: chore/angular-22
 
@@ -20,8 +20,83 @@ The deprecated `@angular/animations` package is not installed any more.
 | Tests | `npm test` | pass — 1 suite, 6 tests |
 | Lint | `npm run lint` | pass — 0 errors |
 
+The table was checked again on the merged branch tip (`ae624eb`) on 2026-08-12. Every row
+still passes.
+
 The three hops are recorded under "Changes made". The work that closed the remaining open
 items afterwards is under "Fixes after the upgrade".
+
+### Final dependency state
+
+What `package.json` declares now, against what it declared on `main`. Only the entries that
+changed are listed. "Installed" is the version in `package-lock.json`.
+
+| Package | Before | Now | Installed |
+| --- | --- | --- | --- |
+| @angular/animations | ^19.2.1 (dep) | **removed** | — |
+| @angular/cdk | ^19.2.2 | ^22.1.1 | 22.1.1 |
+| @angular/common | ^19.2.1 | ^22.1.1 | 22.1.1 |
+| @angular/compiler | ^19.2.1 | ^22.1.1 | 22.1.1 |
+| @angular/core | ^19.2.1 | ^22.1.1 | 22.1.1 |
+| @angular/forms | ^19.2.1 | ^22.1.1 | 22.1.1 |
+| @angular/material | ^19.2.2 | ^22.1.1 | 22.1.1 |
+| @angular/platform-browser | ^19.2.1 | ^22.1.1 | 22.1.1 |
+| @angular/platform-browser-dynamic | ^19.2.1 (dep) | ^22.1.1 (**devDep**) | 22.1.1 |
+| @angular/router | ^19.2.1 | ^22.1.1 | 22.1.1 |
+| marked | not declared | ^18.0.9 (dep) | 18.0.9 |
+| ngx-markdown | ^19.1.0 | ^22.0.0 | 22.0.0 |
+| @angular-builders/jest | ^19.0.0 | ^22.0.1 | 22.0.1 |
+| @angular/build | ^19.2.1 | ^22.1.3 | 22.1.3 |
+| @angular/cli | ^19.2.1 | ^22.1.3 | 22.1.3 |
+| @angular/compiler-cli | ^19.2.1 | ^22.1.1 | 22.1.1 |
+| @types/jest | ^29.5.14 | ^30.0.0 | 30.0.0 |
+| @typescript-eslint/eslint-plugin | ^8.26.0 | ^8.67.0 | 8.67.0 |
+| @typescript-eslint/parser | ^8.26.0 | ^8.67.0 | 8.67.0 |
+| angular-eslint | 19.2.1 | 22.1.0 | 22.1.0 |
+| eslint | ^9.8.0 | ^9.28.0 | 9.39.5 |
+| jest | ^29.7.0 | ^30.4.2 | 30.4.2 |
+| jest-environment-jsdom | not declared | ^30.4.1 (devDep) | 30.4.1 |
+| jest-preset-angular | ^14.5.3 | ^17.0.0 | 17.0.0 |
+| ng-mocks | ^14.13.3 | ^14.17.0 | 14.17.0 |
+| ng-packagr | ^19.2.0 | ^22.1.1 | 22.1.1 |
+| typescript | ~5.5.4 | ~6.0.3 | 6.0.3 |
+
+Not declared, but installed as peers or transitive dependencies and worth knowing:
+`@angular-devkit/build-angular` 22.1.3, `jsdom` 30.0.1, `prettier` 3.9.6.
+
+The workspace version and the library version both moved from `19.2.8` to `22.0.0`. The
+library peer ranges moved from `>=19.0.0` to `>=22.0.0`, and the `"licens"` key became
+`"license"`.
+
+## Commit map
+
+Every commit on `chore/angular-22`, newest first, and the section that records it. Two
+side branches were merged back into `chore/angular-22`, so the history is not linear.
+
+| Commit | Date | Subject | Recorded in |
+| --- | --- | --- | --- |
+| `ae624eb` | 08-12 | update docs | "optional migration `use-application-builder`" (docs only) |
+| `084967b` | 08-11 | Merge PR #76 `chore/angular-22-package-cleanup` | merge commit |
+| `eea04ca` | 08-11 | Merge PR #77 `worktree-fix-lodash-esm-warning` | merge commit |
+| `bb7cf83` | 08-11 | Merge `chore/angular-22` into the cleanup branch | merge commit |
+| `89b6fd9` | 08-11 | docs: record the lodash ESM fix | "drop the `lodash` barrel import" (docs only) |
+| `1de74fb` | 08-11 | fix strict templates in lib | "strictTemplates for the library and the specs" |
+| `8a85cad` | 08-11 | drop `@angular/animations` | "deprecated packages — `@angular/animations` dropped" |
+| `7417b3a` | 08-11 | drop lodash barrel import in nav-list | "drop the `lodash` barrel import" |
+| `b88e04f` | 08-11 | carry working-tree edits | same change as `1de74fb`, on the cleanup branch |
+| `5fa3ac9` | 08-11 | fix marked package | "`fix marked package`" |
+| `b62c2f2` | 08-11 | fix safeNavigationMigration wrappers | "`fix safeNavigationMigration wrappers`" |
+| `607ce98` | 08-11 | fix strictTemplates | "`fix strictTemplates`" |
+| `8e54554` | 08-11 | fix linting | "`fix linting`" |
+| `af2b417` | 08-11 | finish Angular v22 upgrade | "After the last hop" |
+| `6b94560` | 08-11 | update Angular to v22 | "Hop 3 — 21.2 -> 22.1" |
+| `6b96010` | 08-11 | update Angular to v21 | "Hop 2 — 20.3 -> 21.2" |
+| `4616f70` | 08-11 | update Angular to v20 | "Hop 1 — 19.2 -> 20.3" |
+| `6fd5d7b` | 08-11 | add the upgrade plan | "Hop plan" and "Compatibility check" |
+
+`b88e04f` and `1de74fb` carry the identical diff. The same change was committed on the
+cleanup branch and on `chore/angular-22`, then the two branches were merged. This is a
+duplicate in the history, not two separate changes.
 
 ## Hop plan
 
@@ -112,6 +187,13 @@ Verdict: GO — 19 bumps, 0 deferred, 0 unverified.
 - ng-mocks: 14.13.5 -> 14.17.0
 - ng-packagr: 19.2.2 -> 22.1.1
 - ngx-markdown: 19.1.1 -> 22.0.0
+
+This is the plan from the compatibility check, not the result. Two entries came out
+differently: `@angular/animations` was **removed** instead of bumped, and
+`@angular/platform-browser-dynamic` moved to `devDependencies`. The upgrade also touched
+packages the check did not list: `jest`, `@types/jest`, `marked`, `eslint`,
+`@typescript-eslint/*`, `typescript`, and the new `jest-environment-jsdom`. See
+"Final dependency state" for the result.
 
 ## Deferred packages
 
@@ -239,7 +321,7 @@ none
 
 ## Changes made
 
-### Hop 1 — 19.2 -> 20.3 (Angular 20.3.27)
+### Hop 1 — 19.2 -> 20.3 (Angular 20.3.27) — `4616f70`
 
 - `ng update` moved Angular, Material/CDK, `@angular/build`, `@angular/cli`,
   `@angular-builders/jest@20`, `angular-eslint@20.7.0`, `ng-packagr@20.3.2`,
@@ -264,7 +346,7 @@ none
 - Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
   `ng build ui` OK, `ng build` OK.
 
-### Hop 2 — 20.3 -> 21.2 (Angular 21.2.19)
+### Hop 2 — 20.3 -> 21.2 (Angular 21.2.19) — `6b96010`
 
 - `ng update` moved Angular, Material/CDK, `@angular/build`, `@angular/cli`,
   `@angular/platform-browser-dynamic@21.2.19`, `@angular-builders/jest@21.0.4`,
@@ -286,7 +368,7 @@ none
 - Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
   `ng build ui` OK, `ng build` OK.
 
-### Hop 3 — 21.2 -> 22.1 (Angular 22.1.1)
+### Hop 3 — 21.2 -> 22.1 (Angular 22.1.1) — `6b94560`
 
 - The first `ng update` call aborted: `@typescript-eslint/eslint-plugin` and
   `@typescript-eslint/parser` at 8.43.0 peer `typescript >=4.8.4 <6.0.0`, which blocks
@@ -334,7 +416,7 @@ none
 - Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
   `ng build ui` OK, `ng build` OK.
 
-### After the last hop
+### After the last hop — `af2b417`
 
 - **Tests.** `npm test` failed twice before passing:
   1. `Unrecognized CLI Parameters: ["polyfills", "inlineStyleLanguage"]`. The
@@ -357,40 +439,11 @@ none
   matches the Angular major installed before the upgrade. Both are now `22.0.0`.
 - Final rebuild after those edits: `ng build ui` OK, `ng build` OK. The built
   `dist/@lab900/ui/package.json` carries version `22.0.0` and the new peer ranges.
-- **Removed the `marked` global script** from `angular.json` `scripts`
-  (`node_modules/marked/lib/marked.umd.js`). It was a leftover from old `ngx-markdown`
-  versions, which needed a global `marked`. `ngx-markdown@22` imports `marked` as an ES
-  module (`import { Renderer, marked } from 'marked'`), so the bundler resolves it from
-  `node_modules`. No source file uses `window.marked`.
-  The `marked` package itself **stays** in `dependencies`: it is a required (non-optional)
-  peer of `ngx-markdown@22` (`^17.0.0 || ^18.0.0`), and the showcase app uses
-  `provideMarkdown()` and `MarkdownComponent`.
-  Verify: `ng build` OK. `marked` is now in the `main` bundle and no longer in the
-  `scripts` bundle, which dropped to 28.36 kB.
-- **Removed the `lodash` barrel import** from
-  `lib/src/lib/nav-list/components/nav-list/nav-list.component.ts`. It caused the build
-  warning `Module 'lodash' used by ... is not ESM`. The `lodash` package is CommonJS, so
-  importing the barrel pulls the whole CommonJS module into the bundle.
-  `uniqueId` was the only symbol used. It is replaced by a local module counter:
-
-  ```ts
-  let uniqueIdCounter = 0;
-  const uniqueId = (): string => `${++uniqueIdCounter}`;
-  ```
-
-  This keeps the same behaviour as `lodash.uniqueId()`: an incrementing string id. The id is
-  used only for `@for ... track` in the nav-list and nav-item templates.
-  `lodash/cloneDeep` in `lib/src/lib/table/cell-editors/cell-editor.abstract.ts` **stays**.
-  It is a deep import, it is already listed in `allowedCommonJsDependencies` in
-  `angular.json`, and it gives no warning. `structuredClone` cannot replace it, because the
-  cloned cell data can hold functions and Moment objects.
-  Verify: `ng build ui` OK, `ng build` OK and warning-free, `npm run lint` clean,
-  `npm test` 6 tests passing.
 
 ## Fixes after the upgrade
 
-These commits close the open items that the hops left behind. After them, type check,
-both builds, tests **and lint** are all green.
+These commits close the open items that the hops left behind. They are listed in commit
+order. After them, type check, both builds, tests **and lint** are all green.
 
 ### `fix linting` (8e54554) — lint is green
 
@@ -445,11 +498,22 @@ intends. Each call site was adjusted for the new type instead of being wrapped:
 - `showcase-page.component.html`: the three wrapped bindings are plain `?.` expressions
   again, and `[exampleTitle]` now uses `example.title ?? ''`.
 
-### `fix marked package` (5fa3ac9)
+### `fix marked package` (5fa3ac9) — global script removed
 
-Documented under "After the last hop" above.
+**Removed the `marked` global script** from `angular.json` `scripts`
+(`node_modules/marked/lib/marked.umd.js`). It was a leftover from old `ngx-markdown`
+versions, which needed a global `marked`. `ngx-markdown@22` imports `marked` as an ES
+module (`import { Renderer, marked } from 'marked'`), so the bundler resolves it from
+`node_modules`. No source file uses `window.marked`.
 
-### strictTemplates for the library and the specs
+The `marked` package itself **stays** in `dependencies`: it is a required (non-optional)
+peer of `ngx-markdown@22` (`^17.0.0 || ^18.0.0`), and the showcase app uses
+`provideMarkdown()` and `MarkdownComponent`.
+
+Verify: `ng build` OK. `marked` is now in the `main` bundle and no longer in the
+`scripts` bundle, which dropped to 28.36 kB.
+
+### strictTemplates for the library and the specs (1de74fb, also b88e04f)
 
 The last two opt-outs are gone: `strictTemplates: false` was removed from
 `lib/tsconfig.lib.json` and from `tsconfig.spec.json`. **No tsconfig in the workspace
@@ -472,7 +536,37 @@ Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
 `ng build ui` OK, `ng build ui --configuration production` OK, `ng build` OK,
 `npm test` 6/6, `npm run lint` 0 errors. No `NG8xxx` warnings in either library build.
 
-### deprecated packages — `@angular/animations` dropped
+### drop the `lodash` barrel import (7417b3a, PR #77) — build warning gone
+
+**Removed the `lodash` barrel import** from
+`lib/src/lib/nav-list/components/nav-list/nav-list.component.ts`. It caused the build
+warning `Module 'lodash' used by ... is not ESM`. The `lodash` package is CommonJS, so
+importing the barrel pulls the whole CommonJS module into the bundle.
+`uniqueId` was the only symbol used. It is replaced by a local module counter:
+
+```ts
+let uniqueIdCounter = 0;
+const uniqueId = (): string => `${++uniqueIdCounter}`;
+```
+
+This keeps the same behaviour as `lodash.uniqueId()`: an incrementing string id. The id is
+used only for `@for ... track` in the nav-list and nav-item templates.
+
+`lodash/cloneDeep` in `lib/src/lib/table/cell-editors/cell-editor.abstract.ts` **stays**.
+It is a deep import, it is already listed in `allowedCommonJsDependencies` in
+`angular.json`, and it gives no warning. `structuredClone` cannot replace it, because the
+cloned cell data can hold functions and Moment objects.
+
+The `lodash` package stays in `dependencies` for that deep import, and `@types/lodash`
+stays in `devDependencies`.
+
+Verify: `ng build ui` OK, `ng build` OK and warning-free, `npm run lint` clean,
+`npm test` 6 tests passing.
+
+This work was done on the branch `worktree-fix-lodash-esm-warning` and merged through
+PR #77 (`eea04ca`). The doc entry came with it in `89b6fd9`.
+
+### deprecated packages — `@angular/animations` dropped (8a85cad, PR #76)
 
 `@angular/animations` is deprecated in v22: it was deprecated in 20.2 with intent to remove
 in v23, and `animate.enter` / `animate.leave` replace it. The package is no longer installed.
@@ -514,7 +608,11 @@ Verify: `tsc -p tsconfig.app.json` clean, `tsc -p lib/tsconfig.lib.json` clean,
 Smoke test on `ng serve`: the showcase app loads with no console errors, the nav list
 expands its children, and the table column menu opens.
 
-### optional migration `use-application-builder` — run, no changes (2026-08-12)
+This work was done on the branch `chore/angular-22-package-cleanup` and merged through
+PR #76 (`084967b`). That branch also carries `b88e04f`, the duplicate of the
+strictTemplates commit `1de74fb`.
+
+### optional migration `use-application-builder` — run, no changes (ae624eb, 2026-08-12)
 
 `ng update @angular/cli --name use-application-builder` was run to confirm that the workspace
 is already on the new build system. Output: `Migration completed (No changes made).`
@@ -543,6 +641,27 @@ full:
 This migration **cannot** close the `@angular-devkit/build-angular` follow-up. It only removes
 that package from `package.json`, and this project never declared it there. npm installs it as a
 peer of `@angular-builders/jest@22.0.1`.
+
+## Impact on the published library
+
+What a consumer of `@lab900/ui` sees after this branch:
+
+- **New peer ranges.** `@angular/common`, `@angular/core` and `@angular/material` need
+  `>=22.0.0`. The package version is `22.0.0`. An app on Angular 19, 20 or 21 cannot use
+  this release.
+- **Three exported components now run with the v22 `OnPush` default**:
+  `AlertDialogComponent`, `ConfirmationDialogComponent` and `Lab900MergerItemComponent`.
+  They had no explicit strategy before, so they used to run with the old default.
+  `Lab900MergerComponent` is the only exported component that keeps
+  `ChangeDetectionStrategy.Eager`.
+- **`?.` in the library templates now returns `undefined`, not `null`.** This is the v22
+  default. It is not visible through the public API, but it changes what a template binding
+  passes to a consumer's own component.
+- No public class, input, output or model was renamed or removed. The typing changes from
+  `fix strictTemplates` (607ce98) are in `table-cell-select.component.ts` and
+  `icon.component.ts`; `table-cell-select` is not exported from `public-api.ts`.
+- `TESTING_PROVIDERS` lost `provideNoopAnimations()`, but it is **not** exported from
+  `public-api.ts`. It is used only by the library's own spec, so no consumer is affected.
 
 ## Follow-ups
 

@@ -1,6 +1,9 @@
 # Changelog
 
-## 19.2.8
+## 22.0.0
+- Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
+
+- ## 19.2.8
 - Fix: CellWithAnchorRendererComponent empty cell display
 
 ## 19.2.7
