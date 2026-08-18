@@ -9,7 +9,8 @@ Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22
   `full` mode when the option is absent. This enables applications ov v23+ to still use this v22 lib, by compilin this
   lib with it's own angular version.
 
-- ## 19.2.8
+## 19.2.8
+
 - Fix: CellWithAnchorRendererComponent empty cell display
 
 ## 19.2.7
