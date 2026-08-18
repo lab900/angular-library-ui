@@ -5,6 +5,9 @@
 Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
 
 - updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
+- the showcase app and the unit tests now compile the library sources instead of `dist/@lab900/ui`.
+  A library build is no longer needed for local development, see the
+  [README](README.md#run-the-project-locally). This changes nothing in the published package.
 - set `compilationMode` to `partial` in [lib/tsconfig.lib.json](lib/tsconfig.lib.json), because ng-packagr 22 uses
   `full` mode when the option is absent. This enables applications ov v23+ to still use this v22 lib, by compilin this
   lib with it's own angular version.

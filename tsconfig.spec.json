@@ -4,8 +4,5 @@
     "outDir": "./out-tsc/spec",
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"],
-  "paths": {
-    "@lab900/ui": ["dist/@lab900/ui"]
-  }
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts", "lib/**/*.spec.ts"]
 }

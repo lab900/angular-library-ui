@@ -127,9 +127,11 @@ For a consumer of `@lab900/ui`:
       only go if `ng test` runs `jest` directly on `jest-preset-angular@17`.
 - [ ] Handle the `PORT` environment variable. `ng serve` now gives it priority over `--port`, and
       `npm start` passes `--port 4900`. A CI runner that exports `PORT` binds elsewhere.
-- [ ] Fix the `include` of `tsconfig.spec.json`. It lists only `src/**/*.spec.ts`, but the spec
-      files are in `lib/`. `tsc -p tsconfig.spec.json` reports `TS18003`. This drift is older than
-      the upgrade.
+- [x] Fix the `include` of `tsconfig.spec.json`. It listed only `src/**/*.spec.ts`, but the spec
+      files are in `lib/`. `lib/**/*.spec.ts` is now in the `include`, and
+      `tsc -p tsconfig.spec.json --noEmit` passes. The stale `paths` block of that file is also
+      gone: it sat outside `compilerOptions`, so TypeScript ignored it, and it pointed at
+      `dist/@lab900/ui`.
 - [ ] Move the deprecated `isolatedModules` option to `tsconfig.spec.json`. `ts-jest` warns about
       it. The option comes from the `jest-preset-angular` preset.
 

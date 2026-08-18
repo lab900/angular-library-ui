@@ -17,8 +17,22 @@ View the [showcase](https://lab900.github.io/angular-library-ui/) for guides & e
 
 ```bash
 $ npm i
-$ npm run watch:ui # in a separate terminal
 $ npm run start
+```
+
+The showcase app compiles the library from its TypeScript sources. You do not need to build the
+library first, and you do not need to rebuild it after a change:
+
+- `@lab900/ui` maps to `lib/src/public-api.ts` through the `paths` option in [tsconfig.json](/tsconfig.json).
+- `src/styles.scss` uses `lib/_theming.scss` directly.
+- The dev server watches `lib/`, so every change in the library reloads the app.
+
+Build the library only to check the published package, or before you publish it:
+
+```bash
+$ npm run build:ui       # output in dist/@lab900/ui
+$ npm run build:ui:prod  # same build as the pipeline
+$ npm run watch:ui       # rebuild the package on every change
 ```
 
 ## Developing new features or fixing bugs
