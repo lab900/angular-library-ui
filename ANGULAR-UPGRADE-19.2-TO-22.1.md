@@ -10,15 +10,15 @@ Angular 22.1.1, TypeScript 6.0.3, Node 24.15.0. All checks pass.
 `strictTemplates` is enabled everywhere: no tsconfig overrides the v22 default.
 The deprecated `@angular/animations` package is not installed any more.
 
-| Check | Command | Result |
-| --- | --- | --- |
-| Type check, app | `tsc -p tsconfig.app.json --noEmit` | pass |
-| Type check, library | `tsc -p lib/tsconfig.lib.json --noEmit` | pass |
-| Build, library | `npm run build:ui` | pass |
-| Build, library, production | `npm run build:ui:prod` | pass |
-| Build, application | `npm run build` | pass |
-| Tests | `npm test` | pass — 1 suite, 6 tests |
-| Lint | `npm run lint` | pass — 0 errors |
+| Check                      | Command                                 | Result                  |
+| -------------------------- | --------------------------------------- | ----------------------- |
+| Type check, app            | `tsc -p tsconfig.app.json --noEmit`     | pass                    |
+| Type check, library        | `tsc -p lib/tsconfig.lib.json --noEmit` | pass                    |
+| Build, library             | `npm run build:ui`                      | pass                    |
+| Build, library, production | `npm run build:ui:prod`                 | pass                    |
+| Build, application         | `npm run build`                         | pass                    |
+| Tests                      | `npm test`                              | pass — 1 suite, 6 tests |
+| Lint                       | `npm run lint`                          | pass — 0 errors         |
 
 The table was checked again on the merged branch tip (`ae624eb`) on 2026-08-12. Every row
 still passes.
@@ -31,35 +31,35 @@ items afterwards is under "Fixes after the upgrade".
 What `package.json` declares now, against what it declared on `main`. Only the entries that
 changed are listed. "Installed" is the version in `package-lock.json`.
 
-| Package | Before | Now | Installed |
-| --- | --- | --- | --- |
-| @angular/animations | ^19.2.1 (dep) | **removed** | — |
-| @angular/cdk | ^19.2.2 | ^22.1.1 | 22.1.1 |
-| @angular/common | ^19.2.1 | ^22.1.1 | 22.1.1 |
-| @angular/compiler | ^19.2.1 | ^22.1.1 | 22.1.1 |
-| @angular/core | ^19.2.1 | ^22.1.1 | 22.1.1 |
-| @angular/forms | ^19.2.1 | ^22.1.1 | 22.1.1 |
-| @angular/material | ^19.2.2 | ^22.1.1 | 22.1.1 |
-| @angular/platform-browser | ^19.2.1 | ^22.1.1 | 22.1.1 |
-| @angular/platform-browser-dynamic | ^19.2.1 (dep) | ^22.1.1 (**devDep**) | 22.1.1 |
-| @angular/router | ^19.2.1 | ^22.1.1 | 22.1.1 |
-| marked | not declared | ^18.0.9 (dep) | 18.0.9 |
-| ngx-markdown | ^19.1.0 | ^22.0.0 | 22.0.0 |
-| @angular-builders/jest | ^19.0.0 | ^22.0.1 | 22.0.1 |
-| @angular/build | ^19.2.1 | ^22.1.3 | 22.1.3 |
-| @angular/cli | ^19.2.1 | ^22.1.3 | 22.1.3 |
-| @angular/compiler-cli | ^19.2.1 | ^22.1.1 | 22.1.1 |
-| @types/jest | ^29.5.14 | ^30.0.0 | 30.0.0 |
-| @typescript-eslint/eslint-plugin | ^8.26.0 | ^8.67.0 | 8.67.0 |
-| @typescript-eslint/parser | ^8.26.0 | ^8.67.0 | 8.67.0 |
-| angular-eslint | 19.2.1 | 22.1.0 | 22.1.0 |
-| eslint | ^9.8.0 | ^9.28.0 | 9.39.5 |
-| jest | ^29.7.0 | ^30.4.2 | 30.4.2 |
-| jest-environment-jsdom | not declared | ^30.4.1 (devDep) | 30.4.1 |
-| jest-preset-angular | ^14.5.3 | ^17.0.0 | 17.0.0 |
-| ng-mocks | ^14.13.3 | ^14.17.0 | 14.17.0 |
-| ng-packagr | ^19.2.0 | ^22.1.1 | 22.1.1 |
-| typescript | ~5.5.4 | ~6.0.3 | 6.0.3 |
+| Package                           | Before        | Now                  | Installed |
+| --------------------------------- | ------------- | -------------------- | --------- |
+| @angular/animations               | ^19.2.1 (dep) | **removed**          | —         |
+| @angular/cdk                      | ^19.2.2       | ^22.1.1              | 22.1.1    |
+| @angular/common                   | ^19.2.1       | ^22.1.1              | 22.1.1    |
+| @angular/compiler                 | ^19.2.1       | ^22.1.1              | 22.1.1    |
+| @angular/core                     | ^19.2.1       | ^22.1.1              | 22.1.1    |
+| @angular/forms                    | ^19.2.1       | ^22.1.1              | 22.1.1    |
+| @angular/material                 | ^19.2.2       | ^22.1.1              | 22.1.1    |
+| @angular/platform-browser         | ^19.2.1       | ^22.1.1              | 22.1.1    |
+| @angular/platform-browser-dynamic | ^19.2.1 (dep) | ^22.1.1 (**devDep**) | 22.1.1    |
+| @angular/router                   | ^19.2.1       | ^22.1.1              | 22.1.1    |
+| marked                            | not declared  | ^18.0.9 (dep)        | 18.0.9    |
+| ngx-markdown                      | ^19.1.0       | ^22.0.0              | 22.0.0    |
+| @angular-builders/jest            | ^19.0.0       | ^22.0.1              | 22.0.1    |
+| @angular/build                    | ^19.2.1       | ^22.1.3              | 22.1.3    |
+| @angular/cli                      | ^19.2.1       | ^22.1.3              | 22.1.3    |
+| @angular/compiler-cli             | ^19.2.1       | ^22.1.1              | 22.1.1    |
+| @types/jest                       | ^29.5.14      | ^30.0.0              | 30.0.0    |
+| @typescript-eslint/eslint-plugin  | ^8.26.0       | ^8.67.0              | 8.67.0    |
+| @typescript-eslint/parser         | ^8.26.0       | ^8.67.0              | 8.67.0    |
+| angular-eslint                    | 19.2.1        | 22.1.0               | 22.1.0    |
+| eslint                            | ^9.8.0        | ^9.28.0              | 9.39.5    |
+| jest                              | ^29.7.0       | ^30.4.2              | 30.4.2    |
+| jest-environment-jsdom            | not declared  | ^30.4.1 (devDep)     | 30.4.1    |
+| jest-preset-angular               | ^14.5.3       | ^17.0.0              | 17.0.0    |
+| ng-mocks                          | ^14.13.3      | ^14.17.0             | 14.17.0   |
+| ng-packagr                        | ^19.2.0       | ^22.1.1              | 22.1.1    |
+| typescript                        | ~5.5.4        | ~6.0.3               | 6.0.3     |
 
 Not declared, but installed as peers or transitive dependencies and worth knowing:
 `@angular-devkit/build-angular` 22.1.3, `jsdom` 30.0.1, `prettier` 3.9.6.
@@ -73,26 +73,26 @@ library peer ranges moved from `>=19.0.0` to `>=22.0.0`, and the `"licens"` key 
 Every commit on `chore/angular-22`, newest first, and the section that records it. Two
 side branches were merged back into `chore/angular-22`, so the history is not linear.
 
-| Commit | Date | Subject | Recorded in |
-| --- | --- | --- | --- |
-| `ae624eb` | 08-12 | update docs | "optional migration `use-application-builder`" (docs only) |
-| `084967b` | 08-11 | Merge PR #76 `chore/angular-22-package-cleanup` | merge commit |
-| `eea04ca` | 08-11 | Merge PR #77 `worktree-fix-lodash-esm-warning` | merge commit |
-| `bb7cf83` | 08-11 | Merge `chore/angular-22` into the cleanup branch | merge commit |
-| `89b6fd9` | 08-11 | docs: record the lodash ESM fix | "drop the `lodash` barrel import" (docs only) |
-| `1de74fb` | 08-11 | fix strict templates in lib | "strictTemplates for the library and the specs" |
-| `8a85cad` | 08-11 | drop `@angular/animations` | "deprecated packages — `@angular/animations` dropped" |
-| `7417b3a` | 08-11 | drop lodash barrel import in nav-list | "drop the `lodash` barrel import" |
-| `b88e04f` | 08-11 | carry working-tree edits | same change as `1de74fb`, on the cleanup branch |
-| `5fa3ac9` | 08-11 | fix marked package | "`fix marked package`" |
-| `b62c2f2` | 08-11 | fix safeNavigationMigration wrappers | "`fix safeNavigationMigration wrappers`" |
-| `607ce98` | 08-11 | fix strictTemplates | "`fix strictTemplates`" |
-| `8e54554` | 08-11 | fix linting | "`fix linting`" |
-| `af2b417` | 08-11 | finish Angular v22 upgrade | "After the last hop" |
-| `6b94560` | 08-11 | update Angular to v22 | "Hop 3 — 21.2 -> 22.1" |
-| `6b96010` | 08-11 | update Angular to v21 | "Hop 2 — 20.3 -> 21.2" |
-| `4616f70` | 08-11 | update Angular to v20 | "Hop 1 — 19.2 -> 20.3" |
-| `6fd5d7b` | 08-11 | add the upgrade plan | "Hop plan" and "Compatibility check" |
+| Commit    | Date  | Subject                                          | Recorded in                                                |
+| --------- | ----- | ------------------------------------------------ | ---------------------------------------------------------- |
+| `ae624eb` | 08-12 | update docs                                      | "optional migration `use-application-builder`" (docs only) |
+| `084967b` | 08-11 | Merge PR #76 `chore/angular-22-package-cleanup`  | merge commit                                               |
+| `eea04ca` | 08-11 | Merge PR #77 `worktree-fix-lodash-esm-warning`   | merge commit                                               |
+| `bb7cf83` | 08-11 | Merge `chore/angular-22` into the cleanup branch | merge commit                                               |
+| `89b6fd9` | 08-11 | docs: record the lodash ESM fix                  | "drop the `lodash` barrel import" (docs only)              |
+| `1de74fb` | 08-11 | fix strict templates in lib                      | "strictTemplates for the library and the specs"            |
+| `8a85cad` | 08-11 | drop `@angular/animations`                       | "deprecated packages — `@angular/animations` dropped"      |
+| `7417b3a` | 08-11 | drop lodash barrel import in nav-list            | "drop the `lodash` barrel import"                          |
+| `b88e04f` | 08-11 | carry working-tree edits                         | same change as `1de74fb`, on the cleanup branch            |
+| `5fa3ac9` | 08-11 | fix marked package                               | "`fix marked package`"                                     |
+| `b62c2f2` | 08-11 | fix safeNavigationMigration wrappers             | "`fix safeNavigationMigration wrappers`"                   |
+| `607ce98` | 08-11 | fix strictTemplates                              | "`fix strictTemplates`"                                    |
+| `8e54554` | 08-11 | fix linting                                      | "`fix linting`"                                            |
+| `af2b417` | 08-11 | finish Angular v22 upgrade                       | "After the last hop"                                       |
+| `6b94560` | 08-11 | update Angular to v22                            | "Hop 3 — 21.2 -> 22.1"                                     |
+| `6b96010` | 08-11 | update Angular to v21                            | "Hop 2 — 20.3 -> 21.2"                                     |
+| `4616f70` | 08-11 | update Angular to v20                            | "Hop 1 — 19.2 -> 20.3"                                     |
+| `6fd5d7b` | 08-11 | add the upgrade plan                             | "Hop plan" and "Compatibility check"                       |
 
 `b88e04f` and `1de74fb` carry the identical diff. The same change was committed on the
 cleanup branch and on `chore/angular-22`, then the two branches were merged. This is a
@@ -100,11 +100,11 @@ duplicate in the history, not two separate changes.
 
 ## Hop plan
 
-| Hop | From | To | Angular release |
-| --- | --- | --- | --- |
-| 1 | 19.2 | 20.3 | 20.3.27 |
-| 2 | 20.3 | 21.2 | 21.2.19 |
-| 3 | 21.2 | 22.1 | 22.1.1 |
+| Hop | From | To   | Angular release |
+| --- | ---- | ---- | --------------- |
+| 1   | 19.2 | 20.3 | 20.3.27         |
+| 2   | 20.3 | 21.2 | 21.2.19         |
+| 3   | 21.2 | 22.1 | 22.1.1          |
 
 ## Compatibility check
 
@@ -114,57 +114,57 @@ Verdict: GO — 19 bumps, 0 deferred, 0 unverified.
 
 ### Toolchain
 
-| Item | Required | Current | Status |
-| --- | --- | --- | --- |
-| node | ^22.22.3 \|\| ^24.15.0 \|\| >=26.0.0 | 24.15.0 | OK |
-| typescript | >=6.0 <6.1 | 5.5.4 | BUMP |
-| rxjs | ^6.5.3 \|\| ^7.4.0 | 7.8.2 | OK |
-| zone.js | ~0.15.0 \|\| ~0.16.0 | 0.15.1 | OK |
+| Item       | Required                             | Current | Status |
+| ---------- | ------------------------------------ | ------- | ------ |
+| node       | ^22.22.3 \|\| ^24.15.0 \|\| >=26.0.0 | 24.15.0 | OK     |
+| typescript | >=6.0 <6.1                           | 5.5.4   | BUMP   |
+| rxjs       | ^6.5.3 \|\| ^7.4.0                   | 7.8.2   | OK     |
+| zone.js    | ~0.15.0 \|\| ~0.16.0                 | 0.15.1  | OK     |
 
 ### Package matrix
 
-| Package | Declared | Installed | v20 | v21 | v22 | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| @angular-builders/jest | ^19.0.0 | 19.0.1 | 20.0.0 | 21.0.4 | 22.0.1 | BUMP |
-| @angular/animations | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/build | ^19.2.1 | 19.2.15 | 20.3.33 | 21.2.20 | 22.1.3 | BUMP |
-| @angular/cdk | ^19.2.2 | 19.2.19 | 20.2.14 | 21.2.14 | 22.1.1 | BUMP |
-| @angular/cli | ^19.2.1 | 19.2.15 | 20.3.33 | 21.2.20 | 22.1.3 | BUMP |
-| @angular/common | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/compiler | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/compiler-cli | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/core | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/forms | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/material | ^19.2.2 | 19.2.19 | 20.2.14 | 21.2.14 | 22.1.1 | BUMP |
-| @angular/platform-browser | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/platform-browser-dynamic | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @angular/router | ^19.2.1 | 19.2.14 | 20.3.27 | 21.2.19 | 22.1.1 | BUMP |
-| @eslint/js | ^9.8.0 | 9.35.0 | n/a | n/a | n/a | OK |
-| @ngx-translate/core | ^16.0.4 | 16.0.4 | 16.0.4 | 16.0.4 | 16.0.4 | OK |
-| @types/eslint__js | ^8.42.3 | 8.42.3 | n/a | n/a | n/a | OK |
-| @types/jest | ^29.5.14 | 29.5.14 | n/a | n/a | n/a | OK |
-| @types/lodash | ^4.17.7 | 4.17.20 | n/a | n/a | n/a | OK |
-| @types/node | ^20.11.1 | 20.19.13 | n/a | n/a | n/a | OK |
-| @typescript-eslint/eslint-plugin | ^8.26.0 | 8.43.0 | n/a | n/a | n/a | OK |
-| @typescript-eslint/parser | ^8.26.0 | 8.43.0 | n/a | n/a | n/a | OK |
-| angular-cli-ghpages | ^2.0.3 | 2.0.3 | n/a | n/a | n/a | OK |
-| angular-eslint | 19.2.1 | 19.2.1 | 20.7.0 | 21.4.0 | 22.1.0 | BUMP |
-| eslint | ^9.8.0 | 9.35.0 | n/a | n/a | n/a | OK |
-| eslint-config-prettier | ^9.1.0 | 9.1.2 | n/a | n/a | n/a | OK |
-| eslint-plugin-prettier | ^5.2.1 | 5.5.4 | n/a | n/a | n/a | OK |
-| jest | ^29.7.0 | 29.7.0 | n/a | n/a | n/a | OK |
-| jest-preset-angular | ^14.5.3 | 14.6.1 | 17.0.0 | 17.0.0 | 17.0.0 | BUMP |
-| lodash | ^4.17.21 | 4.17.21 | n/a | n/a | n/a | OK |
-| ng-mocks | ^14.13.3 | 14.13.5 | 14.17.0 | 14.17.0 | 14.17.0 | BUMP |
-| ng-packagr | ^19.2.0 | 19.2.2 | 20.3.2 | 21.2.7 | 22.1.1 | BUMP |
-| ngx-markdown | ^19.1.0 | 19.1.1 | 20.1.0 | 21.3.0 | 22.0.0 | BUMP |
-| prettier | ^3.3.3 | 3.6.2 | n/a | n/a | n/a | OK |
-| prettier-eslint | ^16.3.0 | 16.4.2 | n/a | n/a | n/a | OK |
-| prismjs | ^1.29.0 | 1.30.0 | n/a | n/a | n/a | OK |
-| rxjs | ~7.8.2 | 7.8.2 | n/a | n/a | n/a | OK |
-| tslib | ^2.0.0 | 2.8.1 | n/a | n/a | n/a | OK |
-| typescript | ~5.5.4 | 5.5.4 | n/a | n/a | n/a | OK |
-| zone.js | ~0.15.0 | 0.15.1 | n/a | n/a | n/a | OK |
+| Package                           | Declared | Installed | v20     | v21     | v22     | Status |
+| --------------------------------- | -------- | --------- | ------- | ------- | ------- | ------ |
+| @angular-builders/jest            | ^19.0.0  | 19.0.1    | 20.0.0  | 21.0.4  | 22.0.1  | BUMP   |
+| @angular/animations               | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/build                    | ^19.2.1  | 19.2.15   | 20.3.33 | 21.2.20 | 22.1.3  | BUMP   |
+| @angular/cdk                      | ^19.2.2  | 19.2.19   | 20.2.14 | 21.2.14 | 22.1.1  | BUMP   |
+| @angular/cli                      | ^19.2.1  | 19.2.15   | 20.3.33 | 21.2.20 | 22.1.3  | BUMP   |
+| @angular/common                   | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/compiler                 | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/compiler-cli             | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/core                     | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/forms                    | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/material                 | ^19.2.2  | 19.2.19   | 20.2.14 | 21.2.14 | 22.1.1  | BUMP   |
+| @angular/platform-browser         | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/platform-browser-dynamic | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @angular/router                   | ^19.2.1  | 19.2.14   | 20.3.27 | 21.2.19 | 22.1.1  | BUMP   |
+| @eslint/js                        | ^9.8.0   | 9.35.0    | n/a     | n/a     | n/a     | OK     |
+| @ngx-translate/core               | ^16.0.4  | 16.0.4    | 16.0.4  | 16.0.4  | 16.0.4  | OK     |
+| @types/eslint__js                 | ^8.42.3  | 8.42.3    | n/a     | n/a     | n/a     | OK     |
+| @types/jest                       | ^29.5.14 | 29.5.14   | n/a     | n/a     | n/a     | OK     |
+| @types/lodash                     | ^4.17.7  | 4.17.20   | n/a     | n/a     | n/a     | OK     |
+| @types/node                       | ^20.11.1 | 20.19.13  | n/a     | n/a     | n/a     | OK     |
+| @typescript-eslint/eslint-plugin  | ^8.26.0  | 8.43.0    | n/a     | n/a     | n/a     | OK     |
+| @typescript-eslint/parser         | ^8.26.0  | 8.43.0    | n/a     | n/a     | n/a     | OK     |
+| angular-cli-ghpages               | ^2.0.3   | 2.0.3     | n/a     | n/a     | n/a     | OK     |
+| angular-eslint                    | 19.2.1   | 19.2.1    | 20.7.0  | 21.4.0  | 22.1.0  | BUMP   |
+| eslint                            | ^9.8.0   | 9.35.0    | n/a     | n/a     | n/a     | OK     |
+| eslint-config-prettier            | ^9.1.0   | 9.1.2     | n/a     | n/a     | n/a     | OK     |
+| eslint-plugin-prettier            | ^5.2.1   | 5.5.4     | n/a     | n/a     | n/a     | OK     |
+| jest                              | ^29.7.0  | 29.7.0    | n/a     | n/a     | n/a     | OK     |
+| jest-preset-angular               | ^14.5.3  | 14.6.1    | 17.0.0  | 17.0.0  | 17.0.0  | BUMP   |
+| lodash                            | ^4.17.21 | 4.17.21   | n/a     | n/a     | n/a     | OK     |
+| ng-mocks                          | ^14.13.3 | 14.13.5   | 14.17.0 | 14.17.0 | 14.17.0 | BUMP   |
+| ng-packagr                        | ^19.2.0  | 19.2.2    | 20.3.2  | 21.2.7  | 22.1.1  | BUMP   |
+| ngx-markdown                      | ^19.1.0  | 19.1.1    | 20.1.0  | 21.3.0  | 22.0.0  | BUMP   |
+| prettier                          | ^3.3.3   | 3.6.2     | n/a     | n/a     | n/a     | OK     |
+| prettier-eslint                   | ^16.3.0  | 16.4.2    | n/a     | n/a     | n/a     | OK     |
+| prismjs                           | ^1.29.0  | 1.30.0    | n/a     | n/a     | n/a     | OK     |
+| rxjs                              | ~7.8.2   | 7.8.2     | n/a     | n/a     | n/a     | OK     |
+| tslib                             | ^2.0.0   | 2.8.1     | n/a     | n/a     | n/a     | OK     |
+| typescript                        | ~5.5.4   | 5.5.4     | n/a     | n/a     | n/a     | OK     |
+| zone.js                           | ~0.15.0  | 0.15.1    | n/a     | n/a     | n/a     | OK     |
 
 ### Version bumps (19)
 
@@ -402,7 +402,7 @@ none
   an `extendedDiagnostics` block suppressing `nullishCoalescingNotNullable` and
   `optionalChainNotNullable`, the other added `strictTemplates: false`. Angular rejects that
   pair with `NG4003: Angular compiler option "extendedDiagnostics" is configured, however
-  "strictTemplates" is disabled`. The `extendedDiagnostics` blocks were removed from
+"strictTemplates" is disabled`. The `extendedDiagnostics` blocks were removed from
   `tsconfig.app.json`, `tsconfig.spec.json`, `lib/tsconfig.lib.json` and
   `lib/tsconfig.lib.prod.json`. They had no effect with `strictTemplates` off.
 - `tsconfig.json`: removed `fullTemplateTypeCheck: true`, which v22 removed as an option.
@@ -426,7 +426,7 @@ none
      because this project still uses zone.js.
   2. `Test environment jest-environment-jsdom cannot be found`. `jest-preset-angular@17`
      no longer pulls it in. Added `jest-environment-jsdom@^30.4.1` to devDependencies.
-  Result: 1 suite, 6 tests, all passing.
+     Result: 1 suite, 6 tests, all passing.
 - **Lint.** `npm run lint` reported 18 errors. The 3 `prettier/prettier` errors were fixed
   with `prettier --write` on `lib/src/lib/table/cell-editors/cell-editor.abstract.ts` and
   `lib/src/lib/utils/utils.ts`. They appeared because the regenerated lock moved `prettier`

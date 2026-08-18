@@ -1,49 +1,62 @@
 # Changelog
 
 ## 22.0.0
-Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
-- updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
-- set `compilationMode` to `partial` in [lib/tsconfig.lib.json](lib/tsconfig.lib.json), because ng-packagr 22 uses 
-  `full` mode when the option is absent. This enables applications ov v23+ to still use this v22 lib, by compilin this 
-  lib with it's own angular version.
 
+Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
+
+- updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
+- set `compilationMode` to `partial` in [lib/tsconfig.lib.json](lib/tsconfig.lib.json), because ng-packagr 22 uses
+  `full` mode when the option is absent. This enables applications ov v23+ to still use this v22 lib, by compilin this
+  lib with it's own angular version.
 
 - ## 19.2.8
 - Fix: CellWithAnchorRendererComponent empty cell display
 
 ## 19.2.7
+
 - Fix: table with input "multiSort=false" will now be able to toggle between 'asc', 'desc', and 'no sorting', instead of just 'asc' and 'desc'.
 
 ## 19.2.6
+
 - Feat: add support dynamic tooltip on action button
 
 ## 19.2.5
+
 - Fix: import issue from hashed packages
 
 ## 19.2.4
+
 - Chore: update vulnerable package, still one left (angular-cli-ghpages, waiting on an update)
 
 ## 19.2.3
-- Fix: hover issue for action buttons with multi-level sub menus 
+
+- Fix: hover issue for action buttons with multi-level sub menus
 - Fix: re-render warnings because of wrong trackers on navigation for loops.
 
 ## 19.2.2
+
 ### Filter header only toggle columns
+
 - Fixed an issue where the header filter toggle would not properly show the state of the cells that are hidden/shown.
 
 ## 19.2.1
+
 ### Show header filter fixes
+
 - Fixed an issue where the header filter would not show up when `visibleCells` and `hiddenCells` contains items and add new param `showHeaderFilter` to explicitly show/hide the header filter.
 
 ## 19.2.0
+
 #### Breaking Changes
+
 - ActionButton's sub-actions now support reactive options.
-Meaning the number of sub-actions can change dynamically based on the row-data of a table. (e.g. every row having a 
-  different number of files to download). This can be breaking if you were dynamically adding sub-actions to the 
+  Meaning the number of sub-actions can change dynamically based on the row-data of a table. (e.g. every row having a
+  different number of files to download). This can be breaking if you were dynamically adding sub-actions to the
   array after initialization.
 
 ## 19.1.5
-- this version is deprecated, and the version tag was removed, since it contains some breaking changes in comparison to 
+
+- this version is deprecated, and the version tag was removed, since it contains some breaking changes in comparison to
   19.1.4
 
 ## 19.1.4
