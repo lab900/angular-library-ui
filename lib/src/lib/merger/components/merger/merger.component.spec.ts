@@ -119,7 +119,7 @@ describe('Lab900MergerComponent', () => {
 
   it('should clear the choices when the parent sets the master side', () => {
     component.toggleActive(0);
-    fixture.componentRef.setInput('selected', 'left');
+    fixture.componentRef.setInput('selectedSide', 'left');
     fixture.detectChanges();
 
     expect(component.schema()[0].active).toBe(false);
