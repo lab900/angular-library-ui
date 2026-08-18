@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.0.0
+## 22.0.5
 
 Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
 
@@ -8,6 +8,22 @@ Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22
 - set `compilationMode` to `partial` in [lib/tsconfig.lib.json](lib/tsconfig.lib.json), because ng-packagr 22 uses
   `full` mode when the option is absent. This enables applications ov v23+ to still use this v22 lib, by compilin this
   lib with it's own angular version.
+- Merger component refactor:
+  - `Lab900MergerComponent` now runs with `ChangeDetectionStrategy.OnPush`.
+  - The component is now fully signal-based.
+
+#### Breaking Changes
+
+- `result` is a signal: use `merger.result()`.
+- `leftObject` and `rightObject` are required inputs. An input that is never bound throws NG0950.
+- `selected` is a model signal, no longer a plain property.
+- `loading` is a plain input, no longer a model. The `loadingChange` event is gone.
+- `schema` is an input with a `schemaChange` output, no longer a model. `[schema]` and `[(schema)]` keep
+  working, but the event is now asynchronous.
+- `toggleActive(config, index)` is now `toggleActive(index)`.
+- `setInitialValues()` and `compare()` are no longer public.
+- a combined list always starts with the master side. The old toggle path put the left side first.
+- a write to `selected` from the parent clears the merge choices, exactly like the radio buttons do.
 
 ## 19.2.8
 

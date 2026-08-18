@@ -708,8 +708,9 @@ What a consumer of `@lab900/ui` sees after this branch:
 - **Three exported components now run with the v22 `OnPush` default**:
   `AlertDialogComponent`, `ConfirmationDialogComponent` and `Lab900MergerItemComponent`.
   They had no explicit strategy before, so they used to run with the old default.
-  `Lab900MergerComponent` is the only exported component that keeps
-  `ChangeDetectionStrategy.Eager`.
+  `Lab900MergerComponent` kept `ChangeDetectionStrategy.Eager` at the end of the upgrade. It moved to
+  `OnPush` in `22.0.5`, so the published library ships no `Eager` component any more. See the
+  CHANGELOG for the breaking changes that this refactor brings.
 - **`?.` in the library templates now returns `undefined`, not `null`.** This is the v22
   default. It is not visible through the public API, but it changes what a template binding
   passes to a consumer's own component.
@@ -721,10 +722,11 @@ What a consumer of `@lab900/ui` sees after this branch:
 
 ## Follow-ups
 
-- **9 components still use `ChangeDetectionStrategy.Eager`** behind an
-  `// eslint-disable-next-line`. Eight are the showcase app and its examples, which are low
-  risk. The one that matters is `lib/src/lib/merger/components/merger/merger.component.ts`:
-  its own comment says `OnPush` breaks the reset behaviour and a proper refactor is needed.
+- **~~9~~ 7 components still use `ChangeDetectionStrategy.Eager`** behind an
+  `// eslint-disable-next-line`. All 7 are the showcase app and its examples, which are low risk.
+  **Done in `22.0.5`**: `lib/src/lib/merger/components/merger/merger.component.ts` and the
+  `custom-example.component.ts` of the showcase moved to `OnPush`. The merger got the proper refactor
+  that its comment asked for: signal inputs, a `computed` merge result and no lifecycle hooks.
 - **Router `paramsInheritanceStrategy` now defaults to `"always"`.** The showcase app reads
   route data through `ActivatedRoute` in `showcase-page`, `markdown-page` and
   `showcase-home`, and has nested routes. Child routes now inherit params, data and resolved
