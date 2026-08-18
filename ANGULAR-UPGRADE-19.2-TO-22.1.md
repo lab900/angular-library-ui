@@ -113,12 +113,12 @@ For a consumer of `@lab900/ui`:
 
 ## 4. Follow-ups
 
-- [ ] Check the `z-index` stacking against the new top-layer overlays. The library sets `z-index`
+- [x] Check the `z-index` stacking against the new top-layer overlays. The library sets `z-index`
       in `table.component.scss`, `table-tabs.component.scss`, `nav-item.component.scss`,
       `page-header.component.scss` and `app.component.scss`.
-- [ ] Do the same click-through check for every other overlay inside a table cell:
+- [x] Do the same click-through check for every other overlay inside a table cell:
       `mat-datepicker` in `CellDateEditorComponent`, and `mat-menu` in a cell action.
-- [ ] Do a functional check of the routes, because `paramsInheritanceStrategy` is now `"always"`.
+- [x] Do a functional check of the routes, because `paramsInheritanceStrategy` is now `"always"`.
       The showcase reads route data in `showcase-page`, `markdown-page` and `showcase-home`.
 - [ ] Move the 7 remaining showcase components from `Eager` to `OnPush`, or keep the
       `eslint-disable` on purpose.
