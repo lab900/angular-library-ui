@@ -4,8 +4,9 @@
     "outDir": "./out-tsc/spec",
     "types": ["jest", "node"],
     // The TypeScript option replaces the deprecated `isolatedModules` transformer
-    // option of ts-jest. See the `transform` block in jest.config.js.
+    // option of ts-jest. ts-jest reads it from here, so the transpile-only mode
+    // stays on without jest.config.js passing the deprecated option.
     "isolatedModules": true
   },
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts", "lib/**/*.spec.ts"]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts", "lib/**/*.spec.ts", "setup-jest.ts"]
 }

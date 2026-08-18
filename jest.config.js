@@ -1,15 +1,12 @@
 module.exports = {
+  // The preset supplies the Angular transform, `tsconfig.spec.json` and the
+  // jsdom environment. `setup-jest.ts` supplies the test environment itself.
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   roots: ['<rootDir>/src', '<rootDir>/lib'],
-  // Resolve the package name to the library sources, so tests need no lib build.
   moduleNameMapper: {
+    // Resolve the package name to the library sources, so tests need no lib build.
     '^@lab900/ui$': '<rootDir>/lib/src/public-api.ts',
-  },
-  transform: {
-    // @angular-builders/jest passes the ts-jest option `isolatedModules: true`, which
-    // ts-jest deprecates. This value switches that option off. `isolatedModules` is a
-    // compiler option in tsconfig.spec.json instead, so the compilation stays the same.
-    '^.+\\.(ts|js|mjs|html|svg)$': ['jest-preset-angular', { isolatedModules: false }],
+    '\\.(jpg|jpeg|png)$': '<rootDir>/jest.file-mock.js',
   },
 };

@@ -16,13 +16,15 @@ intermediate hops.
   `@typescript-eslint/*` -> 8.67.0, because 8.43.0 blocks TypeScript 6.
 - `jest` -> 30.4.2, `@types/jest` -> 30, `jest-preset-angular` -> 17. The Jest toolchain moved as
   one unit, forced by `@angular-builders/jest@22.0.1`. `jest-environment-jsdom@^30.4.1` is added,
-  because `jest-preset-angular@17` no longer installs it.
+  because `jest-preset-angular@17` no longer installs it. The follow-up in section 4 then
+  **removes** `@angular-builders/jest` again. Jest runs directly. See section 6.
 - `ngx-markdown` -> 22.0.0. `marked@^18.0.9` is added as an explicit dependency, because
   `ngx-markdown@22` declares it as a required peer.
 - `@angular/animations` is **removed**. It is deprecated in v22, with removal planned in v23. The
   project declares no animation trigger.
-- `@angular/platform-browser-dynamic` moved to `devDependencies`. It is deprecated too, but it is
-  still a required peer of `@angular-builders/jest`. No source file imports it.
+- `@angular/platform-browser-dynamic` is **removed**. It is deprecated too. It first moved to
+  `devDependencies`, because `@angular-builders/jest` declared it as a required peer. The follow-up
+  in section 4 drops that builder, so the package is gone. No source file imports it.
 - `package-lock.json` is regenerated, because a failed `ng update` left a stale lock.
 
 Version and metadata: the workspace and the library both moved from `19.2.8` to `22.0.0`.
@@ -39,9 +41,10 @@ from `>=19.0.0` to `>=22.0.0`. The `"licens"` key in `lib/package.json` is now `
   removed. No tsconfig overrides the v22 default any more.
 - `extendedDiagnostics` blocks removed from `tsconfig.app.json`, `tsconfig.spec.json`,
   `lib/tsconfig.lib.json` and `lib/tsconfig.lib.prod.json`.
-- `angular.json`, test target: options are now `{"tsConfig": "tsconfig.spec.json", "zoneless": false}`.
-  The builder schema dropped `polyfills` and `inlineStyleLanguage`. `zoneless: false` is needed,
-  because this project still uses zone.js.
+- `angular.json`, test target: options became `{"tsConfig": "tsconfig.spec.json", "zoneless": false}`.
+  The builder schema dropped `polyfills` and `inlineStyleLanguage`. `zoneless: false` was needed,
+  because this project still uses zone.js. The follow-up in section 4 removes the whole target.
+  Section 6 shows where each option went.
 - `angular.json`, scripts: the `marked` global script is removed. `ngx-markdown@22` imports
   `marked` as an ES module.
 
@@ -122,9 +125,13 @@ For a consumer of `@lab900/ui`:
       The showcase reads route data in `showcase-page`, `markdown-page` and `showcase-home`.
 - [ ] Move the 7 remaining showcase components from `Eager` to `OnPush`, or keep the
       `eslint-disable` on purpose.
-- [ ] Remove the two deprecated packages `@angular/platform-browser-dynamic` and
-      `@angular-devkit/build-angular`. Both are peers of `@angular-builders/jest@22.0.1`. They can
-      only go if `ng test` runs `jest` directly on `jest-preset-angular@17`.
+- [x] Remove the two deprecated packages `@angular/platform-browser-dynamic` and
+      `@angular-devkit/build-angular`. Both were required peers of `@angular-builders/jest@22.0.1`,
+      and the builder loads neither one. Only the first was a direct `devDependency`; npm installed
+      the second because a required peer is missing. So the builder itself had to go. `ng test` is
+      replaced by a direct `jest` run on `jest-preset-angular@17`, whose peers are
+      `@angular/compiler-cli`, `@angular/core`, `@angular/platform-browser`, `jest`, `jsdom` and
+      `typescript`. All three packages are out of the tree. See section 6.
 - [ ] Handle the `PORT` environment variable. `ng serve` now gives it priority over `--port`, and
       `npm start` passes `--port 4900`. A CI runner that exports `PORT` binds elsewhere.
 - [x] Fix the `include` of `tsconfig.spec.json`. It listed only `src/**/*.spec.ts`, but the spec
@@ -141,15 +148,57 @@ For a consumer of `@lab900/ui`:
 
 ## 5. Verification
 
-| Check                      | Command                                 | Result                  |
-| -------------------------- | --------------------------------------- | ----------------------- |
-| Type check, app            | `tsc -p tsconfig.app.json --noEmit`     | pass                    |
-| Type check, library        | `tsc -p lib/tsconfig.lib.json --noEmit` | pass                    |
-| Build, library             | `npm run build:ui`                      | pass                    |
-| Build, library, production | `npm run build:ui:prod`                 | pass                    |
-| Build, application         | `npm run build`                         | pass                    |
-| Tests                      | `npm test`                              | pass — 1 suite, 6 tests |
-| Lint                       | `npm run lint`                          | pass — 0 errors         |
+| Check                      | Command                                 | Result                    |
+| -------------------------- | --------------------------------------- | ------------------------- |
+| Type check, app            | `tsc -p tsconfig.app.json --noEmit`     | pass                      |
+| Type check, library        | `tsc -p lib/tsconfig.lib.json --noEmit` | pass                      |
+| Build, library             | `npm run build:ui`                      | pass                      |
+| Build, library, production | `npm run build:ui:prod`                 | pass                      |
+| Build, application         | `npm run build`                         | pass                      |
+| Tests                      | `npm test`                              | pass — 2 suites, 21 tests |
+| Lint                       | `npm run lint`                          | pass — 0 errors           |
+
+`tsc -p tsconfig.spec.json --noEmit` also passes. All rows were run again on 2026-08-18, after the
+test runner changed. See section 6.
 
 Smoke test on `ng serve`: the showcase app loads with no console errors, the nav list expands its
 children, and the table column menu opens.
+
+## 6. Test runner without a builder
+
+Date: 2026-08-18. This resolves the follow-up in section 4.
+
+`@angular-builders/jest` merged only 6 keys into the Jest config, and it loaded neither of its two
+deprecated peers. `jest.config.js` and `setup-jest.ts` now hold those keys, so the configuration is
+the whole truth. Nothing is injected out of sight.
+
+| Key the builder injected                                     | Where it lives now                                            |
+| ------------------------------------------------------------ | ------------------------------------------------------------- |
+| `preset: 'jest-preset-angular'`                              | `jest.config.js`, unchanged                                   |
+| `transform`, with `tsconfig` and `stringifyContentPathRegex` | the preset supplies both, so the block is gone                |
+| `setupFilesAfterEnv` -> `setup-zone.js`                      | `setup-jest.ts` calls `setupZoneTestEnv()`                    |
+| `setupFilesAfterEnv` -> `match-media.js`                     | `setup-jest.ts` defines `window.matchMedia`                   |
+| `moduleNameMapper` for `jpg`, `jpeg` and `png`               | `jest.file-mock.js`                                           |
+| `testMatch` and `coverageDirectory`, per project root        | `roots: ['<rootDir>/src', '<rootDir>/lib']` and Jest defaults |
+
+The `zoneless: false` option of the builder is now the choice of setup file: `setupZoneTestEnv()`
+instead of `setupZonelessTestEnv()`.
+
+Consequences:
+
+- `npm test` runs `jest`. `npm run test:silent` runs `jest --silent`. Cloud Build calls the second
+  one, so the pipeline files do not change.
+- Jest CLI flags are plain again: `--testPathPatterns`, not `--test-path-patterns`. The Angular CLI
+  dasherized builder options.
+- `angular.json` has no `test` target, so `ng test` is gone. No Angular builder runs Jest.
+- The `isolatedModules: false` transformer override is gone from `jest.config.js`. It existed only
+  to undo the builder default of `true`. The preset passes no such option, so `ts-jest` reads the
+  compiler option `isolatedModules: true` from `tsconfig.spec.json`. The compilation does not
+  change, and the deprecation warning stays away.
+- `setup-jest.ts` is now in the `include` of `tsconfig.spec.json`, so `tsc` checks it.
+- `jest-environment-jsdom` stays. The preset sets `testEnvironment: 'jsdom'`, which resolves to
+  that package.
+
+Open point: `@angular-builders/jest` must ship a new major for every Angular major, and it was the
+one package that forced the whole Jest toolchain to move as a unit. `jest-preset-angular` supports
+a range of Angular majors instead, so the next upgrade has one less constraint.

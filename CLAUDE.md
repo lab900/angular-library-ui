@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm i                      # install
 npm start                  # dev server for the showcase app on port 4900
-npm test                   # Jest via the Angular builder
+npm test                   # Jest
 npm run test:silent        # same, no console output (used by the pipeline)
 npm run lint               # ESLint on both projects
 npm run prettier           # format the whole repo
@@ -19,17 +19,12 @@ npm run build              # build the showcase app
 Run one test file or one test:
 
 ```bash
-npm test -- --test-path-patterns=table-cell
-npm test -- --test-name-pattern="should create"
+npm test -- --testPathPatterns=table-cell
+npm test -- --testNamePattern="should create"
 ```
 
-The Angular CLI dasherizes builder options. `--testPathPatterns` fails with
-`Unknown argument`; `--test-path-patterns` works. A bare positional argument is read as
-the project name, not as a file pattern.
-
-Do not call `npx jest` directly. The `@angular-builders/jest` builder supplies the test
-environment (`zoneless: false`, global mocks, Angular transform). A direct Jest run gives
-false failures.
+Jest runs directly and not through an Angular builder, so every flag is a plain Jest flag.
+There is no `ng test` target, and `angular.json` has no `test` target.
 
 ## Workspace layout
 
@@ -114,9 +109,17 @@ Examples import from `@lab900/ui`, never through a relative path into `lib/`.
 
 ## Testing
 
-Jest with `jest-preset-angular`. `setup-jest.ts` calls `ngMocks.autoSpy('jest')`, so every
-`ng-mocks` mock method is already a spy. Use `TESTING_PROVIDERS` or `TABLE_TESTING_PROVIDERS`
-from `lib/src/lib/testing/testing.providers.ts` in `TestBed`. Set signal inputs with
+Jest with `jest-preset-angular`, run directly. `jest.config.js` is the whole configuration: no
+builder injects hidden keys. The preset supplies the Angular transform, `tsconfig.spec.json` and
+the jsdom environment.
+
+`setup-jest.ts` owns the test environment. It calls `setupZoneTestEnv()`, because the library
+uses zone.js. It defines `window.matchMedia`, which jsdom lacks and Material's `MediaMatcher`
+needs. It calls `ngMocks.autoSpy('jest')`, so every `ng-mocks` mock method is already a spy. The
+file is in the `include` of `tsconfig.spec.json`, so `tsc` checks it.
+
+Use `TESTING_PROVIDERS` or `TABLE_TESTING_PROVIDERS` from
+`lib/src/lib/testing/testing.providers.ts` in `TestBed`. Set signal inputs with
 `fixture.componentRef.setInput(...)`. Test roots are `src/` and `lib/`.
 
 ## Conventions and constraints

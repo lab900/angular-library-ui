@@ -119,13 +119,6 @@
             "buildTarget": "lab900-ui:build"
           }
         },
-        "test": {
-          "builder": "@angular-builders/jest:run",
-          "options": {
-            "tsConfig": "tsconfig.spec.json",
-            "zoneless": false
-          }
-        },
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
