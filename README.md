@@ -32,7 +32,6 @@ Build the library only to check the published package, or before you publish it:
 ```bash
 $ npm run build:ui       # output in dist/@lab900/ui
 $ npm run build:ui:prod  # same build as the pipeline
-$ npm run watch:ui       # rebuild the package on every change
 ```
 
 ## Developing new features or fixing bugs
