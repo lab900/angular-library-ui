@@ -2,7 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    // The TypeScript option replaces the deprecated `isolatedModules` transformer
+    // option of ts-jest. See the `transform` block in jest.config.js.
+    "isolatedModules": true
   },
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts", "lib/**/*.spec.ts"]
 }

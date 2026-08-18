@@ -132,8 +132,12 @@ For a consumer of `@lab900/ui`:
       `tsc -p tsconfig.spec.json --noEmit` passes. The stale `paths` block of that file is also
       gone: it sat outside `compilerOptions`, so TypeScript ignored it, and it pointed at
       `dist/@lab900/ui`.
-- [ ] Move the deprecated `isolatedModules` option to `tsconfig.spec.json`. `ts-jest` warns about
-      it. The option comes from the `jest-preset-angular` preset.
+- [x] Move the deprecated `isolatedModules` option to `tsconfig.spec.json`. The option came from
+      `@angular-builders/jest`, which puts `isolatedModules: true` in the `ts-jest` transformer
+      options. `ts-jest` deprecates that option. `tsconfig.spec.json` and `lib/tsconfig.spec.json`
+      now set the compiler option `isolatedModules: true`, and `jest.config.js` overrides the
+      transformer option with `false`. The compilation does not change, because `ts-jest` reads the
+      value from the parsed `tsconfig`. The warning is gone.
 
 ## 5. Verification
 
