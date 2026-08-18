@@ -6,7 +6,11 @@ steps:
   - name: 'node:24'
     entrypoint: 'npm'
     id: Lint Library
-    args: [ 'run', 'lint' ]
+    args: ['run', 'lint']
+  - name: 'node:24'
+    entrypoint: 'npm'
+    id: Test Library
+    args: ['run', 'test:silent']
   - name: 'node:24'
     entrypoint: 'npm'
     id: Build Library
@@ -16,7 +20,7 @@ steps:
   #   npm stage list @lab900/ui
   #   npm stage view <stage-id>
   #   npm stage download <stage-id>   # optional: inspect the tarball
-  #   npm stage approve <stage-id>    # publishes the version
+  #   npm stage approve <stage-id>    # publishes the version under the alpha tag
   #   npm stage reject <stage-id>     # discards the version
   - name: 'node:24'
     id: Stage Publish to NPM
@@ -30,7 +34,7 @@ steps:
         npm install -g npm@latest
         npm config set -- '//registry.npmjs.org/:_authToken' "$$NPM_TOKEN"
         cd dist/@lab900/ui
-        npm stage publish --ignore-scripts
+        npm stage publish --tag alpha
         # Print the stage id, so the maintainer can approve the version.
         npm stage list @lab900/ui || true
 availableSecrets:
