@@ -1,6 +1,6 @@
 {
   "name": "@lab900/ui",
-  "version": "22.0.6",
+  "version": "22.0.7-alpha.1",
   "author": "Lab900 <info@lab900.com> (https://lab900.com)",
   "license": "MIT",
   "peerDependencies": {
