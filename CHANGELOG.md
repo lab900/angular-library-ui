@@ -1,5 +1,13 @@
 # Changelog
 
+## 22.0.8
+
+- Chore: `angular-cli-ghpages` updated from 2.0.3 to 3.1.0. This closes the last vulnerable package
+  (see 19.2.4). v3 supports Angular 18 to 22, so `@angular-devkit/*` no longer installs a second copy
+  on v18, and `gh-pages` moves from 3.1.0 to 6.3.0. `npm audit` now reports 0 vulnerabilities.
+  The dead `silent` option is removed from the `deploy` target in [angular.json](angular.json); no
+  version of the builder reads it. This only affects the showcase deploy, not the published package.
+
 ## 22.0.5
 
 Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done

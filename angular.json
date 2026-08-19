@@ -125,7 +125,6 @@
             "baseHref": "https://lab900.github.io/angular-library-ui/",
             "name": "Lab900",
             "email": "info@lab900.com",
-            "silent": false,
             "dir": "dist/angular-library-ui/browser"
           }
         },
