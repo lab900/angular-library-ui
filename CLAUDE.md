@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm i                      # install
-npm start                  # dev server for the showcase app on port 4900
+npm start                  # dev server for the showcase app on port 4900 (set in angular.json)
 npm test                   # Jest
 npm run test:silent        # same, no console output (used by the pipeline)
 npm run lint               # ESLint on both projects

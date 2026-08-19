@@ -132,8 +132,12 @@ For a consumer of `@lab900/ui`:
       replaced by a direct `jest` run on `jest-preset-angular@17`, whose peers are
       `@angular/compiler-cli`, `@angular/core`, `@angular/platform-browser`, `jest`, `jsdom` and
       `typescript`. All three packages are out of the tree. See section 6.
-- [ ] Handle the `PORT` environment variable. `ng serve` now gives it priority over `--port`, and
-      `npm start` passes `--port 4900`. A CI runner that exports `PORT` binds elsewhere.
+- [x] Handle the `PORT` environment variable. The dev-server builder reads `process.env.PORT`
+      after it reads `--port`, so the flag could never hold the port. The port now lives in
+      `angular.json` under `serve.options`, and `npm start` is a plain `ng serve`. This also fixes
+      a plain `ng serve`, which bound 4200 instead of 4900. The `PORT` override stays on purpose:
+      the builder logs `Environment variable "PORT" detected.`, no pipeline step serves the app,
+      and a dev container that exports `PORT` is right to choose the port.
 - [x] Fix the `include` of `tsconfig.spec.json`. It listed only `src/**/*.spec.ts`, but the spec
       files are in `lib/`. `lib/**/*.spec.ts` is now in the `include`, and
       `tsc -p tsconfig.spec.json --noEmit` passes. The stale `paths` block of that file is also

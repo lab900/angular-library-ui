@@ -101,7 +101,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "buildTarget": "lab900-ui:build"
+            "buildTarget": "lab900-ui:build",
+            "port": 4900
           },
           "configurations": {
             "production": {
