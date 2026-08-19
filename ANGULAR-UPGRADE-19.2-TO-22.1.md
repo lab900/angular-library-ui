@@ -64,7 +64,8 @@ from `>=19.0.0` to `>=22.0.0`. The `"licens"` key in `lib/package.json` is now `
   widened to match the real values (`table-cell-select.component.ts`).
 - `merger.component.ts` uses `inject()` for `MatIconRegistry` and `DomSanitizer`.
 - `nav-list.component.ts`: the `lodash` barrel import is replaced by a local counter.
-  `lodash/cloneDeep` in `cell-editor.abstract.ts` stays; it is a deep import and gives no warning.
+  `lodash/cloneDeep` in `cell-editor.abstract.ts` first stayed, because a deep import gives no
+  warning in this workspace. That was wrong for a consumer, see bug 7. It is gone now.
 - `lib/src/lib/testing/testing.providers.ts`: `TESTING_PROVIDERS` is now `[provideTranslateService()]`.
 - `showcase-ui.constants.ts`: the `lib/package.json` import is now a relative path.
 
@@ -85,9 +86,21 @@ from `>=19.0.0` to `>=22.0.0`. The `"licens"` key in `lib/package.json` is now `
    `strictTemplates: false`. Angular rejects that pair with `NG4003`. Fix: the
    `extendedDiagnostics` blocks are removed.
 4. **`lodash` ESM build warning.** `Module 'lodash' ... is not ESM`. Fix: the barrel import is gone.
+   The deep import in `cell-editor.abstract.ts` stayed at that point, see bug 7.
 5. **Stale `marked` global script.** It was a leftover from old `ngx-markdown` versions. Fix: the
    script is removed from `angular.json`. The `scripts` bundle dropped to 28.36 kB.
 6. **`"licens"` typo** in `lib/package.json`. The published package now declares its licence.
+7. **The published package used an undeclared `lodash`.** `cell-editor.abstract.ts` imported
+   `lodash/cloneDeep`, but `lib/package.json` declares only `tslib`. In this workspace the import
+   resolved through the root `dependencies`, so no build failed here. A consumer application got
+   two problems: the import resolved only by accident, through a transitive dev dependency
+   (`angular-cli-ghpages` > `gh-pages` > `async` > `lodash`), and the build warned
+   `Module 'lodash/cloneDeep' ... is not ESM`. A deep import does not prevent that warning.
+   Fix: `lib/src/lib/utils/clone.utils.ts` supplies `deepClone`, and `lodash` plus `@types/lodash`
+   are removed from the workspace, together with the `allowedCommonJsDependencies` option in
+   `angular.json` that hid the warning here.
+   The same audit found four more undeclared imports in the published bundle: `@angular/cdk`,
+   `@angular/platform-browser`, `@angular/router` and `rxjs`. All four are now `peerDependencies`.
 
 ## 3. Important and possibly breaking
 

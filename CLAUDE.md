@@ -132,7 +132,11 @@ Use `TESTING_PROVIDERS` or `TABLE_TESTING_PROVIDERS` from
   input type instead.
 - `lib/tsconfig.lib.json` sets `compilationMode: "partial"`. Keep it. Without it ng-packagr
   22 builds in `full` mode, and applications on a later Angular major cannot use the package.
-- Use deep lodash imports (`lodash/cloneDeep`). The barrel import gives an ESM build warning.
+- The library declares only `tslib` in `dependencies`. Add no runtime dependency to `lib/`.
+  A library import that `lib/package.json` does not declare resolves for the workspace but not
+  for a consumer, and a CommonJS package also gives the consumer a `is not ESM` build warning.
+  Write a small util in `lib/src/lib/utils/` instead. `deepClone` replaced `lodash/cloneDeep`
+  for this reason.
 - Angular schematics for the library need `--project ui`, otherwise files land in the app.
 
 ## Release

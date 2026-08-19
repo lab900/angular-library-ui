@@ -59,8 +59,7 @@
             "browser": "src/main.ts",
             "stylePreprocessorOptions": {
               "includePaths": ["."]
-            },
-            "allowedCommonJsDependencies": ["lodash/cloneDeep"]
+            }
           },
           "configurations": {
             "development": {

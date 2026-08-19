@@ -11,6 +11,17 @@ Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22
 - set `compilationMode` to `partial` in [lib/tsconfig.lib.json](lib/tsconfig.lib.json), because ng-packagr 22 uses
   `full` mode when the option is absent. This enables applications ov v23+ to still use this v22 lib, by compilin this
   lib with it's own angular version.
+- Fix: the published package no longer imports `lodash`. `cell-editor.abstract.ts` used
+  `lodash/cloneDeep`, but `lib/package.json` declares only `tslib`. A consumer therefore resolved
+  `lodash` by accident, through a transitive dependency, and got a
+  `Module 'lodash/cloneDeep' ... is not ESM` build warning. The new `deepClone` util replaces it.
+  `deepClone` is exported from `@lab900/ui`. It keeps the prototype of a class instance, copies a
+  function by reference and follows a circular reference, so it handles values that
+  `structuredClone` rejects. The `allowedCommonJsDependencies` option in
+  [angular.json](angular.json) is removed with it; the app build needs no CommonJS allowance now.
+- `lib/package.json` now declares every package that the published code imports. `@angular/cdk`,
+  `@angular/platform-browser`, `@angular/router` and `rxjs` were used but not declared. They are
+  added to `peerDependencies`. An application that already runs Angular 22 needs no action.
 - Merger component refactor:
   - `Lab900MergerComponent` now runs with `ChangeDetectionStrategy.OnPush`.
   - The component is now fully signal-based.
