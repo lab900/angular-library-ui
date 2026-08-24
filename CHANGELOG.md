@@ -2,40 +2,21 @@
 
 ## 22.0.8
 
-- Chore: `angular-cli-ghpages` updated from 2.0.3 to 3.1.0. This closes the last vulnerable package
-  (see 19.2.4). v3 supports Angular 18 to 22, so `@angular-devkit/*` no longer installs a second copy
-  on v18, and `gh-pages` moves from 3.1.0 to 6.3.0. `npm audit` now reports 0 vulnerabilities.
-  The dead `silent` option is removed from the `deploy` target in [angular.json](angular.json); no
-  version of the builder reads it. This only affects the showcase deploy, not the published package.
+- security updates to npm package versions and pipelines, no code changes
 
 ## 22.0.5
 
 Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
 
 - updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
-- the showcase app and the unit tests now compile the library sources instead of `dist/@lab900/ui`.
+- the showcase app now compiles the library sources instead of `dist/@lab900/ui`.
   A library build is no longer needed for local development, see the
-  [README](README.md#run-the-project-locally). This changes nothing in the published package.
-- set `compilationMode` to `partial` in [lib/tsconfig.lib.json](lib/tsconfig.lib.json), because ng-packagr 22 uses
-  `full` mode when the option is absent. This enables applications ov v23+ to still use this v22 lib, by compilin this
-  lib with it's own angular version.
-- Fix: the published package no longer imports `lodash`. `cell-editor.abstract.ts` used
-  `lodash/cloneDeep`, but `lib/package.json` declares only `tslib`. A consumer therefore resolved
-  `lodash` by accident, through a transitive dependency, and got a
-  `Module 'lodash/cloneDeep' ... is not ESM` build warning. The new `deepClone` util replaces it.
-  `deepClone` is exported from `@lab900/ui`. It keeps the prototype of a class instance, copies a
-  function by reference and follows a circular reference, so it handles values that
-  `structuredClone` rejects. The `allowedCommonJsDependencies` option in
-  [angular.json](angular.json) is removed with it; the app build needs no CommonJS allowance now.
-- `lib/package.json` now declares every package that the published code imports. `@angular/cdk`,
-  `@angular/platform-browser`, `@angular/router` and `rxjs` were used but not declared. They are
-  added to `peerDependencies`. An application that already runs Angular 22 needs no action.
-- Merger component refactor:
-  - `Lab900MergerComponent` now runs with `ChangeDetectionStrategy.OnPush`.
-  - The component is now fully signal-based.
+  [README](README.md#run-the-project-locally).
 
-#### Breaking Changes
+#### Breaking Changes for Merger Component:
 
+- The component is now fully signal-based.
+- `Lab900MergerComponent` now runs with `ChangeDetectionStrategy.OnPush`.
 - `result` is a signal: use `merger.result()`.
 - `leftObject` and `rightObject` are required inputs. An input that is never bound throws NG0950.
 - `selected` is a model signal, no longer a plain property.
