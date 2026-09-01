@@ -27,10 +27,10 @@
           class="mat-elevation-z0"
           [multiTemplateDataRows]="true"
           [trackBy]="trackByTableFn()"
-          [dataSource]="publicData()"
+          [dataSource]="publicData() ?? []"
           (cdkDropListDropped)="tableRowOrderChange.emit($event)"
-          [class.has-back-actions]="tableActionsBack()?.length"
-          [class.has-front-actions]="tableActionsFront()?.length">
+          [class.has-back-actions]="tableActionsBack().length"
+          [class.has-front-actions]="tableActionsFront().length">
           @if (selectableRows()?.enabled) {
             <lab900-table-cell-select
               [showFooter]="showCellFooters()"
@@ -45,14 +45,14 @@
               [disableSort]="disableSort()"
               [maxColumnWidthFromTable]="maxColumnWidth()"
               (headerClick)="handleHeaderClick($event)"
-              [data]="publicData()"
+              [data]="publicData() ?? []"
               [showFooterCell]="showCellFooters()"
               (valueChanged)="cellValueChanged.emit($event)" />
           }
           <ng-container matColumnDef="actions-front">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element; let index = index" (click)="$event.stopPropagation()">
-              @if (tableActionsFront()?.length) {
+              @if (tableActionsFront().length) {
                 <div class="table-row-actions-front">
                   @for (action of tableActionsFront(); track action.label) {
                     <lab900-action-button
@@ -71,7 +71,7 @@
           <ng-container matColumnDef="actions-back" stickyEnd="">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element; let index = index" (click)="$event.stopPropagation()">
-              @if (tableActionsBack()?.length) {
+              @if (tableActionsBack().length) {
                 <div class="table-row-actions-back">
                   @for (action of tableActionsBack(); track action.label) {
                     <lab900-action-button

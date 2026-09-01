@@ -5,6 +5,7 @@
 // common
 export * from './lib/utils/utils';
 export * from './lib/utils/different.utils';
+export * from './lib/utils/clone.utils';
 
 // dialogs
 export * from './lib/dialog/components/alert-dialog/alert-dialog.component';

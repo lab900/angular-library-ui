@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ActionButton, BreadCrumb, Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
 import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'lab900-page-header-example',
   imports: [Lab900PageHeaderComponent, MatTabsModule],
+  // eslint-disable-next-line
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: ` <lab900-page-header
       [pageTitle]="pageTitle"
       [navItems]="navItems"

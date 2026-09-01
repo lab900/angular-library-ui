@@ -1,7 +1,8 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-@use '../dist/@lab900/ui/theming' as theme;
+// The showcase uses the library sources, so this points at lib/ and not at the build output.
+@use '../lib/theming' as theme;
 @use 'src/styles/green.palette' as *;
 @use 'src/styles/grey.palette' as *;
 

@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -10,17 +9,17 @@
     "strict": true,
     "experimentalDecorators": true,
     "module": "ES2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "lib": ["ES2022", "dom"],
     "useDefineForClassFields": false,
+    "types": ["jest", "node"],
     "paths": {
-      "@lab900/ui": ["lib/src/public-api.ts"]
+      "@lab900/ui": ["./lib/src/public-api.ts"]
     }
   },
+  "exclude": ["dist", "out-tsc", "tmp"],
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   }
 }

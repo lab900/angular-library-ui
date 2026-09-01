@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, signal, viewChild } from '@angular/core';
 import { mergerDataExample } from './config/merger-data-example';
 import { Lab900MergerComponent, MergeConfig, MergeObject } from '@lab900/ui';
 import { mergerSchemaExample } from './config/merger-schema-example';
@@ -11,11 +11,16 @@ import { MatButton } from '@angular/material/button';
   imports: [TranslatePipe, Lab900MergerComponent, MatButton],
   template: `
     <div class="merger-example-header">
-      <button mat-flat-button color="primary" (click)="mergerComponent?.reset()">
+      <span>master: {{ master() }}</span>
+      <button mat-flat-button color="primary" (click)="mergerComponent()?.reset()">
         {{ 'reset' | translate }}
       </button>
     </div>
-    <lab900-merger [leftObject]="exampleData[0]" [rightObject]="exampleData[1]" [schema]="exampleSchema" />
+    <lab900-merger
+      [leftObject]="exampleData[0]"
+      [rightObject]="exampleData[1]"
+      [schema]="exampleSchema"
+      [(selectedSide)]="master" />
     <button style="margin-right: 1rem" mat-raised-button color="primary" (click)="showResult()">
       {{ 'log_result' | translate }}
     </button>
@@ -25,19 +30,22 @@ import { MatButton } from '@angular/material/button';
       .merger-example-header {
         display: flex;
         justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
         margin-bottom: 1rem;
       }
     `,
   ],
 })
 export class MergerExampleComponent {
-  public exampleData: MergeObject<MergerDataExample>[] = mergerDataExample;
-  public exampleSchema: MergeConfig<MergerDataExample>[] = mergerSchemaExample;
+  public readonly exampleData: MergeObject<MergerDataExample>[] = mergerDataExample;
+  public readonly exampleSchema: MergeConfig<MergerDataExample>[] = mergerSchemaExample;
 
-  @ViewChild(Lab900MergerComponent)
-  public mergerComponent?: Lab900MergerComponent<MergerDataExample>;
+  public readonly master = signal<'left' | 'right'>('right');
+
+  public readonly mergerComponent = viewChild(Lab900MergerComponent<MergerDataExample>);
 
   public showResult(): void {
-    console.log(this.mergerComponent?.result);
+    console.log(this.mergerComponent()?.result());
   }
 }

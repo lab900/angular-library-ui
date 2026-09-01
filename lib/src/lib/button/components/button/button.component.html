@@ -2,7 +2,7 @@
   @case ('raised') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass()"
+      [class]="containerClass() ?? ''"
       mat-raised-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
@@ -17,7 +17,7 @@
   @case ('stroked') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass()"
+      [class]="containerClass() ?? ''"
       mat-stroked-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
@@ -32,7 +32,7 @@
   @case ('flat') {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass()"
+      [class]="containerClass() ?? ''"
       mat-flat-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
@@ -101,7 +101,7 @@
   @default {
     <button
       (throttledClick)="btnClick.emit($event)"
-      [class]="containerClass()"
+      [class]="containerClass() ?? ''"
       mat-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"

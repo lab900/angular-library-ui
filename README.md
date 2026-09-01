@@ -17,8 +17,21 @@ View the [showcase](https://lab900.github.io/angular-library-ui/) for guides & e
 
 ```bash
 $ npm i
-$ npm run watch:ui # in a separate terminal
 $ npm run start
+```
+
+The showcase app compiles the library from its TypeScript sources. You do not need to build the
+library first, and you do not need to rebuild it after a change:
+
+- `@lab900/ui` maps to `lib/src/public-api.ts` through the `paths` option in [tsconfig.json](/tsconfig.json).
+- `src/styles.scss` uses `lib/_theming.scss` directly.
+- The dev server watches `lib/`, so every change in the library reloads the app.
+
+Build the library only to check the published package, or before you publish it:
+
+```bash
+$ npm run build:ui       # output in dist/@lab900/ui
+$ npm run build:ui:prod  # same build as the pipeline
 ```
 
 ## Developing new features or fixing bugs
@@ -40,7 +53,7 @@ Create a patch version of the fix and release it. Don't forget to apply the fix 
 2. Bump the lib version. See [Versioning](#versioning) for more information
 3. Tag the commit with the version number
 4. Push the tag to the repository
-5. The deployment will be triggered automatically
+5. The deployment will be triggered automatically because of the tag
 
 ```bash
 $ cd lib
@@ -48,6 +61,9 @@ $ npm version YOUR_VERSION -m "chore: release %s"
 $ git tag YOUR_VERSION
 $ git push origin YOUR_VERSION
 ```
+
+6. ⚠️ The staged build needs to be manually approved on npm by a project admin. (currently Gino, Senn or Johan)
+   (npmjs.com → user settings → staged packages)
 
 ## Versioning
 

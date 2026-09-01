@@ -1,20 +1,20 @@
 <div
   class="lab900-merger-item"
-  [class.selected]="active"
+  [class.selected]="active()"
   [style.flex-direction]="flexDirection()"
   [style.align-items]="config().nextLine ? '' : 'center'"
   [style.justify-content]="config().nextLine ? '' : 'space-between'">
-  @if (!config()?.component) {
-    @for (subConfig of config()?.nestedObject; track subConfig.attribute) {
+  @if (!config().component) {
+    @for (nested of nestedValues(); track nested.attribute) {
       <div class="lab900-merger-item__sub">
-        <p>{{ subConfig.label | translate }}</p>
-        <span>{{ display(subConfig, config().attribute) | async | translate }}</span>
+        <p>{{ nested.label | translate }}</p>
+        <span>{{ nested.value | async | translate }}</span>
       </div>
     } @empty {
       @if (config().label; as label) {
         <p>{{ label | translate }}</p>
       }
-      <span style="text-align: right">{{ display(config()) | async | translate }}</span>
+      <span style="text-align: right">{{ value() | async | translate }}</span>
     }
   } @else {
     <ng-container #customComponentContainer />

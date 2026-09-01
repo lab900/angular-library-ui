@@ -19,7 +19,7 @@ import { MatIcon } from '@angular/material/icon';
           <mat-icon [svgIcon]="options.icon" />
         }
         {{ columnLabel() | translate }}
-        @if (!disableSort) {
+        @if (!disableSort()) {
           <lab900-column-header-sorting [columnConfig]="columnConfig()" />
         }
       </div>

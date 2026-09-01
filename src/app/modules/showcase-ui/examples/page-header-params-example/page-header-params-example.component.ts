@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ActionButton, Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
 
 @Component({
@@ -8,6 +8,8 @@ import { ActionButton, Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab
     [navItems]="navItems"
     [actions]="actions"
     [showActionsFixedOnMobile]="false" />`,
+  // eslint-disable-next-line
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [Lab900PageHeaderComponent],
 })
 export class PageHeaderParamsExampleComponent {

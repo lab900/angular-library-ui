@@ -1,9 +1,8 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { HttpClient, provideHttpClient, withXhr } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideMarkdown } from 'ngx-markdown';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
@@ -21,8 +20,8 @@ function TranslationLoaderFactory(http: HttpClient): MergingTranslateLoader {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(),
-    provideAnimations(),
+    provideZoneChangeDetection(),
+    provideHttpClient(withXhr()),
     provideRouter(routes),
     provideMarkdown(),
     provideNativeDateAdapter(),
@@ -32,8 +31,8 @@ bootstrapApplication(AppComponent, {
         useFactory: TranslationLoaderFactory,
         deps: [HttpClient],
       },
-      defaultLanguage: 'en',
-      useDefaultLang: true,
+      lang: 'en',
+      fallbackLang: 'en',
     }),
   ],
 }).catch(err => console.error(err));

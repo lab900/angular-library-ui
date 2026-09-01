@@ -1,4 +1,4 @@
-import { Component, computed, inject, viewChild } from '@angular/core';
+import { Component, computed, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
@@ -18,6 +18,8 @@ import { MatIconAnchor, MatIconButton } from '@angular/material/button';
   selector: 'lab900-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  // eslint-disable-next-line
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     NgOptimizedImage,

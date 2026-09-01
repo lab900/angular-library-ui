@@ -50,7 +50,6 @@
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
             ],
             "scripts": [
-              "node_modules/marked/marked.min.js",
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components/prism-scss.min.js",
               "node_modules/prismjs/components/prism-typescript.min.js",
@@ -60,8 +59,7 @@
             "browser": "src/main.ts",
             "stylePreprocessorOptions": {
               "includePaths": ["."]
-            },
-            "allowedCommonJsDependencies": ["lodash/cloneDeep"]
+            }
           },
           "configurations": {
             "development": {
@@ -102,7 +100,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "buildTarget": "lab900-ui:build"
+            "buildTarget": "lab900-ui:build",
+            "port": 4900
           },
           "configurations": {
             "production": {
@@ -120,21 +119,12 @@
             "buildTarget": "lab900-ui:build"
           }
         },
-        "test": {
-          "builder": "@angular-builders/jest:run",
-          "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": ["scss"]
-          }
-        },
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
             "baseHref": "https://lab900.github.io/angular-library-ui/",
             "name": "Lab900",
             "email": "info@lab900.com",
-            "silent": false,
             "dir": "dist/angular-library-ui/browser"
           }
         },
@@ -188,6 +178,30 @@
     },
     "@angular-eslint/schematics:library": {
       "setParserOptionsProject": true
+    },
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   }
 }

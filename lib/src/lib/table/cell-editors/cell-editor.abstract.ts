@@ -3,12 +3,14 @@ import { AfterViewInit, computed, Directive, ElementRef, inject, input, Input, m
 import { Lab900TableCellComponent } from '../components/table-cell/table-cell.component';
 import { isDifferent } from '../../utils/different.utils';
 import { CellEditorBaseOptions } from './cell-editor.options';
-import cloneDeep from 'lodash/cloneDeep';
+import { deepClone } from '../../utils/clone.utils';
 
 @Directive()
-export abstract class CellEditorAbstract<TCellEditorOptions extends CellEditorBaseOptions<T>, T = any, V = any>
-  implements AfterViewInit
-{
+export abstract class CellEditorAbstract<
+  TCellEditorOptions extends CellEditorBaseOptions<T>,
+  T = any,
+  V = any,
+> implements AfterViewInit {
   private readonly tableCell: Lab900TableCellComponent = inject(Lab900TableCellComponent);
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
 
@@ -39,7 +41,7 @@ export abstract class CellEditorAbstract<TCellEditorOptions extends CellEditorBa
     const cell = this.columnConfig();
     // we can't use structuredClone here because it doesn't work with functions
     // for example Moment objects will throw an error
-    const data = cloneDeep(this.data());
+    const data = deepClone(this.data());
     if (cell.key.includes('.')) {
       const keys = cell.key.split('.');
       let value: any = data;

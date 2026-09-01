@@ -1,4 +1,4 @@
-@if (data() && currentTab() && navItems()?.length) {
+@if (data() && currentTab() && navItems().length) {
   <div class="showcase-page row">
     <lab900-page-header [pageTitle]="data()?.title" [navItems]="navItems()" [tabPanel]="tabNavPanel" />
     <mat-tab-nav-panel #tabNavPanel>
@@ -12,7 +12,7 @@
               <lab900-example-viewer
                 [extensions]="example.extensions"
                 [fileDir]="example?.fileFolder"
-                [exampleTitle]="example.title">
+                [exampleTitle]="example.title ?? ''">
                 <ng-container [ngComponentOutlet]="example.component" />
               </lab900-example-viewer>
             </div>

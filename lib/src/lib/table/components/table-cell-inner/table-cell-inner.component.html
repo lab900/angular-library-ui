@@ -3,7 +3,7 @@
     <div class="lab900-cell-editor-wrapper">
       <ng-container
         *ngComponentOutlet="
-          cell().cellEditor;
+          cell().cellEditor ?? null;
           inputs: {
             data: rowValue(),
             columnConfig: cell(),

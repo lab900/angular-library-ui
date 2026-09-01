@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Lab900Sort, Lab900TableComponent, TableCell, TableRowAction } from '@lab900/ui';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -6,6 +6,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 @Component({
   selector: 'lab900-table-example',
   imports: [Lab900TableComponent],
+  // eslint-disable-next-line
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `<lab900-table
     [tableCells]="tableCells"
     [data]="mockData"

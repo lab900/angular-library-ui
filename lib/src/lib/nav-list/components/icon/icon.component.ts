@@ -7,10 +7,10 @@ import { MatIcon } from '@angular/material/icon';
   styleUrls: ['./icon.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: ` @if (icon()?.name) {
+  template: ` @if (icon().name) {
       <mat-icon>{{ icon().name }}</mat-icon>
     }
-    @if (icon()?.svgName; as svgName) {
+    @if (icon().svgName; as svgName) {
       <mat-icon [svgIcon]="svgName" />
     }`,
   imports: [MatIcon],

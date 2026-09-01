@@ -1,17 +1,17 @@
 @if (item()) {
   <div class="nav-item nav-item--depth-{{ depth() }}">
-    @if (!item()?.childrenInOverlay || breakpointObserver.isMatched(allowOverlayMenuUntil())) {
+    @if (!item().childrenInOverlay || breakpointObserver.isMatched(allowOverlayMenuUntil())) {
       <div class="nav-item--without-overlay">
         <lab900-nav-item-button
           [item]="item()"
           [depth]="depth()"
           [expanded]="expanded()"
           [disabled]="disabled()"
-          [showLevelArrow]="showLevelArrows() && !!item()?.children?.length"
-          [routeMatchOptions]="item()?.routeMatchOptions ?? routeMatchOptions()"
+          [showLevelArrow]="showLevelArrows() && !!item().children?.length"
+          [routeMatchOptions]="item().routeMatchOptions ?? routeMatchOptions()"
           (click)="onClick($event)" />
         <!-- Children -->
-        @if (item()?.children?.length) {
+        @if (item().children?.length) {
           @if (expanded()) {
             <div class="nav-item--without-overlay__children">
               @for (child of item().children; track child.uniqueId) {
@@ -35,7 +35,7 @@
           [depth]="depth()"
           [expanded]="expanded()"
           [disabled]="disabled()"
-          [showLevelArrow]="showLevelArrows() && !!item()?.children?.length"
+          [showLevelArrow]="showLevelArrows() && !!item().children?.length"
           [routeMatchOptions]="routeMatchOptions()" />
         <div class="nav-item--with-overlay__overlay mat-elevation-z4">
           @for (child of item().children; track child.label) {

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { TranslateLoader } from '@ngx-translate/core';
+import { TranslateLoader, TranslationObject } from '@ngx-translate/core';
 
 /**
  * Custom ngx-translate translation loader that combines translation files from subprojects with translations from this
@@ -17,8 +17,8 @@ export class MergingTranslateLoader implements TranslateLoader {
   /**
    * Combines translations from subprojects with dynamically loaded translations/overrides for this project.
    */
-  public getTranslation(lang: string): Observable<object> {
-    return this.http.get(`${this.prefix}${lang}${this.suffix}`).pipe(
+  public getTranslation(lang: string): Observable<TranslationObject> {
+    return this.http.get<TranslationObject>(`${this.prefix}${lang}${this.suffix}`).pipe(
       map(translations => ({
         ...translations,
       }))

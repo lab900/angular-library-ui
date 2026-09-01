@@ -1,41 +1,79 @@
 # Changelog
 
+## 22.0.9
+
+- security updates to npm package versions and pipelines, no code changes
+
+- Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
+  - updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
+  - the showcase app now compiles the library sources instead of `dist/@lab900/ui`.
+    A library build is no longer needed for local development, see the
+    [README](README.md#run-the-project-locally).
+
+#### Breaking Changes for Merger Component:
+
+- The component is now fully signal-based.
+- `Lab900MergerComponent` now runs with `ChangeDetectionStrategy.OnPush`.
+- `result` is a signal: use `merger.result()`.
+- `leftObject` and `rightObject` are required inputs. An input that is never bound throws NG0950.
+- `selected` is a model signal, no longer a plain property.
+- `loading` is a plain input, no longer a model. The `loadingChange` event is gone.
+- `schema` is an input with a `schemaChange` output, no longer a model. `[schema]` and `[(schema)]` keep
+  working, but the event is now asynchronous.
+- `toggleActive(config, index)` is now `toggleActive(index)`.
+- `setInitialValues()` and `compare()` are no longer public.
+- a combined list always starts with the master side. The old toggle path put the left side first.
+- a write to `selected` from the parent clears the merge choices, exactly like the radio buttons do.
+
 ## 19.2.8
+
 - Fix: CellWithAnchorRendererComponent empty cell display
 
 ## 19.2.7
+
 - Fix: table with input "multiSort=false" will now be able to toggle between 'asc', 'desc', and 'no sorting', instead of just 'asc' and 'desc'.
 
 ## 19.2.6
+
 - Feat: add support dynamic tooltip on action button
 
 ## 19.2.5
+
 - Fix: import issue from hashed packages
 
 ## 19.2.4
+
 - Chore: update vulnerable package, still one left (angular-cli-ghpages, waiting on an update)
 
 ## 19.2.3
-- Fix: hover issue for action buttons with multi-level sub menus 
+
+- Fix: hover issue for action buttons with multi-level sub menus
 - Fix: re-render warnings because of wrong trackers on navigation for loops.
 
 ## 19.2.2
+
 ### Filter header only toggle columns
+
 - Fixed an issue where the header filter toggle would not properly show the state of the cells that are hidden/shown.
 
 ## 19.2.1
+
 ### Show header filter fixes
+
 - Fixed an issue where the header filter would not show up when `visibleCells` and `hiddenCells` contains items and add new param `showHeaderFilter` to explicitly show/hide the header filter.
 
 ## 19.2.0
+
 #### Breaking Changes
+
 - ActionButton's sub-actions now support reactive options.
-Meaning the number of sub-actions can change dynamically based on the row-data of a table. (e.g. every row having a 
-  different number of files to download). This can be breaking if you were dynamically adding sub-actions to the 
+  Meaning the number of sub-actions can change dynamically based on the row-data of a table. (e.g. every row having a
+  different number of files to download). This can be breaking if you were dynamically adding sub-actions to the
   array after initialization.
 
 ## 19.1.5
-- this version is deprecated, and the version tag was removed, since it contains some breaking changes in comparison to 
+
+- this version is deprecated, and the version tag was removed, since it contains some breaking changes in comparison to
   19.1.4
 
 ## 19.1.4

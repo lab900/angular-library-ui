@@ -79,8 +79,24 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
     return this.matTable.dataSource as T[];
   }
 
+  /**
+   * Since Angular Material v22 an overlay (for example the select panel) is rendered inline,
+   * inside the element that opened it, instead of in the overlay container on the body.
+   * Events from such an overlay bubble up to the td and must not start or restart the cell editor.
+   * Therefore we look at the full ancestor chain and not only at the event target itself.
+   * The overlay can already be removed from the DOM when the event gets to the td.
+   * In that case the target is not a part of the cell anymore and we ignore the event too.
+   */
+  private isDisabledCellEvent(event: Event): boolean {
+    const target = event.target as HTMLElement | null;
+    if (!target) {
+      return false;
+    }
+    return !!target.closest?.('.disable-td-event, .cdk-overlay-pane') || !this.cellElement.contains(target);
+  }
+
   private onClick(event: MouseEvent): void {
-    if (!event.shiftKey && (event.target as HTMLElement)?.classList?.contains('disable-td-event')) {
+    if (!event.shiftKey && this.isDisabledCellEvent(event)) {
       return;
     }
     const clickFn = this.cell().click;
@@ -107,7 +123,7 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
     switch (event.key) {
       case 'ArrowUp':
       case 'ArrowDown': {
-        if (!event.shiftKey && (event.target as HTMLElement)?.classList?.contains('disable-td-event')) {
+        if (!event.shiftKey && this.isDisabledCellEvent(event)) {
           return;
         }
         event.preventDefault();

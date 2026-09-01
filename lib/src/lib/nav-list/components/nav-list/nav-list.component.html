@@ -4,7 +4,7 @@
       <div class="nav-list-group">
         @if (group.label || group.icon) {
           <div class="nav-list-group__wrapper">
-            @if (group.icon && (group.icon?.position === 'left' || !group.icon?.position)) {
+            @if (group.icon && (group.icon.position === 'left' || !group.icon.position)) {
               <lab900-icon class="nav-list-group__icon-left" [icon]="group.icon" />
             }
             @if (group.label) {
@@ -12,7 +12,7 @@
                 {{ group.label | translate }}
               </div>
             }
-            @if (!showLevelArrows() && group.icon && group.icon?.position === 'right') {
+            @if (!showLevelArrows() && group.icon && group.icon.position === 'right') {
               <lab900-icon class="nav-list-group__icon-right" [icon]="group.icon" />
             }
           </div>
