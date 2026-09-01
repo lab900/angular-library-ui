@@ -1,17 +1,14 @@
 # Changelog
 
-## 22.0.8
+## 22.0.9
 
 - security updates to npm package versions and pipelines, no code changes
 
-## 22.0.5
-
-Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
-
-- updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
-- the showcase app now compiles the library sources instead of `dist/@lab900/ui`.
-  A library build is no longer needed for local development, see the
-  [README](README.md#run-the-project-locally).
+- Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
+  - updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
+  - the showcase app now compiles the library sources instead of `dist/@lab900/ui`.
+    A library build is no longer needed for local development, see the
+    [README](README.md#run-the-project-locally).
 
 #### Breaking Changes for Merger Component:
 
