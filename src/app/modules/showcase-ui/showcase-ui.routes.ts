@@ -32,6 +32,11 @@ export default [
     loadComponent: () => import('../shared/components/markdown-page/markdown-page.component'),
     data: { filePath: 'guides/getting-started.md' },
   },
+  {
+    path: 'changelog',
+    loadComponent: () => import('../shared/components/markdown-page/markdown-page.component'),
+    data: { filePath: 'CHANGELOG.md' },
+  },
   new ShowcaseRoute(
     'buttons',
     'Buttons',

@@ -38,6 +38,11 @@
               "src/assets",
               "src/guides",
               {
+                "glob": "CHANGELOG.md",
+                "input": ".",
+                "output": "/"
+              },
+              {
                 "glob": "**/*-example.component.*",
                 "input": "src/app/modules/showcase-ui/examples",
                 "output": "/examples"

@@ -20,6 +20,11 @@ export const showcaseUiNavItems = (matDrawer?: MatDrawer, shouldClose?: boolean)
             route: 'getting-started',
             navigationFinished: () => navigationFinished(matDrawer, shouldClose),
           },
+          {
+            label: 'label.changelog',
+            route: 'changelog',
+            navigationFinished: () => navigationFinished(matDrawer, shouldClose),
+          },
         ],
       },
       {
