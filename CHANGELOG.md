@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Feat: expandable table rows. Add a `lab900TableRowDetail` template to `lab900-table` and a click on a row
+  expands it with that content below it.
+  - `expandableRows` input (`ExpandableRows`): `enabled`, `multiple` (default `true`), `isExpandable` and `compareFn`.
+  - `expandedRows` model to expand or collapse rows from the parent, and a `rowExpandToggle` output.
+  - public methods `toggleRowExpansion`, `expandRow`, `collapseRow`, `collapseAllRows` and `isRowExpanded`, for example
+    to toggle a row from a table row action.
+  - switching tabs collapses all rows, and a dragged row collapses when the drag starts.
+
 ## 22.0.9
 
 - security updates to npm package versions and pipelines, no code changes
