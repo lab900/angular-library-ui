@@ -19,6 +19,7 @@ import { TableDragAndDropExampleComponent } from './examples/table-drag-and-drop
 import { TableTabsExampleComponent } from './examples/table-tabs-example/table-tabs-example.component';
 import { TableExpandableRowsExampleComponent } from './examples/table-expandable-rows-example/table-expandable-rows-example.component';
 import { ActionButtonExampleComponent } from './examples/action-button-example/action-button-example.component';
+import { tableApi } from './showcase-ui.api';
 
 export default [
   {
@@ -53,53 +54,59 @@ export default [
       'Routes, external links, nested levels, and how routeMatchOptions decides which item is active.'
     ),
   ]),
-  new ShowcaseRoute('table', 'Table', [
-    new ShowcaseExample(
-      TableExampleComponent,
-      'Basic table',
-      'The minimum: tableCells for the columns, data, and trackByTableFn. Nested keys and cellFormatter.'
-    ),
-    new ShowcaseExample(
-      TableSortingExampleComponent,
-      'Sorting',
-      'Sortable columns with multiSort. The table emits sortChange; you sort the data.'
-    ),
-    new ShowcaseExample(
-      TableInlineEditingExampleComponent,
-      'Inline editing',
-      'Input and select editors per column, disabled per row. The table emits cellValueChanged; you save the value.'
-    ),
-    new ShowcaseExample(
-      TableCustomContentExampleComponent,
-      'Custom content and styling',
-      'Header actions, content slots, an empty state, row and cell classes, footers and row clicks.'
-    ),
-    new ShowcaseExample(
-      TableRowActionsExampleComponent,
-      'Row actions',
-      'Actions at the start and end of each row, with a tooltip, state and sub actions per row.'
-    ),
-    new ShowcaseExample(
-      TableSelectionExampleComponent,
-      'Selectable rows',
-      'Checkboxes with select all, an initial selection, and rows that cannot be selected.'
-    ),
-    new ShowcaseExample(
-      TableDragAndDropExampleComponent,
-      'Drag and drop rows',
-      'A draggable row action turns on drag and drop. The table emits tableRowOrderChange; you reorder the data.'
-    ),
-    new ShowcaseExample(
-      TableTabsExampleComponent,
-      'Tabs',
-      'Tabs above the table, one with its own columns. Bind activeTabId to load the data of the tab.'
-    ),
-    new ShowcaseExample(
-      TableExpandableRowsExampleComponent,
-      'Expandable rows',
-      'A lab900TableRowDetail template below a row. Click a row to expand it; bind expandedRows to control it.'
-    ),
-  ]),
+  new ShowcaseRoute(
+    'table',
+    'Table',
+    [
+      new ShowcaseExample(
+        TableExampleComponent,
+        'Basic table',
+        'The minimum: tableCells for the columns, data, and trackByTableFn. Nested keys and cellFormatter.'
+      ),
+      new ShowcaseExample(
+        TableSortingExampleComponent,
+        'Sorting',
+        'Sortable columns with multiSort. The table emits sortChange; you sort the data.'
+      ),
+      new ShowcaseExample(
+        TableInlineEditingExampleComponent,
+        'Inline editing',
+        'Input and select editors per column, disabled per row. The table emits cellValueChanged; you save the value.'
+      ),
+      new ShowcaseExample(
+        TableCustomContentExampleComponent,
+        'Custom content and styling',
+        'Header actions, content slots, an empty state, row and cell classes, footers and row clicks.'
+      ),
+      new ShowcaseExample(
+        TableRowActionsExampleComponent,
+        'Row actions',
+        'Actions at the start and end of each row, with a tooltip, state and sub actions per row.'
+      ),
+      new ShowcaseExample(
+        TableSelectionExampleComponent,
+        'Selectable rows',
+        'Checkboxes with select all, an initial selection, and rows that cannot be selected.'
+      ),
+      new ShowcaseExample(
+        TableDragAndDropExampleComponent,
+        'Drag and drop rows',
+        'A draggable row action turns on drag and drop. The table emits tableRowOrderChange; you reorder the data.'
+      ),
+      new ShowcaseExample(
+        TableTabsExampleComponent,
+        'Tabs',
+        'Tabs above the table, one with its own columns. Bind activeTabId to load the data of the tab.'
+      ),
+      new ShowcaseExample(
+        TableExpandableRowsExampleComponent,
+        'Expandable rows',
+        'A lab900TableRowDetail template below a row. Click a row to expand it; bind expandedRows to control it.'
+      ),
+    ],
+    undefined,
+    tableApi
+  ),
   new ShowcaseRoute('page-header', 'Page header', [
     new ShowcaseExample(
       PageHeaderExampleComponent,

@@ -107,6 +107,13 @@ To add an example:
 
 Examples import from `@lab900/ui`, never through a relative path into `lib/`.
 
+The API tab is generated. `npm run docs:api` (`scripts/generate-api-docs.mjs`) reads every export
+of `lib/src/public-api.ts` with the TypeScript compiler API and writes `src/assets/api/api.json`:
+inputs, models and outputs of components and directives, interface properties, JSDoc. The file is
+git-ignored; `prestart`, `prebuild` and `predeploy:showcase` regenerate it. A page gets the tab by
+passing `ShowcaseApiSection[]` (from `showcase-ui.api.ts`) as the fifth `ShowcaseRoute` argument.
+Descriptions come from the JSDoc in `lib/`, so document a new public field there.
+
 ## Testing
 
 Jest with `jest-preset-angular`, run directly. `jest.config.js` is the whole configuration: no

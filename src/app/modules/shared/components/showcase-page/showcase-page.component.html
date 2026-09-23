@@ -18,6 +18,9 @@
             </div>
           }
         }
+        @case ('api') {
+          <lab900-api-docs [sections]="data()?.api ?? []" />
+        }
       }
     </mat-tab-nav-panel>
   </div>
