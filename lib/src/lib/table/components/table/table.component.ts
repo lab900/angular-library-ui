@@ -47,7 +47,7 @@ import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900TableHeaderComponent } from '../table-header/lab900-table-header.component';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
 import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
@@ -89,7 +89,6 @@ export interface SelectableRows<T = any> {
     Lab900TableHeaderComponent,
     NgTemplateOutlet,
     Lab900TableTabsComponent,
-    NgClass,
     CdkDropList,
     TableCellSelectComponent,
     Lab900TableCellComponent,
@@ -145,7 +144,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     return columns.filter(c => !!c.key).sort(Lab900TableService.reorderColumnsFn);
   });
 
-  public readonly visibleColumns = computed(() => [...this.columns()].filter(c => !c.hide));
+  public readonly visibleColumns = computed(() => this.columns().filter(c => !c.hide));
   public readonly showCellFooters = computed(() => this.visibleColumns().some(c => Object.hasOwn(c, 'footer')));
 
   public readonly tableTabs = input<Lab900TableTab<TabId, T>[] | undefined>(undefined);
@@ -192,6 +191,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
    * The expanded rows. Bind it two-way to expand or collapse rows from the parent.
    */
   public readonly expandedRows = model<T[]>([]);
+
+  /**
+   * Lookup set for the expanded rows, used when rows are compared by reference
+   */
+  private readonly expandedRowSet = computed(() => new Set(this.expandedRows()));
 
   /**
    * Show columns filter to hide/show columns
@@ -330,7 +334,12 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
         return;
       }
       const expanded = untracked(this.expandedRows);
-      const remaining = expanded.filter(row => data.some(d => this.compareRows(d, row)));
+      if (!expanded.length) {
+        return;
+      }
+      const hasCompareFn = !!untracked(this.expandableRows)?.compareFn;
+      const dataSet = hasCompareFn ? undefined : new Set(data);
+      const remaining = expanded.filter(row => dataSet?.has(row) ?? data.some(d => this.compareRows(d, row)));
       if (remaining.length !== expanded.length) {
         untracked(() => this.expandedRows.set(remaining));
       }
@@ -389,6 +398,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   public isRowExpanded(row: T): boolean {
+    if (!this.expandableRows()?.compareFn) {
+      return this.expandedRowSet().has(row);
+    }
     return this.expandedRows().some(r => this.compareRows(r, row));
   }
 

@@ -12,7 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
   encapsulation: ViewEncapsulation.None,
   template: `
     <mat-checkbox
-      [matTooltip]="tooltip() | translate"
+      [matTooltip]="tooltip() ? (tooltip() | translate) : ''"
       [matTooltipPosition]="tooltipPosition()"
       [checked]="cellValue()"
       [disabled]="disabled()"

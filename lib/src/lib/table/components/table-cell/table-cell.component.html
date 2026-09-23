@@ -7,16 +7,12 @@
     [ngClass]="cellHeaderClass()"
     matTooltipClass="lab900-table__mat-tooltip"
     [matTooltipDisabled]="!cell().cellHeaderTooltip"
-    [matTooltip]="cell().cellHeaderTooltip ?? '' | translate"
+    [matTooltip]="cell().cellHeaderTooltip ? (cell().cellHeaderTooltip | translate) : ''"
     [matTooltipPosition]="cell().cellHeaderTooltipPosition || 'above'"
     [style.width]="columnWidth()"
     [style.max-width]="columnMaxWidth()">
-    @defer (on viewport; prefetch on idle) {
-      <ng-container
-        *ngComponentOutlet="columnHeaderTemplate(); inputs: { columnConfig: cell(), disableSort: disableSort() }" />
-    } @placeholder {
-      <div class="lab900-deferred-cell-placeholder"></div>
-    }
+    <ng-container
+      *ngComponentOutlet="columnHeaderTemplate(); inputs: { columnConfig: cell(), disableSort: disableSort() }" />
   </th>
   <td
     mat-cell

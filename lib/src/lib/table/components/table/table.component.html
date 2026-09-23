@@ -111,7 +111,7 @@
             <tr
               mat-row
               *matRowDef="let row; columns: displayedColumns(); let i = dataIndex"
-              [ngClass]="getRowClasses(row, i)"
+              [class]="getRowClasses(row, i)"
               [class.lab900-row-selected]="isRowSelected(row)"
               [style.background-color]="getRowColor(row)"
               [class.lab900-row-expanded]="isRowExpandedAt(row, i)"

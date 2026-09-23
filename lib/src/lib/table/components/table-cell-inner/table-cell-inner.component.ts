@@ -58,25 +58,27 @@ export class TableCellInnerComponent<T = any> {
   });
 
   public constructor() {
+    // separate effects, so a change of one state does not rewrite the classes of the others
     effect(() => {
-      const parentElm = this.elRef?.nativeElement?.parentElement;
+      this.parentElement()?.classList.toggle('edit-mode', !!this.isEditing());
+    });
+
+    effect(() => {
+      const parentElm = this.parentElement();
       if (parentElm) {
-        if (this.isEditing()) {
-          parentElm.classList.add('edit-mode');
-        } else {
-          parentElm.classList.remove('edit-mode');
-        }
-        if (this.canEdit()) {
-          parentElm.classList.add('editable');
-        } else {
-          parentElm.classList.remove('editable');
-        }
-        parentElm.tabIndex = this.canEdit() ? 0 : -1;
-        if (this.cellClasses()) {
-          parentElm.classList.remove(...this.previousClasses);
-          parentElm.classList.add(...this.cellClasses());
-          this.previousClasses = this.cellClasses();
-        }
+        const canEdit = !!this.canEdit();
+        parentElm.classList.toggle('editable', canEdit);
+        parentElm.tabIndex = canEdit ? 0 : -1;
+      }
+    });
+
+    effect(() => {
+      const parentElm = this.parentElement();
+      const cellClasses = this.cellClasses();
+      if (parentElm) {
+        parentElm.classList.remove(...this.previousClasses);
+        parentElm.classList.add(...cellClasses);
+        this.previousClasses = cellClasses;
       }
     });
   }
@@ -87,6 +89,10 @@ export class TableCellInnerComponent<T = any> {
     }
     this.valueChanged.emit({ value, cell, row });
   };
+
+  private parentElement(): HTMLElement | null | undefined {
+    return this.elRef?.nativeElement?.parentElement;
+  }
 
   private getCellClasses(cell: TableCell<T>, data: T): string | undefined {
     return typeof cell.cellClass === 'function' ? cell.cellClass(data, cell) : cell.cellClass;

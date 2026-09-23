@@ -29,11 +29,6 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
     );
   });
 
-  private siblingCells?: HTMLTableCellElement[];
-  private siblingRows?: HTMLTableRowElement[];
-  private rowIdx?: number;
-  private cellIdx?: number;
-
   public ngAfterViewInit(): void {
     if (!this.matTable || !this.matTable.dataSource) {
       throw new Error('MatTable [dataSource] is required');
@@ -43,11 +38,6 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
     if (!this.cellElement || this.cellElement.tagName !== 'TD') {
       throw new Error('No parent td element found for TableCellEventsDirective');
     }
-
-    this.siblingCells = this.getAllSiblingCells();
-    this.cellIdx = this.siblingCells.indexOf(this.cellElement);
-    this.siblingRows = this.getAllSiblingRows();
-    this.rowIdx = this.siblingRows.indexOf(this.cellElement.parentElement as HTMLTableRowElement);
 
     /**
      * Listen to keydown, focus and click events on the cell
@@ -112,11 +102,10 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
   }
 
   private onFocus(): void {
-    this.ngZone.run(() => {
-      if (this.editable()) {
-        this.editMode();
-      }
-    });
+    // only enter the zone when there is something to do, to avoid a change detection run on every focus
+    if (this.editable()) {
+      this.ngZone.run(() => this.editMode());
+    }
   }
 
   private onKeydown(event: KeyboardEvent): void {
@@ -150,9 +139,10 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
   }
 
   private getNextEditableSibling(position: 'before' | 'after'): void {
-    const siblings = this.siblingCells ? [...this.siblingCells] : [];
-    const cells =
-      position === 'before' ? siblings.slice(0, this.cellIdx).reverse() : siblings.slice((this.cellIdx ?? 0) + 1);
+    // read the siblings on demand, so they match the current DOM after the rows changed
+    const siblings = this.getAllSiblingCells();
+    const cellIdx = siblings.indexOf(this.cellElement);
+    const cells = position === 'before' ? siblings.slice(0, cellIdx).reverse() : siblings.slice(cellIdx + 1);
     const matching = cells.filter(cell => this.matchingCell(cell, false));
     if (matching?.[0]) {
       matching[0].focus();
@@ -162,9 +152,9 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
   }
 
   private getNextEditableSiblingOnAnotherRow(position: 'before' | 'after', sameColumn = true): void {
-    const allRows = this.siblingRows ? [...this.siblingRows] : [];
-    const rows =
-      position === 'before' ? allRows.slice(0, this.rowIdx).reverse() : allRows.slice((this.rowIdx ?? 0) + 1);
+    const allRows = this.getAllSiblingRows();
+    const rowIdx = allRows.indexOf(this.cellElement.parentElement as HTMLTableRowElement);
+    const rows = position === 'before' ? allRows.slice(0, rowIdx).reverse() : allRows.slice(rowIdx + 1);
     const matching = rows
       .map(row => {
         const childNodes = Array.from(row.childNodes) as HTMLTableCellElement[];
@@ -181,13 +171,13 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
   private getAllSiblingCells(): HTMLTableCellElement[] {
     const elm: HTMLTableCellElement = this.cellElement;
     const cells = elm.parentElement?.children;
-    return cells ? ([...Array.from(cells)] as HTMLTableCellElement[]) : [];
+    return cells ? (Array.from(cells) as HTMLTableCellElement[]) : [];
   }
 
   private getAllSiblingRows(): HTMLTableRowElement[] {
     const elm: HTMLTableCellElement = this.cellElement;
     const rows = elm.parentElement?.parentElement?.children;
-    return rows ? ([...Array.from(rows)] as HTMLTableRowElement[]) : [];
+    return rows ? (Array.from(rows) as HTMLTableRowElement[]) : [];
   }
 
   private matchingCell(cell: HTMLTableCellElement, sameColumnKey: boolean): boolean {

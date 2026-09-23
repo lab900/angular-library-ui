@@ -9,6 +9,14 @@
   - public methods `toggleRowExpansion`, `expandRow`, `collapseRow`, `collapseAllRows` and `isRowExpanded`, for example
     to toggle a row from a table row action.
   - switching tabs collapses all rows, and a dragged row collapses when the drag starts.
+- Perf: faster rendering of large tables, without API changes.
+  - all cells of a table share one `ResizeObserver` for the overflow tooltip, instead of one observer per cell.
+  - a cell no longer scans all table rows when it initializes; keyboard navigation reads the rows when a key is
+    pressed. This also fixes arrow key navigation after the rows were sorted, added, or removed.
+  - focusing a cell only runs change detection when the cell becomes editable.
+  - the `translate` pipe only runs for cell and header tooltips that have a text.
+  - expanded rows are looked up in a set when no `compareFn` is set.
+  - column headers are no longer deferred.
 
 ## 22.0.9
 

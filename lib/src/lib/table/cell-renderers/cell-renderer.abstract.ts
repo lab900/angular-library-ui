@@ -1,4 +1,3 @@
-import { Subscription } from 'rxjs';
 import { TableCell } from '../models/table-cell.model';
 import {
   AfterViewInit,
@@ -24,9 +23,6 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
   protected readonly tableService = inject(Lab900TableService);
   protected readonly ngZone = inject(NgZone);
-
-  private observer?: ResizeObserver;
-  private observerSub?: Subscription;
 
   public readonly columnConfig = input.required<TableCell<T, CellRenderOptions>>();
   public readonly data = model.required<T>();
@@ -96,8 +92,7 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
   }
 
   public ngOnDestroy(): void {
-    this.observerSub?.unsubscribe();
-    this.observer?.unobserve(this.elm.nativeElement);
+    this.tableService.unobserveResize(this.elm.nativeElement);
   }
 
   protected getCellValue(): V | string {
@@ -125,14 +120,10 @@ export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V =
    * @protected
    */
   protected observeCellContentOverflow(): void {
-    this.ngZone.runOutsideAngular(() => {
-      this.observer?.unobserve(this.elm.nativeElement);
-      this.observer = new ResizeObserver(entries => {
-        const innerScrollWidth = this.elm.nativeElement.querySelector('.lab900-cell-value')?.scrollWidth ?? 0;
-        const maxWidth = (entries[0].target as any).offsetWidth;
-        this.textOverflowing.set(innerScrollWidth > maxWidth);
-      });
-      this.observer.observe(this.elm.nativeElement);
+    this.tableService.observeResize(this.elm.nativeElement, entry => {
+      const innerScrollWidth = this.elm.nativeElement.querySelector('.lab900-cell-value')?.scrollWidth ?? 0;
+      const maxWidth = (entry.target as HTMLElement).offsetWidth;
+      this.textOverflowing.set(innerScrollWidth > maxWidth);
     });
   }
 }
