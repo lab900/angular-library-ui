@@ -112,8 +112,13 @@
     <pre class="api-code"><code>{{ symbol.example }}</code></pre>
   }
   @if (symbol.typeTokens.length) {
-    <pre
-      class="api-code"><code>type {{ symbol.name }} = <ng-container *ngTemplateOutlet="typeTpl; context: { $implicit: symbol.typeTokens }" /></code></pre>
+    @if (symbol.kind === 'enum') {
+      <pre
+        class="api-code"><code>enum {{ symbol.name }} <ng-container *ngTemplateOutlet="typeTpl; context: { $implicit: symbol.typeTokens }" /></code></pre>
+    } @else {
+      <pre
+        class="api-code"><code>type {{ symbol.name }} = <ng-container *ngTemplateOutlet="typeTpl; context: { $implicit: symbol.typeTokens }" /></code></pre>
+    }
   }
 
   @for (group of symbol.groups; track $index) {

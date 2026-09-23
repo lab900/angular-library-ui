@@ -19,7 +19,7 @@ import { TableDragAndDropExampleComponent } from './examples/table-drag-and-drop
 import { TableTabsExampleComponent } from './examples/table-tabs-example/table-tabs-example.component';
 import { TableExpandableRowsExampleComponent } from './examples/table-expandable-rows-example/table-expandable-rows-example.component';
 import { ActionButtonExampleComponent } from './examples/action-button-example/action-button-example.component';
-import { tableApi } from './showcase-ui.api';
+import { alertsApi, buttonsApi, mergerApi, navListApi, pageHeaderApi, tableApi } from './showcase-ui.api';
 
 export default [
   {
@@ -32,28 +32,44 @@ export default [
     loadComponent: () => import('../shared/components/markdown-page/markdown-page.component'),
     data: { filePath: 'guides/getting-started.md' },
   },
-  new ShowcaseRoute('buttons', 'Buttons', [
-    new ShowcaseExample(
-      ButtonExampleComponent,
-      'Buttons',
-      'Every button type, with an icon and disabled. Clicks are throttled, 500 ms by default (throttleTimeInMs).'
-    ),
-    new ShowcaseExample(
-      ActionButtonExampleComponent,
-      'Action buttons',
-      'A config object instead of inputs. Every field accepts a value, a function of the data, or a signal.'
-    ),
-  ]),
-  new ShowcaseRoute('alerts', 'Alerts', [
-    new ShowcaseExample(AlertsExampleComponent, 'Alerts', 'The four alert types. The content is projected.'),
-  ]),
-  new ShowcaseRoute('nav-list', 'Nav list', [
-    new ShowcaseExample(
-      NavListExampleComponent,
-      'Nav list',
-      'Routes, external links, nested levels, and how routeMatchOptions decides which item is active.'
-    ),
-  ]),
+  new ShowcaseRoute(
+    'buttons',
+    'Buttons',
+    [
+      new ShowcaseExample(
+        ButtonExampleComponent,
+        'Buttons',
+        'Every button type, with an icon and disabled. Clicks are throttled, 500 ms by default (throttleTimeInMs).'
+      ),
+      new ShowcaseExample(
+        ActionButtonExampleComponent,
+        'Action buttons',
+        'A config object instead of inputs. Every field accepts a value, a function of the data, or a signal.'
+      ),
+    ],
+    undefined,
+    buttonsApi
+  ),
+  new ShowcaseRoute(
+    'alerts',
+    'Alerts',
+    [new ShowcaseExample(AlertsExampleComponent, 'Alerts', 'The four alert types. The content is projected.')],
+    undefined,
+    alertsApi
+  ),
+  new ShowcaseRoute(
+    'nav-list',
+    'Nav list',
+    [
+      new ShowcaseExample(
+        NavListExampleComponent,
+        'Nav list',
+        'Routes, external links, nested levels, and how routeMatchOptions decides which item is active.'
+      ),
+    ],
+    undefined,
+    navListApi
+  ),
   new ShowcaseRoute(
     'table',
     'Table',
@@ -107,23 +123,35 @@ export default [
     undefined,
     tableApi
   ),
-  new ShowcaseRoute('page-header', 'Page header', [
-    new ShowcaseExample(
-      PageHeaderExampleComponent,
-      'Page header',
-      'A title, breadcrumbs built from data, tabs and actions. The tabs need a mat-tab-nav-panel.'
-    ),
-    new ShowcaseExample(
-      PageHeaderActionsExampleComponent,
-      'Page header actions',
-      'Actions aligned left and right, an icon action and an action with a menu.'
-    ),
-  ]),
-  new ShowcaseRoute('merger', 'Merger', [
-    new ShowcaseExample(
-      MergerExampleComponent,
-      'Merger',
-      'Compare two objects and pick values from the other side. The schema sets one row per property.'
-    ),
-  ]),
+  new ShowcaseRoute(
+    'page-header',
+    'Page header',
+    [
+      new ShowcaseExample(
+        PageHeaderExampleComponent,
+        'Page header',
+        'A title, breadcrumbs built from data, tabs and actions. The tabs need a mat-tab-nav-panel.'
+      ),
+      new ShowcaseExample(
+        PageHeaderActionsExampleComponent,
+        'Page header actions',
+        'Actions aligned left and right, an icon action and an action with a menu.'
+      ),
+    ],
+    undefined,
+    pageHeaderApi
+  ),
+  new ShowcaseRoute(
+    'merger',
+    'Merger',
+    [
+      new ShowcaseExample(
+        MergerExampleComponent,
+        'Merger',
+        'Compare two objects and pick values from the other side. The schema sets one row per property.'
+      ),
+    ],
+    undefined,
+    mergerApi
+  ),
 ] satisfies Routes;

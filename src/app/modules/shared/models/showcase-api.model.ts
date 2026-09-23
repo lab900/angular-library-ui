@@ -29,7 +29,7 @@ export interface ApiDocs {
 
 export interface ApiSymbol {
   name: string;
-  kind: 'component' | 'directive' | 'interface' | 'type';
+  kind: 'component' | 'directive' | 'interface' | 'type' | 'enum';
   typeParameters?: string;
   /** Path in the repository, with the line */
   source: string;
@@ -39,7 +39,7 @@ export interface ApiSymbol {
   selector?: string;
   abstract?: boolean;
   extends?: string[];
-  /** The type of a type alias */
+  /** The type of a type alias, or the members of an enum */
   type?: string;
   members?: ApiMember[];
 }

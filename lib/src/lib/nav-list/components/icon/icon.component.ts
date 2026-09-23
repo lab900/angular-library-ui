@@ -2,6 +2,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Icon } from '../../models/nav-item.model';
 import { MatIcon } from '@angular/material/icon';
 
+/**
+ * Shows an Icon config as a Material icon or a registered SVG icon
+ */
 @Component({
   selector: 'lab900-icon',
   changeDetection: ChangeDetectionStrategy.OnPush,

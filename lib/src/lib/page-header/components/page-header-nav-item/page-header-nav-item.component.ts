@@ -6,6 +6,9 @@ import { PageHeaderNavItem } from '../../models/page-header-nav.model';
 import { MatTabLink } from '@angular/material/tabs';
 import { MatIcon } from '@angular/material/icon';
 
+/**
+ * One tab of the page header. The page header renders it for each of its `navItems`.
+ */
 @Component({
   selector: 'lab900-page-header-nav-item',
   templateUrl: './page-header-nav-item.component.html',
@@ -16,6 +19,7 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class PageHeaderNavItemComponent {
   public readonly item = input.required<PageHeaderNavItem>();
+  /** The data that the function options of the item receive */
   public readonly data = input<any>(undefined);
 
   protected readonly label = computed(() => readPropValue(this.item().label, this.data()));

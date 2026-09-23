@@ -6,6 +6,7 @@
  *   including the ones inherited from a base class
  * - interfaces: every property, with the reactive option types marked
  * - type aliases: the type
+ * - enums: the members with their values
  *
  * Descriptions come from the JSDoc in the source. The showcase renders the file in the API tab.
  *
@@ -21,8 +22,9 @@ const entry = resolve(root, 'lib/src/public-api.ts');
 const tsconfig = resolve(root, 'lib/tsconfig.lib.json');
 const outFile = resolve(root, 'src/assets/api/api.json');
 
-const SIGNAL_FUNCTIONS = ['input', 'model', 'output'];
-const SIGNAL_TYPES = /^(?:InputSignal|InputSignalWithTransform|ModelSignal|OutputEmitterRef)<(.*)>$/s;
+/** The functions that declare a member, and the kind of member they declare */
+const SIGNAL_FUNCTIONS = { input: 'input', model: 'model', output: 'output', outputFromObservable: 'output' };
+const SIGNAL_TYPES = /^(?:InputSignal|InputSignalWithTransform|ModelSignal|OutputEmitterRef|OutputRef)<(.*)>$/s;
 
 /** Which fields accept more than a plain value, see `lib/src/lib/utils/utils.ts` */
 const REACTIVE_TYPES = [
@@ -76,6 +78,9 @@ function describeDeclaration(declaration, symbol) {
   }
   if (ts.isTypeAliasDeclaration(declaration)) {
     return { ...base('type', declaration, symbol), type: text(declaration.type) };
+  }
+  if (ts.isEnumDeclaration(declaration)) {
+    return { ...base('enum', declaration, symbol), type: `{ ${declaration.members.map(m => text(m)).join(', ')} }` };
   }
   return undefined;
 }
@@ -141,7 +146,7 @@ function describeClassMember(member) {
   };
 }
 
-/** Reads `input()`, `input.required()`, `model()`, `model.required()` and `output()` */
+/** Reads `input()`, `input.required()`, `model()`, `model.required()`, `output()` and `outputFromObservable()` */
 function readSignalFunction(member) {
   const call = ts.isPropertyDeclaration(member) ? member.initializer : undefined;
   if (!call || !ts.isCallExpression(call)) {
@@ -150,16 +155,17 @@ function readSignalFunction(member) {
   const callee = call.expression;
   const required = ts.isPropertyAccessExpression(callee) && callee.name.text === 'required';
   const fn = (required ? callee.expression : callee).getText();
-  if (!SIGNAL_FUNCTIONS.includes(fn)) {
+  const kind = Object.hasOwn(SIGNAL_FUNCTIONS, fn) ? SIGNAL_FUNCTIONS[fn] : undefined;
+  if (!kind) {
     return undefined;
   }
   const typeNode = call.typeArguments?.[0];
   const optionsArg = fn === 'output' || required ? call.arguments[0] : call.arguments[1];
   const alias = optionsArg && ts.isObjectLiteralExpression(optionsArg) ? readProperty(optionsArg, 'alias') : undefined;
-  const defaultValue = !required && fn !== 'output' ? call.arguments[0]?.getText() : undefined;
+  const defaultValue = !required && kind !== 'output' ? call.arguments[0]?.getText() : undefined;
   return {
     name: alias && ts.isStringLiteralLike(alias) ? alias.text : member.name.getText(),
-    kind: fn,
+    kind,
     type: typeNode ? text(typeNode) : signalValueType(member),
     required: required || undefined,
     default: defaultValue && defaultValue !== 'undefined' ? defaultValue : undefined,
@@ -169,7 +175,10 @@ function readSignalFunction(member) {
 
 /** The value type of a signal without a type argument, `boolean` for `InputSignal<boolean>` */
 function signalValueType(member) {
-  const type = checker.typeToString(checker.getTypeAtLocation(member.name), member, ts.TypeFormatFlags.NoTruncation);
+  const type = checker
+    .typeToString(checker.getTypeAtLocation(member.name), member, ts.TypeFormatFlags.NoTruncation)
+    // a type the file does not import comes out as `import("@angular/core").OutputRef<T>`
+    .replace(/import\("[^"]*"\)\./g, '');
   return (
     type
       .match(SIGNAL_TYPES)?.[1]

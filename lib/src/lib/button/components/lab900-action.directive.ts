@@ -8,17 +8,21 @@ import {
 import { TooltipPosition } from '@angular/material/tooltip';
 import { ActionButton } from '../models/action-button.model';
 
+/**
+ * Resolves an ActionButton config into signals: label, icons, disabled, hidden and tooltip. The action buttons
+ * extend it; use it on your own element to render an action your way.
+ */
 @Directive({
   selector: '[lab900Action]',
   exportAs: 'lab900Action',
 })
 export class Lab900ActionDirective<T = undefined> {
+  /** The config of the button */
   public readonly action = input.required<ActionButton<T>>();
 
-  /**
-   * The data is not required, this should be reflected in the generic T type.
-   * This computed is to work around typescript complaining
-   */
+  // The data is not required, this should be reflected in the generic T type.
+  // The `data` computed below works around typescript complaining.
+  /** The data that the function options of the config receive */
   public readonly _data = input<T | undefined>(undefined, { alias: 'data' });
   public readonly data = computed(() => {
     return this._data() as T;
