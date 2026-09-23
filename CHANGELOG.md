@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 22.1.0
 
 - Feat: expandable table rows. Add a `lab900TableRowDetail` template to `lab900-table` and a click on a row
   expands it with that content below it.
