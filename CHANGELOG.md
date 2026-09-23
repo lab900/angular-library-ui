@@ -17,6 +17,20 @@
   - the `translate` pipe only runs for cell and header tooltips that have a text.
   - expanded rows are looked up in a set when no `compareFn` is set.
   - column headers are no longer deferred.
+- Perf: lighter action buttons and nav list, without API changes.
+  - `lab900PreventDoubleClick` throttles with a timestamp instead of signals, rxjs and a timer per click. The
+    `throttledClick` output now emits synchronously inside the click event. This fixes `keepMenuOpen`, whose
+    `stopPropagation()` ran too late.
+  - the sub actions menu of an action button only renders its items while the menu is open.
+  - the `translate` pipe only runs for action button tooltips that have a text.
+  - `lab900-button` uses class bindings instead of `ngClass`.
+  - the nav list keeps the ids of its items when it recomputes, so it no longer recreates the whole tree.
+    It also no longer changes the `NavItemGroup` and `NavItem` objects passed in, so an item that `hide` hid comes back
+    once `hide` returns `false`.
+  - a nav item checks the `allowOverlayMenuUntil` breakpoint once per change instead of on every check, and an
+    item with `childrenInOverlay` now follows window resizes.
+- Fix: `hide` on a sub action of a toggle action button now hides that option. Before, the options only
+  looked at the `hide` of the toggle itself.
 
 ## 22.0.9
 

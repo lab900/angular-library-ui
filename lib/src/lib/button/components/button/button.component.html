@@ -6,7 +6,8 @@
       mat-raised-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
-      [ngClass]="classList()"
+      [class.prefixIcon]="!!prefixIcon()"
+      [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
@@ -21,7 +22,8 @@
       mat-stroked-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
-      [ngClass]="classList()"
+      [class.prefixIcon]="!!prefixIcon()"
+      [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
@@ -36,7 +38,8 @@
       mat-flat-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
-      [ngClass]="classList()"
+      [class.prefixIcon]="!!prefixIcon()"
+      [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
@@ -105,7 +108,8 @@
       mat-button
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
-      [ngClass]="classList()"
+      [class.prefixIcon]="!!prefixIcon()"
+      [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"

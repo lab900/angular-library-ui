@@ -12,7 +12,19 @@ const hide = (i: { hide?: (() => boolean) | boolean }): boolean => {
 };
 
 let uniqueIdCounter = 0;
-const uniqueId = (): string => `${++uniqueIdCounter}`;
+const uniqueIds = new WeakMap<NavItem | NavItemGroup, string>();
+
+/**
+ * The id belongs to the config object, so a recompute keeps the ids and the @for loops keep their views.
+ */
+const uniqueId = (source: NavItem | NavItemGroup): string => {
+  let id = uniqueIds.get(source);
+  if (!id) {
+    id = `${++uniqueIdCounter}`;
+    uniqueIds.set(source, id);
+  }
+  return id;
+};
 
 @Component({
   selector: 'lab900-nav-list',
@@ -33,21 +45,19 @@ export class Lab900NavListComponent {
     const groups = this.navItemGroups();
     return groups
       .filter(g => !hide(g))
-      .map(g => {
-        g.items = this.filterNavItems(g.items);
-        return { ...g, uniqueId: uniqueId() };
-      })
-      .filter(g => !!g.items?.length);
+      .map(g => ({ ...g, items: this.filterNavItems(g.items ?? []), uniqueId: uniqueId(g) }))
+      .filter(g => !!g.items.length);
   });
 
   private filterNavItems(items: NavItem[]): NavItem[] {
-    return [...items]
+    return items
       .filter(i => !hide(i))
       .map(i => {
+        const item: NavItem = { ...i, uniqueId: uniqueId(i) };
         if (i?.children?.length) {
-          i.children = this.filterNavItems(i.children);
+          item.children = this.filterNavItems(i.children);
         }
-        return { ...i, uniqueId: uniqueId() };
+        return item;
       })
       .filter(i => !!i?.children?.length || i?.route || i?.href);
   }

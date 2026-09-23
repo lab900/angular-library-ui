@@ -6,7 +6,7 @@
       mat-menu-item
       [matMenuTriggerFor]="sub"
       [disabled]="menuItemDisabled()"
-      [matTooltip]="tooltipValue() | translate"
+      [matTooltip]="tooltipValue() ? (tooltipValue() | translate) : ''"
       [matTooltipPosition]="tooltipPosition()"
       (mouseenter)="trigger.openMenu()"
       lab900PreventDoubleClick>
@@ -19,19 +19,22 @@
       }
     </button>
     <mat-menu #sub="matMenu">
-      @for (action of _subActions; track action.label) {
-        <!-- please keep this mat-menu-item wrapper, it's fake but angular mat menu needs it in the same component -->
-        <button mat-menu-item [disabled]="disabled()" style="padding: 0">
-          <lab900-action-button-menu-item [action]="action" [data]="data()" [menuDisabled]="disabled()" />
-        </button>
-      }
+      <!-- lazy: the menu items only render while the menu is open -->
+      <ng-template matMenuContent>
+        @for (action of _subActions; track action.label) {
+          <!-- please keep this mat-menu-item wrapper, it's fake but angular mat menu needs it in the same component -->
+          <button mat-menu-item [disabled]="disabled()" style="padding: 0">
+            <lab900-action-button-menu-item [action]="action" [data]="data()" [menuDisabled]="disabled()" />
+          </button>
+        }
+      </ng-template>
     </mat-menu>
   } @else {
     <button
       mat-menu-item
       (throttledClick)="doAction($event)"
       [disabled]="menuItemDisabled()"
-      [matTooltip]="tooltipValue() | translate"
+      [matTooltip]="tooltipValue() ? (tooltipValue() | translate) : ''"
       [matTooltipPosition]="tooltipPosition()"
       lab900PreventDoubleClick>
       @if (prefixIcon(); as icon) {
