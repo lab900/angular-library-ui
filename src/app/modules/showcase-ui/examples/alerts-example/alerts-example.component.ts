@@ -1,24 +1,19 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Alert, AlertComponent } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-alerts-example',
   imports: [AlertComponent],
-  // eslint-disable-next-line
-  changeDetection: ChangeDetectionStrategy.Eager,
+  styles: ['.alerts { display: flex; flex-direction: column; gap: 16px; }'],
   template: `
-    <lab900-alert [type]="Error">This is an error!</lab900-alert>
-    <br />
-    <lab900-alert [type]="Warn">This is a warning!</lab900-alert>
-    <br />
-    <lab900-alert [type]="Success">This is a success message!</lab900-alert>
-    <br />
-    <lab900-alert [type]="Info">This is an info message!</lab900-alert>
+    <div class="alerts">
+      <lab900-alert [type]="Alert.Error">Something went wrong while saving.</lab900-alert>
+      <lab900-alert [type]="Alert.Warn">You have unsaved changes.</lab900-alert>
+      <lab900-alert [type]="Alert.Success">Your changes are saved.</lab900-alert>
+      <lab900-alert [type]="Alert.Info">This page refreshes every 5 minutes.</lab900-alert>
+    </div>
   `,
 })
 export class AlertsExampleComponent {
-  public readonly Info = Alert.Info;
-  public readonly Warn = Alert.Warn;
-  public readonly Error = Alert.Error;
-  public readonly Success = Alert.Success;
+  protected readonly Alert = Alert;
 }

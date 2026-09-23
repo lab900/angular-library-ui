@@ -1,68 +1,51 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 import { Lab900NavListComponent, NavItemGroup } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-nav-list-example',
   imports: [Lab900NavListComponent],
-  // eslint-disable-next-line
-  changeDetection: ChangeDetectionStrategy.Eager,
-  template:
-    '<lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true" [routeMatchOptions]="matchOptions"/>',
+  template: `
+    <lab900-nav-list [navItemGroups]="navItemGroups" [showLevelArrows]="true" [routeMatchOptions]="matchOptions" />
+  `,
 })
 export class NavListExampleComponent {
-  public matchOptions: IsActiveMatchOptions = {
+  // the default for every item: the path must match, extra query params are allowed
+  protected readonly matchOptions: IsActiveMatchOptions = {
     paths: 'exact',
     queryParams: 'subset',
     matrixParams: 'subset',
     fragment: 'ignored',
   };
-  public navItemGroups: NavItemGroup[] = [
+
+  protected readonly navItemGroups: NavItemGroup[] = [
     {
-      icon: {
-        name: 'home',
-        position: 'right',
-      },
-      label: 'Nav group 1',
+      label: 'Links',
+      icon: { name: 'link', position: 'right' },
       items: [
+        { label: 'Route: Table page', route: '/table', icon: { name: 'table_chart' } },
+        { label: 'Route: this page (active)', route: '/nav-list' },
         {
-          label: 'External link',
-          href: { url: 'https://www.google.be', target: '_blank' },
+          label: 'External, new tab',
+          href: { url: 'https://angular.dev', target: '_blank' },
           icon: { name: 'open_in_new', position: 'right' },
         },
+        { label: 'External, same tab', href: { url: 'https://angular.dev', target: '_self' } },
+      ],
+    },
+    {
+      label: 'Nested levels',
+      items: [
         {
-          label: 'External link',
-          href: { url: 'https://www.google.be', target: '_self' },
-        },
-        {
-          icon: {
-            name: 'edit',
-          },
-          label: 'Sub level',
+          label: 'Level 1',
+          icon: { name: 'folder' },
           children: [
+            { label: 'Level 2: Buttons page', route: '/buttons' },
             {
-              icon: {
-                name: 'open_in_new',
-                position: 'right',
-              },
-              label: 'Actual link',
-              route: '/nav-list',
-            },
-            {
-              label: 'Actual link',
-              route: '/',
-            },
-            {
-              label: 'Sub level 2',
+              label: 'Level 2',
               children: [
-                {
-                  label: 'Actual link',
-                  href: { url: 'https://www.google.be', target: '_blank' },
-                },
-                {
-                  label: 'Actual link',
-                  route: '/',
-                },
+                { label: 'Level 3: Alerts page', route: '/alerts' },
+                { label: 'Level 3: this page (active)', route: '/nav-list' },
               ],
             },
           ],
@@ -70,77 +53,21 @@ export class NavListExampleComponent {
       ],
     },
     {
-      label: 'Nav group 2',
+      label: 'Route matching',
       items: [
         {
-          label: 'Sub level',
-          children: [
-            {
-              label: 'Actual link',
-              route: '/nav-list',
-            },
-            {
-              label: 'Actual link',
-              route: '/',
-            },
-            {
-              label: 'Sub level 2',
-              children: [
-                {
-                  label: 'Actual link',
-                  route: '/nav-list',
-                },
-                {
-                  label: 'Actual link',
-                  route: '/',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      label: 'Match Paths',
-      items: [
-        {
-          label: 'Item with children',
-          children: [
-            {
-              label: 'child 1',
-              href: {
-                url: '/nav-list',
-                target: '_blank',
-              },
-            },
-          ],
-        },
-        {
-          label: 'Exact path / exact query params',
+          // only active with exactly these query params, so the extra param keeps it inactive here
+          label: 'Exact query params (inactive)',
           route: '/nav-list',
-          routeQueryParams: {
-            tab: 'examples',
-            extraParam: 'random',
-          },
-          routeMatchOptions: {
-            paths: 'exact',
-            queryParams: 'exact',
-            matrixParams: 'ignored',
-            fragment: 'ignored',
-          },
+          routeQueryParams: { tab: 'examples', extraParam: 'random' },
+          routeMatchOptions: { paths: 'exact', queryParams: 'exact', matrixParams: 'ignored', fragment: 'ignored' },
         },
         {
-          label: 'Exact path / query param subset',
+          // active as long as the current url contains these query params
+          label: 'Query param subset (active)',
           route: '/nav-list',
-          routeQueryParams: {
-            tab: 'examples',
-          },
-          routeMatchOptions: {
-            paths: 'subset',
-            queryParams: 'subset',
-            matrixParams: 'ignored',
-            fragment: 'ignored',
-          },
+          routeQueryParams: { tab: 'examples' },
+          routeMatchOptions: { paths: 'subset', queryParams: 'subset', matrixParams: 'ignored', fragment: 'ignored' },
         },
       ],
     },

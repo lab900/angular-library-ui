@@ -11,8 +11,8 @@
             <div style="padding: 30px 0 0">
               <lab900-example-viewer
                 [extensions]="example.extensions"
-                [fileDir]="example?.fileFolder"
-                [exampleTitle]="example.title ?? ''">
+                [exampleTitle]="example.title ?? ''"
+                [exampleDescription]="example.description">
                 <ng-container [ngComponentOutlet]="example.component" />
               </lab900-example-viewer>
             </div>

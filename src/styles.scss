@@ -142,16 +142,6 @@ p {
   border-right: none;
 }
 
-// Material lays the icon of an icon button out inline, in the button's line box. That line box is
-// taller than the icon, so the icon sits about 4px too low. Flex centers it regardless of the font.
-// The class is doubled because Material's component styles load after this file with the same
-// specificity, and would otherwise reset `display` to `inline-block`.
-.mat-mdc-icon-button.mat-mdc-icon-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
 // Cards get their weight from a border and background contrast, not from a shadow.
 .mat-mdc-card.lab900-card {
   display: flex;
