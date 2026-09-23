@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, untracked } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ShowcaseRouteData } from '../../models/showcase-route.model';
-import { Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
 import MarkdownPageComponent from '../markdown-page/markdown-page.component';
 import { ExampleViewerComponent } from '../example-viewer/example-viewer.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NgComponentOutlet } from '@angular/common';
 import { Observable } from 'rxjs';
-import { MatTabNavPanel } from '@angular/material/tabs';
+import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { ApiDocsComponent } from '../api-docs/api-docs.component';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 type ShowcaseTab = 'guide' | 'examples' | 'api';
 
@@ -20,9 +20,11 @@ type ShowcaseTab = 'guide' | 'examples' | 'api';
   imports: [
     MarkdownPageComponent,
     ExampleViewerComponent,
-    Lab900PageHeaderComponent,
     NgComponentOutlet,
+    MatTabNav,
+    MatTabLink,
     MatTabNavPanel,
+    RouterLink,
     ApiDocsComponent,
   ],
 })
@@ -30,10 +32,10 @@ export class ShowcasePageComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
 
-  private readonly navByTab: Record<ShowcaseTab, PageHeaderNavItem> = {
-    guide: { label: 'Guide', queryParams: { tab: 'guide' } },
-    examples: { label: 'Examples', queryParams: { tab: 'examples' } },
-    api: { label: 'API', queryParams: { tab: 'api' } },
+  protected readonly tabLabels: Record<ShowcaseTab, string> = {
+    guide: 'Guide',
+    examples: 'Examples',
+    api: 'API',
   };
 
   public queryParams = toSignal(this.activatedRoute.queryParams);
@@ -43,9 +45,14 @@ export class ShowcasePageComponent {
     const data = this.data();
     return [...(data?.docFile ? ['guide' as const] : []), 'examples', ...(data?.api?.length ? ['api' as const] : [])];
   });
-  public navItems = computed<PageHeaderNavItem[]>(() => this.tabs().map(tab => this.navByTab[tab]));
 
   public constructor() {
+    const scrollContainer = inject(CdkScrollable, { optional: true });
+    effect(() => {
+      // a tab opens at the top, not at the scroll position of the previous tab
+      this.currentTab();
+      scrollContainer?.scrollTo({ top: 0 });
+    });
     effect(() => {
       // keep the tab of the url when the page has it, so a link to ?tab=api opens the API tab
       if (this.tabs().includes(untracked(this.queryParams)?.['tab'])) {

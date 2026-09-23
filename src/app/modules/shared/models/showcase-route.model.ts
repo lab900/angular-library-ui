@@ -16,6 +16,10 @@ export class ShowcaseRoute implements Route {
   public data: ShowcaseRouteData;
 
   /**
+   * @param path
+   * @param title
+   * @param examples
+   * @param docFile
    * @param api the sections of the API tab; the tab is hidden without them
    */
   public constructor(

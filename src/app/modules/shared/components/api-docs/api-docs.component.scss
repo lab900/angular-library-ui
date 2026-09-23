@@ -26,7 +26,7 @@ dd code {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 40px;
-  padding-top: 30px;
+  padding-top: 6px;
 
   @container (min-width: 900px) {
     grid-template-columns: minmax(0, 1fr) $toc-width;
@@ -61,7 +61,7 @@ dd code {
   @container (min-width: 900px) {
     display: block;
     position: sticky;
-    top: 20px;
+    top: calc(var(--showcase-header-height, 0px) + 20px);
     align-self: start;
     max-height: calc(100vh - #{lab.$header-height} - 40px);
     overflow-y: auto;
@@ -125,7 +125,7 @@ dd code {
 // Sections and symbols
 
 .api-section {
-  scroll-margin-top: 20px;
+  scroll-margin-top: calc(var(--showcase-header-height, 0px) + 20px);
 }
 
 .api-section__title {
@@ -146,7 +146,7 @@ dd code {
   border: 1px solid lab.$lab-mint;
   border-radius: 8px;
   // keep the heading in view after scrolling to it
-  scroll-margin-top: 20px;
+  scroll-margin-top: calc(var(--showcase-header-height, 0px) + 20px);
 }
 
 .api-symbol__header {
@@ -166,7 +166,7 @@ dd code {
 
 .api-symbol__name--nested {
   font-size: 1rem;
-  scroll-margin-top: 20px;
+  scroll-margin-top: calc(var(--showcase-header-height, 0px) + 20px);
 }
 
 .api-symbol__source {

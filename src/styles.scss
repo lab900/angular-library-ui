@@ -91,6 +91,8 @@ p {
   background: lab.$lab-white;
   height: calc(100vh - #{lab.$header-height}) !important;
   color: lab.$lab-dark;
+  // reserve the scrollbar's width, so centered pages do not shift when the scrollbar comes and goes
+  scrollbar-gutter: stable;
 
   @media screen and (max-width: 599px) {
     height: calc(100vh - #{lab.$header-height-mobile}) !important;
