@@ -17,12 +17,14 @@ export * from './directives/table-header-content.directive';
 export * from './directives/table-top-content.directive';
 export * from './directives/table-left-footer.directive';
 export * from './directives/table-cell-events.directive';
+export * from './directives/table-row-detail.directive';
 
 // table models
 export * from './models/table-cell.model';
 export * from './models/table-cell-tooltip.model';
 export * from './models/table-sort.model';
 export * from './models/table-tabs.model';
+export * from './models/table-expandable-rows.model';
 
 // table cell renderers
 export * from './cell-renderers/cell-renderer.abstract';

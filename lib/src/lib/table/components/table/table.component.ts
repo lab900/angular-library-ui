@@ -7,9 +7,9 @@ import {
   inject,
   input,
   Input,
+  linkedSignal,
   model,
   output,
-  signal,
   TemplateRef,
   TrackByFunction,
   untracked,
@@ -23,6 +23,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Lab900TableHeaderContentDirective } from '../../directives/table-header-content.directive';
 import { ActionButton } from '../../../button/models/action-button.model';
 import { Lab900TableTopContentDirective } from '../../directives/table-top-content.directive';
+import { Lab900TableRowDetailDirective } from '../../directives/table-row-detail.directive';
+import { ExpandableRows, Lab900TableRowDetailContext } from '../../models/table-expandable-rows.model';
 import {
   MatCell,
   MatCellDef,
@@ -45,7 +47,7 @@ import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900TableHeaderComponent } from '../table-header/lab900-table-header.component';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
 import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
@@ -87,7 +89,6 @@ export interface SelectableRows<T = any> {
     Lab900TableHeaderComponent,
     NgTemplateOutlet,
     Lab900TableTabsComponent,
-    NgClass,
     CdkDropList,
     TableCellSelectComponent,
     Lab900TableCellComponent,
@@ -143,7 +144,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     return columns.filter(c => !!c.key).sort(Lab900TableService.reorderColumnsFn);
   });
 
-  public readonly visibleColumns = computed(() => [...this.columns()].filter(c => !c.hide));
+  public readonly visibleColumns = computed(() => this.columns().filter(c => !c.hide));
   public readonly showCellFooters = computed(() => this.visibleColumns().some(c => Object.hasOwn(c, 'footer')));
 
   public readonly tableTabs = input<Lab900TableTab<TabId, T>[] | undefined>(undefined);
@@ -179,7 +180,32 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public readonly selectableRows = input<SelectableRows<T> | undefined>(undefined);
 
-  public readonly selection = signal<SelectionModel<T> | undefined>(undefined);
+  /**
+   * Created once, the first time selectable rows are enabled, and kept afterwards
+   */
+  public readonly selection = linkedSignal<SelectableRows<T> | undefined, SelectionModel<T> | undefined>({
+    source: this.selectableRows,
+    computation: (selectableRows, previous) =>
+      previous?.value ??
+      (selectableRows?.enabled
+        ? new SelectionModel(!selectableRows.singleSelect, selectableRows.selectedItems, true, selectableRows.compareFn)
+        : undefined),
+  });
+
+  /**
+   * Options for rows that expand on click. Expanding needs a `lab900TableRowDetail` template.
+   */
+  public readonly expandableRows = input<ExpandableRows<T> | undefined>(undefined);
+
+  /**
+   * The expanded rows. Bind it two-way to expand or collapse rows from the parent.
+   */
+  public readonly expandedRows = model<T[]>([]);
+
+  /**
+   * Lookup set for the expanded rows, used when rows are compared by reference
+   */
+  private readonly expandedRowSet = computed(() => new Set(this.expandedRows()));
 
   /**
    * Show columns filter to hide/show columns
@@ -232,6 +258,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   public readonly tableRowOrderChange = output<CdkDragDrop<T[]>>();
   public readonly cellValueChanged = output<CellValueChangeEvent<T>>();
   public readonly sortChange = output<Lab900Sort[]>();
+  public readonly rowExpandToggle = output<{ row: T; expanded: boolean }>();
 
   // content children
   protected readonly emptyTableTemplate = contentChild(Lab900TableEmptyDirective, {
@@ -246,6 +273,18 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   protected readonly tableTopContent = contentChild(Lab900TableTopContentDirective, {
     read: TemplateRef,
   });
+  protected readonly rowDetailTemplate = contentChild<
+    Lab900TableRowDetailDirective<T>,
+    TemplateRef<Lab900TableRowDetailContext<T>>
+  >(Lab900TableRowDetailDirective, {
+    read: TemplateRef,
+  });
+
+  protected readonly expandingEnabled = computed(
+    () => !!this.rowDetailTemplate() && this.expandableRows()?.enabled !== false
+  );
+
+  private previousTabId?: TabId;
 
   public readonly displayedColumns = computed(() => this.getDisplayedColumns());
   public readonly tabId = this.tableService.tabId;
@@ -289,15 +328,38 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
       }
     });
 
+    // switching tabs collapses all rows
     effect(() => {
-      const selectableRows = this.selectableRows();
-      if (selectableRows?.enabled && !untracked(this.selection)) {
-        this.selection.set(
-          new SelectionModel(!selectableRows.singleSelect, selectableRows.selectedItems, true, selectableRows.compareFn)
-        );
+      const tabId = this.tabId();
+      if (this.previousTabId !== undefined && this.previousTabId !== tabId) {
+        untracked(() => this.collapseAllRows());
+      }
+      this.previousTabId = tabId;
+    });
+
+    // forget expanded rows that are no longer in the data
+    effect(() => {
+      const data = this.data();
+      if (!data) {
+        return;
+      }
+      const expanded = untracked(this.expandedRows);
+      if (!expanded.length) {
+        return;
+      }
+      const hasCompareFn = !!untracked(this.expandableRows)?.compareFn;
+      const dataSet = hasCompareFn ? undefined : new Set(data);
+      const remaining = expanded.filter(row => dataSet?.has(row) ?? data.some(d => this.compareRows(d, row)));
+      if (remaining.length !== expanded.length) {
+        untracked(() => this.expandedRows.set(remaining));
       }
     });
   }
+
+  /**
+   * Row predicate for the detail row. It is an arrow function, because mat-table calls it without `this`.
+   */
+  protected readonly hasRowDetail = (index: number, row: T): boolean => this.isRowExpandable(row);
 
   public handleSelectAll(checked: boolean): void {
     const selection = this.selection();
@@ -328,9 +390,55 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     return !!this.selection()?.isSelected(row);
   }
 
+  public isRowExpandable(row: T): boolean {
+    if (!this.expandingEnabled()) {
+      return false;
+    }
+    const isExpandable = this.expandableRows()?.isExpandable;
+    return !isExpandable || isExpandable(row);
+  }
+
+  public isRowExpanded(row: T): boolean {
+    if (!this.expandableRows()?.compareFn) {
+      return this.expandedRowSet().has(row);
+    }
+    return this.expandedRows().some(r => this.compareRows(r, row));
+  }
+
+  public toggleRowExpansion(row: T): void {
+    if (this.isRowExpanded(row)) {
+      this.collapseRow(row);
+    } else {
+      this.expandRow(row);
+    }
+  }
+
+  public expandRow(row: T): void {
+    if (!this.isRowExpandable(row) || this.isRowExpanded(row)) {
+      return;
+    }
+    const multiple = this.expandableRows()?.multiple !== false;
+    this.expandedRows.update(rows => (multiple ? [...rows, row] : [row]));
+    this.rowExpandToggle.emit({ row, expanded: true });
+  }
+
+  public collapseRow(row: T): void {
+    if (!this.isRowExpanded(row)) {
+      return;
+    }
+    this.expandedRows.update(rows => rows.filter(r => !this.compareRows(r, row)));
+    this.rowExpandToggle.emit({ row, expanded: false });
+  }
+
+  public collapseAllRows(): void {
+    if (this.expandedRows().length) {
+      this.expandedRows.set([]);
+    }
+  }
+
   public getRowClasses(row: T, index: number): string {
     const classes: string[] = [];
-    if (typeof this.onRowClick() === 'function') {
+    if (typeof this.onRowClick() === 'function' || this.isRowExpandable(row)) {
       classes.push('lab900-row-clickable');
     }
     if (index % 2 === 0) {
@@ -351,6 +459,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   public handleRowClick(event: Event, row: T, index: number): void {
+    if (this.isRowExpandable(row)) {
+      this.toggleRowExpansion(this.getSourceRow(row, index));
+    }
     const rowClick = this.onRowClick();
     if (typeof rowClick === 'function') {
       rowClick(row, index, event);
@@ -370,6 +481,41 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public onActiveTabChange(id: TabId): void {
     this.activeTabId.set(id);
+  }
+
+  public handleRowKeydown(event: Event, row: T, index: number): void {
+    // ignore keys that come from an element inside the row, for example an input in a cell
+    if (event.target === event.currentTarget && this.isRowExpandable(row)) {
+      event.preventDefault();
+      this.toggleRowExpansion(this.getSourceRow(row, index));
+    }
+  }
+
+  public handleRowDragStarted(row: T, index: number): void {
+    // the detail row does not move with the dragged row
+    this.collapseRow(this.getSourceRow(row, index));
+  }
+
+  protected isRowExpandedAt(row: T, index: number): boolean {
+    return this.isRowExpanded(this.getSourceRow(row, index));
+  }
+
+  protected getRowDetailContext(row: T, index: number): Lab900TableRowDetailContext<T> {
+    const sourceRow = this.getSourceRow(row, index);
+    return { $implicit: sourceRow, index, collapse: () => this.collapseRow(sourceRow) };
+  }
+
+  /**
+   * `publicData` copies the rows when `hideSelectableRow` is set.
+   * Expanded rows are stored as the rows the parent passed in, so it can compare them.
+   */
+  protected getSourceRow(row: T, index: number): T {
+    return this.data()?.[index] ?? row;
+  }
+
+  private compareRows(o1: T, o2: T): boolean {
+    const compareFn = this.expandableRows()?.compareFn;
+    return compareFn ? compareFn(o1, o2) : o1 === o2;
   }
 
   private getDisplayedColumns(): string[] {

@@ -1,10 +1,18 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, NgZone, OnDestroy, signal } from '@angular/core';
 import { TableCell } from '../models/table-cell.model';
 import { Lab900TableTab } from '../models/table-tabs.model';
 import { Lab900Sort } from '../models/table-sort.model';
 
 @Injectable()
-export class Lab900TableService<T extends object = object, TabId = string> {
+export class Lab900TableService<T extends object = object, TabId = string> implements OnDestroy {
+  private readonly ngZone = inject(NgZone);
+
+  /**
+   * One ResizeObserver for all cells of the table, instead of one per cell
+   */
+  private resizeObserver?: ResizeObserver;
+  private readonly resizeCallbacks = new Map<Element, (entry: ResizeObserverEntry) => void>();
+
   public readonly inlineEditingCellKey = signal<string | undefined>(undefined);
 
   public readonly disableEditing = signal<boolean>(false);
@@ -19,6 +27,38 @@ export class Lab900TableService<T extends object = object, TabId = string> {
 
   public static reorderColumnsFn(a: TableCell, b: TableCell): number {
     return (a.columnOrder ?? 10000) - (b.columnOrder ?? 10000);
+  }
+
+  public ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+    this.resizeCallbacks.clear();
+  }
+
+  /**
+   * Observe the size of an element. The callback runs outside the Angular zone.
+   */
+  public observeResize(element: Element, callback: (entry: ResizeObserverEntry) => void): void {
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    if (!this.resizeObserver) {
+      this.resizeObserver = this.ngZone.runOutsideAngular(
+        () =>
+          new ResizeObserver(entries => {
+            for (const entry of entries) {
+              this.resizeCallbacks.get(entry.target)?.(entry);
+            }
+          })
+      );
+    }
+    this.resizeCallbacks.set(element, callback);
+    this.resizeObserver.observe(element);
+  }
+
+  public unobserveResize(element: Element): void {
+    if (this.resizeCallbacks.delete(element)) {
+      this.resizeObserver?.unobserve(element);
+    }
   }
 
   public updateTabId(tabId: TabId | null): void {

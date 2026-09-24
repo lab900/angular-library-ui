@@ -12,6 +12,7 @@ import { showcaseUiConfig } from './showcase-ui.constants';
 import { showcaseUiNavItems } from './showcase-ui.nav-items';
 import { TableDragAndDropExampleComponent } from './examples/table-example/table-drag-and-drop-example.component';
 import { TableTabsExampleComponent } from './examples/table-example/table-tabs-example.component';
+import { TableExpandableRowsExampleComponent } from './examples/table-example/table-expandable-rows-example.component';
 import { ActionButtonExampleComponent } from './examples/button-example/action-button-example.component';
 
 export default [
@@ -35,6 +36,7 @@ export default [
     new ShowcaseExample(TableExampleComponent, 'Table'),
     new ShowcaseExample(TableDragAndDropExampleComponent, 'Table with re-arrangeable rows'),
     new ShowcaseExample(TableTabsExampleComponent, 'Table with different tabs'),
+    new ShowcaseExample(TableExpandableRowsExampleComponent, 'Table with expandable rows', 'table-example'),
   ]),
   new ShowcaseRoute('page-header', 'Page header', [
     new ShowcaseExample(PageHeaderParamsExampleComponent, 'Page header from request params'),

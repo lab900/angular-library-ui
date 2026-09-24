@@ -1,7 +1,17 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, model, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  model,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
-import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, skip, take } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NavItemButtonComponent } from '../nav-item-button/nav-item-button.component';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -38,7 +48,32 @@ export class NavItemComponent {
     )
   );
 
+  private readonly breakpointChanges = signal(0);
+
+  /**
+   * Evaluated once per change of the inputs or the breakpoint, instead of twice on every check.
+   */
+  protected readonly showChildrenInOverlay = computed(() => {
+    if (!this.item().childrenInOverlay) {
+      return false;
+    }
+    this.breakpointChanges();
+    return !this.breakpointObserver.isMatched(this.allowOverlayMenuUntil());
+  });
+
   public constructor() {
+    // Only items with an overlay listen to the breakpoint, so the overlay follows window resizes
+    effect(onCleanup => {
+      if (!this.item().childrenInOverlay) {
+        return;
+      }
+      const subscription = this.breakpointObserver
+        .observe(this.allowOverlayMenuUntil())
+        .pipe(skip(1))
+        .subscribe(() => this.breakpointChanges.update(v => v + 1));
+      onCleanup(() => subscription.unsubscribe());
+    });
+
     effect(() => {
       const item = this.item();
       if (!(item.route || item.href || item.children)) {

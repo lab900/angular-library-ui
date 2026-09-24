@@ -1,5 +1,37 @@
 # Changelog
 
+## 22.1.0
+
+- Feat: expandable table rows. Add a `lab900TableRowDetail` template to `lab900-table` and a click on a row
+  expands it with that content below it.
+  - `expandableRows` input (`ExpandableRows`): `enabled`, `multiple` (default `true`), `isExpandable` and `compareFn`.
+  - `expandedRows` model to expand or collapse rows from the parent, and a `rowExpandToggle` output.
+  - public methods `toggleRowExpansion`, `expandRow`, `collapseRow`, `collapseAllRows` and `isRowExpanded`, for example
+    to toggle a row from a table row action.
+  - switching tabs collapses all rows, and a dragged row collapses when the drag starts.
+- Perf: faster rendering of large tables, without API changes.
+  - all cells of a table share one `ResizeObserver` for the overflow tooltip, instead of one observer per cell.
+  - a cell no longer scans all table rows when it initializes; keyboard navigation reads the rows when a key is
+    pressed. This also fixes arrow key navigation after the rows were sorted, added, or removed.
+  - focusing a cell only runs change detection when the cell becomes editable.
+  - the `translate` pipe only runs for cell and header tooltips that have a text.
+  - expanded rows are looked up in a set when no `compareFn` is set.
+  - column headers are no longer deferred.
+- Perf: lighter action buttons and nav list, without API changes.
+  - `lab900PreventDoubleClick` throttles with a timestamp instead of signals, rxjs and a timer per click. The
+    `throttledClick` output now emits synchronously inside the click event. This fixes `keepMenuOpen`, whose
+    `stopPropagation()` ran too late.
+  - the sub actions menu of an action button only renders its items while the menu is open.
+  - the `translate` pipe only runs for action button tooltips that have a text.
+  - `lab900-button` uses class bindings instead of `ngClass`.
+  - the nav list keeps the ids of its items when it recomputes, so it no longer recreates the whole tree.
+    It also no longer changes the `NavItemGroup` and `NavItem` objects passed in, so an item that `hide` hid comes back
+    once `hide` returns `false`.
+  - a nav item checks the `allowOverlayMenuUntil` breakpoint once per change instead of on every check, and an
+    item with `childrenInOverlay` now follows window resizes.
+- Fix: `hide` on a sub action of a toggle action button now hides that option. Before, the options only
+  looked at the `hide` of the toggle itself.
+
 ## 22.0.9
 
 - security updates to npm package versions and pipelines, no code changes

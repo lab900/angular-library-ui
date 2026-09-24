@@ -87,6 +87,23 @@
               <td mat-footer-cell *matFooterCellDef></td>
             }
           </ng-container>
+          <ng-container matColumnDef="lab900-row-detail">
+            <td
+              mat-cell
+              *matCellDef="let element; let index = dataIndex"
+              class="lab900-row-detail-cell"
+              [attr.colspan]="displayedColumns().length">
+              @if (isRowExpandedAt(element, index)) {
+                <div
+                  class="lab900-row-detail-content"
+                  animate.enter="lab900-row-detail-enter"
+                  animate.leave="lab900-row-detail-leave">
+                  <ng-container
+                    *ngTemplateOutlet="rowDetailTemplate() ?? null; context: getRowDetailContext(element, index)" />
+                </div>
+              }
+            </td>
+          </ng-container>
           @if (displayedColumns()) {
             <!-- header row -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: stickyHeader"></tr>
@@ -94,12 +111,28 @@
             <tr
               mat-row
               *matRowDef="let row; columns: displayedColumns(); let i = dataIndex"
-              [ngClass]="getRowClasses(row, i)"
+              [class]="getRowClasses(row, i)"
               [class.lab900-row-selected]="isRowSelected(row)"
               [style.background-color]="getRowColor(row)"
+              [class.lab900-row-expanded]="isRowExpandedAt(row, i)"
+              [attr.aria-expanded]="isRowExpandable(row) ? isRowExpandedAt(row, i) : null"
+              [attr.tabindex]="isRowExpandable(row) ? 0 : null"
               (click)="handleRowClick($event, row, i)"
+              (keydown.enter)="handleRowKeydown($event, row, i)"
+              (keydown.space)="handleRowKeydown($event, row, i)"
               cdkDrag
-              [cdkDragDisabled]="!draggableRows()"></tr>
+              [cdkDragDisabled]="!draggableRows()"
+              (cdkDragStarted)="handleRowDragStarted(row, i)"></tr>
+            <!-- expanded row detail -->
+            <tr
+              mat-row
+              *matRowDef="let row; columns: ['lab900-row-detail']; when: hasRowDetail; let i = dataIndex"
+              class="lab900-row-detail"
+              [class.lab900-row-even]="i % 2 === 0"
+              [class.lab900-row-odd]="i % 2 !== 0"
+              [class.lab900-row-detail-expanded]="isRowExpandedAt(row, i)"
+              [class.lab900-row-selected]="isRowSelected(row)"
+              [style.background-color]="getRowColor(row)"></tr>
             @if (showCellFooters()) {
               <div>
                 <!-- pre footer row -->

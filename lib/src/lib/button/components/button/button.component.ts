@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { Lab900ButtonType } from '../../models/button.model';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -15,7 +15,6 @@ import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     NgTemplateOutlet,
-    NgClass,
     MatButton,
     MatIconButton,
     MatIcon,
@@ -39,8 +38,4 @@ export class Lab900ButtonComponent {
   public readonly throttleTimeInMs = input<number>(500);
 
   public readonly btnClick = output<Event>();
-
-  protected readonly classList = computed(() => {
-    return { suffixIcon: !!this.suffixIcon(), prefixIcon: !!this.prefixIcon() };
-  });
 }

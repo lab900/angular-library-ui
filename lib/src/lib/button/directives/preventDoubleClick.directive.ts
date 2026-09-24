@@ -1,22 +1,11 @@
-import { Directive, effect, HostListener, input, output, signal } from '@angular/core';
-import { timer } from 'rxjs';
-import { filter, throttle } from 'rxjs/operators';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Directive, HostListener, input, output } from '@angular/core';
 
 @Directive({
   selector: '[lab900PreventDoubleClick]',
   standalone: true,
 })
 export class PreventDoubleClickDirective {
-  private readonly click = signal<Event | null>(null);
-  private readonly throttledClick = toSignal(
-    toObservable(this.click).pipe(
-      filter(click => click != null),
-      throttle(() => timer(this.throttleTimeInMs()))
-    )
-  );
-
-  private isThrottled = false;
+  private lastClickTime: number | null = null;
 
   /**
    * @default 500
@@ -26,26 +15,14 @@ export class PreventDoubleClickDirective {
     alias: 'throttledClick',
   });
 
-  public constructor() {
-    effect(() => {
-      const event = this.throttledClick();
-      if (event) {
-        this.throttledClickOutput.emit(event);
-      }
-    });
-  }
-
   @HostListener('click', ['$event'])
   public onClick(event: Event): void {
-    if (!this.isThrottled) {
-      this.isThrottled = true;
-      this.click.set(event);
-
-      setTimeout(() => {
-        this.isThrottled = false;
-      }, this.throttleTimeInMs());
-    } else {
+    const now = event.timeStamp || performance.now();
+    if (this.lastClickTime != null && now - this.lastClickTime < this.throttleTimeInMs()) {
       event.preventDefault();
+      return;
     }
+    this.lastClickTime = now;
+    this.throttledClickOutput.emit(event);
   }
 }

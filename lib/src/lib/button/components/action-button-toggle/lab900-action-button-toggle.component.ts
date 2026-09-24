@@ -34,6 +34,10 @@ export class Lab900ActionButtonToggleComponent<T = undefined> extends Lab900Acti
     return null;
   });
 
+  protected readonly visibleSubActions = computed(() => {
+    return this.subActions()?.filter(action => !computeReactiveBooleanOption<T>(action.hide, this.data)) ?? [];
+  });
+
   protected readonly hideSingleSelectionIndicator = computed(() => {
     return computeReactiveBooleanOption<T>(this.action().hideSelectionIndicator, this.data);
   });
