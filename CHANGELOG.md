@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 22.1.1
 
 - Docs: `AGENTS.md` with instructions for AI coding agents. It ships in the package at
   `node_modules/@lab900/ui/AGENTS.md` and is shown on the new AI agents page of the showcase.
