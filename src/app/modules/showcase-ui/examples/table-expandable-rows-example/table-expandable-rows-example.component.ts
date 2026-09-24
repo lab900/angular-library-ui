@@ -25,7 +25,7 @@ interface Order {
     <lab900-table
       [tableCells]="tableCells"
       [data]="orders"
-      [trackByTableFn]="trackByTableFn"
+      [trackByTableFn]="trackById"
       [tableActionsFront]="tableActionsFront"
       [expandableRows]="expandableRows"
       [(expandedRows)]="expandedRows">
@@ -79,5 +79,5 @@ export class TableExpandableRowsExampleComponent {
     },
   ];
 
-  protected readonly trackByTableFn = (index: number, order: Order): number => order.id;
+  protected readonly trackById = (index: number, order: Order): number => order.id;
 }

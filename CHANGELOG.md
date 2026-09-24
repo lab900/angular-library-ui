@@ -1,5 +1,22 @@
 # Changelog
 
+## 22.1.1
+
+- Docs: `AGENTS.md` with instructions for AI coding agents. It ships in the package at
+  `node_modules/@lab900/ui/AGENTS.md` and is shown on the new AI agents page of the showcase.
+- Docs: the showcase serves `llms.txt` and `llms-full.txt` (the agent guide plus the full API reference) at its root.
+- Feat: `ariaLabel` on `ActionButton` and on `lab900-button`, a translation key for the accessible name. An icon,
+  fab or mini-fab action button without it falls back to its tooltip, then to the icon name.
+- Fix: accessibility.
+  - the icons in buttons, nav items and sort headers are `aria-hidden`.
+  - a sortable table header is in the tab order, sorts on Enter and Space, and sets `aria-sort`.
+  - nav list links are in the tab order again, and the active link sets `aria-current="page"`.
+  - a nav item with children sets `aria-expanded`, and its overlay also opens on keyboard focus.
+  - the alert and confirmation dialogs no longer change the tab order with `tabindex`; the confirm button keeps the
+    initial focus through `cdkFocusInitial`.
+- Breaking: a nav item with children renders a `<button class="nav-item-btn expandable">` instead of an `<a>`. Update
+  CSS that targets `a.nav-item-btn.expandable`.
+
 ## 22.1.0
 
 - Feat: expandable table rows. Add a `lab900TableRowDetail` template to `lab900-table` and a click on a row

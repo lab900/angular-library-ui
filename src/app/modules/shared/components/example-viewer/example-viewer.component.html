@@ -1,7 +1,10 @@
 <mat-card appearance="outlined" class="lab900-card">
   <mat-card-header style="display: flex; justify-content: space-between; align-items: center; padding: 8px 16px">
     <mat-card-title>
-      <h3>{{ exampleTitle() | translate }}</h3>
+      <mat-card-title>{{ exampleTitle() | translate }}</mat-card-title>
+      @if (exampleDescription()) {
+        <mat-card-subtitle>{{ exampleDescription() }}</mat-card-subtitle>
+      }
     </mat-card-title>
     <button
       mat-icon-button

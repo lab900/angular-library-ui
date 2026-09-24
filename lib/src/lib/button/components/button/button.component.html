@@ -9,6 +9,7 @@
       [class.prefixIcon]="!!prefixIcon()"
       [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
+      [attr.aria-label]="ariaLabel() ? (ariaLabel() | translate) : null"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
@@ -25,6 +26,7 @@
       [class.prefixIcon]="!!prefixIcon()"
       [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
+      [attr.aria-label]="ariaLabel() ? (ariaLabel() | translate) : null"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
@@ -41,6 +43,7 @@
       [class.prefixIcon]="!!prefixIcon()"
       [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
+      [attr.aria-label]="ariaLabel() ? (ariaLabel() | translate) : null"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
@@ -55,14 +58,11 @@
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
       [attr.type]="buttonType()"
+      [attr.aria-label]="ariaLabel() ?? label() | translate"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      @if (svgIcon()) {
-        <mat-icon [svgIcon]="label()"></mat-icon>
-      } @else {
-        <mat-icon>{{ label() }}</mat-icon>
-      }
+      <ng-container *ngTemplateOutlet="iconOnly" />
     </button>
   }
   @case ('fab') {
@@ -73,14 +73,11 @@
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
       [attr.type]="buttonType()"
+      [attr.aria-label]="ariaLabel() ?? label() | translate"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      @if (svgIcon()) {
-        <mat-icon [svgIcon]="label()"></mat-icon>
-      } @else {
-        <mat-icon>{{ label() }}</mat-icon>
-      }
+      <ng-container *ngTemplateOutlet="iconOnly" />
     </button>
   }
   @case ('mini-fab') {
@@ -91,14 +88,11 @@
       [color]="color() ?? 'primary'"
       [disabled]="disabled()"
       [attr.type]="buttonType()"
+      [attr.aria-label]="ariaLabel() ?? label() | translate"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
-      @if (svgIcon()) {
-        <mat-icon [svgIcon]="label()" />
-      } @else {
-        <mat-icon>{{ label() }}</mat-icon>
-      }
+      <ng-container *ngTemplateOutlet="iconOnly" />
     </button>
   }
   @default {
@@ -111,6 +105,7 @@
       [class.prefixIcon]="!!prefixIcon()"
       [class.suffixIcon]="!!suffixIcon()"
       [attr.type]="buttonType()"
+      [attr.aria-label]="ariaLabel() ? (ariaLabel() | translate) : null"
       [id]="buttonId()"
       [throttleTimeInMs]="throttleTimeInMs()"
       lab900PreventDoubleClick>
@@ -119,20 +114,29 @@
   }
 }
 
+<!-- the icon of the icon and fab types: the aria-label on the button names it -->
+<ng-template #iconOnly>
+  @if (svgIcon()) {
+    <mat-icon [svgIcon]="label()" aria-hidden="true" />
+  } @else {
+    <mat-icon aria-hidden="true">{{ label() }}</mat-icon>
+  }
+</ng-template>
+
 <ng-template #innerButton>
   @if (prefixIcon(); as icon) {
     @if (svgIcon()) {
-      <mat-icon [svgIcon]="icon" />
+      <mat-icon [svgIcon]="icon" aria-hidden="true" />
     } @else {
-      <mat-icon>{{ icon }}</mat-icon>
+      <mat-icon aria-hidden="true">{{ icon }}</mat-icon>
     }
   }
   {{ label() | translate }}
   @if (suffixIcon(); as icon) {
     @if (svgIcon()) {
-      <mat-icon [svgIcon]="icon" />
+      <mat-icon [svgIcon]="icon" aria-hidden="true" />
     } @else {
-      <mat-icon>{{ icon }}</mat-icon>
+      <mat-icon aria-hidden="true">{{ icon }}</mat-icon>
     }
   }
 </ng-template>

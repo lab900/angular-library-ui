@@ -22,7 +22,8 @@
     border-radius: 4px;
   }
 
-  &:hover &__overlay {
+  &:hover &__overlay,
+  &:focus-within &__overlay {
     display: block;
   }
 }

@@ -39,3 +39,14 @@ Include the library stylesheet in your scss file.
 ```
 
 The lab900-ui mixin expects a [Material theme of config](https://material.angular.io/guide/theming).
+
+## Using an AI coding agent
+
+The package contains `AGENTS.md` with instructions for coding agents. Add this line to the
+`AGENTS.md` or `CLAUDE.md` of your project:
+
+```md
+UI components come from `@lab900/ui`. Read `node_modules/@lab900/ui/AGENTS.md` before you use them.
+```
+
+The same content is on the [AI agents](ai-agents) page.

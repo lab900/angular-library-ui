@@ -8,7 +8,7 @@ import { TableCell } from '../../models/table-cell.model';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: ` @if (svgIcon().length) {
-    <span class="material-icons lab900-sort-arrow">
+    <span class="material-icons lab900-sort-arrow" aria-hidden="true">
       {{ svgIcon() }}
     </span>
   }`,

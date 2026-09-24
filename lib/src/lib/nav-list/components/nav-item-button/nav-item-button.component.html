@@ -2,56 +2,50 @@
   <ng-template #navItemContent>
     <div class="nav-item-btn__inner" [style.padding-left.px]="depth() * 12">
       @if (item.icon && (item.icon.position === 'left' || !item.icon.position)) {
-        <lab900-icon class="nav-item-btn__icon-left" [icon]="item.icon" />
+        <lab900-icon class="nav-item-btn__icon-left" [icon]="item.icon" aria-hidden="true" />
       }
       <div class="nav-item-btn__label">
         {{ item.label | translate }}
       </div>
       @if (!showLevelArrow() && item?.icon?.position === 'right') {
-        <lab900-icon class="nav-item-btn__icon-right" [icon]="item.icon" />
+        <lab900-icon class="nav-item-btn__icon-right" [icon]="item.icon" aria-hidden="true" />
       }
       @if (showLevelArrow()) {
-        <lab900-icon class="nav-item-btn__icon-right" [icon]="{ name: icon() }" />
+        <lab900-icon class="nav-item-btn__icon-right" [icon]="{ name: icon() }" aria-hidden="true" />
       }
     </div>
   </ng-template>
   @if (item.route) {
     <a
-      role="link"
       class="nav-item-btn"
       mat-list-item
-      tabindex="-1"
       [disabled]="disabled()"
       [routerLink]="item.route"
       [queryParams]="item.routeQueryParams"
       [routerLinkActiveOptions]="routeMatchOptions() ?? { exact: false }"
       routerLinkActive="active"
+      ariaCurrentWhenActive="page"
       #rla="routerLinkActive"
       [class.active]="rla.isActive">
       <ng-container *ngTemplateOutlet="navItemContent" />
     </a>
   }
   @if (item.href) {
-    <a
-      role="link"
-      class="nav-item-btn"
-      mat-list-item
-      tabindex="-1"
-      [disabled]="disabled()"
-      [href]="item.href.url"
-      [target]="item.href.target">
+    <a class="nav-item-btn" mat-list-item [disabled]="disabled()" [href]="item.href.url" [target]="item.href.target">
       <ng-container *ngTemplateOutlet="navItemContent" />
     </a>
   }
   @if (item?.children?.length) {
-    <a
-      role="menuitem"
+    <!-- toggles the children, or opens them in an overlay on hover and focus -->
+    <button
+      type="button"
       class="nav-item-btn expandable"
       mat-list-item
-      tabindex="-1"
       [disabled]="disabled()"
+      [attr.aria-expanded]="overlay() ? null : expanded()"
+      [attr.aria-haspopup]="overlay() ? 'true' : null"
       [class.expanded]="expanded()">
       <ng-container *ngTemplateOutlet="navItemContent" />
-    </a>
+    </button>
   }
 }

@@ -3,6 +3,8 @@
   "languages.en": "Engels",
   "languages.nl": "Nederlands",
   "label": {
+    "changelog": "Changelog",
+    "ai-agents": "AI-agents",
     "birthday": "Geboortedatum",
     "first-name": "Voornaam",
     "last-name": "Achternaam",
@@ -40,6 +42,5 @@
   "Posted By": "Geplaatst door",
   "Content": "Inhoud",
   "Background": "Achtergrond",
-  "reset": "Reset",
-  "log_result": "Log Resultaat"
+  "reset": "Reset"
 }

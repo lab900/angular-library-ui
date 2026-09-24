@@ -12,6 +12,9 @@ View the [showcase](https://lab900.github.io/angular-library-ui/) for guides & e
 ## Getting started
 
 - [UI library](https://lab900.github.io/angular-library-ui/getting-started)
+- [Instructions for AI agents](lib/AGENTS.md): how a coding agent should use the library. The file
+  ships in the package at `node_modules/@lab900/ui/AGENTS.md` and is shown in the
+  [showcase](https://lab900.github.io/angular-library-ui/ai-agents).
 
 ## Run the project locally
 

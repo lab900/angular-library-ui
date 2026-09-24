@@ -36,7 +36,8 @@
           [expanded]="expanded()"
           [disabled]="disabled()"
           [showLevelArrow]="showLevelArrows() && !!item().children?.length"
-          [routeMatchOptions]="routeMatchOptions()" />
+          [routeMatchOptions]="routeMatchOptions()"
+          [overlay]="true" />
         <div class="nav-item--with-overlay__overlay mat-elevation-z4">
           @for (child of item().children; track child.uniqueId) {
             <lab900-nav-item

@@ -3,6 +3,14 @@
 A set of Angular components built on top of [Angular Material](https://material.angular.io/). \
 View the [showcase](https://lab900.github.io/angular-library-ui/) for guides & examples.
 
+## AI coding agents
+
+The package ships `AGENTS.md`, a usage guide for coding agents: point your agent to
+`node_modules/@lab900/ui/AGENTS.md`. The showcase also serves
+[`llms.txt`](https://lab900.github.io/angular-library-ui/llms.txt) and
+[`llms-full.txt`](https://lab900.github.io/angular-library-ui/llms-full.txt), the guide plus the full API
+reference. `npm run docs:api` generates both from `lib/AGENTS.md` and the JSDoc in the source.
+
 ## Local development
 
 The showcase app in `src/` compiles these sources directly: `@lab900/ui` maps to `src/public-api.ts`
