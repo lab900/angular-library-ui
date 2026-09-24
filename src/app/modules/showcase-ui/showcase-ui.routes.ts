@@ -33,6 +33,11 @@ export default [
     data: { filePath: 'guides/getting-started.md' },
   },
   {
+    path: 'ai-agents',
+    loadComponent: () => import('../shared/components/markdown-page/markdown-page.component'),
+    data: { filePath: 'guides/AGENTS.md' },
+  },
+  {
     path: 'changelog',
     loadComponent: () => import('../shared/components/markdown-page/markdown-page.component'),
     data: { filePath: 'CHANGELOG.md' },

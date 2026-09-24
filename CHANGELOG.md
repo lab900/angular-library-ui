@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Docs: `AGENTS.md` with instructions for AI coding agents. It ships in the package at
+  `node_modules/@lab900/ui/AGENTS.md` and is shown on the new AI agents page of the showcase.
+
 ## 22.1.0
 
 - Feat: expandable table rows. Add a `lab900TableRowDetail` template to `lab900-table` and a click on a row

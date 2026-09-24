@@ -43,6 +43,11 @@
                 "output": "/"
               },
               {
+                "glob": "AGENTS.md",
+                "input": "lib",
+                "output": "/guides"
+              },
+              {
                 "glob": "**/*-example.component.*",
                 "input": "src/app/modules/showcase-ui/examples",
                 "output": "/examples"

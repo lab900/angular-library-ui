@@ -155,5 +155,9 @@ staged: a maintainer must approve the stage with 2FA (`npm stage list @lab900/ui
 `npm stage approve <stage-id>`). `cloudbuild-alpha.yaml` does the same under the `alpha` tag.
 Record every user-visible change in `CHANGELOG.md`, breaking changes included.
 
+`lib/AGENTS.md` is the usage guide for coding agents in consumer apps. ng-packagr ships it in the
+package, and the showcase shows it at `/ai-agents`. Update it when a public input, output or
+config field changes.
+
 `ANGULAR-UPGRADE-19.2-TO-22.1.md` records the Angular 22 migration, the bugs it fixed, the
 consumer-visible breaking changes, and open follow-ups.

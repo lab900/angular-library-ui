@@ -21,6 +21,11 @@ export const showcaseUiNavItems = (matDrawer?: MatDrawer, shouldClose?: boolean)
             navigationFinished: () => navigationFinished(matDrawer, shouldClose),
           },
           {
+            label: 'label.ai-agents',
+            route: 'ai-agents',
+            navigationFinished: () => navigationFinished(matDrawer, shouldClose),
+          },
+          {
             label: 'label.changelog',
             route: 'changelog',
             navigationFinished: () => navigationFinished(matDrawer, shouldClose),
