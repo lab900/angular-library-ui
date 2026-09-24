@@ -46,6 +46,10 @@ export class Lab900ActionDirective<T = undefined> {
     return computeReactiveStrictStringOption<T>(this.action().label, this.data);
   });
 
+  public readonly ariaLabel = computed(() => {
+    return computeReactiveStringOption<T>(this.action().ariaLabel, this.data);
+  });
+
   public readonly suffixIcon = computed(() => {
     return computeReactiveStringOption<T>(this.action().suffixIcon, this.data);
   });

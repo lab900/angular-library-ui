@@ -38,6 +38,11 @@ export class Lab900ButtonComponent {
   public readonly prefixIcon = input<string | undefined>();
   /** A translation key. For the icon and fab types it is the icon name instead. */
   public readonly label = input.required<string>();
+  /**
+   * A translation key for the accessible name of the button. Set it on the icon and fab types: without it, a screen
+   * reader reads the icon name.
+   */
+  public readonly ariaLabel = input<string | undefined>();
   public readonly disabled = input<boolean>(false);
   /** Read the icon names as names of icons registered in the `MatIconRegistry`, not as Material icon names. */
   public readonly svgIcon = input<boolean>(false);

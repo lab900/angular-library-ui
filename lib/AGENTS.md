@@ -11,6 +11,9 @@ UI components come from `@lab900/ui`. Read `node_modules/@lab900/ui/AGENTS.md` b
 The type definitions in `node_modules/@lab900/ui/types/lab900-ui.d.ts` are the source of truth for every
 signature. Live examples with their source: https://lab900.github.io/angular-library-ui/
 
+Without the package installed, read https://lab900.github.io/angular-library-ui/llms.txt (an index) or
+https://lab900.github.io/angular-library-ui/llms-full.txt (this guide plus the full API reference).
+
 ## Rules
 
 1. Import every symbol from `@lab900/ui`. Never import from a deep path such as
@@ -142,6 +145,9 @@ export class EditComponent {
 
 - Without a `type` the button is a text button. `icon`, `fab` and `mini-fab` show only an icon and
   use `label` as the icon name.
+- `ariaLabel` (a translation key) is the accessible name. An icon-only button falls back to the
+  tooltip, then to the icon name, so give every icon-only button an `ariaLabel` or a `tooltip`.
+  `lab900-button` has the same `ariaLabel` input.
 - A tooltip is `above` the button by default.
 - `subActions` turns the button into a menu, and `action` is then not called. Sub actions nest. Set `keepMenuOpen: true` on a sub
   action to keep the menu open, and call `actionRef.close()` when the work is done.
@@ -193,7 +199,7 @@ export class UsersComponent {
   ];
 
   protected readonly rowActions: TableRowAction<User>[] = [
-    { label: 'delete', type: 'icon', action: ({ data }) => this.delete(data) },
+    { label: 'delete', type: 'icon', ariaLabel: 'users.delete', action: ({ data }) => this.delete(data) },
   ];
 
   protected readonly trackById = (_index: number, user: User): number => user.id;
@@ -208,7 +214,8 @@ export class UsersComponent {
 
 Required inputs: `tableCells` and `trackByTableFn`. The table sorts nothing itself: a click on a
 `sortable` header emits `sortChange` with the new `Lab900Sort[]` (`id` is `sortKey ?? key`). Set
-`multiSort` to allow more than one sort column.
+`multiSort` to allow more than one sort column. A sortable header is in the tab order, sorts on
+Enter and Space, and sets `aria-sort` from the `sort` input, so keep `sort` in sync.
 
 ### `TableCell<T>`
 
@@ -456,3 +463,4 @@ your test setup file.
 | `(rowClick)` on the table                                      | There is no such output. Use the `[onRowClick]` input.         |
 | `CellDateEditorComponent` throws `No provider for DateAdapter` | Add `provideNativeDateAdapter()` or another adapter.           |
 | Deep import from `@lab900/ui/lib/...`                          | Import from `@lab900/ui`.                                      |
+| Icon-only button without a name for screen readers             | Set `ariaLabel` or a `tooltip` on the `ActionButton`.          |

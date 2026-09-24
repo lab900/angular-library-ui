@@ -22,6 +22,11 @@ export interface ActionButtonEvent<T = undefined> {
 export interface ActionButton<T = undefined> {
   /** A translation key. For the icon and fab types it is the icon name instead. */
   label: ReactiveStringOption<T>;
+  /**
+   * A translation key for the accessible name of the button. The icon and fab types fall back to the tooltip, then to
+   * the icon name, so set it on an icon button without a tooltip.
+   */
+  ariaLabel?: ReactiveStringOption<T>;
   /** Runs on a click. Not called when the button has sub actions: the button then opens them. */
   action?: (event: ActionButtonEvent<T>) => void;
   /** The Material button variant, or `toggle` for a button toggle group of the sub actions. Without a type it is a text button. */

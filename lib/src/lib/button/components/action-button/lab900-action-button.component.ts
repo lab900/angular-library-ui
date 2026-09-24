@@ -53,4 +53,11 @@ export class Lab900ActionButtonComponent<T = undefined> extends Lab900ActionDire
   protected readonly tooltipValue = computed(() => {
     return computeReactiveStrictStringOption<T>(this.action().tooltip?.value, this.data);
   });
+
+  /** The explicit aria label, or the tooltip on the icon-only types, whose label is an icon name */
+  protected readonly accessibleLabel = computed(() => {
+    const type = this.buttonType();
+    const iconOnly = type === 'icon' || type === 'fab' || type === 'mini-fab';
+    return this.ariaLabel() || (iconOnly && this.tooltipValue()) || undefined;
+  });
 }

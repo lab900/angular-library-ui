@@ -10,10 +10,13 @@
  *
  * Descriptions come from the JSDoc in the source. The showcase renders the file in the API tab.
  *
+ * It also writes `llms.txt` (an index for AI agents, see https://llmstxt.org) and `llms-full.txt` (`lib/AGENTS.md`
+ * followed by the API reference in Markdown). The showcase serves both at its root.
+ *
  * Usage: node scripts/generate-api-docs.mjs
  */
 import ts from 'typescript';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -21,6 +24,11 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const entry = resolve(root, 'lib/src/public-api.ts');
 const tsconfig = resolve(root, 'lib/tsconfig.lib.json');
 const outFile = resolve(root, 'src/assets/api/api.json');
+const llmsFile = resolve(root, 'src/assets/api/llms.txt');
+const llmsFullFile = resolve(root, 'src/assets/api/llms-full.txt');
+const agentsGuide = resolve(root, 'lib/AGENTS.md');
+/** The deployed showcase, see `baseHref` in `angular.json` */
+const siteUrl = 'https://lab900.github.io/angular-library-ui/';
 
 /** The functions that declare a member, and the kind of member they declare */
 const SIGNAL_FUNCTIONS = { input: 'input', model: 'model', output: 'output', outputFromObservable: 'output' };
@@ -64,6 +72,89 @@ for (const exported of exports) {
 mkdirSync(dirname(outFile), { recursive: true });
 writeFileSync(outFile, JSON.stringify({ symbols }, null, 2) + '\n');
 console.log(`API docs: ${Object.keys(symbols).length} symbols written to ${relative(root, outFile)}`);
+
+writeFileSync(llmsFile, llmsIndex());
+writeFileSync(llmsFullFile, readFileSync(agentsGuide, 'utf8').trimEnd() + '\n\n' + apiMarkdown(symbols));
+console.log(`LLM docs: ${relative(root, llmsFile)} and ${relative(root, llmsFullFile)}`);
+
+/** The llms.txt index: a title, a summary and links to the Markdown docs */
+function llmsIndex() {
+  return `# @lab900/ui
+
+> Angular Material based UI components for Angular 22+: a config-driven data table, action buttons, nav list, page
+> header, dialogs, alerts and an object merger. Every component is standalone and signal based.
+
+Components take typed config objects (\`TableCell<T>\`, \`ActionButton<T>\`, \`NavItemGroup\`), and labels are
+\`@ngx-translate/core\` translation keys. Import every symbol from \`@lab900/ui\`.
+
+## Docs
+
+- [Instructions for AI agents](${siteUrl}guides/AGENTS.md): setup, rules, every component with examples, common mistakes
+- [Getting started](${siteUrl}guides/getting-started.md): installation and theming
+- [Changelog](${siteUrl}CHANGELOG.md): changes per version, breaking changes included
+
+## Optional
+
+- [Full reference](${siteUrl}llms-full.txt): the agent instructions plus the inputs, outputs and config fields of every public symbol
+`;
+}
+
+/** The API reference as Markdown, one section per kind of symbol */
+function apiMarkdown(symbols) {
+  const kinds = [
+    { kind: 'component', title: 'Components' },
+    { kind: 'directive', title: 'Directives' },
+    { kind: 'interface', title: 'Interfaces' },
+    { kind: 'type', title: 'Types' },
+    { kind: 'enum', title: 'Enums' },
+  ];
+  const all = Object.values(symbols).sort((a, b) => a.name.localeCompare(b.name));
+  const sections = kinds
+    .map(({ kind, title }) => {
+      const docs = all.filter(s => s.kind === kind).map(symbolMarkdown);
+      return docs.length ? `## ${title}\n\n${docs.join('\n\n')}` : undefined;
+    })
+    .filter(Boolean);
+  return `# API reference\n\nGenerated from the source of \`@lab900/ui\`.\n\n${sections.join('\n\n')}\n`;
+}
+
+function symbolMarkdown(symbol) {
+  const lines = [`### ${symbol.name}${symbol.typeParameters ? `<${symbol.typeParameters}>` : ''}`];
+  if (symbol.selector) {
+    lines.push(`Selector: \`${symbol.selector}\``);
+  }
+  if (symbol.extends) {
+    lines.push(`Extends: ${symbol.extends.map(e => `\`${e}\``).join(', ')}`);
+  }
+  if (symbol.deprecated) {
+    lines.push(`Deprecated${symbol.deprecated === true ? '' : `: ${symbol.deprecated}`}`);
+  }
+  if (symbol.description) {
+    lines.push(symbol.description);
+  }
+  if (symbol.type) {
+    lines.push('```ts\n' + `${symbol.kind === 'enum' ? 'enum' : 'type'} ${symbol.name} = ${symbol.type}` + '\n```');
+  }
+  if (symbol.members?.length) {
+    lines.push(symbol.members.map(memberMarkdown).join('\n'));
+  }
+  return lines.join('\n\n');
+}
+
+function memberMarkdown(member) {
+  const flags = [
+    member.kind,
+    member.required && 'required',
+    member.reactive && `accepts a ${member.reactive}`,
+    member.default && `default \`${member.default}\``,
+    member.inheritedFrom && `from ${member.inheritedFrom}`,
+    member.deprecated && 'deprecated',
+  ].filter(Boolean);
+  const name = `\`${member.name}${member.optional ? '?' : ''}\``;
+  const meta = flags.length ? ` (${flags.join(', ')})` : '';
+  const description = member.description ? ` — ${member.description.replace(/\s*\n\s*/g, ' ')}` : '';
+  return `- ${name}${meta}: \`${member.type}\`${description}`;
+}
 
 function describeDeclaration(declaration, symbol) {
   if (ts.isClassDeclaration(declaration)) {

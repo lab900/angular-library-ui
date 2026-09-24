@@ -2,8 +2,9 @@
   <p>{{ message | translate }}</p>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close tabindex="-1">{{ cancelButtonText | translate }}</button>
-  <button mat-raised-button color="primary" (click)="onConfirmClick()" tabindex="1">
+  <button mat-raised-button mat-dialog-close>{{ cancelButtonText | translate }}</button>
+  <!-- the dialog focuses the confirm button when it opens -->
+  <button mat-raised-button color="primary" (click)="onConfirmClick()" cdkFocusInitial>
     {{ confirmButtonText | translate }}
   </button>
 </mat-dialog-actions>
