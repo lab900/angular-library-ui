@@ -7,9 +7,9 @@ import {
   inject,
   input,
   Input,
+  linkedSignal,
   model,
   output,
-  signal,
   TemplateRef,
   TrackByFunction,
   untracked,
@@ -180,7 +180,17 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public readonly selectableRows = input<SelectableRows<T> | undefined>(undefined);
 
-  public readonly selection = signal<SelectionModel<T> | undefined>(undefined);
+  /**
+   * Created once, the first time selectable rows are enabled, and kept afterwards
+   */
+  public readonly selection = linkedSignal<SelectableRows<T> | undefined, SelectionModel<T> | undefined>({
+    source: this.selectableRows,
+    computation: (selectableRows, previous) =>
+      previous?.value ??
+      (selectableRows?.enabled
+        ? new SelectionModel(!selectableRows.singleSelect, selectableRows.selectedItems, true, selectableRows.compareFn)
+        : undefined),
+  });
 
   /**
    * Options for rows that expand on click. Expanding needs a `lab900TableRowDetail` template.
@@ -342,15 +352,6 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
       const remaining = expanded.filter(row => dataSet?.has(row) ?? data.some(d => this.compareRows(d, row)));
       if (remaining.length !== expanded.length) {
         untracked(() => this.expandedRows.set(remaining));
-      }
-    });
-
-    effect(() => {
-      const selectableRows = this.selectableRows();
-      if (selectableRows?.enabled && !untracked(this.selection)) {
-        this.selection.set(
-          new SelectionModel(!selectableRows.singleSelect, selectableRows.selectedItems, true, selectableRows.compareFn)
-        );
       }
     });
   }
