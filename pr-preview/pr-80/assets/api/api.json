@@ -1,0 +1,2482 @@
+{
+  "symbols": {
+    "propValue": {
+      "name": "propValue",
+      "kind": "type",
+      "typeParameters": "T = unknown, R = string",
+      "source": "lib/src/lib/utils/utils.ts#L5",
+      "type": "((data?: T) => R) | R"
+    },
+    "ReactiveOption": {
+      "name": "ReactiveOption",
+      "kind": "type",
+      "typeParameters": "PAYLOAD, RETURN_TYPE",
+      "source": "lib/src/lib/utils/utils.ts#L15",
+      "type": "RETURN_TYPE | ((data: PAYLOAD) => RETURN_TYPE | Signal<RETURN_TYPE>) | Signal<RETURN_TYPE>"
+    },
+    "ReactiveBooleanOption": {
+      "name": "ReactiveBooleanOption",
+      "kind": "type",
+      "typeParameters": "PAYLOAD",
+      "source": "lib/src/lib/utils/utils.ts#L18",
+      "type": "ReactiveOption<PAYLOAD, boolean>"
+    },
+    "ReactiveStringOption": {
+      "name": "ReactiveStringOption",
+      "kind": "type",
+      "typeParameters": "PAYLOAD",
+      "source": "lib/src/lib/utils/utils.ts#L19",
+      "type": "ReactiveOption<PAYLOAD, string>"
+    },
+    "ReactiveNumberOption": {
+      "name": "ReactiveNumberOption",
+      "kind": "type",
+      "typeParameters": "PAYLOAD",
+      "source": "lib/src/lib/utils/utils.ts#L20",
+      "type": "ReactiveOption<PAYLOAD, number>"
+    },
+    "AlertDialogComponent": {
+      "name": "AlertDialogComponent",
+      "kind": "component",
+      "source": "lib/src/lib/dialog/components/alert-dialog/alert-dialog.component.ts#L13",
+      "selector": "lab900-alert-dialog",
+      "members": []
+    },
+    "ConfirmationDialogComponent": {
+      "name": "ConfirmationDialogComponent",
+      "kind": "component",
+      "source": "lib/src/lib/dialog/components/confirmation-dialog/confirmation-dialog.component.ts#L13",
+      "selector": "lab900-confirmation-dialog",
+      "members": []
+    },
+    "ConfirmationDialogDirective": {
+      "name": "ConfirmationDialogDirective",
+      "kind": "directive",
+      "source": "lib/src/lib/dialog/directives/confirmation-dialog.directive.ts#L6",
+      "selector": "[lab900ConfirmationDialog]",
+      "members": [
+        {
+          "name": "message",
+          "kind": "input",
+          "type": "string"
+        },
+        {
+          "name": "okButtonText",
+          "kind": "input",
+          "type": "string"
+        },
+        {
+          "name": "cancelButtonText",
+          "kind": "input",
+          "type": "string"
+        },
+        {
+          "name": "confirmed",
+          "kind": "output",
+          "type": "EventEmitter<void>"
+        },
+        {
+          "name": "cancelled",
+          "kind": "output",
+          "type": "EventEmitter<void>"
+        }
+      ]
+    },
+    "AlertDialog": {
+      "name": "AlertDialog",
+      "kind": "interface",
+      "source": "lib/src/lib/dialog/models/alertDialog.ts#L1",
+      "members": [
+        {
+          "name": "message",
+          "type": "string",
+          "optional": true
+        },
+        {
+          "name": "okButtonText",
+          "type": "string",
+          "optional": true
+        },
+        {
+          "name": "messageHTML",
+          "type": "string",
+          "optional": true
+        }
+      ]
+    },
+    "ConfirmationDialog": {
+      "name": "ConfirmationDialog",
+      "kind": "interface",
+      "source": "lib/src/lib/dialog/models/confirmationDialog.ts#L3",
+      "extends": [
+        "AlertDialog"
+      ],
+      "members": [
+        {
+          "name": "cancelButtonText",
+          "type": "string",
+          "optional": true
+        }
+      ]
+    },
+    "AlertComponent": {
+      "name": "AlertComponent",
+      "kind": "component",
+      "source": "lib/src/lib/alert/components/alert/alert.component.ts#L9",
+      "description": "A colored message box. The content is projected, for example\n`<lab900-alert [type]=\"Alert.Warn\">Unsaved changes</lab900-alert>`.",
+      "selector": "lab900-alert",
+      "members": [
+        {
+          "name": "type",
+          "kind": "input",
+          "type": "Alert",
+          "default": "Alert.Info",
+          "description": "Sets the color and the meaning of the alert"
+        }
+      ]
+    },
+    "Alert": {
+      "name": "Alert",
+      "kind": "enum",
+      "source": "lib/src/lib/alert/models/alert.ts#L4",
+      "description": "The types of `lab900-alert`. Expose the enum on your component to bind it, for example `[type]=\"Alert.Error\"`.",
+      "type": "{ Info = 'INFO', Warn = 'WARN', Error = 'ERROR', Success = 'SUCCESS' }"
+    },
+    "NavItem": {
+      "name": "NavItem",
+      "kind": "interface",
+      "source": "lib/src/lib/nav-list/models/nav-item.model.ts#L7",
+      "description": "One entry of a nav list: a route, an external link, or a parent of nested items.\nAn item without a route, a link or visible children is not shown.",
+      "members": [
+        {
+          "name": "label",
+          "type": "string",
+          "description": "A translation key"
+        },
+        {
+          "name": "icon",
+          "type": "Icon",
+          "optional": true
+        },
+        {
+          "name": "route",
+          "type": "string",
+          "optional": true,
+          "description": "The router link of the item"
+        },
+        {
+          "name": "routeQueryParams",
+          "type": "Record<string, any>",
+          "optional": true,
+          "description": "The query params of the route"
+        },
+        {
+          "name": "href",
+          "type": "{ url: string; target?: '_self' | '_blank' }",
+          "optional": true,
+          "description": "An external link instead of a route"
+        },
+        {
+          "name": "children",
+          "type": "NavItem[]",
+          "optional": true,
+          "description": "Nested items. A click on the parent expands them; the parent of the active route starts expanded."
+        },
+        {
+          "name": "childrenInOverlay",
+          "type": "boolean",
+          "optional": true,
+          "description": "Show the children in an overlay instead of below the item, on screens wider than `allowOverlayMenuUntil` of the list"
+        },
+        {
+          "name": "hide",
+          "type": "(() => boolean) | boolean",
+          "optional": true
+        },
+        {
+          "name": "navigationFinished",
+          "type": "(navigationResult: boolean | null) => void",
+          "optional": true,
+          "description": "Called after the navigation to the route of the item has finished, for example to close a sidenav"
+        },
+        {
+          "name": "routeMatchOptions",
+          "type": "IsActiveMatchOptions | { exact: boolean }",
+          "optional": true,
+          "description": "When the item is active. Overrides the `routeMatchOptions` of the list."
+        },
+        {
+          "name": "uniqueId",
+          "type": "string",
+          "optional": true,
+          "description": "Will be automatically generated"
+        }
+      ]
+    },
+    "NavItemGroup": {
+      "name": "NavItemGroup",
+      "kind": "interface",
+      "source": "lib/src/lib/nav-list/models/nav-item.model.ts#L35",
+      "description": "A group of nav items with an optional heading. A group without visible items is not shown.",
+      "members": [
+        {
+          "name": "label",
+          "type": "string",
+          "optional": true,
+          "description": "A translation key for the heading of the group"
+        },
+        {
+          "name": "items",
+          "type": "NavItem[]"
+        },
+        {
+          "name": "icon",
+          "type": "Icon",
+          "optional": true,
+          "description": "An icon next to the heading"
+        },
+        {
+          "name": "hide",
+          "type": "(() => boolean) | boolean",
+          "optional": true
+        },
+        {
+          "name": "uniqueId",
+          "type": "string",
+          "optional": true,
+          "description": "Will be automatically generated"
+        }
+      ]
+    },
+    "Icon": {
+      "name": "Icon",
+      "kind": "interface",
+      "source": "lib/src/lib/nav-list/models/nav-item.model.ts#L51",
+      "description": "An icon of a nav item or group. Set `name` or `svgName`.",
+      "members": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": true,
+          "description": "A Material icon name"
+        },
+        {
+          "name": "svgName",
+          "type": "string",
+          "optional": true,
+          "description": "The name of an icon registered in the `MatIconRegistry`"
+        },
+        {
+          "name": "position",
+          "type": "'left' | 'right'",
+          "optional": true,
+          "description": "The side of the label that the icon is on"
+        }
+      ]
+    },
+    "Lab900NavListComponent": {
+      "name": "Lab900NavListComponent",
+      "kind": "component",
+      "source": "lib/src/lib/nav-list/components/nav-list/nav-list.component.ts#L32",
+      "description": "A navigation menu of grouped items, with nested levels. Hidden items and empty groups are left out.",
+      "selector": "lab900-nav-list",
+      "members": [
+        {
+          "name": "navItemGroups",
+          "kind": "input",
+          "type": "NavItemGroup[]",
+          "required": true
+        },
+        {
+          "name": "indentLevels",
+          "kind": "input",
+          "type": "boolean",
+          "default": "true",
+          "description": "Indent nested items by their level"
+        },
+        {
+          "name": "showLevelArrows",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "Show an arrow on items with children, which shows whether they are expanded"
+        },
+        {
+          "name": "allowOverlayMenuUntil",
+          "kind": "input",
+          "type": "string | string[]",
+          "default": "Breakpoints.XSmall",
+          "description": "Media queries, for example the CDK `Breakpoints`, where items with `childrenInOverlay` expand below the item\ninstead of in an overlay"
+        },
+        {
+          "name": "routeMatchOptions",
+          "kind": "input",
+          "type": "IsActiveMatchOptions | { exact: boolean } | undefined",
+          "description": "When an item is active. An item can override it. Without it, an item is active on its route and the routes\nbelow it (`{ exact: false }`)."
+        }
+      ]
+    },
+    "IconComponent": {
+      "name": "IconComponent",
+      "kind": "component",
+      "source": "lib/src/lib/nav-list/components/icon/icon.component.ts#L8",
+      "description": "Shows an Icon config as a Material icon or a registered SVG icon",
+      "selector": "lab900-icon",
+      "members": [
+        {
+          "name": "icon",
+          "kind": "input",
+          "type": "Icon",
+          "required": true
+        }
+      ]
+    },
+    "Lab900PageHeaderComponent": {
+      "name": "Lab900PageHeaderComponent",
+      "kind": "component",
+      "source": "lib/src/lib/page-header/components/page-header/page-header.component.ts#L18",
+      "description": "The header of a page: a title, breadcrumbs, actions and tabs that link to routes.",
+      "selector": "lab900-page-header",
+      "members": [
+        {
+          "name": "pageTitle",
+          "kind": "input",
+          "type": "string",
+          "description": "A translation key"
+        },
+        {
+          "name": "pageTitleArgs",
+          "kind": "input",
+          "type": "object",
+          "description": "The parameters of the title translation"
+        },
+        {
+          "name": "navItems",
+          "kind": "input",
+          "type": "PageHeaderNavItem[]",
+          "description": "Tabs below the title. They only show together with `tabPanel`."
+        },
+        {
+          "name": "tabPanel",
+          "kind": "input",
+          "type": "MatTabNavPanel",
+          "description": "The corresponding <router-outlet> must be wrapped in an <mat-tab-nav-panel> component and should typically be placed relatively close to this component"
+        },
+        {
+          "name": "showActionsFixedOnMobile",
+          "kind": "input",
+          "type": "boolean",
+          "description": "On screens narrower than 960px, show the actions in a bar fixed to the bottom of the screen"
+        },
+        {
+          "name": "navFitInkBarToContent",
+          "kind": "input",
+          "type": "boolean",
+          "description": "Make the ink bar of the active tab as wide as its label instead of the whole tab"
+        },
+        {
+          "name": "actions",
+          "kind": "input",
+          "type": "ActionButton[]",
+          "description": "Buttons next to the title. Set `align: 'left'` on an action to put it right after the title."
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "any",
+          "description": "The data that the function options of the actions, breadcrumbs and tabs receive"
+        },
+        {
+          "name": "breadCrumbs",
+          "kind": "input",
+          "type": "BreadCrumb[]",
+          "description": "Breadcrumbs below the title"
+        }
+      ]
+    },
+    "PageHeaderNavItemComponent": {
+      "name": "PageHeaderNavItemComponent",
+      "kind": "component",
+      "source": "lib/src/lib/page-header/components/page-header-nav-item/page-header-nav-item.component.ts#L12",
+      "description": "One tab of the page header. The page header renders it for each of its `navItems`.",
+      "selector": "lab900-page-header-nav-item",
+      "members": [
+        {
+          "name": "item",
+          "kind": "input",
+          "type": "PageHeaderNavItem",
+          "required": true
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "any",
+          "description": "The data that the function options of the item receive"
+        }
+      ]
+    },
+    "PageHeaderNavItem": {
+      "name": "PageHeaderNavItem",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/page-header/models/page-header-nav.model.ts#L9",
+      "description": "A tab of the page header. The tab links to a route and is active while that route is.\n`T` is the type of the `data` of the page header, which the function options receive.",
+      "members": [
+        {
+          "name": "label",
+          "type": "((data: T) => string) | string",
+          "description": "A translation key"
+        },
+        {
+          "name": "route",
+          "type": "((data: T) => string) | string",
+          "optional": true,
+          "description": "The router link of the tab, relative to the current route. Without a route the tab links to the current route."
+        },
+        {
+          "name": "queryParams",
+          "type": "((data: T) => Record<string, any>) | Record<string, any>",
+          "optional": true,
+          "description": "The query params of the link"
+        },
+        {
+          "name": "suffixIcon",
+          "type": "((data: T) => string) | string",
+          "optional": true,
+          "description": "Material icon name after the label"
+        },
+        {
+          "name": "prefixIcon",
+          "type": "((data: T) => string) | string",
+          "optional": true,
+          "description": "Material icon name before the label"
+        },
+        {
+          "name": "svgIcon",
+          "type": "((data: T) => boolean) | boolean",
+          "optional": true,
+          "description": "Read the icon names as names of icons registered in the `MatIconRegistry`"
+        }
+      ]
+    },
+    "Lab900MergerComponent": {
+      "name": "Lab900MergerComponent",
+      "kind": "component",
+      "typeParameters": "T",
+      "source": "lib/src/lib/merger/components/merger/merger.component.ts#L26",
+      "description": "Compares two objects side by side, one row per schema config, and lets the user pick values from the other side.\nRows with a difference get an arrow; a click on it merges that value.",
+      "selector": "lab900-merger",
+      "members": [
+        {
+          "name": "leftObject",
+          "kind": "input",
+          "type": "MergeObject<T>",
+          "required": true
+        },
+        {
+          "name": "rightObject",
+          "kind": "input",
+          "type": "MergeObject<T>",
+          "required": true
+        },
+        {
+          "name": "fixed",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "Keep `selectedSide`: the user cannot switch the side that the merge starts from"
+        },
+        {
+          "name": "loading",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "Show a progress bar instead of the rows"
+        },
+        {
+          "name": "schema",
+          "kind": "input",
+          "type": "MergeConfig<T>[]",
+          "required": true,
+          "description": "One row per config. The order of the configs is the order of the rows."
+        },
+        {
+          "name": "selectedSide",
+          "kind": "model",
+          "type": "'left' | 'right'",
+          "default": "'right'",
+          "description": "The side that the merge starts from. The active values of the other side are merged into it."
+        },
+        {
+          "name": "schemaChange",
+          "kind": "output",
+          "type": "MergeConfig<T>[]",
+          "description": "Emits the schema with the choices of the user: `active` is set on the configs that are merged"
+        },
+        {
+          "name": "resultChange",
+          "kind": "output",
+          "type": "T",
+          "description": "Emits the merged object after every change"
+        }
+      ]
+    },
+    "Lab900MergerItemComponent": {
+      "name": "Lab900MergerItemComponent",
+      "kind": "component",
+      "typeParameters": "T",
+      "source": "lib/src/lib/merger/components/merger-item/merger-item.component.ts#L21",
+      "description": "One side of a merger row. The merger renders it; you only need it to build your own merger layout.",
+      "selector": "lab900-merger-item",
+      "members": [
+        {
+          "name": "config",
+          "kind": "input",
+          "type": "MergeConfig<T>",
+          "required": true
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "T",
+          "required": true,
+          "description": "The whole object of this side"
+        },
+        {
+          "name": "active",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "Highlight the item as the side that the merge starts from"
+        }
+      ]
+    },
+    "MergeObject": {
+      "name": "MergeObject",
+      "kind": "interface",
+      "typeParameters": "T",
+      "source": "lib/src/lib/merger/models/merge-object.model.ts#L4",
+      "description": "One side of the merger",
+      "members": [
+        {
+          "name": "data",
+          "type": "T",
+          "description": "The object to compare"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "description": "The heading above this side"
+        }
+      ]
+    },
+    "MergeConfigBase": {
+      "name": "MergeConfigBase",
+      "kind": "interface",
+      "source": "lib/src/lib/merger/models/merge-config.model.ts#L8",
+      "description": "A property to show. It is also the type of the fields in `nestedObject`.",
+      "members": [
+        {
+          "name": "attribute",
+          "type": "string",
+          "optional": true,
+          "description": "The property of the object"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "optional": true,
+          "description": "A translation key, shown next to the value"
+        },
+        {
+          "name": "formatter",
+          "type": "(data: any) => Observable<string> | string",
+          "optional": true,
+          "description": "Turns the value into the text of the row. It can return an observable."
+        }
+      ]
+    },
+    "MergeConfig": {
+      "name": "MergeConfig",
+      "kind": "interface",
+      "typeParameters": "T",
+      "source": "lib/src/lib/merger/models/merge-config.model.ts#L20",
+      "description": "One row of the merger",
+      "extends": [
+        "MergeConfigBase"
+      ],
+      "members": [
+        {
+          "name": "rowClass",
+          "type": "string",
+          "optional": true,
+          "description": "CSS classes on the row"
+        },
+        {
+          "name": "nextLine",
+          "type": "boolean",
+          "optional": true,
+          "description": "Show the value below the label instead of next to it"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "optional": true,
+          "description": "Merge the value of the other side. The user sets it with the arrow of the row; set it to start merged."
+        },
+        {
+          "name": "component",
+          "type": "Type<MergerItemComponent<T>>",
+          "optional": true,
+          "description": "A component that shows the row instead of the label and value. It receives the whole object as `data`."
+        },
+        {
+          "name": "nestedObject",
+          "type": "MergeConfigBase[]",
+          "optional": true,
+          "description": "Fields shown together in one row and merged together. With an `attribute` the fields are properties of that\nobject property, and the whole object is merged. Without it they are top-level properties."
+        },
+        {
+          "name": "combine",
+          "type": "boolean",
+          "optional": true,
+          "description": "Merge an array property by joining both arrays instead of replacing one"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "optional": true,
+          "description": "The user cannot change `active`, and a reset keeps it"
+        }
+      ]
+    },
+    "MergerItemComponent": {
+      "name": "MergerItemComponent",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/merger/abstracts/custom-component.abstract.ts#L7",
+      "description": "Contract for a custom component that shows the value of a merge config.\nThe merger sets the data with setInput, so a signal input and a decorator input are both possible.",
+      "members": [
+        {
+          "name": "data",
+          "type": "T | Signal<T | undefined>",
+          "optional": true,
+          "description": "The whole object of the side that the component is on"
+        }
+      ]
+    },
+    "Lab900ButtonComponent": {
+      "name": "Lab900ButtonComponent",
+      "kind": "component",
+      "source": "lib/src/lib/button/components/button/button.component.ts#L14",
+      "description": "A Material button of any type, with icons and a translated label. Clicks are throttled, so a double click\nemits `btnClick` once.",
+      "selector": "lab900-button",
+      "members": [
+        {
+          "name": "type",
+          "kind": "input",
+          "type": "Lab900ButtonType | undefined",
+          "description": "The Material button variant. Without a type it is a text button."
+        },
+        {
+          "name": "color",
+          "kind": "input",
+          "type": "ThemePalette",
+          "default": "'primary'"
+        },
+        {
+          "name": "suffixIcon",
+          "kind": "input",
+          "type": "string | undefined",
+          "description": "Material icon name after the label. Not shown on the icon and fab types."
+        },
+        {
+          "name": "prefixIcon",
+          "kind": "input",
+          "type": "string | undefined",
+          "description": "Material icon name before the label. Not shown on the icon and fab types."
+        },
+        {
+          "name": "label",
+          "kind": "input",
+          "type": "string",
+          "required": true,
+          "description": "A translation key. For the icon and fab types it is the icon name instead."
+        },
+        {
+          "name": "ariaLabel",
+          "kind": "input",
+          "type": "string | undefined",
+          "description": "A translation key for the accessible name of the button. Set it on the icon and fab types: without it, a screen\nreader reads the icon name."
+        },
+        {
+          "name": "disabled",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "svgIcon",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "Read the icon names as names of icons registered in the `MatIconRegistry`, not as Material icon names."
+        },
+        {
+          "name": "buttonType",
+          "kind": "input",
+          "type": "'button' | 'reset' | 'submit'",
+          "default": "'button'",
+          "description": "The `type` attribute of the `<button>` element. Use `submit` to submit a form."
+        },
+        {
+          "name": "containerClass",
+          "kind": "input",
+          "type": "string | undefined",
+          "description": "CSS classes on the `<button>` element"
+        },
+        {
+          "name": "buttonId",
+          "kind": "input",
+          "type": "string | undefined",
+          "description": "The `id` of the `<button>` element"
+        },
+        {
+          "name": "throttleTimeInMs",
+          "kind": "input",
+          "type": "number",
+          "default": "500",
+          "description": "Clicks within this time after the previous click are ignored"
+        },
+        {
+          "name": "btnClick",
+          "kind": "output",
+          "type": "Event",
+          "description": "Emits on a click, at most once per `throttleTimeInMs`"
+        }
+      ]
+    },
+    "Lab900ActionButtonComponent": {
+      "name": "Lab900ActionButtonComponent",
+      "kind": "component",
+      "typeParameters": "T = undefined",
+      "source": "lib/src/lib/button/components/action-button/lab900-action-button.component.ts#L21",
+      "description": "A button built from an ActionButton config. With sub actions it opens a menu, with the `toggle` type it is a\nbutton toggle group.",
+      "selector": "lab900-action-button",
+      "extends": [
+        "Lab900ActionDirective<T>"
+      ],
+      "members": [
+        {
+          "name": "action",
+          "kind": "input",
+          "type": "ActionButton<T>",
+          "required": true,
+          "description": "The config of the button",
+          "inheritedFrom": "Lab900ActionDirective"
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "T | undefined",
+          "description": "The data that the function options of the config receive",
+          "inheritedFrom": "Lab900ActionDirective"
+        }
+      ]
+    },
+    "Lab900ActionButtonToggleComponent": {
+      "name": "Lab900ActionButtonToggleComponent",
+      "kind": "component",
+      "typeParameters": "T = undefined",
+      "source": "lib/src/lib/button/components/action-button-toggle/lab900-action-button-toggle.component.ts#L12",
+      "description": "A button toggle group with one option per sub action. `lab900-action-button` renders it for the `toggle` type.",
+      "selector": "lab900-action-button-toggle",
+      "extends": [
+        "Lab900ActionDirective<T>"
+      ],
+      "members": [
+        {
+          "name": "action",
+          "kind": "input",
+          "type": "ActionButton<T>",
+          "required": true,
+          "description": "The config of the button",
+          "inheritedFrom": "Lab900ActionDirective"
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "T | undefined",
+          "description": "The data that the function options of the config receive",
+          "inheritedFrom": "Lab900ActionDirective"
+        }
+      ]
+    },
+    "ActionButtonEvent": {
+      "name": "ActionButtonEvent",
+      "kind": "interface",
+      "typeParameters": "T = undefined",
+      "source": "lib/src/lib/button/models/action-button.model.ts#L9",
+      "description": "What the `action` function of an ActionButton receives",
+      "members": [
+        {
+          "name": "event",
+          "type": "Event",
+          "description": "The click event"
+        },
+        {
+          "name": "data",
+          "type": "T",
+          "description": "The data of the button, for example the row of a table"
+        },
+        {
+          "name": "actionRef",
+          "type": "Lab900ActionDirective<T>",
+          "description": "The directive that resolved the button"
+        }
+      ]
+    },
+    "ActionButton": {
+      "name": "ActionButton",
+      "kind": "interface",
+      "typeParameters": "T = undefined",
+      "source": "lib/src/lib/button/models/action-button.model.ts#L22",
+      "description": "The config of a `lab900-action-button`. The page header and the table take lists of them.\n`T` is the type of the data that the function options receive.",
+      "members": [
+        {
+          "name": "label",
+          "type": "ReactiveStringOption<T>",
+          "reactive": "signal",
+          "description": "A translation key. For the icon and fab types it is the icon name instead."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "ReactiveStringOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "A translation key for the accessible name of the button. The icon and fab types fall back to the tooltip, then to\nthe icon name, so set it on an icon button without a tooltip."
+        },
+        {
+          "name": "action",
+          "type": "(event: ActionButtonEvent<T>) => void",
+          "optional": true,
+          "description": "Runs on a click. Not called when the button has sub actions: the button then opens them."
+        },
+        {
+          "name": "type",
+          "type": "ReactiveOption<T, 'toggle' | Lab900ButtonType>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "The Material button variant, or `toggle` for a button toggle group of the sub actions. Without a type it is a text button."
+        },
+        {
+          "name": "color",
+          "type": "ReactiveOption<T, ThemePalette>",
+          "optional": true,
+          "reactive": "signal"
+        },
+        {
+          "name": "disabled",
+          "type": "ReactiveBooleanOption<T>",
+          "optional": true,
+          "reactive": "signal"
+        },
+        {
+          "name": "selected",
+          "type": "ReactiveBooleanOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "On a sub action of a toggle: the option that is selected"
+        },
+        {
+          "name": "hide",
+          "type": "ReactiveBooleanOption<T>",
+          "optional": true,
+          "reactive": "signal"
+        },
+        {
+          "name": "subActions",
+          "type": "ReactiveOption<T, ActionButton<T>[]>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "Actions in a menu that the button opens. With the `toggle` type they are the options of the toggle group."
+        },
+        {
+          "name": "tooltip",
+          "type": "{ value: ReactiveStringOption<T>; position?: 'left' | 'right' | 'above' | 'below' | 'before' | 'after' }",
+          "optional": true,
+          "reactive": "signal",
+          "description": "A tooltip with a translation key. The position is `above` by default."
+        },
+        {
+          "name": "suffixIcon",
+          "type": "ReactiveStringOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "Material icon name after the label"
+        },
+        {
+          "name": "prefixIcon",
+          "type": "ReactiveStringOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "Material icon name before the label"
+        },
+        {
+          "name": "svgIcon",
+          "type": "boolean",
+          "optional": true,
+          "description": "Read the icon names as names of icons registered in the `MatIconRegistry`"
+        },
+        {
+          "name": "containerClass",
+          "type": "ReactiveStringOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "CSS classes on the `<button>` element"
+        },
+        {
+          "name": "buttonId",
+          "type": "ReactiveStringOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "The `id` of the `<button>` element"
+        },
+        {
+          "name": "align",
+          "type": "'left' | 'right'",
+          "optional": true,
+          "description": "In the page header: the side of the header that the button is on"
+        },
+        {
+          "name": "hideSelectionIndicator",
+          "type": "ReactiveBooleanOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "On a toggle: hide the check mark of the selected option"
+        },
+        {
+          "name": "keepMenuOpen",
+          "type": "ReactiveBooleanOption<T>",
+          "optional": true,
+          "reactive": "signal",
+          "description": "On a sub action in a menu: keep the menu open after a click"
+        }
+      ]
+    },
+    "Lab900ButtonType": {
+      "name": "Lab900ButtonType",
+      "kind": "type",
+      "source": "lib/src/lib/button/models/button.model.ts#L4",
+      "description": "The Material button variants. `icon`, `fab` and `mini-fab` show only an icon.",
+      "type": "'raised' | 'stroked' | 'flat' | 'icon' | 'fab' | 'mini-fab'"
+    },
+    "PreventDoubleClickDirective": {
+      "name": "PreventDoubleClickDirective",
+      "kind": "directive",
+      "source": "lib/src/lib/button/directives/preventDoubleClick.directive.ts#L6",
+      "description": "Ignores the clicks that follow a click within `throttleTimeInMs`. Listen to `throttledClick` instead of `click`.",
+      "selector": "[lab900PreventDoubleClick]",
+      "members": [
+        {
+          "name": "throttleTimeInMs",
+          "kind": "input",
+          "type": "number",
+          "default": "500",
+          "description": "Clicks within this time after the previous click are ignored"
+        },
+        {
+          "name": "throttledClick",
+          "kind": "output",
+          "type": "Event",
+          "description": "Emits on a click, at most once per `throttleTimeInMs`"
+        }
+      ]
+    },
+    "Lab900ActionDirective": {
+      "name": "Lab900ActionDirective",
+      "kind": "directive",
+      "typeParameters": "T = undefined",
+      "source": "lib/src/lib/button/components/lab900-action.directive.ts#L15",
+      "description": "Resolves an ActionButton config into signals: label, icons, disabled, hidden and tooltip. The action buttons\nextend it; use it on your own element to render an action your way.",
+      "selector": "[lab900Action]",
+      "members": [
+        {
+          "name": "action",
+          "kind": "input",
+          "type": "ActionButton<T>",
+          "required": true,
+          "description": "The config of the button"
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "T | undefined",
+          "description": "The data that the function options of the config receive"
+        }
+      ]
+    },
+    "BreadCrumbsComponent": {
+      "name": "BreadCrumbsComponent",
+      "kind": "component",
+      "source": "lib/src/lib/bread-crumbs/components/bread-crumbs/bread-crumbs.component.ts#L8",
+      "description": "A breadcrumb trail. The last crumb is the current page. The page header shows one for its `breadCrumbs`.",
+      "selector": "lab900-bread-crumbs",
+      "members": [
+        {
+          "name": "breadCrumbs",
+          "kind": "input",
+          "type": "BreadCrumb[]",
+          "required": true
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "any",
+          "description": "The data that the function options of the crumbs receive"
+        }
+      ]
+    },
+    "BreadCrumb": {
+      "name": "BreadCrumb",
+      "kind": "interface",
+      "source": "lib/src/lib/bread-crumbs/models/bread-crumb.model.ts#L4",
+      "description": "One crumb of a breadcrumb trail. The function options receive the `data` of the trail.",
+      "members": [
+        {
+          "name": "title",
+          "type": "((data: any) => string) | string",
+          "description": "A translation key"
+        },
+        {
+          "name": "route",
+          "type": "((data: any) => string) | string",
+          "description": "The router link of the crumb. A crumb without a route is plain text."
+        },
+        {
+          "name": "queryParams",
+          "type": "((data: any) => object) | object",
+          "optional": true,
+          "description": "The query params of the link"
+        },
+        {
+          "name": "divider",
+          "type": "string",
+          "optional": true,
+          "description": "The text between this crumb and the next one"
+        }
+      ]
+    },
+    "TableRowAction": {
+      "name": "TableRowAction",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L60",
+      "extends": [
+        "ActionButton<T>"
+      ],
+      "members": [
+        {
+          "name": "draggable",
+          "type": "boolean",
+          "optional": true,
+          "description": "Enable drag & drop for the table rows"
+        }
+      ]
+    },
+    "SelectableRows": {
+      "name": "SelectableRows",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L67",
+      "members": [
+        {
+          "name": "enabled",
+          "type": "boolean"
+        },
+        {
+          "name": "checkBoxColor",
+          "type": "ThemePalette",
+          "optional": true
+        },
+        {
+          "name": "position",
+          "type": "'right' | 'left'",
+          "optional": true
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "showSelectAllCheckbox",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "maxSelectableRows",
+          "type": "number",
+          "optional": true
+        },
+        {
+          "name": "selectedItems",
+          "type": "T[]",
+          "optional": true
+        },
+        {
+          "name": "singleSelect",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "hideSelectableRow",
+          "type": "(row: T) => boolean",
+          "optional": true
+        },
+        {
+          "name": "compareFn",
+          "type": "(o1: T, o2: T) => boolean",
+          "optional": true
+        }
+      ]
+    },
+    "Lab900TableComponent": {
+      "name": "Lab900TableComponent",
+      "kind": "component",
+      "typeParameters": "T extends object = object, TabId = string",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L81",
+      "selector": "lab900-table",
+      "members": [
+        {
+          "name": "fixedWidth",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "This will respect the defined widths of the table cells\nIf any cell has a width defined, the table will have a fixed layout"
+        },
+        {
+          "name": "tableCells",
+          "kind": "model",
+          "type": "TableCell<T>[]",
+          "required": true
+        },
+        {
+          "name": "tableTabs",
+          "kind": "input",
+          "type": "Lab900TableTab<TabId, T>[] | undefined"
+        },
+        {
+          "name": "activeTabId",
+          "kind": "model",
+          "type": "TabId | undefined"
+        },
+        {
+          "name": "tableClass",
+          "kind": "input",
+          "type": "string",
+          "default": "''"
+        },
+        {
+          "name": "rowClass",
+          "kind": "input",
+          "type": "((data: T) => string) | string | undefined"
+        },
+        {
+          "name": "rowColor",
+          "kind": "input",
+          "type": "((data: T) => string) | string | undefined"
+        },
+        {
+          "name": "loading",
+          "kind": "model",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "tableHeaderActions",
+          "kind": "input",
+          "type": "ActionButton[]",
+          "default": "[]",
+          "description": "Show a set of actions at the top of the table"
+        },
+        {
+          "name": "tableFooterActions",
+          "kind": "input",
+          "type": "ActionButton[]",
+          "default": "[]",
+          "description": "Show a set of actions at the bottom of the table"
+        },
+        {
+          "name": "tableActionsFront",
+          "kind": "input",
+          "type": "TableRowAction<T>[]",
+          "default": "[]",
+          "description": "Show a set of actions at the start of each row"
+        },
+        {
+          "name": "tableActionsBack",
+          "kind": "input",
+          "type": "TableRowAction<T>[]",
+          "default": "[]",
+          "description": "Show a set of actions at the end of each row"
+        },
+        {
+          "name": "selectableRows",
+          "kind": "input",
+          "type": "SelectableRows<T> | undefined"
+        },
+        {
+          "name": "expandableRows",
+          "kind": "input",
+          "type": "ExpandableRows<T> | undefined",
+          "description": "Options for rows that expand on click. Expanding needs a `lab900TableRowDetail` template."
+        },
+        {
+          "name": "expandedRows",
+          "kind": "model",
+          "type": "T[]",
+          "default": "[]",
+          "description": "The expanded rows. Bind it two-way to expand or collapse rows from the parent."
+        },
+        {
+          "name": "toggleColumns",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "Show columns filter to hide/show columns"
+        },
+        {
+          "name": "toggleAndMoveColumns",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "description": "Show columns filter to hide/show columns AND show rearrange option\nThis overrides toggleColumns field"
+        },
+        {
+          "name": "filterIcon",
+          "kind": "input",
+          "type": "string",
+          "default": "'filter_alt'"
+        },
+        {
+          "name": "showFilterHeader",
+          "kind": "input",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "neverHideTable",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "kind": "model",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "sort",
+          "kind": "input",
+          "type": "Lab900Sort[] | undefined"
+        },
+        {
+          "name": "multiSort",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disableSort",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "maxColumnWidth",
+          "kind": "input",
+          "type": "string | undefined",
+          "description": "set max width of all columns, can be individually overwritten per tableCell\nthis will create a tooltip with the content of the cell, when the text overflows",
+          "example": "'300px'"
+        },
+        {
+          "name": "onRowClick",
+          "kind": "input",
+          "type": "((value: T, index: number, event: Event) => void) | undefined"
+        },
+        {
+          "name": "preFooterTitle",
+          "kind": "input",
+          "type": "string | undefined"
+        },
+        {
+          "name": "stickyHeader",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "trackByTableFn",
+          "kind": "input",
+          "type": "TrackByFunction<T>",
+          "required": true
+        },
+        {
+          "name": "disabledEditing",
+          "kind": "input",
+          "type": "boolean"
+        },
+        {
+          "name": "selectionChanged",
+          "kind": "output",
+          "type": "SelectionModel<T>"
+        },
+        {
+          "name": "rowSelectToggle",
+          "kind": "output",
+          "type": "T"
+        },
+        {
+          "name": "tableCellsFiltered",
+          "kind": "output",
+          "type": "TableCell<T>[]",
+          "deprecated": "use tableCellsChange instead"
+        },
+        {
+          "name": "tableRowOrderChange",
+          "kind": "output",
+          "type": "CdkDragDrop<T[]>"
+        },
+        {
+          "name": "cellValueChanged",
+          "kind": "output",
+          "type": "CellValueChangeEvent<T>"
+        },
+        {
+          "name": "sortChange",
+          "kind": "output",
+          "type": "Lab900Sort[]"
+        },
+        {
+          "name": "rowExpandToggle",
+          "kind": "output",
+          "type": "{ row: T; expanded: boolean }"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T[] | null | undefined"
+        }
+      ]
+    },
+    "Lab900TableHeaderComponent": {
+      "name": "Lab900TableHeaderComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/components/table-header/lab900-table-header.component.ts#L16",
+      "selector": "lab900-table-header",
+      "members": [
+        {
+          "name": "tableHeaderContent",
+          "kind": "input",
+          "type": "TemplateRef<any> | undefined"
+        },
+        {
+          "name": "tableHeaderActions",
+          "kind": "input",
+          "type": "ActionButton[]",
+          "default": "[]"
+        },
+        {
+          "name": "filterIcon",
+          "kind": "input",
+          "type": "string",
+          "default": "'filter_alt'"
+        },
+        {
+          "name": "showFilterHeader",
+          "kind": "input",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "toggleAndMoveColumns",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "toggleColumns",
+          "kind": "input",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "tableCellsFiltered",
+          "kind": "output",
+          "type": "TableCell[]"
+        }
+      ]
+    },
+    "Lab900TableFilterMenuComponent": {
+      "name": "Lab900TableFilterMenuComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/components/table-filter-menu/table-filter-menu.component.ts#L21",
+      "selector": "lab900-table-filter-menu",
+      "members": [
+        {
+          "name": "filterIcon",
+          "kind": "input",
+          "type": "string",
+          "default": "'filter_alt'"
+        },
+        {
+          "name": "showFilterHeader",
+          "kind": "input",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "toggleAndMoveColumns",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "filterChanged",
+          "kind": "output",
+          "type": "TableCell[]"
+        }
+      ]
+    },
+    "Lab900TableCellComponent": {
+      "name": "Lab900TableCellComponent",
+      "kind": "component",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/components/table-cell/table-cell.component.ts#L37",
+      "selector": "lab900-table-cell[cell]",
+      "members": [
+        {
+          "name": "cell",
+          "kind": "input",
+          "type": "TableCell<T>",
+          "required": true
+        },
+        {
+          "name": "data",
+          "kind": "input",
+          "type": "T[]",
+          "required": true
+        },
+        {
+          "name": "disableSort",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "maxColumnWidthFromTable",
+          "kind": "input",
+          "type": "string | undefined"
+        },
+        {
+          "name": "showFooterCell",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "headerClick",
+          "kind": "output",
+          "type": "TableCell<T>"
+        },
+        {
+          "name": "valueChanged",
+          "kind": "output",
+          "type": "CellValueChangeEvent<T>"
+        }
+      ]
+    },
+    "Lab900TableTabsComponent": {
+      "name": "Lab900TableTabsComponent",
+      "kind": "component",
+      "typeParameters": "TabId = string, T extends object = object",
+      "source": "lib/src/lib/table/components/table-tabs/table-tabs.component.ts#L6",
+      "selector": "lab900-table-tabs",
+      "members": [
+        {
+          "name": "tableTabs",
+          "kind": "input",
+          "type": "Lab900TableTab<TabId, T>[]",
+          "required": true
+        },
+        {
+          "name": "activeTabId",
+          "kind": "model",
+          "type": "TabId",
+          "required": true
+        }
+      ]
+    },
+    "Lab900TableEmptyDirective": {
+      "name": "Lab900TableEmptyDirective",
+      "kind": "directive",
+      "source": "lib/src/lib/table/directives/table-empty.directive.ts#L3",
+      "selector": "[lab900TableEmpty]",
+      "members": []
+    },
+    "Lab900TableDisabledDirective": {
+      "name": "Lab900TableDisabledDirective",
+      "kind": "directive",
+      "source": "lib/src/lib/table/directives/table-disabled.directive.ts#L3",
+      "selector": "[lab900TableDisabled]",
+      "members": []
+    },
+    "Lab900TableHeaderContentDirective": {
+      "name": "Lab900TableHeaderContentDirective",
+      "kind": "directive",
+      "source": "lib/src/lib/table/directives/table-header-content.directive.ts#L3",
+      "selector": "[lab900TableHeaderContent]",
+      "members": []
+    },
+    "Lab900TableTopContentDirective": {
+      "name": "Lab900TableTopContentDirective",
+      "kind": "directive",
+      "source": "lib/src/lib/table/directives/table-top-content.directive.ts#L3",
+      "selector": "[lab900TableTopContent]",
+      "members": []
+    },
+    "Lab900TableLeftFooterDirective": {
+      "name": "Lab900TableLeftFooterDirective",
+      "kind": "directive",
+      "source": "lib/src/lib/table/directives/table-left-footer.directive.ts#L3",
+      "selector": "[lab900TableLeftFooter]",
+      "members": []
+    },
+    "TableCellEventsDirective": {
+      "name": "TableCellEventsDirective",
+      "kind": "directive",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/directives/table-cell-events.directive.ts#L8",
+      "selector": "[lab900TableCellEvents]",
+      "members": [
+        {
+          "name": "cellData",
+          "kind": "input",
+          "type": "T",
+          "required": true
+        },
+        {
+          "name": "cell",
+          "kind": "input",
+          "type": "TableCell<T>",
+          "required": true
+        },
+        {
+          "name": "rowIndex",
+          "kind": "input",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    "Lab900TableRowDetailDirective": {
+      "name": "Lab900TableRowDetailDirective",
+      "kind": "directive",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/directives/table-row-detail.directive.ts#L11",
+      "description": "Content of an expanded row. The table renders it below the row, over the full width of the table.",
+      "example": "<ng-template lab900TableRowDetail [lab900TableRowDetailOf]=\"data\" let-row let-index=\"index\">\n  <app-row-detail [row]=\"row\" />\n</ng-template>",
+      "selector": "[lab900TableRowDetail]",
+      "members": [
+        {
+          "name": "lab900TableRowDetailOf",
+          "kind": "input",
+          "type": "T[] | null | undefined",
+          "description": "Only used to type the template context, pass the same data as the table."
+        }
+      ]
+    },
+    "CellValueChangeEvent": {
+      "name": "CellValueChangeEvent",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/models/table-cell.model.ts#L10",
+      "members": [
+        {
+          "name": "value",
+          "type": "any"
+        },
+        {
+          "name": "cell",
+          "type": "TableCell<T>"
+        },
+        {
+          "name": "row",
+          "type": "T"
+        }
+      ]
+    },
+    "TableCell": {
+      "name": "TableCell",
+      "kind": "interface",
+      "typeParameters": "T = any, CellRenderOptions = any, HeaderRenderOptions = any, CellEditorOptions extends CellEditorBaseOptions = CellEditorBaseOptions",
+      "source": "lib/src/lib/table/models/table-cell.model.ts#L16",
+      "members": [
+        {
+          "name": "key",
+          "type": "string",
+          "description": "Column key"
+        },
+        {
+          "name": "label",
+          "type": "propValue<TableCell>",
+          "reactive": "function",
+          "description": "Column header label"
+        },
+        {
+          "name": "cellClass",
+          "type": "((data: T, cell: TableCell) => string) | string",
+          "optional": true,
+          "description": "Custom cell class"
+        },
+        {
+          "name": "cellHeaderClass",
+          "type": "propValue<TableCell<T>>",
+          "optional": true,
+          "reactive": "function",
+          "description": "Custom cell header class"
+        },
+        {
+          "name": "cellFormatter",
+          "type": "(data: T, cell: TableCell) => string",
+          "optional": true,
+          "description": "Custom formatter to display data inside the cell"
+        },
+        {
+          "name": "hide",
+          "type": "boolean",
+          "optional": true,
+          "description": "Should show column in the table"
+        },
+        {
+          "name": "columnOrder",
+          "type": "number",
+          "optional": true,
+          "description": "Order of the column in the table\nSorted fields will come before non-sorted fields"
+        },
+        {
+          "name": "alwaysVisible",
+          "type": "boolean",
+          "optional": true,
+          "description": "Can't hide the column"
+        },
+        {
+          "name": "sortable",
+          "type": "boolean",
+          "optional": true,
+          "description": "Column is sortable"
+        },
+        {
+          "name": "sortKey",
+          "type": "string",
+          "optional": true,
+          "description": "sort key to be used\ndefaults to `key` if not defined"
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "optional": true,
+          "description": "Column is sticky"
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "optional": true,
+          "description": "Column width"
+        },
+        {
+          "name": "click",
+          "type": "(data: T, cell: TableCell, mouseEvent?: MouseEvent) => unknown",
+          "optional": true,
+          "description": "on click"
+        },
+        {
+          "name": "cellRenderer",
+          "type": "Type<CellRendererAbstract<CellRenderOptions, T>>",
+          "optional": true,
+          "description": "Specify a custom cell renderer component to display the cell content in a different way"
+        },
+        {
+          "name": "cellRenderOptions",
+          "type": "CellRenderOptions",
+          "optional": true,
+          "description": "Specify cellRenderer component specific options"
+        },
+        {
+          "name": "cellEditor",
+          "type": "Type<CellEditorAbstract<CellEditorOptions, T>>",
+          "optional": true
+        },
+        {
+          "name": "cellEditorOptions",
+          "type": "CellEditorOptions",
+          "optional": true
+        },
+        {
+          "name": "headerRenderer",
+          "type": "Type<ColumnHeaderRendererAbstract<HeaderRenderOptions, T>>",
+          "optional": true,
+          "description": "Specify a custom header renderer component to display the column header content in a different way"
+        },
+        {
+          "name": "headerRenderOptions",
+          "type": "HeaderRenderOptions",
+          "optional": true,
+          "description": "Specify headerRenderer component specific options"
+        },
+        {
+          "name": "cellHeaderTooltip",
+          "type": "string",
+          "optional": true,
+          "description": "Enable a tooltip for cell header, takes text to be displayed"
+        },
+        {
+          "name": "cellHeaderTooltipPosition",
+          "type": "TooltipPosition",
+          "optional": true,
+          "description": "Define the position for the cell header tooltip"
+        },
+        {
+          "name": "cellTooltip",
+          "type": "TableCellTooltip<T>",
+          "optional": true,
+          "description": "Enable a tooltip, displays the cell content in a tooltip"
+        },
+        {
+          "name": "cellMaxWidth",
+          "type": "string",
+          "optional": true,
+          "description": "set max width of column, this will cause the content to overflow",
+          "example": "'300px'"
+        },
+        {
+          "name": "footer",
+          "type": "((data: T[], cell: TableCell) => string | Signal<string>) | string | Signal<string>",
+          "optional": true,
+          "description": "Cell footer to be displayed"
+        },
+        {
+          "name": "footerLoading",
+          "type": "Signal<boolean>",
+          "optional": true
+        },
+        {
+          "name": "footerCellClass",
+          "type": "string",
+          "optional": true
+        }
+      ]
+    },
+    "TableCellTooltip": {
+      "name": "TableCellTooltip",
+      "kind": "interface",
+      "typeParameters": "T = unknown",
+      "source": "lib/src/lib/table/models/table-cell-tooltip.model.ts#L3",
+      "members": [
+        {
+          "name": "text",
+          "type": "propValue<T>",
+          "optional": true,
+          "reactive": "function",
+          "description": "Text that is displayed in the tooltip, can be dependent on data"
+        },
+        {
+          "name": "onlyOnOverflow",
+          "type": "propValue<T, boolean>",
+          "optional": true,
+          "reactive": "function",
+          "description": "If true, tooltip will only show when it is the content of the cell is cut off (by setting TableCell.cellMaxWidth\nvalue)",
+          "default": "false"
+        },
+        {
+          "name": "tooltipOptions",
+          "type": "{ tooltipPosition: 'left' | 'right' | 'above' | 'below' | 'before' | 'after' }",
+          "optional": true,
+          "description": "Currently ony supports positioning option of matTooltip"
+        }
+      ]
+    },
+    "TooltipOptions": {
+      "name": "TooltipOptions",
+      "kind": "interface",
+      "source": "lib/src/lib/table/models/table-cell-tooltip.model.ts#L22",
+      "members": [
+        {
+          "name": "tooltipPosition",
+          "type": "'left' | 'right' | 'above' | 'below' | 'before' | 'after'",
+          "optional": true
+        }
+      ]
+    },
+    "Lab900Sort": {
+      "name": "Lab900Sort",
+      "kind": "interface",
+      "source": "lib/src/lib/table/models/table-sort.model.ts#L1",
+      "members": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "The id of the column being sorted."
+        },
+        {
+          "name": "direction",
+          "type": "'asc' | 'desc' | ''",
+          "description": "The sort direction."
+        }
+      ]
+    },
+    "Lab900TableTab": {
+      "name": "Lab900TableTab",
+      "kind": "interface",
+      "typeParameters": "TabId = string, T extends object = object",
+      "source": "lib/src/lib/table/models/table-tabs.model.ts#L3",
+      "members": [
+        {
+          "name": "id",
+          "type": "TabId"
+        },
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "tableCells",
+          "type": "TableCell<T>[]",
+          "optional": true,
+          "description": "Load a different config for a tab"
+        }
+      ]
+    },
+    "ExpandableRows": {
+      "name": "ExpandableRows",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/models/table-expandable-rows.model.ts#L1",
+      "members": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "optional": true,
+          "description": "Rows expand when the table has a `lab900TableRowDetail` template.\nSet this to false to turn expanding off without removing the template.",
+          "default": "true"
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "optional": true,
+          "description": "Allow more than one expanded row at a time.\nWith false, expanding a row collapses the other one.",
+          "default": "true"
+        },
+        {
+          "name": "isExpandable",
+          "type": "(row: T) => boolean",
+          "optional": true,
+          "description": "Decide per row if it can expand. It is evaluated when the row renders."
+        },
+        {
+          "name": "compareFn",
+          "type": "(o1: T, o2: T) => boolean",
+          "optional": true,
+          "description": "Compare rows to find the expanded ones, for example when the data is fetched again as new objects.",
+          "default": "strict equality"
+        }
+      ]
+    },
+    "Lab900TableRowDetailContext": {
+      "name": "Lab900TableRowDetailContext",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/models/table-expandable-rows.model.ts#L25",
+      "members": [
+        {
+          "name": "$implicit",
+          "type": "T"
+        },
+        {
+          "name": "index",
+          "type": "number"
+        },
+        {
+          "name": "collapse",
+          "type": "() => void"
+        }
+      ]
+    },
+    "CellRendererAbstract": {
+      "name": "CellRendererAbstract",
+      "kind": "directive",
+      "typeParameters": "CellRenderOptions = any, T = any, V = any",
+      "source": "lib/src/lib/table/cell-renderers/cell-renderer.abstract.ts#L19",
+      "abstract": true,
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, CellRenderOptions>",
+          "required": true
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "((value: V, cell: TableCell<T>, row: T) => void) | undefined"
+        }
+      ]
+    },
+    "CellWithIconRendererComponent": {
+      "name": "CellWithIconRendererComponent",
+      "kind": "component",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.component.ts#L8",
+      "selector": "lab900-cell-with-icon-renderer",
+      "extends": [
+        "CellRendererAbstract<CellWithIconRendererOptions<T>, T>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, CellRenderOptions>",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "((value: V, cell: TableCell<T>, row: T) => void) | undefined",
+          "inheritedFrom": "CellRendererAbstract"
+        }
+      ]
+    },
+    "CellWithIconRendererOptions": {
+      "name": "CellWithIconRendererOptions",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/cell-renderers/cell-with-icon-renderer/cell-with-icon-renderer.options.ts#L1",
+      "members": [
+        {
+          "name": "icon",
+          "type": "(data: T) => string"
+        },
+        {
+          "name": "svgIcon",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "showCellValue",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "CellWithAnchorRendererComponent": {
+      "name": "CellWithAnchorRendererComponent",
+      "kind": "component",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/cell-renderers/cell-with-anchor-renderer/cell-with-anchor-renderer.component.ts#L7",
+      "selector": "lab900-cell-with-anchor",
+      "extends": [
+        "CellRendererAbstract<CellWithAnchorRendererOptions<T>, T>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, CellRenderOptions>",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "((value: V, cell: TableCell<T>, row: T) => void) | undefined",
+          "inheritedFrom": "CellRendererAbstract"
+        }
+      ]
+    },
+    "CellWithAnchorRendererOptions": {
+      "name": "CellWithAnchorRendererOptions",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/cell-renderers/cell-with-anchor-renderer/cell-with-anchor-renderer.options.ts#L1",
+      "members": [
+        {
+          "name": "url",
+          "type": "(data: T) => string"
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "optional": true
+        }
+      ]
+    },
+    "CheckboxCellRendererOptions": {
+      "name": "CheckboxCellRendererOptions",
+      "kind": "interface",
+      "source": "lib/src/lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.options.ts#L3",
+      "members": [
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "theme",
+          "type": "ThemePalette",
+          "optional": true
+        }
+      ]
+    },
+    "CheckboxCellRendererComponent": {
+      "name": "CheckboxCellRendererComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.component.ts#L8",
+      "selector": "lab900-checkbox-cell-renderer",
+      "extends": [
+        "CellRendererAbstract<CheckboxCellRendererOptions>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, CellRenderOptions>",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "((value: V, cell: TableCell<T>, row: T) => void) | undefined",
+          "inheritedFrom": "CellRendererAbstract"
+        }
+      ]
+    },
+    "DefaultCellRendererComponent": {
+      "name": "DefaultCellRendererComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/cell-renderers/default-cell-renderer/default-cell-renderer.component.ts#L6",
+      "selector": "lab900-default-cell-renderer",
+      "extends": [
+        "CellRendererAbstract"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, CellRenderOptions>",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "((value: V, cell: TableCell<T>, row: T) => void) | undefined",
+          "inheritedFrom": "CellRendererAbstract"
+        }
+      ]
+    },
+    "CellWithClearingRendererComponent": {
+      "name": "CellWithClearingRendererComponent",
+      "kind": "component",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/cell-renderers/cell-with-clearing-renderer/cell-with-clearing-renderer.component.ts#L9",
+      "selector": "lab900-cell-with-clearing-renderer",
+      "extends": [
+        "CellRendererAbstract<CellWithClearingRendererOptions, T>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, CellRenderOptions>",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellRendererAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "((value: V, cell: TableCell<T>, row: T) => void) | undefined",
+          "inheritedFrom": "CellRendererAbstract"
+        }
+      ]
+    },
+    "CellWithClearingRendererOptions": {
+      "name": "CellWithClearingRendererOptions",
+      "kind": "interface",
+      "source": "lib/src/lib/table/cell-renderers/cell-with-clearing-renderer/cell-with-clearing-renderer.options.ts#L1",
+      "members": [
+        {
+          "name": "showClose",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "ColumnHeaderRendererAbstract": {
+      "name": "ColumnHeaderRendererAbstract",
+      "kind": "directive",
+      "typeParameters": "ColumnHeaderRenderOptions = any, T = any",
+      "source": "lib/src/lib/table/column-header-renderers/column-header-renderer-abstract.directive.ts#L5",
+      "abstract": true,
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T>",
+          "required": true
+        },
+        {
+          "name": "disableSort",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false"
+        }
+      ]
+    },
+    "DefaultColumnHeaderRendererComponent": {
+      "name": "DefaultColumnHeaderRendererComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/column-header-renderers/default-column-header-renderer/default-column-header-renderer.component.ts#L6",
+      "selector": "lab900-default-column-header-renderer",
+      "extends": [
+        "ColumnHeaderRendererAbstract"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T>",
+          "required": true,
+          "inheritedFrom": "ColumnHeaderRendererAbstract"
+        },
+        {
+          "name": "disableSort",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "inheritedFrom": "ColumnHeaderRendererAbstract"
+        }
+      ]
+    },
+    "ColumnHeaderSortingComponent": {
+      "name": "ColumnHeaderSortingComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/column-header-renderers/column-header-sorting/column-header-sorting.component.ts#L5",
+      "selector": "lab900-column-header-sorting",
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell",
+          "required": true
+        }
+      ]
+    },
+    "ColumnHeaderWithIconRendererOptions": {
+      "name": "ColumnHeaderWithIconRendererOptions",
+      "kind": "interface",
+      "source": "lib/src/lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.options.ts#L1",
+      "members": [
+        {
+          "name": "icon",
+          "type": "string"
+        },
+        {
+          "name": "svgIcon",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    "ColumnHeaderWithIconRendererComponent": {
+      "name": "ColumnHeaderWithIconRendererComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/column-header-renderers/column-header-with-icon-renderer/column-header-with-icon-renderer.component.ts#L8",
+      "selector": "lab900-default-column-header-renderer",
+      "extends": [
+        "ColumnHeaderRendererAbstract<ColumnHeaderWithIconRendererOptions>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T>",
+          "required": true,
+          "inheritedFrom": "ColumnHeaderRendererAbstract"
+        },
+        {
+          "name": "disableSort",
+          "kind": "input",
+          "type": "boolean",
+          "default": "false",
+          "inheritedFrom": "ColumnHeaderRendererAbstract"
+        }
+      ]
+    },
+    "CellEditorAbstract": {
+      "name": "CellEditorAbstract",
+      "kind": "directive",
+      "typeParameters": "TCellEditorOptions extends CellEditorBaseOptions<T>, T = any, V = any",
+      "source": "lib/src/lib/table/cell-editors/cell-editor.abstract.ts#L8",
+      "abstract": true,
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, any, any, TCellEditorOptions>",
+          "required": true
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "(value: V, cell: TableCell<T>, row: T) => void"
+        }
+      ]
+    },
+    "CellEditorBaseOptions": {
+      "name": "CellEditorBaseOptions",
+      "kind": "interface",
+      "typeParameters": "T = any",
+      "source": "lib/src/lib/table/cell-editors/cell-editor.options.ts#L3",
+      "members": [
+        {
+          "name": "valueChanged",
+          "type": "(event: CellValueChangeEvent<T>) => void",
+          "optional": true,
+          "description": "Callback when the value of the editor changes\nCan also be handled globally via the table"
+        },
+        {
+          "name": "disabled",
+          "type": "(data?: T) => boolean",
+          "optional": true,
+          "description": "Disable the editor based on the row data\nCan also be done globally via the table"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "optional": true,
+          "description": "Show a placeholder when no value is present"
+        },
+        {
+          "name": "disablePlaceholderOutsideEditor",
+          "type": "boolean",
+          "optional": true,
+          "description": "Don't display the placeholder in the normal view when no value is present"
+        }
+      ]
+    },
+    "CellInputEditorComponent": {
+      "name": "CellInputEditorComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/cell-editors/cell-input-editor/cell-input-editor.component.ts#L6",
+      "selector": "lab900-cell-edit-input-renderer",
+      "extends": [
+        "CellEditorAbstract<CellInputEditorOptions>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, any, any, TCellEditorOptions>",
+          "required": true,
+          "inheritedFrom": "CellEditorAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellEditorAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "(value: V, cell: TableCell<T>, row: T) => void",
+          "inheritedFrom": "CellEditorAbstract"
+        }
+      ]
+    },
+    "CellInputEditorOptions": {
+      "name": "CellInputEditorOptions",
+      "kind": "interface",
+      "source": "lib/src/lib/table/cell-editors/cell-input-editor/cell-input-editor.options.ts#L22",
+      "extends": [
+        "CellEditorBaseOptions"
+      ],
+      "members": [
+        {
+          "name": "type",
+          "type": "(| 'number' | 'search' | 'button' | 'time' | 'image' | 'text' | 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email' | 'file' | 'hidden' | 'month' | 'password' | 'radio' | 'range')",
+          "optional": true
+        },
+        {
+          "name": "maxLength",
+          "type": "number",
+          "optional": true
+        }
+      ]
+    },
+    "CellSelectEditorOptions": {
+      "name": "CellSelectEditorOptions",
+      "kind": "interface",
+      "typeParameters": "O = any, T = any",
+      "source": "lib/src/lib/table/cell-editors/cell-select-editor/cell-select-editor.options.ts#L3",
+      "extends": [
+        "CellEditorBaseOptions<T>"
+      ],
+      "members": [
+        {
+          "name": "options",
+          "type": "O[] | ((data: T) => O[])"
+        },
+        {
+          "name": "compareWithFn",
+          "type": "(o1: O, o2: O) => boolean",
+          "optional": true
+        },
+        {
+          "name": "optionLabelFn",
+          "type": "(o: O) => string",
+          "optional": true
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "optional": true
+        },
+        {
+          "name": "panelWidth",
+          "type": "string | number | null",
+          "optional": true
+        }
+      ]
+    },
+    "CellSelectEditorComponent": {
+      "name": "CellSelectEditorComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/cell-editors/cell-select-editor/cell-select-editor.component.ts#L7",
+      "selector": "lab900-cell-select-editor",
+      "extends": [
+        "CellEditorAbstract<CellSelectEditorOptions>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, any, any, TCellEditorOptions>",
+          "required": true,
+          "inheritedFrom": "CellEditorAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellEditorAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "(value: V, cell: TableCell<T>, row: T) => void",
+          "inheritedFrom": "CellEditorAbstract"
+        }
+      ]
+    },
+    "CellDateEditorComponent": {
+      "name": "CellDateEditorComponent",
+      "kind": "component",
+      "source": "lib/src/lib/table/cell-editors/cell-date-editor/cell-date-editor.component.ts#L13",
+      "selector": "lab900-cell-date-editor",
+      "extends": [
+        "CellEditorAbstract<CellEditorBaseOptions>"
+      ],
+      "members": [
+        {
+          "name": "columnConfig",
+          "kind": "input",
+          "type": "TableCell<T, any, any, TCellEditorOptions>",
+          "required": true,
+          "inheritedFrom": "CellEditorAbstract"
+        },
+        {
+          "name": "data",
+          "kind": "model",
+          "type": "T",
+          "required": true,
+          "inheritedFrom": "CellEditorAbstract"
+        },
+        {
+          "name": "handleValueChanged",
+          "kind": "input",
+          "type": "(value: V, cell: TableCell<T>, row: T) => void",
+          "inheritedFrom": "CellEditorAbstract"
+        }
+      ]
+    }
+  }
+}
