@@ -122,6 +122,21 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   public readonly sort = this.tableService.sort;
   public readonly defaultHeaderRenderer = DefaultColumnHeaderRendererComponent;
 
+  public readonly sortable = computed(() => !this.disableSort() && !!this.cell().sortable);
+
+  /** The `aria-sort` of the header, or `null` when the column cannot be sorted */
+  public readonly ariaSort = computed(() => {
+    if (!this.sortable()) {
+      return null;
+    }
+    const cell = this.cell();
+    const direction = this.sort()?.find(s => s.id === (cell.sortKey ?? cell.key))?.direction;
+    if (direction === 'asc') {
+      return 'ascending';
+    }
+    return direction === 'desc' ? 'descending' : 'none';
+  });
+
   public ngOnInit(): void {
     const columnDef = this.columnDef();
     if (this.table && columnDef) {
@@ -139,6 +154,13 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   public handleHeaderClick(cell: TableCell<T>): void {
     if (!this.disableSort()) {
       this.headerClick.emit(cell);
+    }
+  }
+
+  public handleHeaderKeydown(event: Event, cell: TableCell<T>): void {
+    if (this.sortable()) {
+      event.preventDefault();
+      this.handleHeaderClick(cell);
     }
   }
 

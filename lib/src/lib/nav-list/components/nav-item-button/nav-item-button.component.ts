@@ -21,6 +21,8 @@ export class NavItemButtonComponent {
   public readonly expanded = model<boolean>(false);
   public readonly showLevelArrow = input<boolean>(false);
   public readonly depth = input<number>(0);
+  /** The children open in an overlay on hover and focus, so the button does not toggle them */
+  public readonly overlay = input<boolean>(false);
 
   public readonly icon = computed(() => {
     if (this.item()?.childrenInOverlay) {

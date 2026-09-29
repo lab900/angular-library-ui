@@ -26,6 +26,9 @@ const uniqueId = (source: NavItem | NavItemGroup): string => {
   return id;
 };
 
+/**
+ * A navigation menu of grouped items, with nested levels. Hidden items and empty groups are left out.
+ */
 @Component({
   selector: 'lab900-nav-list',
   templateUrl: './nav-list.component.html',
@@ -36,9 +39,19 @@ const uniqueId = (source: NavItem | NavItemGroup): string => {
 })
 export class Lab900NavListComponent {
   public readonly navItemGroups = input.required<NavItemGroup[]>();
+  /** Indent nested items by their level */
   public readonly indentLevels = input<boolean>(true);
+  /** Show an arrow on items with children, which shows whether they are expanded */
   public readonly showLevelArrows = input<boolean>(false);
+  /**
+   * Media queries, for example the CDK `Breakpoints`, where items with `childrenInOverlay` expand below the item
+   * instead of in an overlay
+   */
   public readonly allowOverlayMenuUntil = input<string | string[]>(Breakpoints.XSmall);
+  /**
+   * When an item is active. An item can override it. Without it, an item is active on its route and the routes
+   * below it (`{ exact: false }`).
+   */
   public readonly routeMatchOptions = input<IsActiveMatchOptions | { exact: boolean } | undefined>(undefined);
 
   public readonly filteredNavItemGroups = computed<NavItemGroup[]>(() => {

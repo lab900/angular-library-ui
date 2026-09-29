@@ -177,6 +177,29 @@ describe('Lab900TableComponent expandable rows', () => {
     expect(details()).toEqual(['john-0']);
   });
 
+  it('sorts a sortable column from the keyboard and reports it in aria-sort', async () => {
+    host.tableCells[0].sortable = true;
+    await render();
+    const header = element().querySelector<HTMLTableCellElement>('th.sortable')!;
+    expect(header.getAttribute('tabindex')).toBe('0');
+    expect(header.getAttribute('aria-sort')).toBe('none');
+
+    header.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await render();
+    expect(header.getAttribute('aria-sort')).toBe('ascending');
+
+    header.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    await render();
+    expect(header.getAttribute('aria-sort')).toBe('descending');
+  });
+
+  it('keeps a column that is not sortable out of the tab order', async () => {
+    await render();
+    const header = element().querySelector<HTMLTableCellElement>('th.mat-mdc-header-cell')!;
+    expect(header.hasAttribute('tabindex')).toBe(false);
+    expect(header.hasAttribute('aria-sort')).toBe(false);
+  });
+
   it('collapses all rows when the tab changes', async () => {
     host.tabs.set([
       { id: 'a', label: 'A' },

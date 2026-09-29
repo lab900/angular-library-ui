@@ -3,7 +3,11 @@
     mat-header-cell
     *matHeaderCellDef
     (click)="handleHeaderClick(cell())"
-    [class.sortable]="!disableSort() && cell().sortable"
+    (keydown.enter)="handleHeaderKeydown($event, cell())"
+    (keydown.space)="handleHeaderKeydown($event, cell())"
+    [class.sortable]="sortable()"
+    [attr.tabindex]="sortable() ? 0 : null"
+    [attr.aria-sort]="ariaSort()"
     [ngClass]="cellHeaderClass()"
     matTooltipClass="lab900-table__mat-tooltip"
     [matTooltipDisabled]="!cell().cellHeaderTooltip"

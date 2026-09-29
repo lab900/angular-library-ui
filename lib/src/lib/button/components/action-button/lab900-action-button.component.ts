@@ -14,6 +14,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Lab900ActionDirective } from '../lab900-action.directive';
 import { Lab900ActionButtonMenuItemComponent } from '../action-button-menu-item/lab900-action-button-menu-item.component';
 
+/**
+ * A button built from an ActionButton config. With sub actions it opens a menu, with the `toggle` type it is a
+ * button toggle group.
+ */
 @Component({
   selector: 'lab900-action-button',
   templateUrl: './lab900-action-button.component.html',
@@ -48,5 +52,12 @@ export class Lab900ActionButtonComponent<T = undefined> extends Lab900ActionDire
 
   protected readonly tooltipValue = computed(() => {
     return computeReactiveStrictStringOption<T>(this.action().tooltip?.value, this.data);
+  });
+
+  /** The explicit aria label, or the tooltip on the icon-only types, whose label is an icon name */
+  protected readonly accessibleLabel = computed(() => {
+    const type = this.buttonType();
+    const iconOnly = type === 'icon' || type === 'fab' || type === 'mini-fab';
+    return this.ariaLabel() || (iconOnly && this.tooltipValue()) || undefined;
   });
 }

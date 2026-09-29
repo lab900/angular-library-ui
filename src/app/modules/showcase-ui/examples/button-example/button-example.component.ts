@@ -1,59 +1,63 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Lab900ButtonComponent } from '@lab900/ui';
 
 @Component({
   selector: 'lab900-button-example',
-  styles: ['p {margin: 10px 0}'],
   imports: [Lab900ButtonComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: `
+    .button-grid {
+      display: grid;
+      grid-template-columns: 80px repeat(3, max-content);
+      gap: 16px 24px;
+      align-items: center;
+    }
+    .column-title {
+      font-weight: 500;
+    }
+  `,
   template: `
-    <p>Raised button</p>
-    <lab900-button
-      (btnClick)="log('Raised button')"
-      color="primary"
-      type="raised"
-      label="hello world"
-      suffixIcon="remove_red_eye"
-      buttonId="Raised-button"
-      [throttleTimeInMs]="1000" />
-    <p>Raised button disabled</p>
-    <lab900-button
-      [disabled]="true"
-      (btnClick)="log('Raised button disabled')"
-      color="primary"
-      type="raised"
-      label="hello world"
-      buttonId="Raised-button-disabled"
-      suffixIcon="remove_red_eye" />
-    <p>Stroked button</p>
-    <lab900-button
-      (btnClick)="log('Stroked button')"
-      color="primary"
-      type="stroked"
-      label="hello world"
-      buttonId="Stroked-button"
-      prefixIcon="edit" />
-    <p>Stroked button disabled</p>
-    <lab900-button
-      (btnClick)="log('Stroked button disabled')"
-      [disabled]="true"
-      color="primary"
-      type="stroked"
-      label="hello world"
-      buttonId="Stroked-button-disabled"
-      prefixIcon="edit" />
-    <p>Raised button color= accent</p>
-    <lab900-button color="accent" type="raised" label="hello world" />
-    <p>Icon button</p>
-    <lab900-button type="icon" label="delete" (btnClick)="log('Icon button')" />
-    <p>Fab icon button</p>
-    <lab900-button type="fab" label="delete" (btnClick)="log(' Fab Icon button')" />
-    <p>Fab-mini icon button</p>
-    <lab900-button type="mini-fab" label="delete" (btnClick)="log('Fab Mini Icon button')" />
+    <div class="button-grid">
+      <span></span>
+      <span class="column-title">Default</span>
+      <span class="column-title">With icon</span>
+      <span class="column-title">Disabled</span>
+
+      <span class="column-title">raised</span>
+      <lab900-button type="raised" label="Save" (btnClick)="clicked.set('raised')" />
+      <lab900-button type="raised" label="Save" prefixIcon="save" (btnClick)="clicked.set('raised with icon')" />
+      <lab900-button type="raised" label="Save" [disabled]="true" />
+
+      <span class="column-title">stroked</span>
+      <lab900-button type="stroked" label="Edit" (btnClick)="clicked.set('stroked')" />
+      <lab900-button type="stroked" label="Edit" prefixIcon="edit" (btnClick)="clicked.set('stroked with icon')" />
+      <lab900-button type="stroked" label="Edit" [disabled]="true" />
+
+      <span class="column-title">flat</span>
+      <lab900-button type="flat" label="Open" (btnClick)="clicked.set('flat')" />
+      <lab900-button type="flat" label="Open" suffixIcon="open_in_new" (btnClick)="clicked.set('flat with icon')" />
+      <lab900-button type="flat" label="Open" [disabled]="true" />
+
+      <span class="column-title">accent</span>
+      <lab900-button type="raised" color="accent" label="Accent" (btnClick)="clicked.set('accent')" />
+      <span></span>
+      <span></span>
+    </div>
+
+    <p>For the icon types, the label is the name of the Material icon.</p>
+    <div class="button-grid">
+      <span class="column-title">icon</span>
+      <span class="column-title">fab</span>
+      <span class="column-title">mini-fab</span>
+      <span></span>
+
+      <lab900-button type="icon" label="delete" (btnClick)="clicked.set('icon')" />
+      <lab900-button type="fab" label="add" (btnClick)="clicked.set('fab')" />
+      <lab900-button type="mini-fab" label="add" (btnClick)="clicked.set('mini-fab')" />
+    </div>
+
+    <p>Last clicked: {{ clicked() ?? '-' }}</p>
   `,
 })
 export class ButtonExampleComponent {
-  public log(message: string): void {
-    console.log(message);
-  }
+  protected readonly clicked = signal<string | undefined>(undefined);
 }

@@ -15,6 +15,9 @@ import { MergerItemComponent } from '../../abstracts/custom-component.abstract';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AsyncPipe } from '@angular/common';
 
+/**
+ * One side of a merger row. The merger renders it; you only need it to build your own merger layout.
+ */
 @Component({
   selector: 'lab900-merger-item',
   templateUrl: './merger-item.component.html',
@@ -27,7 +30,9 @@ import { AsyncPipe } from '@angular/common';
 })
 export class Lab900MergerItemComponent<T> {
   public readonly config = input.required<MergeConfig<T>>();
+  /** The whole object of this side */
   public readonly data = input.required<T>();
+  /** Highlight the item as the side that the merge starts from */
   public readonly active = input<boolean>(false);
 
   protected readonly flexDirection = computed(() =>

@@ -5,5 +5,6 @@ import { Signal } from '@angular/core';
  * The merger sets the data with setInput, so a signal input and a decorator input are both possible.
  */
 export interface MergerItemComponent<T = any> {
+  /** The whole object of the side that the component is on */
   data?: T | Signal<T | undefined>;
 }

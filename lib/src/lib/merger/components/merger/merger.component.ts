@@ -19,6 +19,10 @@ interface MergeSources<T> {
   selectedSide: 'left' | 'right';
 }
 
+/**
+ * Compares two objects side by side, one row per schema config, and lets the user pick values from the other side.
+ * Rows with a difference get an arrow; a click on it merges that value.
+ */
 @Component({
   selector: 'lab900-merger',
   templateUrl: './merger.component.html',
@@ -32,9 +36,12 @@ export class Lab900MergerComponent<T> {
 
   public readonly leftObject = input.required<MergeObject<T>>();
   public readonly rightObject = input.required<MergeObject<T>>();
+  /** Keep `selectedSide`: the user cannot switch the side that the merge starts from */
   public readonly fixed = input<boolean>(false);
+  /** Show a progress bar instead of the rows */
   public readonly loading = input<boolean>(false);
 
+  /** One row per config. The order of the configs is the order of the rows. */
   public readonly schemaInput = input.required<MergeConfig<T>[]>({ alias: 'schema' });
 
   /** The side that the merge starts from. The active values of the other side are merged into it. */
@@ -54,6 +61,7 @@ export class Lab900MergerComponent<T> {
     computation: (source, previous) =>
       previous && previous.source.schema === source.schema ? this.clearChoices(previous.value) : source.schema,
   });
+  /** Emits the schema with the choices of the user: `active` is set on the configs that are merged */
   public readonly schemaChange = outputFromObservable(toObservable(this.schema));
 
   private readonly master = computed(() => (this.selectedSide() === 'right' ? this.rightObject() : this.leftObject()));
@@ -71,6 +79,7 @@ export class Lab900MergerComponent<T> {
     });
     return result;
   });
+  /** Emits the merged object after every change */
   public readonly resultChange = outputFromObservable(toObservable(this.result));
 
   protected readonly showLoading = computed(

@@ -38,6 +38,21 @@
               "src/assets",
               "src/guides",
               {
+                "glob": "CHANGELOG.md",
+                "input": ".",
+                "output": "/"
+              },
+              {
+                "glob": "AGENTS.md",
+                "input": "lib",
+                "output": "/guides"
+              },
+              {
+                "glob": "llms*.txt",
+                "input": "src/assets/api",
+                "output": "/"
+              },
+              {
                 "glob": "**/*-example.component.*",
                 "input": "src/app/modules/showcase-ui/examples",
                 "output": "/examples"
@@ -125,7 +140,8 @@
             "baseHref": "https://lab900.github.io/angular-library-ui/",
             "name": "Lab900",
             "email": "info@lab900.com",
-            "dir": "dist/angular-library-ui/browser"
+            "dir": "dist/angular-library-ui/browser",
+            "add": true
           }
         },
         "lint": {

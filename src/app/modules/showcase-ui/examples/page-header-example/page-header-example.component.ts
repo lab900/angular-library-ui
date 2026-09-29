@@ -1,85 +1,62 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ActionButton, BreadCrumb, Lab900PageHeaderComponent, PageHeaderNavItem } from '@lab900/ui';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabNavPanel } from '@angular/material/tabs';
+
+interface PageData {
+  invoiceNumber: string;
+}
 
 @Component({
   selector: 'lab900-page-header-example',
-  imports: [Lab900PageHeaderComponent, MatTabsModule],
-  // eslint-disable-next-line
-  changeDetection: ChangeDetectionStrategy.Eager,
-  template: ` <lab900-page-header
-      [pageTitle]="pageTitle"
-      [navItems]="navItems"
-      [actions]="actions"
+  imports: [Lab900PageHeaderComponent, MatTabNavPanel],
+  template: `
+    <lab900-page-header
+      pageTitle="Invoice details"
       [breadCrumbs]="breadCrumbs"
-      [data]="{ tab: 'Examples' }"
-      [tabPanel]="tabNavPanel" />
-    <mat-tab-nav-panel #tabNavPanel />`,
+      [data]="pageData"
+      [navItems]="navItems"
+      [tabPanel]="tabNavPanel"
+      [actions]="actions" />
+    <!-- the tabs only render with a tab panel; the content of the active tab goes inside it -->
+    <mat-tab-nav-panel #tabNavPanel />
+
+    <p>Last action: {{ lastAction() ?? '-' }}</p>
+  `,
 })
 export class PageHeaderExampleComponent {
-  public pageTitle = 'Example page header';
-  public navItems: PageHeaderNavItem[] = [
-    {
-      label: 'Tab 1',
-      route: '#',
-      suffixIcon: 'warning',
-    },
-    {
-      label: 'Tab 2',
-      route: '#',
-      prefixIcon: 'warning',
-    },
-  ];
+  protected readonly lastAction = signal<string | undefined>(undefined);
 
-  public breadCrumbs: BreadCrumb[] = [
+  // `data` is passed to every function in the breadcrumbs, nav items and actions
+  protected readonly pageData: PageData = { invoiceNumber: '2026-042' };
+
+  protected readonly breadCrumbs: BreadCrumb[] = [
+    { title: 'Home', route: '/' },
+    { title: 'Invoices', route: '/page-header' },
     {
-      title: 'Home',
-      route: '/',
-    },
-    {
-      title: 'UI Library',
-      route: '/ui',
-    },
-    {
-      title: 'Page header',
+      title: (data: PageData) => `Invoice ${data.invoiceNumber}`,
       route: '/page-header',
-    },
-    {
-      title: (data: { tab: string }) => data.tab,
-      route: `/page-header`,
-      queryParams: (data: { tab: string }) => ({
-        tab: data.tab.toLowerCase(),
-      }),
+      queryParams: (data: PageData) => ({ invoice: data.invoiceNumber }),
     },
   ];
 
-  public actions: ActionButton[] = [
-    {
-      type: 'toggle',
-      label: '',
-      disabled: true,
-      subActions: [
-        {
-          label: 'Action 1',
-          action: () => console.log('action 1'),
-        },
-        {
-          label: 'Action 2',
-          action: () => console.log('action 2'),
-        },
-      ],
-    },
+  // without a route, a tab links to the current page; the active tab is the one whose query params match the url
+  protected readonly navItems: PageHeaderNavItem[] = [
+    { label: 'Details', queryParams: { section: 'details' }, prefixIcon: 'description' },
+    { label: 'Payments', queryParams: { section: 'payments' }, suffixIcon: 'warning' },
+  ];
+
+  protected readonly actions: ActionButton[] = [
     {
       label: 'Cancel',
-      prefixIcon: 'edit',
-      action: () => console.log('cancel'),
       type: 'stroked',
+      prefixIcon: 'close',
+      action: () => this.lastAction.set('Cancel'),
     },
     {
       label: 'Save',
-      suffixIcon: 'keyboard_arrow_down',
-      action: () => console.log('save'),
       type: 'flat',
+      prefixIcon: 'save',
+      action: () => this.lastAction.set('Save'),
     },
   ];
 }

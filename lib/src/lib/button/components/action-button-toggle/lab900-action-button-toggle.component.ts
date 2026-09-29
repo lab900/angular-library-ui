@@ -6,6 +6,9 @@ import { MatIcon } from '@angular/material/icon';
 import { PreventDoubleClickDirective } from '../../directives/preventDoubleClick.directive';
 import { TranslatePipe } from '@ngx-translate/core';
 
+/**
+ * A button toggle group with one option per sub action. `lab900-action-button` renders it for the `toggle` type.
+ */
 @Component({
   selector: 'lab900-action-button-toggle',
   templateUrl: './lab900-action-button-toggle.component.html',
