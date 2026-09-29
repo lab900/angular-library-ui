@@ -6,6 +6,8 @@ Breaking changes are marked **BREAKING**.
 
 ## [Unreleased]
 
+## [22.1.1] - 2026-09-29
+
 ### Added
 
 - `ariaLabel` (translation key) on `ActionButton` and `lab900-button`. Icon, fab and mini-fab buttons without it
@@ -313,7 +315,8 @@ Contains breaking changes compared to 19.1.4. Use 19.2.0 instead.
 
 No changelog available.
 
-[Unreleased]: https://github.com/lab900/angular-library-ui/compare/22.1.0...HEAD
+[Unreleased]: https://github.com/lab900/angular-library-ui/compare/22.1.1...HEAD
+[22.1.1]: https://github.com/lab900/angular-library-ui/compare/22.1.0...22.1.1
 [22.1.0]: https://github.com/lab900/angular-library-ui/compare/22.0.9...22.1.0
 [22.0.9]: https://github.com/lab900/angular-library-ui/compare/19.2.8...22.0.9
 [19.2.8]: https://github.com/lab900/angular-library-ui/compare/19.2.7...19.2.8
