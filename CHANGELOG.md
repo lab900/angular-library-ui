@@ -4,7 +4,7 @@ All notable changes to `@lab900/ui` are documented in this file. The format is b
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The major version follows the Angular major version.
 Breaking changes are marked **BREAKING**.
 
-## [Unreleased]
+## [22.1.1] - 2026-09-29
 
 ### Added
 
@@ -313,7 +313,8 @@ Contains breaking changes compared to 19.1.4. Use 19.2.0 instead.
 
 No changelog available.
 
-[Unreleased]: https://github.com/lab900/angular-library-ui/compare/22.1.0...HEAD
+[Unreleased]: https://github.com/lab900/angular-library-ui/compare/22.1.1...HEAD
+[22.1.1]: https://github.com/lab900/angular-library-ui/compare/22.1.0...22.1.1
 [22.1.0]: https://github.com/lab900/angular-library-ui/compare/22.0.9...22.1.0
 [22.0.9]: https://github.com/lab900/angular-library-ui/compare/19.2.8...22.0.9
 [19.2.8]: https://github.com/lab900/angular-library-ui/compare/19.2.7...19.2.8
