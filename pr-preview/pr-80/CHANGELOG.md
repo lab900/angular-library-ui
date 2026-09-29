@@ -1,258 +1,349 @@
 # Changelog
 
-## 22.1.1
-
-- Docs: `AGENTS.md` with instructions for AI coding agents. It ships in the package at
-  `node_modules/@lab900/ui/AGENTS.md` and is shown on the new AI agents page of the showcase.
-- Docs: the showcase serves `llms.txt` and `llms-full.txt` (the agent guide plus the full API reference) at its root.
-- Feat: `ariaLabel` on `ActionButton` and on `lab900-button`, a translation key for the accessible name. An icon,
-  fab or mini-fab action button without it falls back to its tooltip, then to the icon name.
-- Fix: accessibility.
-  - the icons in buttons, nav items and sort headers are `aria-hidden`.
-  - a sortable table header is in the tab order, sorts on Enter and Space, and sets `aria-sort`.
-  - nav list links are in the tab order again, and the active link sets `aria-current="page"`.
-  - a nav item with children sets `aria-expanded`, and its overlay also opens on keyboard focus.
-  - the alert and confirmation dialogs no longer change the tab order with `tabindex`; the confirm button keeps the
-    initial focus through `cdkFocusInitial`.
-- Breaking: a nav item with children renders a `<button class="nav-item-btn expandable">` instead of an `<a>`. Update
-  CSS that targets `a.nav-item-btn.expandable`.
+All notable changes to `@lab900/ui` are documented in this file. The format is based on
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The major version follows the Angular major version.
+Breaking changes are marked **BREAKING**.
 
-## 22.1.0
-
-- Feat: expandable table rows. Add a `lab900TableRowDetail` template to `lab900-table` and a click on a row
-  expands it with that content below it.
-  - `expandableRows` input (`ExpandableRows`): `enabled`, `multiple` (default `true`), `isExpandable` and `compareFn`.
-  - `expandedRows` model to expand or collapse rows from the parent, and a `rowExpandToggle` output.
-  - public methods `toggleRowExpansion`, `expandRow`, `collapseRow`, `collapseAllRows` and `isRowExpanded`, for example
-    to toggle a row from a table row action.
-  - switching tabs collapses all rows, and a dragged row collapses when the drag starts.
-- Perf: faster rendering of large tables, without API changes.
-  - all cells of a table share one `ResizeObserver` for the overflow tooltip, instead of one observer per cell.
-  - a cell no longer scans all table rows when it initializes; keyboard navigation reads the rows when a key is
-    pressed. This also fixes arrow key navigation after the rows were sorted, added, or removed.
-  - focusing a cell only runs change detection when the cell becomes editable.
-  - the `translate` pipe only runs for cell and header tooltips that have a text.
-  - expanded rows are looked up in a set when no `compareFn` is set.
-  - column headers are no longer deferred.
-- Perf: lighter action buttons and nav list, without API changes.
-  - `lab900PreventDoubleClick` throttles with a timestamp instead of signals, rxjs and a timer per click. The
-    `throttledClick` output now emits synchronously inside the click event. This fixes `keepMenuOpen`, whose
-    `stopPropagation()` ran too late.
-  - the sub actions menu of an action button only renders its items while the menu is open.
-  - the `translate` pipe only runs for action button tooltips that have a text.
-  - `lab900-button` uses class bindings instead of `ngClass`.
-  - the nav list keeps the ids of its items when it recomputes, so it no longer recreates the whole tree.
-    It also no longer changes the `NavItemGroup` and `NavItem` objects passed in, so an item that `hide` hid comes back
-    once `hide` returns `false`.
-  - a nav item checks the `allowOverlayMenuUntil` breakpoint once per change instead of on every check, and an
-    item with `childrenInOverlay` now follows window resizes.
-- Fix: `hide` on a sub action of a toggle action button now hides that option. Before, the options only
-  looked at the `hide` of the toggle itself.
+## [Unreleased]
 
-## 22.0.9
+### Added
 
-- security updates to npm package versions and pipelines, no code changes
+- `ariaLabel` (translation key) on `ActionButton` and `lab900-button`. Icon, fab and mini-fab buttons without it
+  fall back to the tooltip, then the icon name.
+- `AGENTS.md` for AI coding agents, shipped at `node_modules/@lab900/ui/AGENTS.md` and shown on the showcase AI
+  agents page.
+- Showcase serves `llms.txt` and `llms-full.txt` (agent guide + full API reference) at its root.
 
-- Upgrade to Angular 22, see [angular upgrade document](ANGULAR-UPGRADE-19.2-TO-22.1.md) for all changes done
-  - updated the [cloudbuild.yaml](cloudbuild.yaml) file to use `npm stage publish` instead of `npm publish`
-  - the showcase app now compiles the library sources instead of `dist/@lab900/ui`.
-    A library build is no longer needed for local development, see the
-    [README](README.md#run-the-project-locally).
+### Changed
 
-#### Breaking Changes for Merger Component:
+- **BREAKING:** a nav item with children renders `<button class="nav-item-btn expandable">` instead of `<a>`.
+  Update CSS that targets `a.nav-item-btn.expandable`.
 
-- The component is now fully signal-based.
-- `Lab900MergerComponent` now runs with `ChangeDetectionStrategy.OnPush`.
-- `result` is a signal: use `merger.result()`.
-- `leftObject` and `rightObject` are required inputs. An input that is never bound throws NG0950.
-- `selected` is a model signal, no longer a plain property.
-- `loading` is a plain input, no longer a model. The `loadingChange` event is gone.
-- `schema` is an input with a `schemaChange` output, no longer a model. `[schema]` and `[(schema)]` keep
-  working, but the event is now asynchronous.
-- `toggleActive(config, index)` is now `toggleActive(index)`.
-- `setInitialValues()` and `compare()` are no longer public.
-- a combined list always starts with the master side. The old toggle path put the left side first.
-- a write to `selected` from the parent clears the merge choices, exactly like the radio buttons do.
+### Fixed
 
-## 19.2.8
+- Accessibility:
+  - icons in buttons, nav items and sort headers are `aria-hidden`.
+  - sortable headers are focusable, sort on Enter/Space and set `aria-sort`.
+  - nav list links are focusable again; the active link sets `aria-current="page"`.
+  - nav items with children set `aria-expanded`; their overlay also opens on keyboard focus.
+  - alert and confirmation dialogs no longer override `tabindex`; the confirm button gets initial focus via
+    `cdkFocusInitial`.
 
-- Fix: CellWithAnchorRendererComponent empty cell display
+## [22.1.0] - 2026-09-23
 
-## 19.2.7
+### Added
 
-- Fix: table with input "multiSort=false" will now be able to toggle between 'asc', 'desc', and 'no sorting', instead of just 'asc' and 'desc'.
+- Expandable table rows: add a `lab900TableRowDetail` template to `lab900-table`; clicking a row shows it below.
+  - `expandableRows` input (`ExpandableRows`): `enabled`, `multiple` (default `true`), `isExpandable`, `compareFn`.
+  - `expandedRows` model and `rowExpandToggle` output.
+  - methods `toggleRowExpansion`, `expandRow`, `collapseRow`, `collapseAllRows`, `isRowExpanded`.
+  - switching tabs collapses all rows; dragging a row collapses it.
 
-## 19.2.6
+### Changed
 
-- Feat: add support dynamic tooltip on action button
+- `lab900PreventDoubleClick`: `throttledClick` now emits synchronously inside the click event.
+- Performance, without API changes:
+  - table: one shared `ResizeObserver` for overflow tooltips; cells no longer scan all rows on init; focusing a
+    cell only runs change detection when it becomes editable; column headers are no longer deferred; expanded rows
+    use a set lookup when no `compareFn` is set.
+  - action buttons: `lab900PreventDoubleClick` throttles with a timestamp; sub action menus render items only while
+    open; `lab900-button` uses class bindings instead of `ngClass`.
+  - nav list: keeps item ids on recompute instead of recreating the tree; nav items check `allowOverlayMenuUntil`
+    once per change.
+  - the `translate` pipe only runs for tooltips that have text.
 
-## 19.2.5
+### Fixed
 
-- Fix: import issue from hashed packages
+- Arrow key navigation in the table after rows are sorted, added or removed.
+- `keepMenuOpen` on action buttons (`stopPropagation()` ran too late).
+- Nav list no longer mutates the passed `NavItemGroup`/`NavItem` objects, so an item hidden by `hide` reappears
+  when `hide` returns `false`.
+- Nav items with `childrenInOverlay` follow window resizes.
+- `hide` on a sub action of a toggle action button now hides that option.
 
-## 19.2.4
+## [22.0.9] - 2026-09-01
 
-- Chore: update vulnerable package, still one left (angular-cli-ghpages, waiting on an update)
+Upgrade to Angular 22. See [ANGULAR-UPGRADE-19.2-TO-22.1.md](ANGULAR-UPGRADE-19.2-TO-22.1.md) for details.
 
-## 19.2.3
+### Changed
 
-- Fix: hover issue for action buttons with multi-level sub menus
-- Fix: re-render warnings because of wrong trackers on navigation for loops.
+- **BREAKING:** `Lab900MergerComponent` is fully signal-based and `OnPush`:
+  - `result` is a signal: use `merger.result()`.
+  - `leftObject` and `rightObject` are required inputs (unbound throws NG0950).
+  - `selected` is a model signal; writing it from the parent clears the merge choices, like the radio buttons do.
+  - `loading` is a plain input instead of a model.
+  - `schema` is an input with a `schemaChange` output. `[schema]` and `[(schema)]` still work, but the event is
+    now asynchronous.
+  - `toggleActive(config, index)` is now `toggleActive(index)`.
+  - combined lists always start with the master side.
+- [cloudbuild.yaml](cloudbuild.yaml) uses `npm stage publish`.
+- The showcase compiles the library from source; no library build is needed for local development (see the
+  [README](README.md#run-the-project-locally)).
 
-## 19.2.2
+### Removed
 
-### Filter header only toggle columns
+- **BREAKING:** `Lab900MergerComponent`: the `loadingChange` output, and the public `setInitialValues()` and
+  `compare()` methods.
 
-- Fixed an issue where the header filter toggle would not properly show the state of the cells that are hidden/shown.
+### Security
 
-## 19.2.1
+- Updated npm packages and pipelines.
 
-### Show header filter fixes
+## [19.2.8] - 2026-08-06
 
-- Fixed an issue where the header filter would not show up when `visibleCells` and `hiddenCells` contains items and add new param `showHeaderFilter` to explicitly show/hide the header filter.
+### Fixed
 
-## 19.2.0
+- `CellWithAnchorRendererComponent` empty cell display.
 
-#### Breaking Changes
+## [19.2.7] - 2026-02-25
 
-- ActionButton's sub-actions now support reactive options.
-  Meaning the number of sub-actions can change dynamically based on the row-data of a table. (e.g. every row having a
-  different number of files to download). This can be breaking if you were dynamically adding sub-actions to the
-  array after initialization.
+### Fixed
 
-## 19.1.5
+- With `multiSort=false`, sorting cycles through asc, desc and none.
 
-- this version is deprecated, and the version tag was removed, since it contains some breaking changes in comparison to
-  19.1.4
+## [19.2.6] - 2025-10-13
 
-## 19.1.4
+### Added
 
-- Fix: table cell select not resetting to view after editing
+- Dynamic tooltip on action buttons.
 
-## 19.1.0
+## [19.2.5] - 2025-09-10
 
-### Action Menu/Button/Toggle Improvements
+### Fixed
 
-- All action types now have **reactive options**.
-- Action menus will close on click by default, unless explicitly set to stay open using the new `keepMenuOpen` option.
-- The selection indicator in the `Lab900ActionButtonToggleComponent` can now be disabled using the
-  new `hideSelectionIndicator` option.
+- Import issue from hashed packages.
 
-#### Breaking Changes
+## [19.2.4] - 2025-09-09
 
-- **Reactive options no longer support observables.** They now use **signals**, so you'll need to provide a signal or a
-  function that returns a signal.
-- The **action callback** now receives a single argument: `ActionButtonEvent`, which contains both the original event
-  and a reference to the component.
+### Security
 
-### Table footer improvements
+- Updated vulnerable packages (`angular-cli-ghpages` still pending).
 
-- Footer cells can now handle signals, making async data possible without workarounds
-- Footer cells can display a loading spinner while async data is loading
-- Roadmap: would be nice to also have footer renderers.
+## [19.2.3] - 2025-09-01
 
-#### Breaking Changes
+### Fixed
 
-- All deprecated `TableCell` properties have been removed as the logic behind them was already removed.
+- Hover on action buttons with multi-level sub menus.
+- Re-render warnings from wrong `track` expressions in navigation loops.
 
-## 19.0.3
+## [19.2.2] - 2025-08-28
 
-- Fixed issues with table footers not showing up
+### Fixed
 
-## 19.0.1
+- Header filter toggle shows the correct hidden/shown state of cells.
 
-- Angular 19 update
-- All module imports have been removed
-- Some smaller improvements
-- No breaking changes
+## [19.2.1] - 2025-08-28
 
-## 18.1.5
+### Added
 
-- add tooltips to action menu items (sub-actions)
+- `showHeaderFilter` to explicitly show or hide the header filter.
 
-## 18.1.4
+### Fixed
 
-- adjusting id's to buttons for testing purposes
+- Header filter not showing when `visibleCells` and `hiddenCells` both contain items.
 
-## 18.1.3
+## [19.2.0] - 2025-08-04
 
-- adding id's to buttons for testing purposes
+### Changed
 
-## 18.1.2
+- **BREAKING:** `ActionButton` sub actions support reactive options, so their number can change per row. This
+  breaks code that adds sub actions to the array after initialization.
 
-- deferred table cells for better performance
+## [19.1.5] - 2025-08-01 [YANKED]
 
-## 18.0.12
+Contains breaking changes compared to 19.1.4. Use 19.2.0 instead.
 
-- fix: nav-item with children where throwing NG0953 errors
+## [19.1.4] - 2025-06-11
 
-## 18.0.11
+### Fixed
 
-- fix: console errors with footer column defs when data is emptied async
+- Table cell select not returning to view mode after editing.
 
-## 18.0.10
+## [19.1.0] - 2025-04-30
 
-- fix: sorting arrows in table not updating correctly
+### Added
 
-## 18.0.9
+- Reactive options for all action types.
+- `keepMenuOpen` to keep an action menu open on click.
+- `hideSelectionIndicator` on `Lab900ActionButtonToggleComponent`.
+- Footer cells accept signals and show a loading spinner while async data loads.
 
-- fix: table tooltip translations
+### Changed
 
-## 18.0.7/18.0.8
+- **BREAKING:** reactive options use signals instead of observables: pass a signal or a function returning one.
+- **BREAKING:** action callbacks receive a single `ActionButtonEvent` argument (original event + component
+  reference).
+- Action menus close on click by default.
 
-- fix: issues with structuredClone
+### Removed
 
-## 18.0.6
+- **BREAKING:** all deprecated `TableCell` properties.
 
-- fix: table cell value states
+## [19.0.3] - 2025-03-24
 
-## 18.0.5
+### Fixed
 
-- fix hideSelectableRow
+- Table footers not showing.
 
-## 18.0.4
+## [19.0.1] - 2025-03-11
 
-- fix issues with navigation table cells with some rows not having editable cells
+### Changed
 
-## 18.0.3
+- Upgrade to Angular 19; all module imports removed. No breaking changes.
 
-- Upgrade to Angular 18
-- More components are using Signals
+## [18.1.5] - 2025-01-30
 
-### Breaking changes
+### Added
 
-- Some Signal updates might break your application.
-- Lab900DataListComponent: removed - was not used anymore
-- Lab900SharingComponent: removed - was not used anymore
+- Tooltips on action menu items (sub actions).
 
-## 17.0.6
+## [18.1.4] - 2024-11-27
 
-- fix issues with navigation table cells with some rows not having editable cells
+### Changed
 
-## 17.0.2
+- Adjusted button ids for testing.
 
-- Fix required type in Lab900ButtonComponent
+## [18.1.3] - 2024-11-26
 
-## 17.0.1
+### Added
 
-- Fix click event on Lab900ActionButtonComponent
+- Ids on buttons for testing.
 
-## 17.0.0
+## [18.1.2] - 2024-10-17
 
-Upgrade to Angular 17
+### Changed
 
-### Breaking changes
+- Deferred table cells for better performance.
 
-#### The last modules have been removed:
+## [18.0.12] - 2024-10-14
 
-- `Lab900MergerModule` is removed. Import the standalone component `Lab900MergerComponent` instead.
-- `DialogModule` is removed. Import any of the standalone
-  components `ConfirmationDialogComponent`, `AlertDialogComponent` instead.
-- `Lab900ButtonModule` is removed. Import any of the standalone
-  componenst `Lab900ButtonComponent`, `Lab900ActionButtonToggleComponent`, `Lab900ActionButtonMenuComponent`, `Lab900ActionButtonComponent`
-  instead.
-- `Lab900DataListModule` is removed. Import the standalone component `Lab900DataListComponent` instead.
+### Fixed
 
-## older version
+- NG0953 errors on nav items with children.
 
-Sorry no changelog available :(
+## [18.0.11] - 2024-10-09
+
+### Fixed
+
+- Console errors from footer column defs when data is emptied async.
+
+## [18.0.10] - 2024-09-13
+
+### Fixed
+
+- Table sort arrows not updating.
+
+## [18.0.9] - 2024-09-03
+
+### Fixed
+
+- Table tooltip translations.
+
+## [18.0.8] - 2024-08-29
+
+### Fixed
+
+- Issues with `structuredClone` (also in 18.0.7).
+
+## [18.0.6] - 2024-08-23
+
+### Fixed
+
+- Table cell value states.
+
+## [18.0.5] - 2024-08-21
+
+### Fixed
+
+- `hideSelectableRow`.
+
+## [18.0.4] - 2024-08-20
+
+### Fixed
+
+- Navigation table cells when some rows have no editable cells.
+
+## [18.0.3] - 2024-07-30
+
+### Changed
+
+- Upgrade to Angular 18.
+- **BREAKING:** more components use signals, which may affect your application.
+
+### Removed
+
+- **BREAKING:** `Lab900DataListComponent` and `Lab900SharingComponent` (unused).
+
+## [17.0.6] - 2024-08-20
+
+### Fixed
+
+- Navigation table cells when some rows have no editable cells.
+
+## [17.0.2] - 2024-05-23
+
+### Fixed
+
+- Required type in `Lab900ButtonComponent`.
+
+## [17.0.1] - 2024-05-22
+
+### Fixed
+
+- Click event on `Lab900ActionButtonComponent`.
+
+## [17.0.0] - 2024-04-19
+
+### Changed
+
+- Upgrade to Angular 17.
+
+### Removed
+
+- **BREAKING:** the last modules. Import the standalone components instead:
+
+  | Removed                | Use instead                                                                                                                    |
+  | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+  | `Lab900MergerModule`   | `Lab900MergerComponent`                                                                                                        |
+  | `DialogModule`         | `ConfirmationDialogComponent`, `AlertDialogComponent`                                                                          |
+  | `Lab900ButtonModule`   | `Lab900ButtonComponent`, `Lab900ActionButtonToggleComponent`, `Lab900ActionButtonMenuComponent`, `Lab900ActionButtonComponent` |
+  | `Lab900DataListModule` | `Lab900DataListComponent`                                                                                                      |
+
+## Older versions
+
+No changelog available.
+
+[Unreleased]: https://github.com/lab900/angular-library-ui/compare/22.1.0...HEAD
+[22.1.0]: https://github.com/lab900/angular-library-ui/compare/22.0.9...22.1.0
+[22.0.9]: https://github.com/lab900/angular-library-ui/compare/19.2.8...22.0.9
+[19.2.8]: https://github.com/lab900/angular-library-ui/compare/19.2.7...19.2.8
+[19.2.7]: https://github.com/lab900/angular-library-ui/compare/19.2.6...19.2.7
+[19.2.6]: https://github.com/lab900/angular-library-ui/compare/19.2.5...19.2.6
+[19.2.5]: https://github.com/lab900/angular-library-ui/compare/19.2.4...19.2.5
+[19.2.4]: https://github.com/lab900/angular-library-ui/compare/19.2.3...19.2.4
+[19.2.3]: https://github.com/lab900/angular-library-ui/compare/19.2.2...19.2.3
+[19.2.2]: https://github.com/lab900/angular-library-ui/compare/19.2.1...19.2.2
+[19.2.1]: https://github.com/lab900/angular-library-ui/compare/19.2.0...19.2.1
+[19.2.0]: https://github.com/lab900/angular-library-ui/compare/19.1.4...19.2.0
+[19.1.5]: https://www.npmjs.com/package/@lab900/ui/v/19.1.5
+[19.1.4]: https://github.com/lab900/angular-library-ui/compare/19.1.3...19.1.4
+[19.1.0]: https://github.com/lab900/angular-library-ui/compare/19.0.3...19.1.0
+[19.0.3]: https://github.com/lab900/angular-library-ui/compare/19.0.2...19.0.3
+[19.0.1]: https://github.com/lab900/angular-library-ui/compare/19.0.0...19.0.1
+[18.1.5]: https://www.npmjs.com/package/@lab900/ui/v/18.1.5
+[18.1.4]: https://www.npmjs.com/package/@lab900/ui/v/18.1.4
+[18.1.3]: https://github.com/lab900/angular-library-ui/compare/18.1.2...18.1.3
+[18.1.2]: https://github.com/lab900/angular-library-ui/compare/18.1.1...18.1.2
+[18.0.12]: https://github.com/lab900/angular-library-ui/compare/18.0.11...18.0.12
+[18.0.11]: https://github.com/lab900/angular-library-ui/compare/18.0.10...18.0.11
+[18.0.10]: https://github.com/lab900/angular-library-ui/compare/18.0.9...18.0.10
+[18.0.9]: https://github.com/lab900/angular-library-ui/compare/18.0.8...18.0.9
+[18.0.8]: https://github.com/lab900/angular-library-ui/compare/18.0.6...18.0.8
+[18.0.6]: https://github.com/lab900/angular-library-ui/compare/18.0.5...18.0.6
+[18.0.5]: https://github.com/lab900/angular-library-ui/compare/18.0.4...18.0.5
+[18.0.4]: https://github.com/lab900/angular-library-ui/compare/18.0.3...18.0.4
+[18.0.3]: https://github.com/lab900/angular-library-ui/compare/18.0.2...18.0.3
+[17.0.6]: https://github.com/lab900/angular-library-ui/compare/17.0.4...17.0.6
+[17.0.2]: https://www.npmjs.com/package/@lab900/ui/v/17.0.2
+[17.0.1]: https://www.npmjs.com/package/@lab900/ui/v/17.0.1
+[17.0.0]: https://github.com/lab900/angular-library-ui/compare/16.0.0...17.0.0
