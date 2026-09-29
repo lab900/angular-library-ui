@@ -1,0 +1,17 @@
+# @lab900/ui
+
+> Angular Material based UI components for Angular 22+: a config-driven data table, action buttons, nav list, page
+> header, dialogs, alerts and an object merger. Every component is standalone and signal based.
+
+Components take typed config objects (`TableCell<T>`, `ActionButton<T>`, `NavItemGroup`), and labels are
+`@ngx-translate/core` translation keys. Import every symbol from `@lab900/ui`.
+
+## Docs
+
+- [Instructions for AI agents](https://lab900.github.io/angular-library-ui/guides/AGENTS.md): setup, rules, every component with examples, common mistakes
+- [Getting started](https://lab900.github.io/angular-library-ui/guides/getting-started.md): installation and theming
+- [Changelog](https://lab900.github.io/angular-library-ui/CHANGELOG.md): changes per version, breaking changes included
+
+## Optional
+
+- [Full reference](https://lab900.github.io/angular-library-ui/llms-full.txt): the agent instructions plus the inputs, outputs and config fields of every public symbol

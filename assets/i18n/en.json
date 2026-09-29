@@ -25,6 +25,8 @@
     "pizza-error": "That is not a valid answer.",
     "guides": "Guides",
     "getting-started": "Getting started",
+    "ai-agents": "AI agents",
+    "changelog": "Changelog",
     "components": "Components"
   },
   "content": {
@@ -36,7 +38,6 @@
     "form-title": "Please enter your information below."
   },
   "reset": "Reset",
-  "log_result": "Log Result",
   "app": {
     "title": "Angular Libraries",
     "description": "Build with Angular Material"
