@@ -4,8 +4,6 @@ All notable changes to `@lab900/ui` are documented in this file. The format is b
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The major version follows the Angular major version.
 Breaking changes are marked **BREAKING**.
 
-## [Unreleased]
-
 ## [22.1.1] - 2026-09-29
 
 ### Added
