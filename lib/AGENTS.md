@@ -253,6 +253,8 @@ Enter and Space, and sets `aria-sort` from the `sort` input, so keep `sort` in s
   `showSelectAllCheckbox`). Outputs `selectionChanged` (the `SelectionModel<T>`) and
   `rowSelectToggle`.
 - Row click: `onRowClick: (row, index, event) => void`. It is an input, not an output.
+- Row links: `rowLink: (row, index) => Lab900TableRowLink | null | undefined` and
+  `rowLinkLabel: (row, index) => string | null | undefined` (see below).
 - Tabs: `tableTabs: Lab900TableTab[]` and `activeTabId` (model). A tab with `tableCells` shows other
   columns.
 - Editing: `disabledEditing`, output `cellValueChanged`.
@@ -300,6 +302,52 @@ protected readonly expandableRows: ExpandableRows<Order> = {
 `lab900TableRowDetailOf` only types the context. Use `compareFn` when the data is fetched again as
 new objects. From code, call `toggleRowExpansion`, `expandRow`, `collapseRow`, `collapseAllRows` and
 `isRowExpanded` on the table instance (`viewChild.required(Lab900TableComponent<Order>)`).
+
+### Row links
+
+`rowLink` makes a row a real link: hovering shows the url, and a middle click, a ctrl/cmd/shift click or
+the context menu opens it in a new tab or window. The browser handles those; `onRowClick` is not called.
+A plain click, an alt click and Enter on the link do not follow it: they call `onRowClick` and toggle an
+expandable row, as without `rowLink`. Without `onRowClick`, they navigate to the link with the router,
+unless the row expands. Clicks outside the link behave as without `rowLink`.
+
+```html
+<lab900-table
+  [tableCells]="tableCells"
+  [data]="orders()"
+  [trackByTableFn]="trackById"
+  [rowLink]="orderLink"
+  [rowLinkLabel]="orderLinkLabel"
+  [onRowClick]="openOrder" />
+```
+
+```ts
+private readonly router = inject(Router);
+private readonly route = inject(ActivatedRoute);
+
+// null or undefined: the row is not a link
+protected readonly orderLink = (order: Order): UrlTree | null =>
+  order.archived ? null : this.router.createUrlTree([order.id], { relativeTo: this.route });
+// translation key, the name of the link for screen readers
+protected readonly orderLinkLabel = (order: Order): string => `orders.open-order-${order.id}`;
+// optional: without it, a plain click navigates to the link
+protected readonly openOrder = (order: Order): void => {
+  this.saveFilters();
+  void this.router.navigate([order.id], { relativeTo: this.route });
+};
+```
+
+`Lab900TableRowLink` is what `routerLink` accepts: a string, commands or a `UrlTree`. Commands resolve
+relative to the route of the table; build a `UrlTree` to choose the route yourself. The href includes
+the base href, and the links resolve again after each navigation. Each data cell of the row holds an
+`<a class="lab900-row-link">`; the first one is the tab stop of the row and gets `rowLinkLabel` as its
+`aria-label` (without it, its cell text names the link). Cells with a `click`, an editable inline editor
+or an interactive renderer are not a part of the link, nor are the select and action columns. In e2e
+tests use `row.getByRole('link', { name: 'Open order 1042' })`: every link cell of a row is a link, and
+only the tab stop has the label.
+
+An `onRowClick` that opens a new tab on a ctrl/cmd click no longer gets those clicks from the link;
+remove that code when you add `rowLink`.
 
 ### Inline editing
 
@@ -362,7 +410,8 @@ export class StatusCellComponent extends CellRendererAbstract<StatusCellOptions,
 ```
 
 `CellRendererAbstract` gives you `columnConfig()`, `data()` (the row), `cellValue()`,
-`renderOptions()`, `tooltip()` and `disabled()`.
+`renderOptions()`, `tooltip()` and `disabled()`. A renderer with its own buttons, links or inputs sets
+`public static override readonly interactive = true`, so `rowLink` keeps its cells out of the row link.
 
 An editor extends `CellEditorAbstract<Options, T, V>`. Read `cellValue()` and `editOptions()`,
 give the input the class `lab900-cell-input` (it gets focus when the editor opens), and call

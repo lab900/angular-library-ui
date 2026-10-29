@@ -4,6 +4,26 @@ All notable changes to `@lab900/ui` are documented in this file. The format is b
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The major version follows the Angular major version.
 Breaking changes are marked **BREAKING**.
 
+## [22.2.0] - 2026-10-29
+
+### Added
+
+- Row links on `lab900-table`: the `rowLink` input (`(row, index) => Lab900TableRowLink | null | undefined`)
+  makes a row a real link, so a middle click, a ctrl/cmd/shift click or the context menu opens it in a new tab
+  or window and hovering shows the url. A plain click, an alt click and Enter still call `onRowClick` and do not
+  follow the link; without `onRowClick` they navigate with the router, unless the row expands.
+  - `Lab900TableRowLink` accepts what `routerLink` accepts: a string, commands or a `UrlTree`. The href includes
+    the base href; links resolve again after each navigation.
+  - each data cell of a link row wraps its content in `<a class="lab900-row-link">`; the first one is the tab stop.
+    Cells with a `click`, an editable inline editor or an interactive renderer are left out, and so are the select
+    and action columns.
+  - `rowLinkLabel` input: the accessible name (translation key) of the tab stop of each row.
+  - an `onRowClick` that opens a new tab on a ctrl/cmd click no longer gets those clicks from the link.
+  - `CellRendererAbstract.interactive` (static): set it to `true` in a renderer with its own buttons or links.
+    `CellWithAnchorRendererComponent`, `CellWithClearingRendererComponent` and `CheckboxCellRendererComponent`
+    set it.
+  - link rows get `lab900-row-clickable`.
+
 ## [22.1.1] - 2026-09-29
 
 ### Added
