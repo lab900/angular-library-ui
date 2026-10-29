@@ -46,6 +46,7 @@
               [maxColumnWidthFromTable]="maxColumnWidth()"
               (headerClick)="handleHeaderClick($event)"
               [data]="publicData() ?? []"
+              [rowLinks]="rowLinks()"
               [showFooterCell]="showCellFooters()"
               (valueChanged)="cellValueChanged.emit($event)" />
           }

@@ -18,6 +18,7 @@ import { TableSelectionExampleComponent } from './examples/table-selection-examp
 import { TableDragAndDropExampleComponent } from './examples/table-drag-and-drop-example/table-drag-and-drop-example.component';
 import { TableTabsExampleComponent } from './examples/table-tabs-example/table-tabs-example.component';
 import { TableExpandableRowsExampleComponent } from './examples/table-expandable-rows-example/table-expandable-rows-example.component';
+import { TableRowLinkExampleComponent } from './examples/table-row-link-example/table-row-link-example.component';
 import { ActionButtonExampleComponent } from './examples/action-button-example/action-button-example.component';
 import { alertsApi, buttonsApi, mergerApi, navListApi, pageHeaderApi, tableApi } from './showcase-ui.api';
 
@@ -128,6 +129,11 @@ export default [
         TableExpandableRowsExampleComponent,
         'Expandable rows',
         'A lab900TableRowDetail template below a row. Click a row to expand it; bind expandedRows to control it.'
+      ),
+      new ShowcaseExample(
+        TableRowLinkExampleComponent,
+        'Row links',
+        'rowLink makes a row a real link that opens in a new tab. A plain click still runs onRowClick.'
       ),
     ],
     undefined,

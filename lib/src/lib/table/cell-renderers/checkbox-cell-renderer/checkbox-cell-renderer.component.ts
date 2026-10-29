@@ -23,6 +23,8 @@ import { MatTooltip } from '@angular/material/tooltip';
   `,
 })
 export class CheckboxCellRendererComponent extends CellRendererAbstract<CheckboxCellRendererOptions> {
+  public static override readonly interactive = true;
+
   public readonly disabled = computed(() => this.columnConfig()?.cellEditorOptions?.disabled?.(this.data()) ?? false);
 
   public onValueChange(newValue: boolean): void {

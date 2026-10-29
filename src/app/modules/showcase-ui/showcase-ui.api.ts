@@ -98,6 +98,7 @@ export const tableApi: ShowcaseApiSection[] = [
       'TableRowAction',
       'SelectableRows',
       'ExpandableRows',
+      'Lab900TableRowLink',
       'Lab900TableTab',
       'Lab900Sort',
       'CellValueChangeEvent',

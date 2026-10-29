@@ -27,5 +27,7 @@ export class CellWithAnchorRendererComponent<T = any> extends CellRendererAbstra
   CellWithAnchorRendererOptions<T>,
   T
 > {
+  public static override readonly interactive = true;
+
   public readonly anchorHref = computed(() => this.renderOptions()?.url(this.data()));
 }

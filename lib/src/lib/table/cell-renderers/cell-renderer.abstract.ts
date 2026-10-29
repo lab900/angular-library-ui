@@ -20,6 +20,12 @@ import { Lab900TableService } from '../services/table.service';
 export abstract class CellRendererAbstract<CellRenderOptions = any, T = any, V = any>
   implements AfterViewInit, OnDestroy
 {
+  /**
+   * Set it to true in a renderer with its own buttons, links or inputs.
+   * The table then keeps the cell out of the row link (`rowLink`).
+   */
+  public static readonly interactive: boolean = false;
+
   protected readonly elm: ElementRef<HTMLElement> = inject(ElementRef);
   protected readonly tableService = inject(Lab900TableService);
   protected readonly ngZone = inject(NgZone);

@@ -69,6 +69,13 @@ export class Lab900TableService<T extends object = object, TabId = string> imple
     this.disableEditing.set(value);
   }
 
+  /**
+   * A cell is editable when it has an editor, and editing is not disabled for the table or for the row
+   */
+  public isCellEditable<R>(cell: TableCell<R>, row: R): boolean {
+    return !!cell.cellEditor && !this.disableEditing() && !cell.cellEditorOptions?.disabled?.(row);
+  }
+
   public updateTabs(tabs: Lab900TableTab<TabId, T>[] | null): void {
     this._tabs.set([...(tabs ?? [])]);
   }

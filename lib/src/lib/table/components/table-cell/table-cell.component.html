@@ -24,17 +24,35 @@
     [style.width]="columnWidth()"
     [style.max-width]="columnMaxWidth()"
     class="lab900-td">
-    @defer (on viewport; prefetch on idle) {
-      <lab900-table-cell-inner
-        [cell]="cell()"
-        lab900TableCellEvents
-        [cellData]="element"
-        [rowValue]="element"
-        [rowIndex]="rowIndex"
-        (valueChanged)="valueChanged.emit($event)" />
-    } @placeholder {
-      <div class="lab900-deferred-cell-placeholder"></div>
+    @let rowLink = rowLinks()[rowIndex];
+    @let rowLinkCellIndex = rowLink ? rowLink.cellKeys.indexOf(cell().key) : -1;
+    <!-- outside the defer block, so rows below the fold are links too -->
+    @if (rowLink && rowLinkCellIndex >= 0) {
+      <!-- the first link cell of the row is its tab stop, and carries the label of the link -->
+      <a
+        class="lab900-row-link"
+        [href]="rowLink.href"
+        draggable="false"
+        [attr.tabindex]="rowLinkCellIndex === 0 ? null : -1"
+        [attr.aria-label]="rowLinkCellIndex === 0 && rowLink.label ? (rowLink.label | translate) : null">
+        <ng-container *ngTemplateOutlet="cellContent" />
+      </a>
+    } @else {
+      <ng-container *ngTemplateOutlet="cellContent" />
     }
+    <ng-template #cellContent>
+      @defer (on viewport; prefetch on idle) {
+        <lab900-table-cell-inner
+          [cell]="cell()"
+          lab900TableCellEvents
+          [cellData]="element"
+          [rowValue]="element"
+          [rowIndex]="rowIndex"
+          (valueChanged)="valueChanged.emit($event)" />
+      } @placeholder {
+        <div class="lab900-deferred-cell-placeholder"></div>
+      }
+    </ng-template>
   </td>
   @if (showFooterCell()) {
     <td mat-footer-cell *matFooterCellDef [ngClass]="cell().footerCellClass">
