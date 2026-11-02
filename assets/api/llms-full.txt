@@ -253,6 +253,8 @@ Enter and Space, and sets `aria-sort` from the `sort` input, so keep `sort` in s
   `showSelectAllCheckbox`). Outputs `selectionChanged` (the `SelectionModel<T>`) and
   `rowSelectToggle`.
 - Row click: `onRowClick: (row, index, event) => void`. It is an input, not an output.
+- Row links: `rowLink: (row, index) => Lab900TableRowLink | null | undefined` and
+  `rowLinkLabel: (row, index) => string | null | undefined` (see below).
 - Tabs: `tableTabs: Lab900TableTab[]` and `activeTabId` (model). A tab with `tableCells` shows other
   columns.
 - Editing: `disabledEditing`, output `cellValueChanged`.
@@ -300,6 +302,57 @@ protected readonly expandableRows: ExpandableRows<Order> = {
 `lab900TableRowDetailOf` only types the context. Use `compareFn` when the data is fetched again as
 new objects. From code, call `toggleRowExpansion`, `expandRow`, `collapseRow`, `collapseAllRows` and
 `isRowExpanded` on the table instance (`viewChild.required(Lab900TableComponent<Order>)`).
+
+### Row links
+
+`rowLink` makes a row a real link: hovering shows the url, and a middle click, a ctrl/cmd/shift click or
+the context menu opens it in a new tab or window. The browser handles those; `onRowClick` is not called.
+A plain click, an alt click and Enter on the link do not follow it: they call `onRowClick` and toggle an
+expandable row, as without `rowLink`. Without `onRowClick`, they navigate to the link with the router,
+unless the row expands. Clicks outside the link behave as without `rowLink`.
+
+```html
+<lab900-table
+  [tableCells]="tableCells"
+  [data]="orders()"
+  [trackByTableFn]="trackById"
+  [rowLink]="orderLink"
+  [rowLinkLabel]="orderLinkLabel"
+  [onRowClick]="openOrder" />
+```
+
+```ts
+private readonly router = inject(Router);
+private readonly route = inject(ActivatedRoute);
+
+// null or undefined: the row is not a link
+protected readonly orderLink = (order: Order): UrlTree | null =>
+  order.archived ? null : this.router.createUrlTree([order.id], { relativeTo: this.route });
+// translation key, the name of the link for screen readers
+protected readonly orderLinkLabel = (order: Order): string => `orders.open-order-${order.id}`;
+// optional: without it, a plain click navigates to the link
+protected readonly openOrder = (order: Order): void => {
+  this.saveFilters();
+  void this.router.navigate([order.id], { relativeTo: this.route });
+};
+```
+
+`Lab900TableRowLink` is what `routerLink` accepts: a string, commands or a `UrlTree`. Commands resolve
+relative to the route of the table; build a `UrlTree` to choose the route yourself. The href includes
+the base href. A string or commands resolve again after each navigation, a `UrlTree` does not. Each
+data cell of the row holds an `<a class="lab900-row-link">`; the first one is the tab stop of the row
+and gets `rowLinkLabel` as its `aria-label` (without it, its cell text names the link). Cells with a
+`click`, an editable inline editor, an interactive renderer or `excludeFromRowLink: true` are not a part
+of the link, nor are the select and action columns. In e2e tests use
+`row.getByRole('link', { name: 'Open order 1042' })`: every link cell of a row is a link, and only the
+tab stop has the label.
+
+Check the custom renderers of the table before you add `rowLink`. A renderer with its own buttons or
+links must set `interactive` (see "Custom renderer or editor"), or its column `excludeFromRowLink: true`;
+otherwise its buttons end up inside the row link.
+
+An `onRowClick` that opens a new tab on a ctrl/cmd click no longer gets those clicks from the link;
+remove that code when you add `rowLink`.
 
 ### Inline editing
 
@@ -362,7 +415,9 @@ export class StatusCellComponent extends CellRendererAbstract<StatusCellOptions,
 ```
 
 `CellRendererAbstract` gives you `columnConfig()`, `data()` (the row), `cellValue()`,
-`renderOptions()`, `tooltip()` and `disabled()`.
+`renderOptions()`, `tooltip()` and `disabled()`. A renderer with its own buttons, links or inputs sets
+`public static override readonly interactive = true`, so `rowLink` keeps its cells out of the row link.
+For a renderer you can't change, set `excludeFromRowLink: true` on the column instead.
 
 An editor extends `CellEditorAbstract<Options, T, V>`. Read `cellValue()` and `editOptions()`,
 give the input the class `lab900-cell-input` (it gets focus when the editor opens), and call
@@ -716,6 +771,7 @@ Selector: `lab900-table-cell[cell]`
 - `disableSort` (input, default `false`): `boolean`
 - `maxColumnWidthFromTable` (input): `string | undefined`
 - `showFooterCell` (input, default `false`): `boolean`
+- `rowLinks` (input, default `[]`): `(Lab900TableResolvedRowLink | null)[]` — The resolved row links of the table, by data index
 - `headerClick` (output): `TableCell<T>`
 - `valueChanged` (output): `CellValueChangeEvent<T>`
 
@@ -749,6 +805,8 @@ Selector: `lab900-table`
 - `disableSort` (input, default `false`): `boolean`
 - `maxColumnWidth` (input): `string | undefined` — set max width of all columns, can be individually overwritten per tableCell this will create a tooltip with the content of the cell, when the text overflows
 - `onRowClick` (input): `((value: T, index: number, event: Event) => void) | undefined`
+- `rowLink` (input): `((row: T, index: number) => Lab900TableRowLink | null | undefined) | undefined` — Make rows real links, so a middle click, a ctrl/cmd click or the context menu opens the row in a new tab. A plain click calls `onRowClick` and toggles an expandable row, without following the link. Without `onRowClick`, a plain click on a row that does not expand navigates to the link with the router. Return `null` or `undefined` for a row that is not a link. Cells with a `click`, an inline editor, an interactive renderer or `excludeFromRowLink` are not a part of the link.
+- `rowLinkLabel` (input): `((row: T, index: number) => string | null | undefined) | undefined` — Accessible name (translation key) of the row link, for example 'Open order 1042'. Without it, the link is named by the text of its first cell.
 - `preFooterTitle` (input): `string | undefined`
 - `stickyHeader` (input, default `false`): `boolean`
 - `trackByTableFn` (input, required): `TrackByFunction<T>`
@@ -1013,6 +1071,15 @@ An icon of a nav item or group. Set `name` or `svgName`.
 - `id`: `string` — The id of the column being sorted.
 - `direction`: `'asc' | 'desc' | ''` — The sort direction.
 
+### Lab900TableResolvedRowLink
+
+The resolved link of one table row
+
+- `urlTree`: `UrlTree`
+- `href`: `string` — The url of the link, base href included
+- `label?`: `string` — Accessible name (translation key) of the tab stop
+- `cellKeys`: `string[]` — The keys of the columns whose cell is a part of the link. The first one is the tab stop of the row.
+
 ### Lab900TableRowDetailContext<T = any>
 
 - `$implicit`: `T`
@@ -1129,6 +1196,7 @@ A tab of the page header. The tab links to a route and is active while that rout
 - `sticky?`: `boolean` — Column is sticky
 - `width?`: `string` — Column width
 - `click?`: `(data: T, cell: TableCell, mouseEvent?: MouseEvent) => unknown` — on click
+- `excludeFromRowLink?`: `boolean` — Keep the cell out of the row link (`rowLink` on the table), for example for a cell renderer with its own buttons or links that does not set `interactive`
 - `cellRenderer?`: `Type<CellRendererAbstract<CellRenderOptions, T>>` — Specify a custom cell renderer component to display the cell content in a different way
 - `cellRenderOptions?`: `CellRenderOptions` — Specify cellRenderer component specific options
 - `cellEditor?`: `Type<CellEditorAbstract<CellEditorOptions, T>>`
@@ -1167,6 +1235,15 @@ The Material button variants. `icon`, `fab` and `mini-fab` show only an icon.
 
 ```ts
 type Lab900ButtonType = 'raised' | 'stroked' | 'flat' | 'icon' | 'fab' | 'mini-fab'
+```
+
+### Lab900TableRowLink
+
+The link of a table row. It accepts what `routerLink` accepts.
+Commands are resolved relative to the route of the table; pass a `UrlTree` to resolve them yourself.
+
+```ts
+type Lab900TableRowLink = string | UrlTree | readonly any[]
 ```
 
 ### propValue<T = unknown, R = string>

@@ -1071,7 +1071,7 @@
       "name": "TableRowAction",
       "kind": "interface",
       "typeParameters": "T = any",
-      "source": "lib/src/lib/table/components/table/table.component.ts#L60",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L64",
       "extends": [
         "ActionButton<T>"
       ],
@@ -1088,7 +1088,7 @@
       "name": "SelectableRows",
       "kind": "interface",
       "typeParameters": "T = any",
-      "source": "lib/src/lib/table/components/table/table.component.ts#L67",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L71",
       "members": [
         {
           "name": "enabled",
@@ -1150,7 +1150,7 @@
       "name": "Lab900TableComponent",
       "kind": "component",
       "typeParameters": "T extends object = object, TabId = string",
-      "source": "lib/src/lib/table/components/table/table.component.ts#L81",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L85",
       "selector": "lab900-table",
       "members": [
         {
@@ -1312,6 +1312,18 @@
           "type": "((value: T, index: number, event: Event) => void) | undefined"
         },
         {
+          "name": "rowLink",
+          "kind": "input",
+          "type": "((row: T, index: number) => Lab900TableRowLink | null | undefined) | undefined",
+          "description": "Make rows real links, so a middle click, a ctrl/cmd click or the context menu opens the row in a new tab.\nA plain click calls `onRowClick` and toggles an expandable row, without following the link.\nWithout `onRowClick`, a plain click on a row that does not expand navigates to the link with the router.\nReturn `null` or `undefined` for a row that is not a link.\nCells with a `click`, an inline editor, an interactive renderer or `excludeFromRowLink` are not a part of the link."
+        },
+        {
+          "name": "rowLinkLabel",
+          "kind": "input",
+          "type": "((row: T, index: number) => string | null | undefined) | undefined",
+          "description": "Accessible name (translation key) of the row link, for example 'Open order 1042'.\nWithout it, the link is named by the text of its first cell."
+        },
+        {
           "name": "preFooterTitle",
           "kind": "input",
           "type": "string | undefined"
@@ -1459,7 +1471,7 @@
       "name": "Lab900TableCellComponent",
       "kind": "component",
       "typeParameters": "T = any",
-      "source": "lib/src/lib/table/components/table-cell/table-cell.component.ts#L37",
+      "source": "lib/src/lib/table/components/table-cell/table-cell.component.ts#L38",
       "selector": "lab900-table-cell[cell]",
       "members": [
         {
@@ -1490,6 +1502,13 @@
           "kind": "input",
           "type": "boolean",
           "default": "false"
+        },
+        {
+          "name": "rowLinks",
+          "kind": "input",
+          "type": "(Lab900TableResolvedRowLink | null)[]",
+          "default": "[]",
+          "description": "The resolved row links of the table, by data index"
         },
         {
           "name": "headerClick",
@@ -1708,6 +1727,12 @@
           "description": "on click"
         },
         {
+          "name": "excludeFromRowLink",
+          "type": "boolean",
+          "optional": true,
+          "description": "Keep the cell out of the row link (`rowLink` on the table),\nfor example for a cell renderer with its own buttons or links that does not set `interactive`"
+        },
+        {
           "name": "cellRenderer",
           "type": "Type<CellRendererAbstract<CellRenderOptions, T>>",
           "optional": true,
@@ -1916,6 +1941,41 @@
         {
           "name": "collapse",
           "type": "() => void"
+        }
+      ]
+    },
+    "Lab900TableRowLink": {
+      "name": "Lab900TableRowLink",
+      "kind": "type",
+      "source": "lib/src/lib/table/models/table-row-link.model.ts#L7",
+      "description": "The link of a table row. It accepts what `routerLink` accepts.\nCommands are resolved relative to the route of the table; pass a `UrlTree` to resolve them yourself.",
+      "type": "string | UrlTree | readonly any[]"
+    },
+    "Lab900TableResolvedRowLink": {
+      "name": "Lab900TableResolvedRowLink",
+      "kind": "interface",
+      "source": "lib/src/lib/table/models/table-row-link.model.ts#L12",
+      "description": "The resolved link of one table row",
+      "members": [
+        {
+          "name": "urlTree",
+          "type": "UrlTree"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "description": "The url of the link, base href included"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "optional": true,
+          "description": "Accessible name (translation key) of the tab stop"
+        },
+        {
+          "name": "cellKeys",
+          "type": "string[]",
+          "description": "The keys of the columns whose cell is a part of the link. The first one is the tab stop of the row."
         }
       ]
     },
