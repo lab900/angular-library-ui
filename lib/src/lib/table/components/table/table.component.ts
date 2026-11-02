@@ -52,7 +52,6 @@ import { ActivatedRoute, NavigationEnd, Router, UrlTree } from '@angular/router'
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { Lab900TableResolvedRowLink, Lab900TableRowLink } from '../../models/table-row-link.model';
-import { CellRendererAbstract } from '../../cell-renderers/cell-renderer.abstract';
 import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
 import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
@@ -253,7 +252,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
    * A plain click calls `onRowClick` and toggles an expandable row, without following the link.
    * Without `onRowClick`, a plain click on a row that does not expand navigates to the link with the router.
    * Return `null` or `undefined` for a row that is not a link.
-   * Cells with a `click`, an inline editor or an interactive renderer are not a part of the link.
+   * Cells with a `click`, an inline editor, an interactive renderer or `excludeFromRowLink` are not a part of the link.
    */
   public readonly rowLink = input<((row: T, index: number) => Lab900TableRowLink | null | undefined) | undefined>(
     undefined
@@ -330,8 +329,9 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   });
 
   /**
-   * The link of each row, resolved once per data change and after each navigation, like routerLink.
-   * Separate from `rowLinks`, so a change of the columns does not call `rowLink` again.
+   * The link of each row, resolved once per data change. Like routerLink, a string or commands resolve
+   * again after each navigation, because they can be relative to the route; a `UrlTree` does not.
+   * Separate from `rowLinks`, so a change of the columns or of `rowLinkLabel` does not call `rowLink` again.
    */
   private readonly resolvedRowLinks = computed(() => {
     const rowLink = this.rowLink();
@@ -339,15 +339,16 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     if (!rowLink || !data?.length) {
       return [];
     }
-    this.navigationEnd();
-    const rowLinkLabel = this.rowLinkLabel();
-    return data.map((row, index) => {
-      const urlTree = this.toUrlTree(rowLink(row, index));
+    const links = data.map((row, index) => rowLink(row, index));
+    if (links.some(link => link != null && !(link instanceof UrlTree))) {
+      this.navigationEnd();
+    }
+    return links.map(link => {
+      const urlTree = this.toUrlTree(link);
       if (!urlTree) {
         return null;
       }
-      const href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(urlTree));
-      return { urlTree, href, label: rowLinkLabel?.(row, index) ?? undefined };
+      return { urlTree, href: this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(urlTree)) };
     });
   });
 
@@ -361,9 +362,11 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
     }
     const data = this.data() ?? [];
     const columns = this.visibleColumns();
+    const rowLinkLabel = this.rowLinkLabel();
     return links.map((link, index) => {
-      const cellKeys = link ? columns.filter(cell => this.isRowLinkCell(cell, data[index])).map(cell => cell.key) : [];
-      return link && cellKeys.length ? { ...link, cellKeys } : null;
+      const row = data[index];
+      const cellKeys = link ? columns.filter(cell => this.isRowLinkCell(cell, row)).map(cell => cell.key) : [];
+      return link && cellKeys.length ? { ...link, label: rowLinkLabel?.(row, index) ?? undefined, cellKeys } : null;
     });
   });
 
@@ -601,19 +604,22 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   /**
-   * A cell with a click handler, an inline editor or an interactive renderer is not a part of the row link
+   * A cell with `excludeFromRowLink`, a click handler, an inline editor or an interactive renderer
+   * is not a part of the row link
    */
   private isRowLinkCell(cell: TableCell<T>, row: T): boolean {
-    const renderer = cell.cellRenderer as unknown as typeof CellRendererAbstract | undefined;
-    return !cell.click && !this.tableService.isCellEditable(cell, row) && !renderer?.interactive;
+    const renderer = cell.cellRenderer;
+    const interactive = !!renderer && 'interactive' in renderer && renderer.interactive === true;
+    return !cell.excludeFromRowLink && !cell.click && !this.tableService.isCellEditable(cell, row) && !interactive;
   }
 
   /**
-   * A ctrl/cmd, shift or middle click. An alt click counts as a plain click, the browser would download the link.
+   * A ctrl/cmd or shift click. An alt click counts as a plain click, the browser would download the link.
+   * A middle click fires `auxclick`, not `click`, so the browser opens the link without the table.
    */
   private isNewTabClick(event: Event): boolean {
-    const { ctrlKey, metaKey, shiftKey, button } = event as MouseEvent;
-    return ctrlKey || metaKey || shiftKey || !!button;
+    const { ctrlKey, metaKey, shiftKey } = event as MouseEvent;
+    return ctrlKey || metaKey || shiftKey;
   }
 
   private compareRows(o1: T, o2: T): boolean {

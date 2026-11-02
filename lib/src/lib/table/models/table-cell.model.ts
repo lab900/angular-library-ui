@@ -75,6 +75,12 @@ export interface TableCell<
   click?: (data: T, cell: TableCell, mouseEvent?: MouseEvent) => unknown;
 
   /**
+   * Keep the cell out of the row link (`rowLink` on the table),
+   * for example for a cell renderer with its own buttons or links that does not set `interactive`
+   */
+  excludeFromRowLink?: boolean;
+
+  /**
    * Specify a custom cell renderer component to display the cell content in a different way
    */
   cellRenderer?: Type<CellRendererAbstract<CellRenderOptions, T>>;

@@ -13,7 +13,7 @@ Breaking changes are marked **BREAKING**.
   or window and hovering shows the url. A plain click, an alt click and Enter still call `onRowClick` and do not
   follow the link; without `onRowClick` they navigate with the router, unless the row expands.
   - `Lab900TableRowLink` accepts what `routerLink` accepts: a string, commands or a `UrlTree`. The href includes
-    the base href; links resolve again after each navigation.
+    the base href; a string or commands resolve again after each navigation, a `UrlTree` does not.
   - each data cell of a link row wraps its content in `<a class="lab900-row-link">`; the first one is the tab stop.
     Cells with a `click`, an editable inline editor or an interactive renderer are left out, and so are the select
     and action columns.
@@ -22,6 +22,8 @@ Breaking changes are marked **BREAKING**.
   - `CellRendererAbstract.interactive` (static): set it to `true` in a renderer with its own buttons or links.
     `CellWithAnchorRendererComponent`, `CellWithClearingRendererComponent` and `CheckboxCellRendererComponent`
     set it.
+  - `TableCell.excludeFromRowLink`: keeps a column out of the row link, for example a column whose renderer has
+    its own buttons or links and does not set `interactive`.
   - link rows get `lab900-row-clickable`.
 
 ## [22.1.1] - 2026-09-29

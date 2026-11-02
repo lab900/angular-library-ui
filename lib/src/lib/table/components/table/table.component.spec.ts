@@ -10,6 +10,7 @@ import { TableCell } from '../../models/table-cell.model';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableRowLink } from '../../models/table-row-link.model';
 import { CellInputEditorComponent } from '../../cell-editors/cell-input-editor/cell-input-editor.component';
+import { CheckboxCellRendererComponent } from '../../cell-renderers/checkbox-cell-renderer/checkbox-cell-renderer.component';
 
 interface Row {
   id: number;
@@ -241,6 +242,8 @@ class RowLinkHostComponent {
     { key: 'id', label: 'ID' },
     { key: 'name', label: 'Name', cellEditor: CellInputEditorComponent },
     { key: 'city', label: 'City', cellFormatter: () => 'Ghent', cellClass: () => this.cityClass },
+    { key: 'note', label: 'Note', excludeFromRowLink: true },
+    { key: 'active', label: 'Active', cellRenderer: CheckboxCellRendererComponent },
   ];
   public readonly data: Row[] = [
     { id: 1, name: 'john' },
@@ -281,15 +284,15 @@ describe('Lab900TableComponent row links', () => {
    * Dispatch a click and report whether the table prevented its default.
    * A listener on the document prevents it afterwards, because jsdom can't navigate.
    */
-  const click = (target: Element, init: MouseEventInit = {}): boolean => {
+  const click = (target: Element, init: MouseEventInit = {}, type = 'click'): boolean => {
     let prevented = false;
     const listener = (event: Event): void => {
       prevented = event.defaultPrevented;
       event.preventDefault();
     };
-    document.addEventListener('click', listener);
-    target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, ...init }));
-    document.removeEventListener('click', listener);
+    document.addEventListener(type, listener);
+    target.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, ...init }));
+    document.removeEventListener(type, listener);
     return prevented;
   };
 
@@ -322,6 +325,12 @@ describe('Lab900TableComponent row links', () => {
     expect(row.querySelector('.cdk-column-id a.lab900-row-link')).not.toBeNull();
   });
 
+  it('keeps a cell with excludeFromRowLink or an interactive renderer out of the link', () => {
+    const row = dataRows()[0];
+    expect(row.querySelector('.cdk-column-note a')).toBeNull();
+    expect(row.querySelector('.cdk-column-active a')).toBeNull();
+  });
+
   it('gives each row one tab stop and no native drag', () => {
     const [first, second] = links(0);
     expect(first.hasAttribute('tabindex')).toBe(false);
@@ -343,6 +352,12 @@ describe('Lab900TableComponent row links', () => {
 
   it.each(['ctrlKey', 'metaKey', 'shiftKey'])('lets the browser open the link on a %s click', key => {
     const prevented = click(links(0)[0], { [key]: true });
+    expect(prevented).toBe(false);
+    expect(host.onRowClick()).not.toHaveBeenCalled();
+  });
+
+  it('lets the browser open the link on a middle click', () => {
+    const prevented = click(links(0)[0], { button: 1 }, 'auxclick');
     expect(prevented).toBe(false);
     expect(host.onRowClick()).not.toHaveBeenCalled();
   });
@@ -384,6 +399,18 @@ describe('Lab900TableComponent row links', () => {
     await TestBed.inject(Router).navigateByUrl('/?page=2');
     await render();
     expect(links(0)[0].getAttribute('href')).toBe('/app/orders/2');
+  });
+
+  it('does not resolve UrlTree links again after a navigation', async () => {
+    const router = TestBed.inject(Router);
+    const rowLink = jest.fn((row: Row) => router.createUrlTree(['/orders', row.id]));
+    host.rowLink.set(rowLink);
+    await render();
+    rowLink.mockClear();
+
+    await router.navigateByUrl('/?page=2');
+    await render();
+    expect(rowLink).not.toHaveBeenCalled();
   });
 
   it('runs a row action without calling onRowClick or following the link', () => {
