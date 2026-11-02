@@ -26,7 +26,8 @@ import {
 } from '@angular/material/table';
 import { readPropValue } from '../../../utils/utils';
 import { Lab900TableService } from '../../services/table.service';
-import { NgClass, NgComponentOutlet } from '@angular/common';
+import { NgClass, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
+import { Lab900TableResolvedRowLink } from '../../models/table-row-link.model';
 import { DefaultColumnHeaderRendererComponent } from '../../column-header-renderers/default-column-header-renderer/default-column-header-renderer.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { TableCellInnerComponent } from '../table-cell-inner/table-cell-inner.component';
@@ -41,6 +42,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     NgClass,
     TranslatePipe,
     NgComponentOutlet,
+    NgTemplateOutlet,
     TableCellInnerComponent,
     TableCellEventsDirective,
     MatTooltip,
@@ -72,6 +74,10 @@ export class Lab900TableCellComponent<T = any> implements OnDestroy, OnInit {
   public readonly disableSort = input<boolean>(false);
   public readonly maxColumnWidthFromTable = input<string | undefined>(undefined);
   public readonly showFooterCell = input<boolean>(false);
+  /**
+   * The resolved row links of the table, by data index
+   */
+  public readonly rowLinks = input<(Lab900TableResolvedRowLink | null)[]>([]);
 
   public readonly columnMaxWidth = computed(() => {
     return this.cell().cellMaxWidth ?? this.maxColumnWidthFromTable();

@@ -70,6 +70,35 @@
     padding-right: 0 !important;
   }
 
+  // the row link fills its cell: its ::before covers the padding,
+  // below the cell content, so tooltips and text selection keep working
+  td.mat-mdc-cell:has(> .lab900-row-link) {
+    position: relative;
+    z-index: 0;
+  }
+
+  .lab900-row-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+
+    &:focus-visible {
+      outline: none;
+
+      &::before {
+        outline: 2px solid currentColor;
+        outline-offset: -2px;
+      }
+    }
+  }
+
   tr.mat-mdc-row.lab900-row-expanded > td.mat-mdc-cell {
     border-bottom-width: 0;
   }

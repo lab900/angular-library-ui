@@ -47,7 +47,11 @@ import { Lab900Sort } from '../../models/table-sort.model';
 import { Lab900TableTab } from '../../models/table-tabs.model';
 import { Lab900TableService } from '../../services/table.service';
 import { Lab900TableHeaderComponent } from '../table-header/lab900-table-header.component';
-import { NgTemplateOutlet } from '@angular/common';
+import { LocationStrategy, NgTemplateOutlet } from '@angular/common';
+import { ActivatedRoute, NavigationEnd, Router, UrlTree } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
+import { Lab900TableResolvedRowLink, Lab900TableRowLink } from '../../models/table-row-link.model';
 import { Lab900TableTabsComponent } from '../table-tabs/table-tabs.component';
 import { TableCellSelectComponent } from '../table-cell-select/table-cell-select.component';
 import { Lab900TableCellComponent } from '../table-cell/table-cell.component';
@@ -116,6 +120,10 @@ export interface SelectableRows<T = any> {
 })
 export class Lab900TableComponent<T extends object = object, TabId = string> {
   private readonly tableService = inject(Lab900TableService<T, TabId>);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute, { optional: true });
+  private readonly locationStrategy = inject(LocationStrategy);
+  private readonly navigationEnd = toSignal(this.router.events.pipe(filter(event => event instanceof NavigationEnd)));
 
   /**
    * This will respect the defined widths of the table cells
@@ -239,6 +247,23 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public readonly onRowClick = input<((value: T, index: number, event: Event) => void) | undefined>(undefined);
 
+  /**
+   * Make rows real links, so a middle click, a ctrl/cmd click or the context menu opens the row in a new tab.
+   * A plain click calls `onRowClick` and toggles an expandable row, without following the link.
+   * Without `onRowClick`, a plain click on a row that does not expand navigates to the link with the router.
+   * Return `null` or `undefined` for a row that is not a link.
+   * Cells with a `click`, an inline editor, an interactive renderer or `excludeFromRowLink` are not a part of the link.
+   */
+  public readonly rowLink = input<((row: T, index: number) => Lab900TableRowLink | null | undefined) | undefined>(
+    undefined
+  );
+
+  /**
+   * Accessible name (translation key) of the row link, for example 'Open order 1042'.
+   * Without it, the link is named by the text of its first cell.
+   */
+  public readonly rowLinkLabel = input<((row: T, index: number) => string | null | undefined) | undefined>(undefined);
+
   public readonly preFooterTitle = input<string | undefined>(undefined);
   public readonly stickyHeader = input<boolean>(false);
   public readonly trackByTableFn = input.required<TrackByFunction<T>>();
@@ -301,6 +326,48 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
       }));
     }
     return data;
+  });
+
+  /**
+   * The link of each row, resolved once per data change. Like routerLink, a string or commands resolve
+   * again after each navigation, because they can be relative to the route; a `UrlTree` does not.
+   * Separate from `rowLinks`, so a change of the columns or of `rowLinkLabel` does not call `rowLink` again.
+   */
+  private readonly resolvedRowLinks = computed(() => {
+    const rowLink = this.rowLink();
+    const data = this.data();
+    if (!rowLink || !data?.length) {
+      return [];
+    }
+    const links = data.map((row, index) => rowLink(row, index));
+    if (links.some(link => link != null && !(link instanceof UrlTree))) {
+      this.navigationEnd();
+    }
+    return links.map(link => {
+      const urlTree = this.toUrlTree(link);
+      if (!urlTree) {
+        return null;
+      }
+      return { urlTree, href: this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(urlTree)) };
+    });
+  });
+
+  /**
+   * The link of each row and the cells that are a part of it, `null` for a row without a link
+   */
+  protected readonly rowLinks = computed<(Lab900TableResolvedRowLink | null)[]>(() => {
+    const links = this.resolvedRowLinks();
+    if (!links.length) {
+      return [];
+    }
+    const data = this.data() ?? [];
+    const columns = this.visibleColumns();
+    const rowLinkLabel = this.rowLinkLabel();
+    return links.map((link, index) => {
+      const row = data[index];
+      const cellKeys = link ? columns.filter(cell => this.isRowLinkCell(cell, row)).map(cell => cell.key) : [];
+      return link && cellKeys.length ? { ...link, label: rowLinkLabel?.(row, index) ?? undefined, cellKeys } : null;
+    });
   });
 
   public constructor() {
@@ -438,7 +505,7 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
 
   public getRowClasses(row: T, index: number): string {
     const classes: string[] = [];
-    if (typeof this.onRowClick() === 'function' || this.isRowExpandable(row)) {
+    if (typeof this.onRowClick() === 'function' || this.isRowExpandable(row) || this.rowLinks()[index]) {
       classes.push('lab900-row-clickable');
     }
     if (index % 2 === 0) {
@@ -459,12 +526,25 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
   }
 
   public handleRowClick(event: Event, row: T, index: number): void {
-    if (this.isRowExpandable(row)) {
+    const rowLink = (event.target as Element | null)?.closest?.('.lab900-row-link') ? this.rowLinks()[index] : null;
+    if (rowLink) {
+      // the browser opens the link in a new tab or window
+      if (this.isNewTabClick(event)) {
+        return;
+      }
+      // a plain click on the link does what a click on the row does, the link must not navigate
+      event.preventDefault();
+    }
+    const expandable = this.isRowExpandable(row);
+    if (expandable) {
       this.toggleRowExpansion(this.getSourceRow(row, index));
     }
     const rowClick = this.onRowClick();
     if (typeof rowClick === 'function') {
       rowClick(row, index, event);
+    } else if (rowLink && !expandable) {
+      // nothing else handles the click, so navigate like routerLink
+      void this.router.navigateByUrl(rowLink.urlTree);
     }
   }
 
@@ -511,6 +591,35 @@ export class Lab900TableComponent<T extends object = object, TabId = string> {
    */
   protected getSourceRow(row: T, index: number): T {
     return this.data()?.[index] ?? row;
+  }
+
+  private toUrlTree(link: Lab900TableRowLink | null | undefined): UrlTree | null {
+    if (link == null) {
+      return null;
+    }
+    // resolve it the way routerLink does
+    return link instanceof UrlTree
+      ? link
+      : this.router.createUrlTree(Array.isArray(link) ? link : [link], { relativeTo: this.route });
+  }
+
+  /**
+   * A cell with `excludeFromRowLink`, a click handler, an inline editor or an interactive renderer
+   * is not a part of the row link
+   */
+  private isRowLinkCell(cell: TableCell<T>, row: T): boolean {
+    const renderer = cell.cellRenderer;
+    const interactive = !!renderer && 'interactive' in renderer && renderer.interactive === true;
+    return !cell.excludeFromRowLink && !cell.click && !this.tableService.isCellEditable(cell, row) && !interactive;
+  }
+
+  /**
+   * A ctrl/cmd or shift click. An alt click counts as a plain click, the browser would download the link.
+   * A middle click fires `auxclick`, not `click`, so the browser opens the link without the table.
+   */
+  private isNewTabClick(event: Event): boolean {
+    const { ctrlKey, metaKey, shiftKey } = event as MouseEvent;
+    return ctrlKey || metaKey || shiftKey;
   }
 
   private compareRows(o1: T, o2: T): boolean {

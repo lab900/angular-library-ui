@@ -21,19 +21,14 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
   public readonly cell = input.required<TableCell<T>>();
   public readonly rowIndex = input.required<number>();
 
-  private readonly editable = computed(() => {
-    return (
-      !this.tableService.disableEditing() &&
-      this.cell().cellEditor &&
-      !this.cell().cellEditorOptions?.disabled?.(this.cellData())
-    );
-  });
+  private readonly editable = computed(() => this.tableService.isCellEditable(this.cell(), this.cellData()));
 
   public ngAfterViewInit(): void {
     if (!this.matTable || !this.matTable.dataSource) {
       throw new Error('MatTable [dataSource] is required');
     }
-    this.cellElement = this.innerElm.nativeElement.parentElement as HTMLTableCellElement;
+    // closest, because a row link can sit between the cell and this element
+    this.cellElement = this.innerElm.nativeElement.parentElement?.closest('td') as HTMLTableCellElement;
 
     if (!this.cellElement || this.cellElement.tagName !== 'TD') {
       throw new Error('No parent td element found for TableCellEventsDirective');
@@ -109,6 +104,10 @@ export class TableCellEventsDirective<T = any> implements AfterViewInit {
   }
 
   private onKeydown(event: KeyboardEvent): void {
+    // a focused row link keeps the native Tab and arrow keys
+    if ((event.target as HTMLElement | null)?.closest?.('.lab900-row-link')) {
+      return;
+    }
     switch (event.key) {
       case 'ArrowUp':
       case 'ArrowDown': {

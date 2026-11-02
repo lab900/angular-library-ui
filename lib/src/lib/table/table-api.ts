@@ -25,6 +25,7 @@ export * from './models/table-cell-tooltip.model';
 export * from './models/table-sort.model';
 export * from './models/table-tabs.model';
 export * from './models/table-expandable-rows.model';
+export * from './models/table-row-link.model';
 
 // table cell renderers
 export * from './cell-renderers/cell-renderer.abstract';

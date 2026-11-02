@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -31,16 +32,12 @@ export class TableCellInnerComponent<T = any> {
   public readonly valueChanged = output<CellValueChangeEvent<T>>();
 
   private previousClasses: string[] = [];
+  // the cell is detached from this component by the time it is destroyed, so keep a reference
+  private classesElement?: HTMLElement;
 
   protected readonly cellTemplate = computed(() => this.cell().cellRenderer ?? DefaultCellRendererComponent);
 
-  public readonly canEdit = computed(() => {
-    return (
-      this.cell().cellEditor &&
-      !this.tableService.disableEditing() &&
-      !this.cell().cellEditorOptions?.disabled?.(this.rowValue())
-    );
-  });
+  public readonly canEdit = computed(() => this.tableService.isCellEditable(this.cell(), this.rowValue()));
 
   public readonly isEditing = computed(() => {
     const cell = this.cell();
@@ -79,8 +76,12 @@ export class TableCellInnerComponent<T = any> {
         parentElm.classList.remove(...this.previousClasses);
         parentElm.classList.add(...cellClasses);
         this.previousClasses = cellClasses;
+        this.classesElement = parentElm;
       }
     });
+
+    // the cell outlives this component when a row link is added to or removed from it
+    inject(DestroyRef).onDestroy(() => this.classesElement?.classList.remove(...this.previousClasses));
   }
 
   public readonly handleValueChanged = (value: any, cell: TableCell<T>, row: T): void => {
@@ -90,8 +91,11 @@ export class TableCellInnerComponent<T = any> {
     this.valueChanged.emit({ value, cell, row });
   };
 
+  /**
+   * The cell, also when a row link sits between the cell and this component
+   */
   private parentElement(): HTMLElement | null | undefined {
-    return this.elRef?.nativeElement?.parentElement;
+    return this.elRef?.nativeElement?.parentElement?.closest('td');
   }
 
   private getCellClasses(cell: TableCell<T>, data: T): string | undefined {

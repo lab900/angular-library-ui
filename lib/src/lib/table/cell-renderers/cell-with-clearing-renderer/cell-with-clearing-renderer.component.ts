@@ -31,6 +31,8 @@ export class CellWithClearingRendererComponent<T = any> extends CellRendererAbst
   CellWithClearingRendererOptions,
   T
 > {
+  public static override readonly interactive = true;
+
   public readonly tooltipWithHtml = computed(() => this.tooltip()?.replace(/<[^>]*>/g, ''));
   public readonly canClear = computed(() => this.hasCellValue() && !this.disabled());
 
