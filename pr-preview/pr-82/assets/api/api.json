@@ -1071,7 +1071,7 @@
       "name": "TableRowAction",
       "kind": "interface",
       "typeParameters": "T = any",
-      "source": "lib/src/lib/table/components/table/table.component.ts#L65",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L64",
       "extends": [
         "ActionButton<T>"
       ],
@@ -1088,7 +1088,7 @@
       "name": "SelectableRows",
       "kind": "interface",
       "typeParameters": "T = any",
-      "source": "lib/src/lib/table/components/table/table.component.ts#L72",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L71",
       "members": [
         {
           "name": "enabled",
@@ -1150,7 +1150,7 @@
       "name": "Lab900TableComponent",
       "kind": "component",
       "typeParameters": "T extends object = object, TabId = string",
-      "source": "lib/src/lib/table/components/table/table.component.ts#L86",
+      "source": "lib/src/lib/table/components/table/table.component.ts#L85",
       "selector": "lab900-table",
       "members": [
         {
@@ -1315,7 +1315,7 @@
           "name": "rowLink",
           "kind": "input",
           "type": "((row: T, index: number) => Lab900TableRowLink | null | undefined) | undefined",
-          "description": "Make rows real links, so a middle click, a ctrl/cmd click or the context menu opens the row in a new tab.\nA plain click calls `onRowClick` and toggles an expandable row, without following the link.\nWithout `onRowClick`, a plain click on a row that does not expand navigates to the link with the router.\nReturn `null` or `undefined` for a row that is not a link.\nCells with a `click`, an inline editor or an interactive renderer are not a part of the link."
+          "description": "Make rows real links, so a middle click, a ctrl/cmd click or the context menu opens the row in a new tab.\nA plain click calls `onRowClick` and toggles an expandable row, without following the link.\nWithout `onRowClick`, a plain click on a row that does not expand navigates to the link with the router.\nReturn `null` or `undefined` for a row that is not a link.\nCells with a `click`, an inline editor, an interactive renderer or `excludeFromRowLink` are not a part of the link."
         },
         {
           "name": "rowLinkLabel",
@@ -1725,6 +1725,12 @@
           "type": "(data: T, cell: TableCell, mouseEvent?: MouseEvent) => unknown",
           "optional": true,
           "description": "on click"
+        },
+        {
+          "name": "excludeFromRowLink",
+          "type": "boolean",
+          "optional": true,
+          "description": "Keep the cell out of the row link (`rowLink` on the table),\nfor example for a cell renderer with its own buttons or links that does not set `interactive`"
         },
         {
           "name": "cellRenderer",

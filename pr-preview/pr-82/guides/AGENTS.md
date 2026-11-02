@@ -339,12 +339,17 @@ protected readonly openOrder = (order: Order): void => {
 
 `Lab900TableRowLink` is what `routerLink` accepts: a string, commands or a `UrlTree`. Commands resolve
 relative to the route of the table; build a `UrlTree` to choose the route yourself. The href includes
-the base href, and the links resolve again after each navigation. Each data cell of the row holds an
-`<a class="lab900-row-link">`; the first one is the tab stop of the row and gets `rowLinkLabel` as its
-`aria-label` (without it, its cell text names the link). Cells with a `click`, an editable inline editor
-or an interactive renderer are not a part of the link, nor are the select and action columns. In e2e
-tests use `row.getByRole('link', { name: 'Open order 1042' })`: every link cell of a row is a link, and
-only the tab stop has the label.
+the base href. A string or commands resolve again after each navigation, a `UrlTree` does not. Each
+data cell of the row holds an `<a class="lab900-row-link">`; the first one is the tab stop of the row
+and gets `rowLinkLabel` as its `aria-label` (without it, its cell text names the link). Cells with a
+`click`, an editable inline editor, an interactive renderer or `excludeFromRowLink: true` are not a part
+of the link, nor are the select and action columns. In e2e tests use
+`row.getByRole('link', { name: 'Open order 1042' })`: every link cell of a row is a link, and only the
+tab stop has the label.
+
+Check the custom renderers of the table before you add `rowLink`. A renderer with its own buttons or
+links must set `interactive` (see "Custom renderer or editor"), or its column `excludeFromRowLink: true`;
+otherwise its buttons end up inside the row link.
 
 An `onRowClick` that opens a new tab on a ctrl/cmd click no longer gets those clicks from the link;
 remove that code when you add `rowLink`.
@@ -412,6 +417,7 @@ export class StatusCellComponent extends CellRendererAbstract<StatusCellOptions,
 `CellRendererAbstract` gives you `columnConfig()`, `data()` (the row), `cellValue()`,
 `renderOptions()`, `tooltip()` and `disabled()`. A renderer with its own buttons, links or inputs sets
 `public static override readonly interactive = true`, so `rowLink` keeps its cells out of the row link.
+For a renderer you can't change, set `excludeFromRowLink: true` on the column instead.
 
 An editor extends `CellEditorAbstract<Options, T, V>`. Read `cellValue()` and `editOptions()`,
 give the input the class `lab900-cell-input` (it gets focus when the editor opens), and call
